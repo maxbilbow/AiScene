@@ -12,34 +12,21 @@ import QuartzCore
 #if iOS
     import UIKit
     #elseif OSX
-
+    
 #endif
 
-#if SceneKit
+
     import SceneKit
-//    typealias SceneObject = NSObject
-    typealias RendererDelegate = SCNSceneRendererDelegate
-    #else
-    protocol RendererDelegate {}
-    protocol SceneObject {}
-    #endif
 
-#if OPENGL_ES
-    typealias RMSView = GLKView
-    #elseif SceneKit
-    typealias RMSView = SCNView
-    #elseif iOS
-    typealias RMSView = UIView
-    #elseif OSX
-    typealias RMSView = NSView
-#endif
+    typealias RendererDelegate = SCNSceneRendererDelegate
+
 
 class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     lazy var actionProcessor: RMSActionProcessor = RMSActionProcessor(world: self.world!, gameView: self.gameView)
     private let _isDebugging = false
     var debugData: String = "No Data"
     
-    var gvc: RMXViewController?
+    var gvc: GameViewController?
     var gameView: GameView!
 
    
@@ -55,11 +42,6 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     
     #if iOS
     var view: UIView {
-        return self.gvc!.gameView!
-    }
-    
-    #elseif OPENGL_OSX
-    var view: GameView {
         return self.gvc!.gameView!
     }
     #endif
@@ -85,9 +67,9 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
             self.world = RMSWorld(scene: scene)
         }
 //        self.world!.clock = RMXClock(world: self.world!, interface: self)
-        #if SceneKit
+
         self.gameView!.delegate = self
-        #endif
+
         return self
     }
     
@@ -105,28 +87,6 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     func setUpGestureRecognisers() {
         
     }
-    
-    /*
-    func setController(forKey key: String, run process: ()->() ) -> ( isActive: Bool, process: ()->() )? {
-        let old = self.controllers.updateValue((isActive: false, process: process ), forKey: key)
-        if old != nil {
-           self.controllers[key]!.isActive = old!.isActive
-        }
-        return self.controllers[key]
-    }
-
-    func getController(forKey key: String) -> ( isActive: Bool, process: ()->() )? {
-        return self.controllers[key]
-    }
-
-    func processControllers(){
-        for controller in self.controllers {
-            if controller.1.isActive {
-                controller.1.process()
-            }
-        }
-    }
-*/
 
     func log(_ message: String = "", sender: String = __FUNCTION__, line: Int = __LINE__) {
         if _isDebugging {
@@ -144,11 +104,11 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     }
     
     
-    #if SceneKit
+
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
         self.update()
     }
-    #endif
+
     
     func update(){
         self.actionProcessor.animate()

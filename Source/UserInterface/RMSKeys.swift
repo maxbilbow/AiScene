@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Rattle Media. All rights reserved.
 //
 
+#if OSX
 import Foundation
 import AppKit
 import ApplicationServices
@@ -342,3 +343,6 @@ extension GameView {
     }
     #endif
 }
+
+#endif
+

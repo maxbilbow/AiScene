@@ -1,0 +1,909 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6C9299981AE5432000E71811 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299961AE5432000E71811 /* Main.storyboard */; };
+		6C92999A1AE5432000E71811 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299991AE5432000E71811 /* Images.xcassets */; };
+		6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C92999B1AE5432000E71811 /* LaunchScreen.xib */; };
+		6C9299A91AE5432100E71811 /* AiSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299A81AE5432100E71811 /* AiSceneTests.swift */; };
+		6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B81AE544C000E71811 /* 3dModels.swift */; };
+		6C9299D81AE544C000E71811 /* RMSArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B91AE544C000E71811 /* RMSArt.swift */; };
+		6C9299D91AE544C000E71811 /* RMSPhysicsBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */; };
+		6C9299DA1AE544C000E71811 /* RMSWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMSWorld.swift */; };
+		6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
+		6C9299DC1AE544C000E71811 /* RMXClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BD1AE544C000E71811 /* RMXClock.swift */; };
+		6C9299DD1AE544C000E71811 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
+		6C9299DE1AE544C000E71811 /* RMXSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RMXSprite.swift */; };
+		6C9299DF1AE544C000E71811 /* RMSEquations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C11AE544C000E71811 /* RMSEquations.swift */; };
+		6C9299E01AE544C000E71811 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C21AE544C000E71811 /* RMSMaths.swift */; };
+		6C9299E11AE544C000E71811 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C31AE544C000E71811 /* RMX.swift */; };
+		6C9299E21AE544C000E71811 /* RMXDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C41AE544C000E71811 /* RMXDebugger.swift */; };
+		6C9299E31AE544C000E71811 /* RMXQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C51AE544C000E71811 /* RMXQuestions.swift */; };
+		6C9299E41AE544C000E71811 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C61AE544C000E71811 /* RMXValue.swift */; };
+		6C9299E51AE544C000E71811 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C91AE544C000E71811 /* GameView.swift */; };
+		6C9299E61AE544C000E71811 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CA1AE544C000E71811 /* GameViewController.swift */; };
+		6C9299E71AE544C000E71811 /* RMXInitialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CB1AE544C000E71811 /* RMXInitialize.swift */; };
+		6C9299E81AE544C000E71811 /* RMXController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CD1AE544C000E71811 /* RMXController.swift */; };
+		6C9299E91AE544C000E71811 /* RMXViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CE1AE544C000E71811 /* RMXViewController.swift */; };
+		6C9299EA1AE544C000E71811 /* Accelorometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D01AE544C000E71811 /* Accelorometer.swift */; };
+		6C9299EB1AE544C000E71811 /* iOSControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D11AE544C000E71811 /* iOSControllers.swift */; };
+		6C9299EC1AE544C000E71811 /* RMSActionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */; };
+		6C9299ED1AE544C000E71811 /* RMSKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D31AE544C000E71811 /* RMSKeys.swift */; };
+		6C9299EE1AE544C000E71811 /* RMXDPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D41AE544C000E71811 /* RMXDPad.swift */; };
+		6C9299EF1AE544C000E71811 /* RMXInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D51AE544C000E71811 /* RMXInterface.swift */; };
+		6C9299F11AE544D500E71811 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299F01AE544D500E71811 /* art.scnassets */; };
+		6C9299F31AE5457700E71811 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
+		6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F41AE5467000E71811 /* AppDelegate.swift */; };
+		6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299FE1AE5497800E71811 /* AppDelegate.swift */; };
+		6C929A071AE5497900E71811 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C929A061AE5497900E71811 /* Images.xcassets */; };
+		6C929A0A1AE5497900E71811 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C929A081AE5497900E71811 /* MainMenu.xib */; };
+		6C929A161AE5497900E71811 /* AiScene_OSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */; };
+		6C929A1D1AE5499900E71811 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C91AE544C000E71811 /* GameView.swift */; };
+		6C929A1E1AE5499900E71811 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CA1AE544C000E71811 /* GameViewController.swift */; };
+		6C929A1F1AE5499900E71811 /* RMXInitialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CB1AE544C000E71811 /* RMXInitialize.swift */; };
+		6C929A201AE5499D00E71811 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
+		6C929A211AE5499D00E71811 /* 3dModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B81AE544C000E71811 /* 3dModels.swift */; };
+		6C929A221AE5499D00E71811 /* RMSArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B91AE544C000E71811 /* RMSArt.swift */; };
+		6C929A231AE5499D00E71811 /* RMSPhysicsBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */; };
+		6C929A241AE5499D00E71811 /* RMSWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMSWorld.swift */; };
+		6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
+		6C929A261AE5499D00E71811 /* RMXClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BD1AE544C000E71811 /* RMXClock.swift */; };
+		6C929A271AE5499D00E71811 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
+		6C929A281AE5499D00E71811 /* RMXSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RMXSprite.swift */; };
+		6C929A291AE549A300E71811 /* RMXController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CD1AE544C000E71811 /* RMXController.swift */; };
+		6C929A2A1AE549A300E71811 /* RMXViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CE1AE544C000E71811 /* RMXViewController.swift */; };
+		6C929A2B1AE549A600E71811 /* Accelorometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D01AE544C000E71811 /* Accelorometer.swift */; };
+		6C929A2C1AE549A600E71811 /* iOSControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D11AE544C000E71811 /* iOSControllers.swift */; };
+		6C929A2D1AE549A600E71811 /* RMSActionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */; };
+		6C929A2E1AE549A600E71811 /* RMSKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D31AE544C000E71811 /* RMSKeys.swift */; };
+		6C929A2F1AE549A600E71811 /* RMXDPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D41AE544C000E71811 /* RMXDPad.swift */; };
+		6C929A301AE549A600E71811 /* RMXInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D51AE544C000E71811 /* RMXInterface.swift */; };
+		6C929A311AE54DCA00E71811 /* RMSEquations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C11AE544C000E71811 /* RMSEquations.swift */; };
+		6C929A321AE54DCA00E71811 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C21AE544C000E71811 /* RMSMaths.swift */; };
+		6C929A331AE54DCA00E71811 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C31AE544C000E71811 /* RMX.swift */; };
+		6C929A341AE54DCA00E71811 /* RMXDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C41AE544C000E71811 /* RMXDebugger.swift */; };
+		6C929A351AE54DCA00E71811 /* RMXQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C51AE544C000E71811 /* RMXQuestions.swift */; };
+		6C929A361AE54DCA00E71811 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C61AE544C000E71811 /* RMXValue.swift */; };
+		6C929A371AE54E3E00E71811 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299F01AE544D500E71811 /* art.scnassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6C9299A31AE5432100E71811 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C9299831AE5432000E71811 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C92998A1AE5432000E71811;
+			remoteInfo = AiScene;
+		};
+		6C929A101AE5497900E71811 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6C9299831AE5432000E71811 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C9299F91AE5497800E71811;
+			remoteInfo = "AiScene-OSX";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		6C92998B1AE5432000E71811 /* AiScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C92998F1AE5432000E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C9299971AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6C9299991AE5432000E71811 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		6C92999C1AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		6C9299A21AE5432100E71811 /* AiSceneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiSceneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9299A71AE5432100E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C9299A81AE5432100E71811 /* AiSceneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiSceneTests.swift; sourceTree = "<group>"; };
+		6C9299B51AE544C000E71811 /* CWrappers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CWrappers.c; sourceTree = "<group>"; };
+		6C9299B61AE544C000E71811 /* Vertices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vertices.h; sourceTree = "<group>"; };
+		6C9299B81AE544C000E71811 /* 3dModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 3dModels.swift; sourceTree = "<group>"; };
+		6C9299B91AE544C000E71811 /* RMSArt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSArt.swift; sourceTree = "<group>"; };
+		6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSPhysicsBody.swift; sourceTree = "<group>"; };
+		6C9299BB1AE544C000E71811 /* RMSWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSWorld.swift; sourceTree = "<group>"; };
+		6C9299BC1AE544C000E71811 /* RMXCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXCamera.swift; sourceTree = "<group>"; };
+		6C9299BD1AE544C000E71811 /* RMXClock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXClock.swift; sourceTree = "<group>"; };
+		6C9299BE1AE544C000E71811 /* RMXNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXNode.swift; sourceTree = "<group>"; };
+		6C9299BF1AE544C000E71811 /* RMXSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSprite.swift; sourceTree = "<group>"; };
+		6C9299C11AE544C000E71811 /* RMSEquations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSEquations.swift; sourceTree = "<group>"; };
+		6C9299C21AE544C000E71811 /* RMSMaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSMaths.swift; sourceTree = "<group>"; };
+		6C9299C31AE544C000E71811 /* RMX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMX.swift; sourceTree = "<group>"; };
+		6C9299C41AE544C000E71811 /* RMXDebugger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXDebugger.swift; sourceTree = "<group>"; };
+		6C9299C51AE544C000E71811 /* RMXQuestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXQuestions.swift; sourceTree = "<group>"; };
+		6C9299C61AE544C000E71811 /* RMXValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXValue.swift; sourceTree = "<group>"; };
+		6C9299C91AE544C000E71811 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		6C9299CA1AE544C000E71811 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		6C9299CB1AE544C000E71811 /* RMXInitialize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXInitialize.swift; sourceTree = "<group>"; };
+		6C9299CD1AE544C000E71811 /* RMXController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXController.swift; sourceTree = "<group>"; };
+		6C9299CE1AE544C000E71811 /* RMXViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXViewController.swift; sourceTree = "<group>"; };
+		6C9299D01AE544C000E71811 /* Accelorometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Accelorometer.swift; sourceTree = "<group>"; };
+		6C9299D11AE544C000E71811 /* iOSControllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSControllers.swift; sourceTree = "<group>"; };
+		6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSActionProcessor.swift; sourceTree = "<group>"; };
+		6C9299D31AE544C000E71811 /* RMSKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSKeys.swift; sourceTree = "<group>"; };
+		6C9299D41AE544C000E71811 /* RMXDPad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXDPad.swift; sourceTree = "<group>"; };
+		6C9299D51AE544C000E71811 /* RMXInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXInterface.swift; sourceTree = "<group>"; };
+		6C9299F01AE544D500E71811 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; name = art.scnassets; path = ../art.scnassets; sourceTree = SOURCE_ROOT; };
+		6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChildSpriteArray.swift; sourceTree = "<group>"; };
+		6C9299F41AE5467000E71811 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6C9299FA1AE5497800E71811 /* AiScene-OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AiScene-OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C9299FD1AE5497800E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C9299FE1AE5497800E71811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6C929A061AE5497900E71811 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		6C929A091AE5497900E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AiScene-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C929A141AE5497900E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiScene_OSXTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C9299881AE5432000E71811 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C92999F1AE5432100E71811 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C9299F71AE5497800E71811 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C929A0C1AE5497900E71811 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6C9299821AE5432000E71811 = {
+			isa = PBXGroup;
+			children = (
+				6C9299F01AE544D500E71811 /* art.scnassets */,
+				6C9299B31AE544C000E71811 /* Source */,
+				6C92998D1AE5432000E71811 /* AiScene */,
+				6C9299A51AE5432100E71811 /* AiSceneTests */,
+				6C9299FB1AE5497800E71811 /* AiScene-OSX */,
+				6C929A121AE5497900E71811 /* AiScene-OSXTests */,
+				6C92998C1AE5432000E71811 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6C92998C1AE5432000E71811 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C92998B1AE5432000E71811 /* AiScene.app */,
+				6C9299A21AE5432100E71811 /* AiSceneTests.xctest */,
+				6C9299FA1AE5497800E71811 /* AiScene-OSX.app */,
+				6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6C92998D1AE5432000E71811 /* AiScene */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299961AE5432000E71811 /* Main.storyboard */,
+				6C9299F41AE5467000E71811 /* AppDelegate.swift */,
+				6C9299991AE5432000E71811 /* Images.xcassets */,
+				6C92999B1AE5432000E71811 /* LaunchScreen.xib */,
+				6C92998E1AE5432000E71811 /* Supporting Files */,
+			);
+			path = AiScene;
+			sourceTree = "<group>";
+		};
+		6C92998E1AE5432000E71811 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6C92998F1AE5432000E71811 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6C9299A51AE5432100E71811 /* AiSceneTests */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299A81AE5432100E71811 /* AiSceneTests.swift */,
+				6C9299A61AE5432100E71811 /* Supporting Files */,
+			);
+			path = AiSceneTests;
+			sourceTree = "<group>";
+		};
+		6C9299A61AE5432100E71811 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299A71AE5432100E71811 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6C9299B31AE544C000E71811 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299B41AE544C000E71811 /* C */,
+				6C9299B71AE544C000E71811 /* Environment */,
+				6C9299C01AE544C000E71811 /* Generics */,
+				6C9299C71AE544C000E71811 /* Geometry */,
+				6C9299C81AE544C000E71811 /* Initialisation */,
+				6C9299CC1AE544C000E71811 /* Protocols */,
+				6C9299CF1AE544C000E71811 /* UserInterface */,
+			);
+			name = Source;
+			path = ../Source;
+			sourceTree = "<group>";
+		};
+		6C9299B41AE544C000E71811 /* C */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299B51AE544C000E71811 /* CWrappers.c */,
+				6C9299B61AE544C000E71811 /* Vertices.h */,
+			);
+			path = C;
+			sourceTree = "<group>";
+		};
+		6C9299B71AE544C000E71811 /* Environment */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */,
+				6C9299B81AE544C000E71811 /* 3dModels.swift */,
+				6C9299B91AE544C000E71811 /* RMSArt.swift */,
+				6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */,
+				6C9299BB1AE544C000E71811 /* RMSWorld.swift */,
+				6C9299BC1AE544C000E71811 /* RMXCamera.swift */,
+				6C9299BD1AE544C000E71811 /* RMXClock.swift */,
+				6C9299BE1AE544C000E71811 /* RMXNode.swift */,
+				6C9299BF1AE544C000E71811 /* RMXSprite.swift */,
+			);
+			path = Environment;
+			sourceTree = "<group>";
+		};
+		6C9299C01AE544C000E71811 /* Generics */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299C11AE544C000E71811 /* RMSEquations.swift */,
+				6C9299C21AE544C000E71811 /* RMSMaths.swift */,
+				6C9299C31AE544C000E71811 /* RMX.swift */,
+				6C9299C41AE544C000E71811 /* RMXDebugger.swift */,
+				6C9299C51AE544C000E71811 /* RMXQuestions.swift */,
+				6C9299C61AE544C000E71811 /* RMXValue.swift */,
+			);
+			path = Generics;
+			sourceTree = "<group>";
+		};
+		6C9299C71AE544C000E71811 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Geometry;
+			sourceTree = "<group>";
+		};
+		6C9299C81AE544C000E71811 /* Initialisation */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299C91AE544C000E71811 /* GameView.swift */,
+				6C9299CA1AE544C000E71811 /* GameViewController.swift */,
+				6C9299CB1AE544C000E71811 /* RMXInitialize.swift */,
+			);
+			path = Initialisation;
+			sourceTree = "<group>";
+		};
+		6C9299CC1AE544C000E71811 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299CD1AE544C000E71811 /* RMXController.swift */,
+				6C9299CE1AE544C000E71811 /* RMXViewController.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		6C9299CF1AE544C000E71811 /* UserInterface */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299D01AE544C000E71811 /* Accelorometer.swift */,
+				6C9299D11AE544C000E71811 /* iOSControllers.swift */,
+				6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */,
+				6C9299D31AE544C000E71811 /* RMSKeys.swift */,
+				6C9299D41AE544C000E71811 /* RMXDPad.swift */,
+				6C9299D51AE544C000E71811 /* RMXInterface.swift */,
+			);
+			path = UserInterface;
+			sourceTree = "<group>";
+		};
+		6C9299FB1AE5497800E71811 /* AiScene-OSX */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299FE1AE5497800E71811 /* AppDelegate.swift */,
+				6C929A061AE5497900E71811 /* Images.xcassets */,
+				6C929A081AE5497900E71811 /* MainMenu.xib */,
+				6C9299FC1AE5497800E71811 /* Supporting Files */,
+			);
+			path = "AiScene-OSX";
+			sourceTree = "<group>";
+		};
+		6C9299FC1AE5497800E71811 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6C9299FD1AE5497800E71811 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6C929A121AE5497900E71811 /* AiScene-OSXTests */ = {
+			isa = PBXGroup;
+			children = (
+				6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */,
+				6C929A131AE5497900E71811 /* Supporting Files */,
+			);
+			path = "AiScene-OSXTests";
+			sourceTree = "<group>";
+		};
+		6C929A131AE5497900E71811 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6C929A141AE5497900E71811 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C92998A1AE5432000E71811 /* AiScene */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C9299AC1AE5432100E71811 /* Build configuration list for PBXNativeTarget "AiScene" */;
+			buildPhases = (
+				6C9299871AE5432000E71811 /* Sources */,
+				6C9299881AE5432000E71811 /* Frameworks */,
+				6C9299891AE5432000E71811 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AiScene;
+			productName = AiScene;
+			productReference = 6C92998B1AE5432000E71811 /* AiScene.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6C9299A11AE5432100E71811 /* AiSceneTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C9299AF1AE5432100E71811 /* Build configuration list for PBXNativeTarget "AiSceneTests" */;
+			buildPhases = (
+				6C92999E1AE5432100E71811 /* Sources */,
+				6C92999F1AE5432100E71811 /* Frameworks */,
+				6C9299A01AE5432100E71811 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6C9299A41AE5432100E71811 /* PBXTargetDependency */,
+			);
+			name = AiSceneTests;
+			productName = AiSceneTests;
+			productReference = 6C9299A21AE5432100E71811 /* AiSceneTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6C9299F91AE5497800E71811 /* AiScene-OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C929A171AE5497900E71811 /* Build configuration list for PBXNativeTarget "AiScene-OSX" */;
+			buildPhases = (
+				6C9299F61AE5497800E71811 /* Sources */,
+				6C9299F71AE5497800E71811 /* Frameworks */,
+				6C9299F81AE5497800E71811 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AiScene-OSX";
+			productName = "AiScene-OSX";
+			productReference = 6C9299FA1AE5497800E71811 /* AiScene-OSX.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6C929A0E1AE5497900E71811 /* AiScene-OSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C929A1A1AE5497900E71811 /* Build configuration list for PBXNativeTarget "AiScene-OSXTests" */;
+			buildPhases = (
+				6C929A0B1AE5497900E71811 /* Sources */,
+				6C929A0C1AE5497900E71811 /* Frameworks */,
+				6C929A0D1AE5497900E71811 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6C929A111AE5497900E71811 /* PBXTargetDependency */,
+			);
+			name = "AiScene-OSXTests";
+			productName = "AiScene-OSXTests";
+			productReference = 6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6C9299831AE5432000E71811 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "Rattle Media";
+				TargetAttributes = {
+					6C92998A1AE5432000E71811 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					6C9299A11AE5432100E71811 = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 6C92998A1AE5432000E71811;
+					};
+					6C9299F91AE5497800E71811 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					6C929A0E1AE5497900E71811 = {
+						CreatedOnToolsVersion = 6.3;
+						TestTargetID = 6C9299F91AE5497800E71811;
+					};
+				};
+			};
+			buildConfigurationList = 6C9299861AE5432000E71811 /* Build configuration list for PBXProject "AiScene" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6C9299821AE5432000E71811;
+			productRefGroup = 6C92998C1AE5432000E71811 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C92998A1AE5432000E71811 /* AiScene */,
+				6C9299A11AE5432100E71811 /* AiSceneTests */,
+				6C9299F91AE5497800E71811 /* AiScene-OSX */,
+				6C929A0E1AE5497900E71811 /* AiScene-OSXTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6C9299891AE5432000E71811 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */,
+				6C92999A1AE5432000E71811 /* Images.xcassets in Resources */,
+				6C9299F11AE544D500E71811 /* art.scnassets in Resources */,
+				6C9299981AE5432000E71811 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C9299A01AE5432100E71811 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C9299F81AE5497800E71811 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C929A071AE5497900E71811 /* Images.xcassets in Resources */,
+				6C929A371AE54E3E00E71811 /* art.scnassets in Resources */,
+				6C929A0A1AE5497900E71811 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C929A0D1AE5497900E71811 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C9299871AE5432000E71811 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C9299D91AE544C000E71811 /* RMSPhysicsBody.swift in Sources */,
+				6C9299EB1AE544C000E71811 /* iOSControllers.swift in Sources */,
+				6C9299DA1AE544C000E71811 /* RMSWorld.swift in Sources */,
+				6C9299EA1AE544C000E71811 /* Accelorometer.swift in Sources */,
+				6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */,
+				6C9299DE1AE544C000E71811 /* RMXSprite.swift in Sources */,
+				6C9299E11AE544C000E71811 /* RMX.swift in Sources */,
+				6C9299E51AE544C000E71811 /* GameView.swift in Sources */,
+				6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */,
+				6C9299E91AE544C000E71811 /* RMXViewController.swift in Sources */,
+				6C9299DF1AE544C000E71811 /* RMSEquations.swift in Sources */,
+				6C9299DD1AE544C000E71811 /* RMXNode.swift in Sources */,
+				6C9299E61AE544C000E71811 /* GameViewController.swift in Sources */,
+				6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */,
+				6C9299DC1AE544C000E71811 /* RMXClock.swift in Sources */,
+				6C9299E71AE544C000E71811 /* RMXInitialize.swift in Sources */,
+				6C9299EC1AE544C000E71811 /* RMSActionProcessor.swift in Sources */,
+				6C9299EF1AE544C000E71811 /* RMXInterface.swift in Sources */,
+				6C9299D81AE544C000E71811 /* RMSArt.swift in Sources */,
+				6C9299E41AE544C000E71811 /* RMXValue.swift in Sources */,
+				6C9299E21AE544C000E71811 /* RMXDebugger.swift in Sources */,
+				6C9299ED1AE544C000E71811 /* RMSKeys.swift in Sources */,
+				6C9299EE1AE544C000E71811 /* RMXDPad.swift in Sources */,
+				6C9299E81AE544C000E71811 /* RMXController.swift in Sources */,
+				6C9299F31AE5457700E71811 /* ChildSpriteArray.swift in Sources */,
+				6C9299E01AE544C000E71811 /* RMSMaths.swift in Sources */,
+				6C9299E31AE544C000E71811 /* RMXQuestions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C92999E1AE5432100E71811 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C9299A91AE5432100E71811 /* AiSceneTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C9299F61AE5497800E71811 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C929A1D1AE5499900E71811 /* GameView.swift in Sources */,
+				6C929A201AE5499D00E71811 /* ChildSpriteArray.swift in Sources */,
+				6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */,
+				6C929A301AE549A600E71811 /* RMXInterface.swift in Sources */,
+				6C929A2B1AE549A600E71811 /* Accelorometer.swift in Sources */,
+				6C929A231AE5499D00E71811 /* RMSPhysicsBody.swift in Sources */,
+				6C929A211AE5499D00E71811 /* 3dModels.swift in Sources */,
+				6C929A271AE5499D00E71811 /* RMXNode.swift in Sources */,
+				6C929A1E1AE5499900E71811 /* GameViewController.swift in Sources */,
+				6C929A361AE54DCA00E71811 /* RMXValue.swift in Sources */,
+				6C929A241AE5499D00E71811 /* RMSWorld.swift in Sources */,
+				6C929A2A1AE549A300E71811 /* RMXViewController.swift in Sources */,
+				6C929A331AE54DCA00E71811 /* RMX.swift in Sources */,
+				6C929A321AE54DCA00E71811 /* RMSMaths.swift in Sources */,
+				6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */,
+				6C929A281AE5499D00E71811 /* RMXSprite.swift in Sources */,
+				6C929A261AE5499D00E71811 /* RMXClock.swift in Sources */,
+				6C929A291AE549A300E71811 /* RMXController.swift in Sources */,
+				6C929A341AE54DCA00E71811 /* RMXDebugger.swift in Sources */,
+				6C929A1F1AE5499900E71811 /* RMXInitialize.swift in Sources */,
+				6C929A2D1AE549A600E71811 /* RMSActionProcessor.swift in Sources */,
+				6C929A2F1AE549A600E71811 /* RMXDPad.swift in Sources */,
+				6C929A311AE54DCA00E71811 /* RMSEquations.swift in Sources */,
+				6C929A2E1AE549A600E71811 /* RMSKeys.swift in Sources */,
+				6C929A351AE54DCA00E71811 /* RMXQuestions.swift in Sources */,
+				6C929A221AE5499D00E71811 /* RMSArt.swift in Sources */,
+				6C929A2C1AE549A600E71811 /* iOSControllers.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C929A0B1AE5497900E71811 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C929A161AE5497900E71811 /* AiScene_OSXTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6C9299A41AE5432100E71811 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C92998A1AE5432000E71811 /* AiScene */;
+			targetProxy = 6C9299A31AE5432100E71811 /* PBXContainerItemProxy */;
+		};
+		6C929A111AE5497900E71811 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6C9299F91AE5497800E71811 /* AiScene-OSX */;
+			targetProxy = 6C929A101AE5497900E71811 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6C9299961AE5432000E71811 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C9299971AE5432000E71811 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6C92999B1AE5432000E71811 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C92999C1AE5432000E71811 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		6C929A081AE5497900E71811 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C929A091AE5497900E71811 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6C9299AA1AE5432100E71811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6C9299AB1AE5432100E71811 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6C9299AD1AE5432100E71811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = AiScene/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6C9299AE1AE5432100E71811 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = AiScene/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		6C9299B01AE5432100E71811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = AiSceneTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AiScene.app/AiScene";
+			};
+			name = Debug;
+		};
+		6C9299B11AE5432100E71811 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = AiSceneTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AiScene.app/AiScene";
+			};
+			name = Release;
+		};
+		6C929A181AE5497900E71811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "AiScene-OSX/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "-DSceneKit -DOSX";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6C929A191AE5497900E71811 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "AiScene-OSX/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				OTHER_SWIFT_FLAGS = "-DSceneKit -DOSX";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6C929A1B1AE5497900E71811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "AiScene-OSXTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AiScene-OSX.app/Contents/MacOS/AiScene-OSX";
+			};
+			name = Debug;
+		};
+		6C929A1C1AE5497900E71811 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "AiScene-OSXTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AiScene-OSX.app/Contents/MacOS/AiScene-OSX";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C9299861AE5432000E71811 /* Build configuration list for PBXProject "AiScene" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C9299AA1AE5432100E71811 /* Debug */,
+				6C9299AB1AE5432100E71811 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6C9299AC1AE5432100E71811 /* Build configuration list for PBXNativeTarget "AiScene" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C9299AD1AE5432100E71811 /* Debug */,
+				6C9299AE1AE5432100E71811 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		6C9299AF1AE5432100E71811 /* Build configuration list for PBXNativeTarget "AiSceneTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C9299B01AE5432100E71811 /* Debug */,
+				6C9299B11AE5432100E71811 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		6C929A171AE5497900E71811 /* Build configuration list for PBXNativeTarget "AiScene-OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C929A181AE5497900E71811 /* Debug */,
+				6C929A191AE5497900E71811 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		6C929A1A1AE5497900E71811 /* Build configuration list for PBXNativeTarget "AiScene-OSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C929A1B1AE5497900E71811 /* Debug */,
+				6C929A1C1AE5497900E71811 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6C9299831AE5432000E71811 /* Project object */;
+}

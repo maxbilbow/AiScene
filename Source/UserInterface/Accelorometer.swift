@@ -9,6 +9,8 @@
 import Foundation
 import GLKit
 
+#if iOS
+
 extension RMXDPad {
     func accelerometer() {
 //        if true { return }
@@ -81,3 +83,5 @@ extension RMXDPad {
         // println()
     }
 }
+
+#endif

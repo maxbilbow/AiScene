@@ -15,7 +15,7 @@ extension RMX {
     /* static func Controller(view: GameView, world: RMSWorld) -> RMXDPad {
         return RMXDPad(view: view, world: world)
     } */
-    static func Controller(gvc: RMXViewController) -> RMXDPad {
+    static func Controller(gvc: GameViewController, scene: SCNScene? = nil) -> RMXDPad {
         return RMXDPad(gvc: gvc)//.initialize(gvc, gameView: gvc.gameView) as! RMXDPad
     }
     #elseif OSX
@@ -28,9 +28,9 @@ extension RMX {
 protocol RMXView {
     var world: RMSWorld? { get }
     var interface: RMXInterface? { get set }
-    var gvc: RMXViewController? { get set }
+    var gvc: GameViewController? { get set }
     
-    func initialize(gvc: RMXViewController, interface: RMXInterface)
+    func initialize(gvc: GameViewController, interface: RMXInterface)
 }
 
 protocol RMXViewController {

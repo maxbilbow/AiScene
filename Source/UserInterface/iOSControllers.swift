@@ -9,9 +9,9 @@
 import Foundation
 import GLKit
 import SceneKit
-//#if OPENGL_ES
+
+#if iOS
 import UIKit
-//#endif
 
 extension RMXDPad {
         private func _handleRelease(state: UIGestureRecognizerState) {
@@ -180,5 +180,7 @@ extension RMXDPad {
     }
 
 
+
+#endif
 
 

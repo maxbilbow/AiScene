@@ -8,7 +8,7 @@
 
 import Foundation
 import GLKit
-
+#if iOS
 
 import CoreMotion
 import UIKit
@@ -132,13 +132,14 @@ class RMXDPad : RMXInterface {
     var moveOrigin: CGPoint = CGPoint(x: 0,y: 0)
     var lookOrigin: CGPoint = CGPoint(x: 0,y: 0)
     func toggleBehaviours(recogniser: UITapGestureRecognizer){
-        self.world!.usesBehaviour = !self.world!.usesBehaviour
-        self.world!.setBehaviours(self.world!.usesBehaviour)
+//        self.world!.usesBehaviour = !self.world!.usesBehaviour
+//        self.world!.setBehaviours(self.world!.usesBehaviour)
     }
     
     
     
 }
 
+#endif
 
 
