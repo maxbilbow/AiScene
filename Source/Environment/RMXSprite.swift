@@ -69,7 +69,7 @@ class RMXSprite : RMXSpriteManager {
         return self.node.parentNode
     }
     
-    var paretn: RMXSprite?
+    var parent: RMXSprite?
     
     var node: SCNNode
     
@@ -186,9 +186,20 @@ class RMXSprite : RMXSpriteManager {
     var scale: RMXVector3 {
         return self.node.presentationNode().scale
     }
-    class func new(parent p: AnyObject) -> RMXSprite {
-        let sprite = RMXSprite()
-
+    
+    class func rootNode(node: RMXNode, rootNode: RMXNode) -> RMXNode {
+        if node.parentNode == rootNode || node.parentNode == nil {
+            return node
+        } else {
+            println(node.parentNode)
+            return self.rootNode(node.parentNode!, rootNode: rootNode)
+        }
+    }
+    
+    class func new(parent p: AnyObject, node: SCNNode? = nil) -> RMXSprite {
+        
+        let sprite = RMXSprite(node: node ?? RMXNode())
+        
 //        if nodeOnly {
             if let parent = p as? RMSWorld {
                 

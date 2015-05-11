@@ -138,9 +138,9 @@ extension RMXDPad {
                 // retrieved the first clicked object
                 let result: AnyObject! = hitResults[0]
                 
-                
+                ///TODO: GrabItem (and not itself)
                 if let node = result.node {
-                    self.world?.observer.node.addChildNode(node)
+                    self.world?.observer.node.addChildNode(RMXSprite.rootNode(node, rootNode: self.world!.scene.rootNode))
                     node
 //                    if self.world?.observer.grabItem(item: self.world!.getSprite(node: node)) == false {
 //                        self.action(action: "throw", speed: 20)

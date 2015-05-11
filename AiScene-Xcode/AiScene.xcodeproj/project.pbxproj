@@ -878,6 +878,7 @@
 				6C9299AE1AE5432100E71811 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6C9299AF1AE5432100E71811 /* Build configuration list for PBXNativeTarget "AiSceneTests" */ = {
 			isa = XCConfigurationList;
@@ -886,6 +887,7 @@
 				6C9299B11AE5432100E71811 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6C929A171AE5497900E71811 /* Build configuration list for PBXNativeTarget "AiScene-OSX" */ = {
 			isa = XCConfigurationList;
@@ -894,6 +896,7 @@
 				6C929A191AE5497900E71811 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6C929A1A1AE5497900E71811 /* Build configuration list for PBXNativeTarget "AiScene-OSXTests" */ = {
 			isa = XCConfigurationList;
@@ -902,6 +905,7 @@
 				6C929A1C1AE5497900E71811 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

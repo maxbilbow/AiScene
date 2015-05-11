@@ -181,12 +181,14 @@ class RMSWorld  {
     }
 
     
+    
     func getSprite(#node: RMXNode) -> RMXSprite? {
+        
         if node.physicsBody == nil || node.physicsBody!.type == .Static {
             return nil
         } else if node.name == nil || node.name!.isEmpty {
-            let sprite = RMXSprite.new(parent: self)
-            sprite.node = node
+            let n = RMXSprite.rootNode(node, rootNode: self.scene.rootNode)
+            let sprite = RMXSprite.new(parent: self, node: n)
             return sprite
         } else {
             for sprite in self.children {
