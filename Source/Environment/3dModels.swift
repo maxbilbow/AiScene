@@ -57,6 +57,13 @@ class RMXModels {
              hasColor = true
             node = SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
             break
+        case ShapeType.FLOOR.rawValue:
+            hasColor = true
+            node = SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
+            node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
+            node.geometry?.firstMaterial!.doubleSided = true
+            
+            break
         case ShapeType.PONGO.rawValue:
             node = pongo?.rootNode.clone() as! SCNNode
             node.scale *= 0.001 * radius
@@ -99,6 +106,7 @@ class RMXModels {
         case .WORLD, .BACKGROUND:
             node.physicsBody = SCNPhysicsBody.staticBody()
             node.physicsBody!.restitution = 0.0
+            node.physicsBody!.damping = 1
         case .KINEMATIC:
             node.physicsBody = SCNPhysicsBody.kinematicBody()
             node.physicsBody!.restitution = 0.1

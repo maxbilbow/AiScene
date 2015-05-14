@@ -229,7 +229,7 @@ class RMSActionProcessor {
             self.activeSprite.extendArmLength(self.extendArm)
         }
         let node = self.activeSprite.node.presentationNode()
-         RMXLog("\n    vel:\(self.activeSprite.node.physicsBody!.velocity.print)\n    Pos:\(node.position.print)\n transform:\n\(node.transform.print)\n  orientation:\n\(self.activeSprite.orientation.print)")
+        if false { RMXLog("\n    vel:\(self.activeSprite.node.physicsBody!.velocity.print)\n    Pos:\(node.position.print)\n transform:\n\(node.transform.print)\n  orientation:\n\(self.activeSprite.orientation.print)") }
          }
         
     var extendArm: RMFloatB = 0

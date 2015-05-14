@@ -196,7 +196,7 @@ extension RMXSprite {
         if self.type == nil {
             self.type = .BACKGROUND
         }
-        self.node = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .ABSTRACT, radius: 100)
+        self.setNode(RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .ABSTRACT, radius: 100))
         self.isVisible = true
         self.isRotating = isRotating
         self.setRotationSpeed(speed: 1 * PI_OVER_180 / 10)

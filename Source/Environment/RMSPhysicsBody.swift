@@ -39,19 +39,19 @@ extension RMXSprite {
     
     func accelerateForward(v: RMFloatB) {
         let force = self.forwardVector * -v * self.speed
-        RMXLog("\n Force:\(force.print)")
+        //RMXLog("\n Force:\(force.print)")
         self.node.physicsBody!.applyForce(force, impulse: false)
     }
     
     func accelerateUp(v: RMFloatB) {
         let force = self.upVector * -v * self.speed
-        RMXLog(force.print)
+       // RMXLog(force.print)
         self.node.physicsBody!.applyForce(force, impulse: false)
     }
     
     func accelerateLeft(v: RMFloatB) {
         let force = self.leftVector * -v * self.speed
-        RMXLog(force.print)
+        //RMXLog(force.print)
         self.node.physicsBody!.applyForce(force, impulse: false)
     }
     

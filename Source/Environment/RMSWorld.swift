@@ -12,7 +12,7 @@ import SceneKit
 
 enum RMXWorldType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 class RMSWorld  {
-    
+    var aiOn = false
     lazy var environments: ChildSpriteArray = ChildSpriteArray(parent: self)
 
     var children: [RMXSprite] {
@@ -68,11 +68,11 @@ class RMSWorld  {
     
     func worldDidInitialize() {
         let radius = RMSWorld.RADIUS
-            self.scene.physicsWorld.gravity = RMXVector3Zero
-            let earth = RMXModels.getNode(shapeType: ShapeType.ROCK.rawValue, mode: .BACKGROUND, radius: radius)
-            earth.physicsField = SCNPhysicsField.radialGravityField()
-    //        earth.physicsField!.scope = .OutsideExtent
-            earth.physicsField!.categoryBitMask = Int(SCNPhysicsCollisionCategory.Default.rawValue)
+//            self.scene.physicsWorld.gravity = RMXVector3Zero
+            let earth = RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: radius * 10)
+//            earth.physicsField = SCNPhysicsField.radialGravityField()
+
+//            earth.physicsField!.categoryBitMask = Int(SCNPhysicsCollisionCategory.Default.rawValue)
     
             self.scene.rootNode.addChildNode(earth)
 
@@ -160,15 +160,23 @@ class RMSWorld  {
         }
     }
   
-    private var _hasGravity = false
+    private var _hasGravity: Bool {
+        return self.scene.physicsWorld.gravity != SCNVector3Zero
+    }
+    private var _gravity = SCNVector3Zero
     func toggleGravity() {
         #if SceneKit
             if _hasGravity {
+                let gravity = self.scene.physicsWorld.gravity
+                _gravity = gravity == SCNVector3Zero ? SCNVector3Make(0, -2, 0) : gravity
                 self.scene.physicsWorld.gravity = SCNVector3Zero
-                _hasGravity = false
+                NSLog("Gravity off: \(self.scene.physicsWorld.gravity.print)")
             } else {
-                self.scene.physicsWorld.gravity = SCNVector3Make(0,-1,0)
-                _hasGravity = true
+                if _gravity == RMXVector3Zero {
+                     _gravity = SCNVector3Make(0, -self.GRAVITY, 0)
+                }
+                self.scene.physicsWorld.gravity = _gravity
+                NSLog("Gravity on: \(self.scene.physicsWorld.gravity.print)")
             }
             #else
         for object in children {
@@ -184,9 +192,11 @@ class RMSWorld  {
     
     func getSprite(#node: RMXNode) -> RMXSprite? {
         
-        if node.physicsBody == nil || node.physicsBody!.type == .Static {
-            return nil
-        } else if node.name == nil || node.name!.isEmpty {
+//        if node.physicsBody == nil || node.physicsBody!.type == .Static {
+//            return nil
+//        } else
+
+        if node.name == nil || node.name!.isEmpty {
             let n = RMXSprite.rootNode(node, rootNode: self.scene.rootNode)
             let sprite = RMXSprite.new(parent: self, node: n)
             return sprite
@@ -198,19 +208,31 @@ class RMSWorld  {
             }
         }
         let sprite = RMXSprite.new(parent: self)
-        sprite.node = node
+        sprite.setNode(node)
         return sprite
     }
     
     func animate() {
-    #if SceneKit
         self.sun.animate()
-            #else
-        for child in children {
-            child.animate()
+        if self.aiOn {
+            for child in self.children {
+                child.processAi(aiOn: self.aiOn)
+            }
         }
-        #endif
+//        for child in children {
+//            child.animate()
+//        }
     }
 
 }
 
+
+extension RMSWorld {
+    func setBehaviours(areOn: Bool){
+        self.aiOn = areOn
+        for child in children{
+            child.aiOn = areOn
+        }
+        NSLog("aiOn: \(self.aiOn)")
+    }
+}

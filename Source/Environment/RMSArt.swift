@@ -192,8 +192,8 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color)
-
+            let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color, mode: .AI)
+            
                 
                 node.position = RMXVector3Make(randPos[0], randPos[1], randPos[2])
             
@@ -201,6 +201,12 @@ class RMXArt {
              
             #if SceneKit
                 world.scene.rootNode.addChildNode(node)
+
+                if let sprite = world.getSprite(node: node) {
+                    RMX.addRandomMovement(to: sprite)
+                    sprite.insertChild(sprite, andNode: false)
+                }
+                
             #else
                 let sprite = RMXSprite(node: node)
                 sprite.setColor(RMXArt.randomColor())

@@ -429,6 +429,14 @@ func RMXVector4MakeWithVector3(v: RMXVector3, w: RMFloatB) -> RMXVector4{
     return RMXVector4Make(v.x,v.y,v.z,w)
 }
 
+func == (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z
+}
+
+func != (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
+    return lhs.x != rhs.x || lhs.y != rhs.y || lhs.z != rhs.z
+}
+
 extension GLKMatrix4 {
     /*
     var upVector: RMXVector3 {

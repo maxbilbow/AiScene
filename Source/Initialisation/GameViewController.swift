@@ -96,9 +96,20 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         
         // configure the view
         self.gameView!.backgroundColor = NSColor.lightGrayColor()
-//        self.gameView?.pointOfView
+
+//        self.world?.activeSprite.node.addObserver(self, selector: "somethingHappened:", name: "WHATEVER", object: nil)
+        
+//        let notificationCenter = NSNotificationCenter.defaultCenter()
+//        let mainQueue = NSOperationQueue.mainQueue()
+//        
+//        var observer = notificationCenter.addObserverForName(UITextFieldTextDidChangeNotification, object: nil, queue: mainQueue) { _ in
+//            self.sendButton.enabled = self.messageField.text.utf16count > 0
+//        }
     }
     
+    func somethingHappened(thing: AnyObject){
+        println(thing)
+    }
 
 
 }

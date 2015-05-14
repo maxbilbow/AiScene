@@ -14,6 +14,17 @@ import SceneKit
 import UIKit
 
 extension RMXDPad {
+    
+    func toggleAi(recogniser: UITapGestureRecognizer){
+        self.world!.aiOn = !self.world!.aiOn
+        NSLog("aiOn: \(self.world!.aiOn)")
+        //self.world!.setBehaviours(self.world!.hasBehaviour)
+    }
+    
+    func jump(recogniser: UITapGestureRecognizer){
+        self.action(action: "jump", speed: 1)
+    }
+    
         private func _handleRelease(state: UIGestureRecognizerState) {
             if state == UIGestureRecognizerState.Ended {
                 self.action(action: "stop")
@@ -139,15 +150,51 @@ extension RMXDPad {
                 let result: AnyObject! = hitResults[0]
                 
                 ///TODO: GrabItem (and not itself)
+//                if self.activeSprite!.hasItem {
+//                    NSLog("Node is thrown: \(self.activeSprite!.item!.name)")
+//                    self.action(action: "throw", speed: 20)
+//                    return
+//                } else
+                
                 if let node = result.node {
-                    self.world?.observer.node.addChildNode(RMXSprite.rootNode(node, rootNode: self.world!.scene.rootNode))
-                    node
-//                    if self.world?.observer.grabItem(item: self.world!.getSprite(node: node)) == false {
-//                        self.action(action: "throw", speed: 20)
-//                        _handleRelease(recognizer.state)
-//                    }
+                    if let body = node.physicsBody {
+                        switch (body.type){
+                        case .Static:
+                            NSLog("Node is static")
+                            break
+                        case .Dynamic:
+                            NSLog("Node is Dynamic")
+                            break
+                        case .Kinematic:
+                            NSLog("Node is Kinematic")
+                            break
+                        default:
+                            fatalError("Something went wrong")
+                        }
+                    }
+                    let rootNode = RMXSprite.rootNode(node, rootNode: self.world!.scene.rootNode)
+                    if rootNode == self.activeSprite?.node {
+                        NSLog("Node is self")
+                        //return
+                    } else {
+                        if let item = self.world!.getSprite(node: node) {
+                            if let itemInHand = self.activeSprite!.item {
+                                if item.name == itemInHand.name {
+                                    self.action(action: "throw", speed: 20 * item.mass)
+                                    NSLog("Node \(item.name) was thrown with force: 20 x \(item.mass)")
+                                } else {
+//                                   self.world?.observer.grabItem(item: item)
+                                    NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
+                                }
+                            } else {
+                                //self.world?.observer.grabItem(item: item)
+                                NSLog("Node is grabbable: \(item.name)")
+                            }
+                        }
+                    }
                 }
                 
+  
                 // get its material
                 let material = result.node!.geometry!.firstMaterial!
                 

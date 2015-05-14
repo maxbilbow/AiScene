@@ -9,6 +9,7 @@
 import Foundation
 import GLKit
 
+
 extension RMX {
     static let RANDOM_MOVEMENT = true
     
@@ -53,77 +54,86 @@ extension RMX {
 //
 //      } 
     }
-    static func buildScene(world: RMSWorld) -> RMSWorld{
-        
-//        let poppy = self.makePoppy(world: world)
-//        
-        let observer = world.activeSprite
-//        let actors = [ 0:observer, 1:poppy ]
-        
-        autoreleasepool {
-
-            for child in world.children {
-                let sprite = child
-                if sprite.isUnique {
-                    return
-                }
-                if sprite.type == RMXSpriteType.AI {
-                var timePassed = 0
-                var timeLimit = random() % 600
-                let speed:RMFloatB = RMFloatB(random() % 15)/3
-//                    let theta = Float(random() % 100)/100
-//                    let phi = Float(random() % 100)/100
-//                    var target = world.furthestObjectFrom(sprite)
-                var randomMovement = false
-                var accelerating = false
-                    sprite.addBehaviour{ (isOn:Bool) -> () in
-                        if !isOn { return }
-                    if !self.RANDOM_MOVEMENT { return }
-                    if sprite.hasGravity { //Dont start until gravity has been toggled once
-                        randomMovement = true
-                    }
+    enum MoveState { case MOVING, TURNING, IDLE }
+    static func addRandomMovement(to sprite: RMXSprite) {
+        if let world = sprite.world {
+            RMXLog("Adding AI to \(sprite.name)")
+            var timePassed = 0
+            var timeLimit = random() % 600
+            let speed:RMFloatB = RMFloatB(random() % 15000)/3
+            //                    let theta = Float(random() % 100)/100
+            //                    let phi = Float(random() % 100)/100
+            //                    var target = world.furthestObjectFrom(sprite)
+            
+            var state: MoveState = .MOVING
+            sprite.addBehaviour{ (isOn:Bool) -> () in
+                if !isOn { return }
+                if !self.RANDOM_MOVEMENT { return }
                 
-                    if randomMovement && !sprite.hasGravity {
-                        if timePassed >= timeLimit {
-                            if sprite.hasItem {
-                                sprite.turnToFace(observer)
-                                sprite.throwItem(500)
-                            }
-                            timePassed = 0
-                            timeLimit = random() % 1600 + 10
-                            
-                            if sprite.distanceTo(point: RMXVector3Zero) > world.radius - 50 {
-                                accelerating = false
-                                timeLimit = 600
-                            } else {
-                              let rmxID = random() % RMXSprite.COUNT
-                                if let target = world.childSpriteArray.get(rmxID) {
+                
+                switch state {
+                case .TURNING:
+                    if timePassed >= timeLimit {
+                        if sprite.hasItem {
+                            sprite.turnToFace(world.activeSprite)
+                            sprite.throwItem(500)
+                        }
+                        timePassed = 0
+                        timeLimit = random() % 1600 + 10
+                        
+                        if sprite.distanceTo(point: RMXVector3Zero) > world.radius - 50 {
+                            state = .MOVING
+                            timeLimit = 600
+                        } else {
+                            let rmxID = random() % RMXSprite.COUNT
+                            if let target = world.childSpriteArray.get(rmxID) {
                                 sprite.headTo(target, speed: speed, doOnArrival: { (sender, objects) -> AnyObject? in
-//                                        if let target = world.furthestObjectFrom(sprite) {
-//                                            
-//                                        }
+                                    //                                        if let target = world.furthestObjectFrom(sprite) {
+                                    //
+                                    //                                        }
                                     sprite.grabItem(item: target)
                                     return nil
                                 })
                                 
-                                accelerating = true
-                                }
+                                state = .MOVING
                             }
-                        } else {
-                            if accelerating {
-                                sprite.accelerateForward(speed)
-                            }
-                            timePassed++
                         }
                     }
-                }
+                    break
+                        
+                    
+                case .MOVING:
+                    sprite.accelerateForward(speed)
+                    timePassed++
+                    break
+                default:
+                    fatalError()
                 }
             }
         }
+    }
+    
+
+    static func buildScene(world: RMSWorld) -> RMSWorld{
+        
+//        let poppy = self.makePoppy(world: world)
+//
+        let observer = world.activeSprite
+//        let actors = [ 0:observer, 1:poppy ]
         
 
+            for child in world.children {
+                let sprite = child
+                if !sprite.isUnique && sprite.type == RMXSpriteType.AI {
+                    addRandomMovement(to: child)
+                }
+            }
+    
         return world
     }
+    
+    
+    
     static func makePoppy(#world: RMSWorld) -> RMXSprite{
         let poppy: RMXSprite = RMXSprite.Unique(world, asType: .AI).asShape(radius: 3, shape: .DOG).asPlayerOrAI()
 

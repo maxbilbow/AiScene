@@ -50,30 +50,78 @@ class RMXDPad : RMXInterface {
     override func setUpGestureRecognisers(){
 //        let image = UIImage(contentsOfFile: "popNose.png")
 //        button.setImage(image, forState: UIControlState.Normal)
-        
-        func pauseButton (view: UIView)  {
-            let button: UIButton = UIButton(frame: CGRectMake(0, view.bounds.height - 30, view.bounds.width / 3, 20))
+        let topBar: CGFloat = 40; let buttonCount: CGFloat = 5
+        func makeBottomLeftBar (view: UIView)  {
+            let lastCam: UIButton = UIButton(frame: CGRectMake(0, view.bounds.height - 30, view.bounds.width / 3, 20))
             
-            button.setTitle("< CAM ", forState:UIControlState.Normal)
-            button.addTarget(self, action: Selector("previousCamera:"), forControlEvents:UIControlEvents.TouchDown)
-            button.enabled = true
-            view.addSubview(button)
+            lastCam.setTitle("< CAM ", forState:UIControlState.Normal)
+            lastCam.addTarget(self, action: Selector("previousCamera:"), forControlEvents:UIControlEvents.TouchDown)
+            lastCam.enabled = true
+            view.addSubview(lastCam)
             
-            let behaviours: UIButton = UIButton(frame: CGRectMake(view.bounds.width / 3, view.bounds.height - 30, view.bounds.width / 3, 20))
+            let nextCam: UIButton = UIButton(frame: CGRectMake(view.bounds.width / 3, view.bounds.height - 30, view.bounds.width / 3, 20))
             
-            behaviours.setTitle("CAM >", forState:UIControlState.Normal)
+            nextCam.setTitle("CAM >", forState:UIControlState.Normal)
 //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            behaviours.addTarget(self, action: Selector("nextCamera:"), forControlEvents:UIControlEvents.TouchDown)
-            behaviours.enabled = true
-            view.addSubview(behaviours)
+            nextCam.addTarget(self, action: Selector("nextCamera:"), forControlEvents:UIControlEvents.TouchDown)
+            nextCam.enabled = true
+            view.addSubview(nextCam)
         }
+        
+        func makeTopBar (view: UIView)  {
+            let switchButton: UIButton = UIButton(frame: CGRectMake(0, 0, view.bounds.width / buttonCount, topBar))
+            
+            switchButton.setTitle("<SWITCH> ", forState:UIControlState.Normal)
+            switchButton.addTarget(self, action: Selector("switchEnvironment:"), forControlEvents:UIControlEvents.TouchDown)
+            switchButton.enabled = true
+            switchButton.backgroundColor = UIColor.grayColor()
+            view.addSubview(switchButton)
+            
+            let behaviours: UIButton = UIButton(frame: CGRectMake(view.bounds.width / buttonCount, 0, view.bounds.width / buttonCount, topBar))
+            
+            behaviours.setTitle("<Toggle AI>", forState:UIControlState.Normal)
+            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
+            behaviours.addTarget(self, action: Selector("toggleAi:"), forControlEvents:UIControlEvents.TouchDown)
+            behaviours.enabled = true
+            behaviours.backgroundColor = UIColor.grayColor()
+            view.addSubview(behaviours)
+            
+            let gravity: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 2 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
+            
+            gravity.setTitle("<Gravity>", forState:UIControlState.Normal)
+            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
+            gravity.addTarget(self, action: Selector("toggleAllGravity:"), forControlEvents:UIControlEvents.TouchDown)
+            gravity.enabled = true
+            gravity.backgroundColor = UIColor.grayColor()
+            view.addSubview(gravity)
+            
+            let playerGravity: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 3 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
+            
+            playerGravity.setTitle("<My Gravity>", forState:UIControlState.Normal)
+            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
+            playerGravity.addTarget(self, action: Selector("toggleGravity:"), forControlEvents:UIControlEvents.TouchDown)
+            playerGravity.enabled = true
+            playerGravity.backgroundColor = UIColor.grayColor()
+            view.addSubview(playerGravity)
+            
+            let jump: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 4 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
+            
+            jump.setTitle("<JUMP>", forState:UIControlState.Normal)
+            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
+            jump.addTarget(self, action: Selector("jump:"), forControlEvents:UIControlEvents.TouchDown)
+            jump.enabled = true
+            jump.backgroundColor = UIColor.grayColor()
+            view.addSubview(jump)
+        }
+
         
         
         let w = self.gameView!.bounds.size.width
-        let h = self.gameView!.bounds.size.height
-        let leftView: UIView = UIImageView(frame: CGRectMake(0, 0, w/2, h))
-        let rightView: UIView = UIImageView(frame: CGRectMake(w/2, 0, w/2, h))
-        pauseButton(leftView)
+        let h = self.gameView!.bounds.size.height - topBar
+        let leftView: UIView = UIImageView(frame: CGRectMake(0, topBar, w/2, h))
+        let rightView: UIView = UIImageView(frame: CGRectMake(w/2, topBar, w/2, h))
+        makeTopBar(self.gameView)
+        makeBottomLeftBar(leftView)
         
         
         
@@ -131,10 +179,7 @@ class RMXDPad : RMXInterface {
     var i = 0
     var moveOrigin: CGPoint = CGPoint(x: 0,y: 0)
     var lookOrigin: CGPoint = CGPoint(x: 0,y: 0)
-    func toggleBehaviours(recogniser: UITapGestureRecognizer){
-//        self.world!.usesBehaviour = !self.world!.usesBehaviour
-//        self.world!.setBehaviours(self.world!.usesBehaviour)
-    }
+
     
     
     

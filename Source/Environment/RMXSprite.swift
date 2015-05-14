@@ -20,7 +20,7 @@ protocol RMXSpriteManager {
 class RMXSprite : RMXSpriteManager {
     
     lazy var environments: ChildSpriteArray = ChildSpriteArray(parent: self)
-
+    var aiOn: Bool = false
     
     var children: [RMXSprite] {
         return environments.current
@@ -69,9 +69,14 @@ class RMXSprite : RMXSpriteManager {
         return self.node.parentNode
     }
     
+    var node: SCNNode {
+        return self._node
+    }
+    
     var parent: RMXSprite?
     
-    var node: SCNNode
+    private var _node: SCNNode
+    
     
     var name: String {
         return "\(_name): \(self.rmxID)"
@@ -86,6 +91,7 @@ class RMXSprite : RMXSpriteManager {
     
     func setName(name: String) {
         self._name = name
+        self.node.name = self.name
     }
     var altitude: RMFloatB {
         return self.position.y
@@ -171,11 +177,15 @@ class RMXSprite : RMXSpriteManager {
     
 
     init(node: SCNNode = RMXNode()){
-        self.node = node
+        _node = node
         
         self.spriteDidInitialize()
     }
     
+    func setNode(node: SCNNode){
+        self._node = node
+        self._node.name = self.name
+    }
     
     var usesBehaviour = true
 
@@ -246,16 +256,16 @@ class RMXSprite : RMXSpriteManager {
     var acceleration: RMXVector3 = RMXVector3Zero
     private let _zNorm = 90 * PI_OVER_180
     
-    
+    func processAi(aiOn isOn: Bool = true) {
+        for behaviour in self.behaviours {
+            behaviour(isOn)
+        }
+    }
     
     func animate() {
         if let type = self.type {
             //            if type == .PASSIVE { return }
-            if type == .AI {
-                for behaviour in self.behaviours {
-                    behaviour(self.usesBehaviour)
-                }
-            }
+            self.processAi(aiOn: self.usesBehaviour)
         } else {
             self.type = .PASSIVE
             return
@@ -288,11 +298,13 @@ class RMXSprite : RMXSpriteManager {
             
         }
         func debug(){
+            if false {
                 let transform = self.node.transform
                 if self.isObserver { RMXLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
                
             
-            if self.isObserver { RMXLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
+                if self.isObserver { RMXLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
+            }
         }
     }
     lazy var cameras: Array<SCNNode> = [ self.node ]
@@ -322,7 +334,7 @@ extension RMXSprite {
     
     private func setShape(shapeType type: ShapeType, scale s: RMXVector3?) {
             let scale = s ?? self.node.scale
-            self.node = RMXModels.getNode(shapeType: type.rawValue, scale: scale)
+            self.setNode(RMXModels.getNode(shapeType: type.rawValue, scale: scale))
     }
     
     func asShape(radius: RMFloatB? = nil, height: RMFloatB? = nil, scale: RMXVector3? = nil, shape shapeType: ShapeType = .CUBE, asType type: RMXSpriteType = .PASSIVE, color: NSColor? = nil) -> RMXSprite {
@@ -335,17 +347,18 @@ extension RMXSprite {
             }
             return true
         }
-        self.node = RMXModels.getNode(shapeType: shapeType.rawValue,mode: type, scale: scale, radius: radius, height: height, color: color)
+        self.setNode(RMXModels.getNode(shapeType: shapeType.rawValue,mode: type, scale: scale, radius: radius, height: height, color: color))
         return self
     }
 
     var mass: RMFloatB {
-        var mass = self.node.physicsBody!.mass
-        if mass == 0 {
-            mass = self.node.presentationNode().physicsBody!.mass
+        if let body = self.node.physicsBody {
+            return RMFloatB(body.mass)
+        } else {
+            return 0
         }
-        return RMFloatB(mass)
     }
+    
     func asPlayerOrAI(position: RMXVector3 = RMXVector3Zero) -> RMXSprite {
         if self.type == nil {
             self.type = .PLAYER
@@ -452,12 +465,7 @@ extension RMXSprite {
         self.behaviours.removeAll()
     }
     
-    func setBehaviours(areOn: Bool){
-        self.usesBehaviour = areOn
-        for child in children{
-            child.usesBehaviour = areOn
-        }
-    }
+    
     
     
   
@@ -475,7 +483,9 @@ extension RMXSprite {
             self.item!.hasGravity = _itemHadGravity
             let fwd4 = self.forwardVector
             let fwd3 = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
-            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
+//            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
+            self.item!.node.physicsBody?.type = SCNPhysicsBodyType.Dynamic
+            self.item!.node.physicsBody!.applyForce(self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength), impulse: true)
             self.item!.wasJustThrown = true
             self.setItem(item: nil)
             return true
@@ -517,20 +527,21 @@ extension RMXSprite {
         return self.distanceTo(item) <= self.reach + item.radius
     }
     
-    func grabItem(item itemIn: RMXSprite? = nil) -> Bool {
-        if self.hasItem { return false }
+    func grabItem(item itemIn: RMXSprite? = nil) -> RMXSprite? {
+        if self.hasItem { return self.item }
         if let item = itemIn {
             if self.isWithinReachOf(item) || true {
                 self.setItem(item: item)
-                return true
-            }
-        } else if let item = self.world!.closestObjectTo(self) {
-            if self.item == nil && self.isWithinReachOf(item) {
-                self.setItem(item: item)
-                return true
+                return item
             }
         }
-        return false
+//        } else if let item = self.world!.closestObjectTo(self) {
+//            if self.item == nil && self.isWithinReachOf(item) {
+//                self.setItem(item: item)
+//                return item
+//            }
+//        }
+        return nil
     }
     
     func releaseItem() {
@@ -627,7 +638,7 @@ extension RMXSprite {
     }
     
     func headTo(object: RMXSprite, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
-        let dist = self.turnToFace(object)
+        let dist = self.turnToFace(object, rSpeed: speed)
         if  dist >= fabs(object.reach + self.reach) {
             #if OPENGL_OSX
                 speed *= 0.5
@@ -636,12 +647,12 @@ extension RMXSprite {
             if !self.hasGravity {
                 let climb = speed * 0.1
                 if self.altitude < object.altitude {
-                    self.accelerateUp(climb)
+                    self.node.physicsBody?.applyForce(SCNVector3Make(0,climb,0), impulse: true)
                 } else if self.altitude > object.altitude {
-                    self.accelerateUp(-climb / 2)
+                    self.node.physicsBody?.applyForce(SCNVector3Make(0,-climb / 2,0), impulse: true)
                 } else {
                     self.stop()
-                    RMXVector3SetY(&self.node.physicsBody!.velocity, 0)
+                    //RMXVector3SetY(&self.node.physicsBody!.velocity, 0)
                 }
             }
             
@@ -654,13 +665,13 @@ extension RMXSprite {
     }
     
 ///TODO Theta may be -ve?
-    func turnToFace(object: RMXSprite) -> RMFloatB {
+    func turnToFace(object: RMXSprite, rSpeed: RMFloatB = 1) -> RMFloatB {
         var goto = object.centerOfView
         
         
         let theta = -RMXGetTheta(vectorA: self.position, vectorB: goto)
         if theta > 0.1 {
-            self.lookAround(theta: self.rotationSpeed)
+            self.lookAround(theta: self.rotationSpeed * rSpeed)
         }
         
         if self.hasGravity { //TODO delete and fix below
