@@ -94,7 +94,11 @@ extension RMXSprite {
 
 
     var velocity: RMXVector3 {
-        return self.node.physicsBody!.velocity ?? RMXVector3Zero
+        if let body = self.physicsBody {
+            return body.velocity
+        } else {
+            return RMXVector3Zero
+        }
     }
 
     

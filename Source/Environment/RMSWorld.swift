@@ -69,12 +69,13 @@ class RMSWorld  {
     func worldDidInitialize() {
         let radius = RMSWorld.RADIUS
 //            self.scene.physicsWorld.gravity = RMXVector3Zero
-            let earth = RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: radius * 10)
+        let earth = RMXSprite.new(parent: self, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: radius * 10, color: NSColor.yellowColor()))
 //            earth.physicsField = SCNPhysicsField.radialGravityField()
 
 //            earth.physicsField!.categoryBitMask = Int(SCNPhysicsCollisionCategory.Default.rawValue)
-    
-            self.scene.rootNode.addChildNode(earth)
+
+        earth.setName(name: "The Ground")
+        self.insertChild(earth, andNode: true)
 
             //cameras
             let sunCam: SCNNode = SCNNode()
@@ -139,24 +140,25 @@ class RMSWorld  {
         }   else { return nil }
     }
     
-    func insertChild(child: RMXSprite, insertNode:Bool = true){
+    func insertChild(child: RMXSprite, andNode:Bool = true){
         child.parentSprite = nil
         child.world = self
-            if insertNode {
+            if andNode {
                 self.scene.rootNode.addChildNode(child.node)
             }
+        RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
         self.childSpriteArray.set(child)
     }
     
     func insertChildren(children: [RMXSprite], insertNodes:Bool = true){
         for child in children {
-            self.insertChild(child, insertNode: insertNodes)
+            self.insertChild(child, andNode: insertNodes)
         }
     }
 
     func insertChildren(#children: [Int:RMXSprite], insertNodes:Bool = true){
         for child in children {
-            self.insertChild(child.1, insertNode: insertNodes)
+            self.insertChild(child.1, andNode: insertNodes)
         }
     }
   
@@ -196,13 +198,13 @@ class RMSWorld  {
 //            return nil
 //        } else
 
-        if node.name == nil || node.name!.isEmpty {
+        if node.name == nil || node.name == "" {
             let n = RMXSprite.rootNode(node, rootNode: self.scene.rootNode)
             let sprite = RMXSprite.new(parent: self, node: n)
             return sprite
         } else {
             for sprite in self.children {
-                if sprite.name == node.name {
+                if sprite.node.name == node.name {
                     return sprite
                 }
             }

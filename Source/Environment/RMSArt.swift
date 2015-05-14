@@ -200,17 +200,18 @@ class RMXArt {
                     
              
             #if SceneKit
-                world.scene.rootNode.addChildNode(node)
+                
 
                 if let sprite = world.getSprite(node: node) {
                     RMX.addRandomMovement(to: sprite)
-                    sprite.insertChild(sprite, andNode: false)
+                } else {
+                    world.scene.rootNode.addChildNode(node)
                 }
                 
             #else
-                let sprite = RMXSprite(node: node)
+                let sprite = RMXSprite.new(parent: world, node: node)
                 sprite.setColor(RMXArt.randomColor())
-                world.insertChild(sprite)
+
             #endif
 //            let object: RMXSprite = RMXSprite.new(parent: world, nodeOnly: true)
 //            object.hasGravity = false

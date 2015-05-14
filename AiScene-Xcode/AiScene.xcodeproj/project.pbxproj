@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,7 +26,6 @@
 		6C4A28841B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
 		6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
 		6C9299981AE5432000E71811 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299961AE5432000E71811 /* Main.storyboard */; };
-		6C92999A1AE5432000E71811 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299991AE5432000E71811 /* Images.xcassets */; };
 		6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C92999B1AE5432000E71811 /* LaunchScreen.xib */; };
 		6C9299A91AE5432100E71811 /* AiSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299A81AE5432100E71811 /* AiSceneTests.swift */; };
 		6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B81AE544C000E71811 /* 3dModels.swift */; };
@@ -58,7 +57,6 @@
 		6C9299F31AE5457700E71811 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
 		6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F41AE5467000E71811 /* AppDelegate.swift */; };
 		6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299FE1AE5497800E71811 /* AppDelegate.swift */; };
-		6C929A071AE5497900E71811 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C929A061AE5497900E71811 /* Images.xcassets */; };
 		6C929A0A1AE5497900E71811 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C929A081AE5497900E71811 /* MainMenu.xib */; };
 		6C929A161AE5497900E71811 /* AiScene_OSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */; };
 		6C929A1D1AE5499900E71811 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C91AE544C000E71811 /* GameView.swift */; };
@@ -120,7 +118,6 @@
 		6C92998B1AE5432000E71811 /* AiScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C92998F1AE5432000E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C9299971AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		6C9299991AE5432000E71811 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6C92999C1AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		6C9299A21AE5432100E71811 /* AiSceneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiSceneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C9299A71AE5432100E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -158,7 +155,6 @@
 		6C9299FA1AE5497800E71811 /* AiScene-OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AiScene-OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C9299FD1AE5497800E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C9299FE1AE5497800E71811 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6C929A061AE5497900E71811 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6C929A091AE5497900E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AiScene-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C929A141AE5497900E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -242,7 +238,6 @@
 			children = (
 				6C9299961AE5432000E71811 /* Main.storyboard */,
 				6C9299F41AE5467000E71811 /* AppDelegate.swift */,
-				6C9299991AE5432000E71811 /* Images.xcassets */,
 				6C92999B1AE5432000E71811 /* LaunchScreen.xib */,
 				6C92998E1AE5432000E71811 /* Supporting Files */,
 			);
@@ -371,7 +366,6 @@
 			isa = PBXGroup;
 			children = (
 				6C9299FE1AE5497800E71811 /* AppDelegate.swift */,
-				6C929A061AE5497900E71811 /* Images.xcassets */,
 				6C929A081AE5497900E71811 /* MainMenu.xib */,
 				6C9299FC1AE5497800E71811 /* Supporting Files */,
 			);
@@ -487,6 +481,7 @@
 				TargetAttributes = {
 					6C92998A1AE5432000E71811 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = 668T39KN4E;
 					};
 					6C9299A11AE5432100E71811 = {
 						CreatedOnToolsVersion = 6.3;
@@ -502,7 +497,7 @@
 				};
 			};
 			buildConfigurationList = 6C9299861AE5432000E71811 /* Build configuration list for PBXProject "AiScene" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -532,7 +527,6 @@
 				6C4A287A1B03ACCC001C3F5B /* Icon.png in Resources */,
 				6C4A28781B03ACCC001C3F5B /* pop1.png in Resources */,
 				6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */,
-				6C92999A1AE5432000E71811 /* Images.xcassets in Resources */,
 				6C9299F11AE544D500E71811 /* art.scnassets in Resources */,
 				6C4A287E1B03ACCC001C3F5B /* texture_poppy.png in Resources */,
 				6C9299981AE5432000E71811 /* Main.storyboard in Resources */,
@@ -555,7 +549,6 @@
 			files = (
 				6C4A287D1B03ACCC001C3F5B /* popNose.png in Resources */,
 				6C4A287B1B03ACCC001C3F5B /* Icon.png in Resources */,
-				6C929A071AE5497900E71811 /* Images.xcassets in Resources */,
 				6C929A371AE54E3E00E71811 /* art.scnassets in Resources */,
 				6C4A28751B03ACCC001C3F5B /* IMG_0014.png in Resources */,
 				6C4A28791B03ACCC001C3F5B /* pop1.png in Resources */,
@@ -792,7 +785,8 @@
 		6C9299AD1AE5432100E71811 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = AiScene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
@@ -803,7 +797,8 @@
 		6C9299AE1AE5432100E71811 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = AiScene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";

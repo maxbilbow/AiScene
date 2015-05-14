@@ -79,7 +79,7 @@ class RMXSprite : RMXSpriteManager {
     
     
     var name: String {
-        return "\(_name): \(self.rmxID)"
+        return "\(_name)-\(self.rmxID)"
     }
     
     var centerOfView: RMXVector3 {
@@ -87,11 +87,22 @@ class RMXSprite : RMXSpriteManager {
     }
     
     var isAnimated: Bool = true
-    private var _name: String = ""
+    private var _name: String = "SPRITE"
     
-    func setName(name: String) {
-        self._name = name
+    func setName(name: String? = nil) {
+        if let name = name {
+            self._name = name
+            NSLog("Name set to \(self.name)")
+        } else if let name = self.node.name {
+            NSLog("node is '\(name)' (!= \(self.name)) - sprite will be named '\(_name)-\(name)-\(self.rmxID)'")
+            if self.name != name { self._name += "-\(name)" }
+        } else {
+            NSLog(self.node.name ?? "node is nameless - but will be named '\(self.name)'")
+            //self.node.name = self.name
+        }
         self.node.name = self.name
+        
+        
     }
     var altitude: RMFloatB {
         return self.position.y
@@ -131,15 +142,6 @@ class RMXSprite : RMXSpriteManager {
     
     
     
-    private var _isDrawable: Bool?
-    var isDrawable: Bool {
-        if _isDrawable != nil {
-            return _isDrawable!
-        } else {
-            _isDrawable = self.isVisible && self.shapeType != .NULL
-        }
-        return _isDrawable!
-    }
     
 
     ///Set automated rotation (used mainly for the sun)
@@ -184,7 +186,7 @@ class RMXSprite : RMXSpriteManager {
     
     func setNode(node: SCNNode){
         self._node = node
-        self._node.name = self.name
+        self.setName()
     }
     
     var usesBehaviour = true
@@ -199,6 +201,7 @@ class RMXSprite : RMXSpriteManager {
     
     class func rootNode(node: RMXNode, rootNode: RMXNode) -> RMXNode {
         if node.parentNode == rootNode || node.parentNode == nil {
+            RMXLog("RootNode: \(node.name)")
             return node
         } else {
             println(node.parentNode)
@@ -209,17 +212,16 @@ class RMXSprite : RMXSpriteManager {
     class func new(parent p: AnyObject, node: SCNNode? = nil) -> RMXSprite {
         
         let sprite = RMXSprite(node: node ?? RMXNode())
-        
-//        if nodeOnly {
-            if let parent = p as? RMSWorld {
+    
+            if let world = p as? RMSWorld {
                 
-                let minHeight = parent.ground + sprite.height / 3
-                if sprite.y < minHeight {
-                    sprite.y = minHeight
-                }
-                parent.insertChild(sprite)
+//                let minHeight = parent.ground + sprite.height / 3
+//                if sprite.y < minHeight {
+//                    sprite.y = minHeight
+//                }
+                world.insertChild(sprite, andNode: true)
             } else if let parent = p as? RMXSprite {
-                parent.insertChild(sprite)
+                parent.insertChild(sprite, andNode: false)//TODO:: is this right?
             
             } else {
                 fatalError("Not yet compatable")
@@ -230,14 +232,14 @@ class RMXSprite : RMXSpriteManager {
     func spriteDidInitialize(){
         RMXSprite.COUNT++
         #if SceneKit
-            self.node.physicsBody = SCNPhysicsBody.staticBody()
-            self.node.physicsBody!.restitution = 0.5
-//            self.node.physicsBody!.allowsResting = false
+           // self.node.physicsBody = SCNPhysicsBody.staticBody()
+           // self.node.physicsBody!.restitution = 0.5
+//TODO
         #endif
         if self.parentSprite != nil {
             self.world = self.parentSprite!.world
         }
-        self.node.name = self.name
+        self.setName()
     }
     
     func toggleGravity() {
@@ -327,7 +329,8 @@ extension RMXSprite {
         self.y = self.y ?? point.y
         self.z = self.z ?? point.z
         self.startingPoint = RMXVector3Make(self.x!,self.y!,self.z!)
-        self.node.position = startingPoint
+        //self.node.position = startingPoint
+        
         
     }
     
@@ -373,7 +376,7 @@ extension RMXSprite {
             body.friction = 0.1
         } else {
             if self.node.geometry == nil {
-                self.node.physicsBody = SCNPhysicsBody.dynamicBody()
+                self.node.physicsBody = SCNPhysicsBody.dynamicBody()//TODO check
             }
         }
             self.node.camera = RMXCamera()
@@ -415,9 +418,7 @@ extension RMXSprite {
         cameraNode.position = pos
         cameraNode.camera = RMXCamera()
     }
-    func resetDrawable(){
-        self._isDrawable = nil
-    }
+    
     
    
 }
@@ -478,14 +479,18 @@ extension RMXSprite {
     
     func throwItem(strength: RMFloatB) -> Bool
     {
-        if self.item != nil {
-            self.item!.isAnimated = true
-            self.item!.hasGravity = _itemHadGravity
+        if let itemInHand = self.item {
+            itemInHand.isAnimated = true
+            itemInHand.hasGravity = _itemHadGravity
             let fwd4 = self.forwardVector
             let fwd3 = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
 //            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
-            self.item!.node.physicsBody?.type = SCNPhysicsBodyType.Dynamic
-            self.item!.node.physicsBody!.applyForce(self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength), impulse: true)
+            if let body = itemInHand.node.physicsBody {
+                body.applyForce(self.velocity + RMXVector3MultiplyScalar(fwd3,strength), impulse: false)
+                RMXLog("\(itemInHand.name) was just thrown")
+            } else {
+                RMXLog("\(itemInHand.name) had no body")
+            }
             self.item!.wasJustThrown = true
             self.setItem(item: nil)
             return true
@@ -588,7 +593,8 @@ extension RMXSprite {
                 _jumpState = .GOING_UP
                 self.squatLevel = 0
             } else {
-                RMXVector3PlusY(&self.node.physicsBody!.velocity, _jumpStrength)
+                //RMXVector3PlusY(&self.node.physicsBody!.velocity, _jumpStrength) //TODO check mass is necessary below
+                self.node.physicsBody?.applyForce(RMXVector3Make(0, _jumpStrength * self.mass, 0), impulse: false)
             }
             break
         case .GOING_UP:

@@ -161,7 +161,7 @@ extension RMXDPad {
                         switch (body.type){
                         case .Static:
                             NSLog("Node is static")
-                            break
+                            return
                         case .Dynamic:
                             NSLog("Node is Dynamic")
                             break
@@ -186,9 +186,11 @@ extension RMXDPad {
 //                                   self.world?.observer.grabItem(item: item)
                                     NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
                                 }
-                            } else {
-                                //self.world?.observer.grabItem(item: item)
+                            } else if item.type != RMXSpriteType.BACKGROUND {
+                                self.world?.observer.grabItem(item: item)
                                 NSLog("Node is grabbable: \(item.name)")
+                            } else {
+                                NSLog("Node was NOT grabbable: \(item.name)")
                             }
                         }
                     }
