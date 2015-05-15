@@ -149,53 +149,7 @@ extension RMXDPad {
                 // retrieved the first clicked object
                 let result: AnyObject! = hitResults[0]
                 
-                ///TODO: GrabItem (and not itself)
-//                if self.activeSprite!.hasItem {
-//                    NSLog("Node is thrown: \(self.activeSprite!.item!.name)")
-//                    self.action(action: "throw", speed: 20)
-//                    return
-//                } else
-                
-                if let node = result.node {
-                    if let body = node.physicsBody {
-                        switch (body.type){
-                        case .Static:
-                            NSLog("Node is static")
-                            return
-                        case .Dynamic:
-                            NSLog("Node is Dynamic")
-                            break
-                        case .Kinematic:
-                            NSLog("Node is Kinematic")
-                            break
-                        default:
-                            fatalError("Something went wrong")
-                        }
-                    }
-                    let rootNode = RMXSprite.rootNode(node, rootNode: self.world!.scene.rootNode)
-                    if rootNode == self.activeSprite?.node {
-                        NSLog("Node is self")
-                        //return
-                    } else {
-                        if let item = self.world!.getSprite(node: node) {
-                            if let itemInHand = self.activeSprite!.item {
-                                if item.name == itemInHand.name {
-                                    self.action(action: "throw", speed: 20 * item.mass)
-                                    NSLog("Node \(item.name) was thrown with force: 20 x \(item.mass)")
-                                } else {
-//                                   self.world?.observer.grabItem(item: item)
-                                    NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
-                                }
-                            } else if item.type != RMXSpriteType.BACKGROUND {
-                                self.world?.observer.grabItem(item: item)
-                                NSLog("Node is grabbable: \(item.name)")
-                            } else {
-                                NSLog("Node was NOT grabbable: \(item.name)")
-                            }
-                        }
-                    }
-                }
-                
+                self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 20)
   
                 // get its material
                 let material = result.node!.geometry!.firstMaterial!

@@ -145,7 +145,7 @@ class RMSActionProcessor {
         if action == "grab" {
             self.activeSprite.grabItem()
         }
-        if action == "throw" && speed != 0 {
+        if action == "throw" && speed != 0 {//depreciated perhaps
             if self.activeSprite.hasItem {
                 RMXLog("Throw: \(self.activeSprite.item?.name) with speed: \(speed)")
                 self.activeSprite.throwItem(speed)
@@ -224,15 +224,77 @@ class RMSActionProcessor {
         
     }
     
+    func debug(_ yes: Bool = true){
+        if yes {
+            let node = self.activeSprite.node.presentationNode()
+            RMXLog("\n    vel:\(self.activeSprite.node.physicsBody!.velocity.print)\n    Pos:\(node.position.print)\n transform:\n\(node.transform.print)\n  orientation:\n\(self.activeSprite.orientation.print)")
+        }
+    }
+    
     func animate(){
         if self.extendArm != 0 {
             self.activeSprite.extendArmLength(self.extendArm)
         }
-        let node = self.activeSprite.node.presentationNode()
-        if false { RMXLog("\n    vel:\(self.activeSprite.node.physicsBody!.velocity.print)\n    Pos:\(node.position.print)\n transform:\n\(node.transform.print)\n  orientation:\n\(self.activeSprite.orientation.print)") }
-         }
+        self.debug(false)
+    }
+        
         
     var extendArm: RMFloatB = 0
 //    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
     var isMouseLocked = false
+    
+    
+    func manipulate(action: String? = nil, sprite: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil) -> AnyObject? {
+        if let action = action {
+            switch action {
+                case "throw", "Throw":
+                    if let sprite = sprite {
+                        if let node = object?.node {
+                            if let body = node.physicsBody {
+                                switch (body.type){
+                                case .Static:
+                                    NSLog("Node is static")
+                                    return nil
+                                case .Dynamic:
+                                    NSLog("Node is Dynamic")
+                                    break
+                                case .Kinematic:
+                                    NSLog("Node is Kinematic")
+                                    break
+                                default:
+                                    fatalError("Something went wrong")
+                                }
+                            }
+                            let rootNode = RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
+                            if rootNode == sprite.node {
+                                NSLog("Node is self")
+                                //return
+                            } else {
+                                if let item = self.world.getSprite(node: node) {
+                                    if let itemInHand = sprite.item {
+                                        if item.name == itemInHand.name {
+                                            sprite.throwItem(speed * item.mass)
+                                            NSLog("Node \(item.name) was thrown with force: 20 x \(item.mass)")
+                                        } else {
+                                            //                                   self.world?.observer.grabItem(item: item)
+                                            NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
+                                        }
+                                    } else if item.type != RMXSpriteType.BACKGROUND {
+                                        sprite.grabItem(item: item)
+                                        NSLog("Node is grabbable: \(item.name)")
+                                    } else {
+                                        NSLog("Node was NOT grabbable: \(item.name)")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                break
+            default:
+                NSLog("Action '\(action)' not recognised")
+            }
+            
+        }
+        return nil
+    }
 }

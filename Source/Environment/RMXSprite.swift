@@ -299,8 +299,8 @@ class RMXSprite : RMXSpriteManager {
             
             
         }
-        func debug(){
-            if false {
+        func debug(_ yes: Bool = true){
+            if yes {
                 let transform = self.node.transform
                 if self.isObserver { RMXLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
                

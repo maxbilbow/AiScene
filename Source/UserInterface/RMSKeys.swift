@@ -313,10 +313,8 @@ extension GameView {
                 // retrieved the first clicked object
                 let result: AnyObject! = hitResults[0]
                 
-                if let node = result.node {
-                    self.world?.observer.grabItem(item: self.world!.getSprite(node: node))
-                    RMXLog(node.name)
-                }
+                self.interface!.actionProcessor.manipulate(action: "throw", sprite: self.interface!.activeSprite, object: result, speed: 20)
+            
                 // get its material
                 let material = result.node!.geometry!.firstMaterial!
                 

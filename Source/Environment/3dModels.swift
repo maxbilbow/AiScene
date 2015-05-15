@@ -59,9 +59,9 @@ class RMXModels {
             break
         case ShapeType.FLOOR.rawValue:
             hasColor = true
-            node = SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
-            node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
-            node.geometry?.firstMaterial!.doubleSided = true
+            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius * 0.1)))
+            //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
+            //node.geometry?.firstMaterial!.doubleSided = true
             
             break
         case ShapeType.PONGO.rawValue:
