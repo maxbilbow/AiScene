@@ -25,6 +25,8 @@
 		6C4A28811B03ACCC001C3F5B /* texture_numbers.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A28711B03ACCC001C3F5B /* texture_numbers.png */; };
 		6C4A28841B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
 		6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
+		6C86CE6E1B0669DB00ED6054 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */; };
+		6C86CE701B0669FF00ED6054 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */; };
 		6C9299981AE5432000E71811 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299961AE5432000E71811 /* Main.storyboard */; };
 		6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C92999B1AE5432000E71811 /* LaunchScreen.xib */; };
 		6C9299A91AE5432100E71811 /* AiSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299A81AE5432100E71811 /* AiSceneTests.swift */; };
@@ -114,6 +116,8 @@
 		6C4A28701B03ACCC001C3F5B /* texture_poppy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_poppy.png; sourceTree = "<group>"; };
 		6C4A28711B03ACCC001C3F5B /* texture_numbers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_numbers.png; sourceTree = "<group>"; };
 		6C4A28831B049FF9001C3F5B /* Observers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observers.swift; sourceTree = "<group>"; };
+		6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
+		6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/SceneKit.framework; sourceTree = DEVELOPER_DIR; };
 		6C92998B1AE5432000E71811 /* AiScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C92998F1AE5432000E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C9299971AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -165,6 +169,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C86CE6E1B0669DB00ED6054 /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -179,6 +184,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C86CE701B0669FF00ED6054 /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +216,8 @@
 		6C9299821AE5432000E71811 = {
 			isa = PBXGroup;
 			children = (
+				6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */,
+				6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */,
 				6C4A28821B03ACDB001C3F5B /* Media */,
 				6C9299F01AE544D500E71811 /* art.scnassets */,
 				6C9299B31AE544C000E71811 /* Source */,
@@ -488,6 +496,7 @@
 					};
 					6C9299F91AE5497800E71811 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = 668T39KN4E;
 					};
 					6C929A0E1AE5497900E71811 = {
 						CreatedOnToolsVersion = 6.3;
@@ -842,7 +851,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -862,7 +870,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "AiScene-OSX/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

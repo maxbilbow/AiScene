@@ -26,9 +26,10 @@ class GameView: SCNView  {
         self.gvc = gvc
         self.interface = interface
         self.delegate = self.interface
-        let height = RMFloatB((observer.geometry! as! SCNCylinder).height)
-        let radius = RMFloatB((observer.geometry! as! SCNCylinder).radius)
-        let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 1)
+       // let height = RMFloatB((observer.geometry! as! SCNCylinder).height)
+        let radius = RMFloatB((observer.geometry! as! SCNSphere).radius)
+        let height = radius * 2 
+        let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
         self.observer.node.addChildNode(head)
         head.camera = RMXCamera()
         

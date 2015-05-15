@@ -182,6 +182,14 @@ func + (lhs: SCNVector3, rhs: SCNVector3)->SCNVector3{
     )
 }
 
+func - (lhs: SCNVector3, rhs: SCNVector3)->SCNVector3{
+    return SCNVector3Make(
+        lhs.x - rhs.x,
+        lhs.y - rhs.y,
+        lhs.z - rhs.z
+    )
+}
+
 
 func + (lhs: GLKVector3, rhs: Float)->GLKVector3{
     return GLKVector3AddScalar(lhs, rhs)

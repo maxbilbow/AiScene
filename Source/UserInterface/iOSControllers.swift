@@ -132,25 +132,25 @@ extension RMXDPad {
     
     func grabOrThrow(recognizer: UIGestureRecognizer) {
         let spriteAction = self.world!.activeSprite
-        if let item = spriteAction.item  {
-            spriteAction.throwItem(20)
-            return
-        }
+//        if let item = spriteAction.item  {
+//            spriteAction.throwItem(20 * item.mass)
+//            return
+//        }
         
-        #if SceneKit
-            // retrieve the SCNView
-            let scnView = self.view as! GameView
-            // check what nodes are tapped
-            let p = recognizer.locationInView(scnView)
 
-            if let hitResults = scnView.hitTest(p, options: nil) {
-            // check that we clicked on at least one object
+        // retrieve the SCNView
+        let scnView = self.view as! GameView
+        // check what nodes are tapped
+        let p = recognizer.locationInView(scnView)
+
+        if let hitResults = scnView.hitTest(p, options: nil) {
+        // check that we clicked on at least one object
             if hitResults.count > 0 {
                 // retrieved the first clicked object
                 let result: AnyObject! = hitResults[0]
                 
-                self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 20)
-  
+                self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000)
+
                 // get its material
                 let material = result.node!.geometry!.firstMaterial!
                 
@@ -173,14 +173,10 @@ extension RMXDPad {
                 SCNTransaction.commit()
             }
         }
-            #else
-            spriteAction.grabItem()
-            
-        #endif
     }
 
     
-    }
+}
 
 
 

@@ -9,13 +9,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMSWorld.swift"
-            timestampString = "453299925.717516"
+            filePath = "../Source/UserInterface/RMSActionProcessor.swift"
+            timestampString = "453406277.565599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
-            landmarkName = "animate()"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "movement(_:speed:point:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Environment/RMXSprite.swift"
+            timestampString = "453413859.78619"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
+            landmarkName = "animate(aiOn:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

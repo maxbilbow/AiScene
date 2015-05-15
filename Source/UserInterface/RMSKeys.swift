@@ -14,9 +14,13 @@ import SceneKit
 
 class RMSKeys : RMXInterface {
     
+    let ON_KEY_DOWN: (on:RMFloat,off:RMFloat) = (1,0)
+    let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
+    
     lazy var mv: (on:RMFloat,off:RMFloat) = (self.moveSpeed, 0)
     
     lazy var keys: [ RMKey ] = [
+        RMKey(self, action: "information", characters: "i", isRepeating: false,speed: self.ON_KEY_DOWN),
         RMKey(self, action: "forward", characters: "w", speed: self.mv),
         RMKey(self, action: "back", characters: "s", speed: self.mv),
         RMKey(self, action: "left", characters: "a", speed: self.mv),
@@ -26,18 +30,18 @@ class RMSKeys : RMXInterface {
         RMKey(self, action: "rollLeft", characters: "z", speed: (self.lookSpeed*10,0)),
         RMKey(self, action: "rollRight", characters: "x", speed: (self.lookSpeed*10,0)),
         RMKey(self, action: "jump", characters: " "),
-        RMKey(self, action: "toggleGravity", characters: "g", isRepeating: false,speed: (0,1)),
-        RMKey(self, action: "toggleAllGravity", characters: "G", isRepeating: false,speed: (0,1)),
-        RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: (0,1)),
+        RMKey(self, action: "toggleGravity", characters: "g", isRepeating: false,speed: self.ON_KEY_UP),
+        RMKey(self, action: "toggleAllGravity", characters: "G", isRepeating: false,speed: self.ON_KEY_UP),
+        RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: self.ON_KEY_UP),
         RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: (0.01,0)),
-        RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: (0,1)),//,
-        RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: (0,1)),
+        RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: self.ON_KEY_UP),//,
+        RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: self.ON_KEY_UP),
         RMKey(self, action: "throw", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
         
-        RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: (0,1)),
-        RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: (0,1)), //generically used for testing
-        RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: (0,1)),
-        RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: (0,1))
+        RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: self.ON_KEY_DOWN),
+        RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: self.ON_KEY_DOWN), //generically used for testing
+        RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: self.ON_KEY_DOWN),
+        RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: self.ON_KEY_DOWN)
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
@@ -295,11 +299,10 @@ extension GameView {
     }
     
     override func rightMouseDown(theEvent: NSEvent) {
-        self.keys.get(forChar: "Mouse 2")?.press()
+//        self.keys.get(forChar: "Mouse 2")?.press()
+        self.interface!.actionProcessor.manipulate(action: "throw", sprite: self.interface!.activeSprite, speed: 18000)
         super.rightMouseDown(theEvent)
     }
-    
-    #if SceneKit
     
     
     override func mouseDown(theEvent: NSEvent) {
@@ -313,7 +316,7 @@ extension GameView {
                 // retrieved the first clicked object
                 let result: AnyObject! = hitResults[0]
                 
-                self.interface!.actionProcessor.manipulate(action: "throw", sprite: self.interface!.activeSprite, object: result, speed: 20)
+                self.interface!.actionProcessor.manipulate(action: "throw", sprite: self.interface!.activeSprite, object: result, speed: 18000)
             
                 // get its material
                 let material = result.node!.geometry!.firstMaterial!
@@ -339,7 +342,7 @@ extension GameView {
         }
         super.mouseDown(theEvent)
     }
-    #endif
+
 }
 
 #endif

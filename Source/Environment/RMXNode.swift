@@ -90,7 +90,7 @@ extension RMXSprite {
     
     
     var viewPoint: RMXVector3{
-        return self.forwardVector + self.position
+        return self.position - self.forwardVector
     }
     
     var ground: RMFloatB {
@@ -145,7 +145,7 @@ extension RMXSprite {
     func grabNode(sprite: RMXSprite?){
         if let sprite = sprite {
             #if SceneKit
-            self.insertChild(sprite)
+            //self.insertChild(sprite)
             sprite.setPosition(self.forwardVector)
             #endif
         }
@@ -153,6 +153,7 @@ extension RMXSprite {
     
     func setPosition(position: RMXVector3){
         self.node.position = position
+        self.node.physicsBody?.resetTransform()
     }
 }
 

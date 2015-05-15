@@ -48,186 +48,177 @@ class RMSActionProcessor {
     private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
     private var _panThreshold: RMFloatB = 70
     
-    func movement(action: String!, speed: RMFloatB = 0,  point: [RMFloatB]) -> Bool{
-        if action == nil { return false }
-        if action == "move" && point.count == 3 {
+    func movement(action: String!, speed: RMFloatB = 1,  point: [RMFloatB]) -> Bool{
+        
+        switch action {
+        case nil:
+            RMXLog("ACTION IS NIL")
+            return true
+        case "move", "Move", "MOVE":
+            if point.count == 3 {
                 self.activeSprite.accelerateForward(point[2] * speed)
                 self.activeSprite.accelerateLeft(point[0] * speed)
                 self.activeSprite.accelerateUp(point[1] * speed)
-            
-            let sprite = self.activeSprite.node
-            sprite
-        }
-        if action == "stop" {
+                
+                let sprite = self.activeSprite.node
+                sprite
+            }
+            return true
+        case "Stop", "stop", "STOP":
             self.activeSprite.stop()
             _movement = (0,0,0)
-        }
-        
-        if action == "look" && point.count == 2 {
-            self.activeSprite.lookAround(theta: point[0] * speed,phi: point[1] * speed)
-        }
-        
-        if action == "roll" {
-//            self.activeSprite.addRoll(rollRadians: speed)
+            return true
+        case "look", "Look", "LOOK":
+            if point.count == 2 {
+                self.activeSprite.lookAround(theta: point[0] * speed,phi: point[1] * speed)
+            }
+            return true
+        case "roll", "Roll", "ROLL":
             self.activeSprite.lookAround(roll: speed)
-        }
-
-        
-        if action == "rollLeft"  {
+            return true
+        case "rollLeft":
             self.activeSprite.lookAround(roll: -speed)
-        }
-        
-        if action == "rollRight"  {
+            return true
+        case "rollRight":
             self.activeSprite.lookAround(roll: speed)
-        }
-        
-        
-        if (action == "forward") {
+            return true
+        case "forward":
             if speed == 0 {
                 self.activeSprite.stop()
             }
             else {
                 self.activeSprite.accelerateForward(speed)
             }
-        }
-        
-        if (action == "back") {
+            return true
+        case "back":
             if speed == 0 {
                 self.activeSprite.stop()
             }
             else {
                 self.activeSprite.accelerateForward(-speed)
             }
-        }
-        if (action == "left") {
+            return true
+        case "left":
             if speed == 0 {
                 self.activeSprite.stop()
             }
             else {
                 self.activeSprite.accelerateLeft(speed)
             }
-        }
-        if (action == "right") {
+            return true
+        case "right":
             if speed == 0 {
                 self.activeSprite.stop()
             }
             else {
                 self.activeSprite.accelerateLeft(-speed)
             }
-        }
-        
-        if (action == "up") {
+            return true
+        case "up":
             if speed == 0 {
                 self.activeSprite.stop()
             }
             else {
                 self.activeSprite.accelerateUp(-speed)
             }
-        }
-        if (action == "down") {
+            return true
+        case "down":
             if speed == 0 {
                 self.activeSprite.stop()
             }
             else {
                 self.activeSprite.accelerateUp(speed)
             }
-        }
-        
-        if (action == "jump") {
+            return true
+        case "jump":
             if speed == 0 {
                 self.activeSprite.jump()
             }
             else {
                 self.activeSprite.prepareToJump()
             }
-        }
-        
-        if action == "grab" {
-            self.activeSprite.grabItem()
-        }
-        if action == "throw" && speed != 0 {//depreciated perhaps
-            if self.activeSprite.hasItem {
-                RMXLog("Throw: \(self.activeSprite.item?.name) with speed: \(speed)")
-                self.activeSprite.throwItem(speed)
+            return true
+        case "throw":
+            if speed != 0 {//depreciated perhaps
+                if self.activeSprite.hasItem {
+                    RMXLog("Throw: \(self.activeSprite.item?.name) with speed: \(speed)")
+                    self.manipulate(action: "throw", sprite: self.activeSprite, object: self.activeSprite.item, speed: speed)
+                }
             }
-        }
-        if self.activeSprite.hasItem {
-            if action == "enlargeItem"   {
+            return true
+        case "enlargeItem":
+            if self.activeSprite.hasItem {
                 let size = (self.activeSprite.item?.radius)! * speed
                 if size > 0.5 && size < 15 {
                     self.activeSprite.item?.setRadius(size)
                     self.activeSprite.item?.node.physicsBody!.mass *= RMFloat(size)
                 }
-
             }
-            
-            if action == "extendArm" {// && (self.extendArm != speed && self.extendArm != 0) {
+            return true
+        case "extendArm":
+            if self.activeSprite.hasItem {
                 if self.extendArm != speed {
                     self.extendArm = speed * 5
                 }
             }
-        } else {
-            if action == "toggleAllGravity" && speed == 1{
-                self.world.toggleGravity()
-            }
-        }
-        
-        if action == "toggleGravity" && speed == 1 {
+            return true
+        case "toggleAllGravity":
+            if speed == 1 { self.world.toggleGravity() }
+            break
+        case "toggleGravity":
             self.activeSprite.toggleGravity()
-        }
-        
-        
-        if action == "toggleMouseLock" && speed == 1{
-            #if OPENGL_OSX
-            self.activeSprite.mouse.toggleFocus()
-            #endif
-        }
-
-        
-        if action == "lockMouse" && speed == 1 {
-            self.isMouseLocked = !self.isMouseLocked
-
-        }
-        
-        if action == "switchEnvitonment" {
-            self.world.environments.plusOne()
-        }
-        
-        if action == "toggleFog" {
+            break
+        case "lockMouse":
+            if speed == 1 { self.isMouseLocked = !self.isMouseLocked }
+            break
+        case "switchEnvitonment":
+            if speed == 1 { self.world.environments.plusOne() }
+            break
+        case "toggleFog":
             RMX.toggleFog()
-        }
-        
-        if action == "nextCamera" && speed == 1 {
-            let cameraNode = self.activeSprite.getNextCamera()
-            #if SceneKit
+            break
+        case "nextCamera":
+            if speed == 1 {
+                let cameraNode = self.activeSprite.getNextCamera()
                 self.gameView.pointOfView = cameraNode
-                #else
-                self.world.activeCamera = cameraNode.camera as! RMXCamera
-            #endif
-            
-        } else if action == "previousCamera" && speed == 1 {
-            let cameraNode = self.activeSprite.getPreviousCamera()
-            #if SceneKit
+            }
+            break
+        case "previousCamera":
+            if speed == 1 {
+                let cameraNode = self.activeSprite.getPreviousCamera()
                 self.gameView.pointOfView = cameraNode
-                #else
-                self.world.activeCamera = cameraNode.camera as! RMXCamera
-            #endif
+            }
+            break
+        case "reset":
+            if speed == 1 {
+                self.activeSprite.node.position = self.activeSprite.startingPoint
+                self.activeSprite.node.physicsBody!.resetTransform()
+            }
+            break
+        case "information":
+            if speed == 1 { println(_getInfo()) }
+        default:
+            RMXLog("'\(action)' not recognised")
         }
         
-        if action == "reset" {
-            self.activeSprite.node.position = self.activeSprite.startingPoint
-            self.activeSprite.node.physicsBody!.resetTransform()
-
-        }
         
-        return true
+       
+        return false
         
     }
     
+    private func _getInfo() -> String {
+        let node = self.activeSprite.node//.presentationNode()
+        let sprite = self.activeSprite
+        let physics = self.world.scene.physicsWorld
+        var info = "\n     vel:\(sprite.velocity.print)\n     Pos:\(sprite.position.print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
+        info += "\n       MASS: \(sprite.mass),  GRAVITY: \(physics.gravity.print)"
+        info += "\n   FRICTION: \(node.physicsBody?.friction), Rolling Friction: \(node.physicsBody?.rollingFriction), restitution: \(node.physicsBody?.restitution) \n"
+        return info
+    }
     func debug(_ yes: Bool = true){
         if yes {
-            let node = self.activeSprite.node.presentationNode()
-            RMXLog("\n    vel:\(self.activeSprite.node.physicsBody!.velocity.print)\n    Pos:\(node.position.print)\n transform:\n\(node.transform.print)\n  orientation:\n\(self.activeSprite.orientation.print)")
+            RMXLog(_getInfo())
         }
     }
     
@@ -247,7 +238,7 @@ class RMSActionProcessor {
     func manipulate(action: String? = nil, sprite: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil) -> AnyObject? {
         if let action = action {
             switch action {
-                case "throw", "Throw":
+                case "throw", "Throw","grab", "Grab":
                     if let sprite = sprite {
                         if let node = object?.node {
                             if let body = node.physicsBody {
@@ -274,7 +265,7 @@ class RMSActionProcessor {
                                     if let itemInHand = sprite.item {
                                         if item.name == itemInHand.name {
                                             sprite.throwItem(speed * item.mass)
-                                            NSLog("Node \(item.name) was thrown with force: 20 x \(item.mass)")
+                                            NSLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
                                         } else {
                                             //                                   self.world?.observer.grabItem(item: item)
                                             NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
@@ -286,6 +277,11 @@ class RMSActionProcessor {
                                         NSLog("Node was NOT grabbable: \(item.name)")
                                     }
                                 }
+                            }
+                        } else {
+                            if let itemInHand = sprite.item {
+                                sprite.throwItem(speed * itemInHand.mass)
+                                NSLog("Node \(itemInHand.name) was thrown with force: \(speed) x \(itemInHand.mass)")
                             }
                         }
                     }
