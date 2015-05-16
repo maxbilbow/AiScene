@@ -19,20 +19,25 @@ extension RMXDPad {
 //            self.world!.physics.directionOfGravity = RMXVector3Make(RMFloatB(g.x), RMFloatB(g.y), RMFloatB(g.z))
 //        }
         
+        func tilt(direction: String, tilt: RMFloatB){
+            let rollSpeed = RMFloatB(fabs(RMXInterface.moveSpeed)*4)
+            let rollThreshold: RMFloatB = 0.1
+            if tilt > rollThreshold {
+                let speed = (1.0 + tilt) * rollSpeed
+                self.action(action: direction, speed: speed)
+            } else if tilt < -rollThreshold {
+                let speed = (-1.0 + tilt) * rollSpeed
+                self.action(action: direction, speed: speed)
+            }
+        }
+        
         let key = "accelerometerCounter"
 //        let i = self.world!.clock?.getCounter(forKey:key)
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
         if self.motionManager.deviceMotion != nil {
-            let tilt = RMFloatB(self.motionManager.deviceMotion.gravity.y)
-            let tiltSpeed = RMFloatB(fabs(RMXInterface.moveSpeed)*4)
-            let tiltThreshold: RMFloatB = 0.1
-            if tilt > tiltThreshold {
-                let speed = (1.0 + tilt) * tiltSpeed
-                self.action(action: "roll", speed: speed)
-            } else if tilt < -tiltThreshold {
-                let speed = (-1.0 + tilt) * tiltSpeed
-                self.action(action: "roll", speed: speed)
-            }
+            tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
+            tilt("pitch", RMFloatB(self.motionManager.deviceMotion.gravity.z))
+//            tilt("yaw", RMFloatB(self.motionManager.deviceMotion.gravity.x))
             
             if !_testing { return }
             var x,y,z, q, r, s, t, u, v,a,b,c,e,f,g,h,i,j,k,l,m:Double

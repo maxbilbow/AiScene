@@ -76,6 +76,12 @@ class RMSActionProcessor {
         case "roll", "Roll", "ROLL":
             self.activeSprite.lookAround(roll: speed)
             return true
+        case "pitch", "Pitch", "PITCH":
+            self.activeSprite.lookAround(phi: speed)
+            return true
+        case "yaw", "Yaw", "YAW":
+            self.activeSprite.lookAround(theta: speed)
+            return true
         case "rollLeft":
             self.activeSprite.lookAround(roll: -speed)
             return true
