@@ -366,7 +366,7 @@ extension RMXSprite {
         }
         
         self.speed = 1000 * self.mass / 10
-        self.rotationSpeed = 150 * self.mass / 5
+        self.rotationSpeed = 150 * self.mass / 10
 
         if let body = self.node.physicsBody {
 //           body.rollingFriction = 1000//0.99

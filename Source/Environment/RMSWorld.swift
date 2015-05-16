@@ -52,8 +52,8 @@ class RMSWorld  {
     var activeCamera: SCNNode {
         return self.activeSprite.cameraNode
     }
-    
-    lazy var activeSprite: RMXSprite = RMXSprite.Unique(self, asType: .PLAYER).asShape(radius: 15, height: 15, shape: .SPHERE, color: NSColor.yellowColor()).asPlayerOrAI()
+
+    lazy var activeSprite: RMXSprite = RMXSprite.Unique(self, asType: .PLAYER).asShape(radius: 5, height: 5, shape: .SPHERE, color: NSColor.yellowColor()).asPlayerOrAI()
 
     
     lazy var observer: RMXSprite = self.activeSprite
