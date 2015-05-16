@@ -21,29 +21,30 @@ Slowly building physics fromt the ground up.
 
 Controls:
 ```Swift
-class RMSKeys {
-    
-    var keys: [ RMKey ]?
-    init(){
-        self.keys = [
-            RMKey(action: "forward", key: "w"),
-            RMKey(action: "back", key: "s"),
-            RMKey(action: "left", key: "a"),
-            RMKey(action: "right", key: "d"),
-            RMKey(action: "up", key: "e"),
-            RMKey(action: "down", key: "q"),
-            RMKey(action: "jump", key: " "),
-            RMKey(action: "toggleGravity", key: "g"),
-            RMKey(action: "toggleAllGravity", key: "G")
-            RMKey(action: "toggleMouseLock", key: "m")//,
-            RMKey(action: "grab", key: "Mouse 1"),
-            RMKey(action: "throw", key: "Mouse 2"),
-            RMKey(action: "extendArm", key: "Arrow-Up"),
-            RMKey(action: "retractArm", key: "Arrow-Down"),
-            RMKey(action: "shrinkItem", key: "-"),
-            RMKey(action: "enlargeItem", key: "="),
-            RMKey(action: "toggleFog", key: "f")
-        ]
-    }
+
+   lazy var keys: [ RMKey ] = [
+        RMKey(self, action: "information", characters: "i", isRepeating: false,speed: self.ON_KEY_DOWN),
+        RMKey(self, action: "forward", characters: "w", speed: self.mv),
+        RMKey(self, action: "back", characters: "s", speed: self.mv),
+        RMKey(self, action: "left", characters: "a", speed: self.mv),
+        RMKey(self, action: "right", characters: "d", speed: self.mv),
+        RMKey(self, action: "up", characters: "e", speed: self.mv),
+        RMKey(self, action: "down", characters: "q", speed: self.mv),
+        RMKey(self, action: "rollLeft", characters: "z", speed: (self.lookSpeed*10,0)),
+        RMKey(self, action: "rollRight", characters: "x", speed: (self.lookSpeed*10,0)),
+        RMKey(self, action: "jump", characters: " "),
+        RMKey(self, action: "toggleGravity", characters: "g", isRepeating: false,speed: self.ON_KEY_UP),
+        RMKey(self, action: "toggleAllGravity", characters: "G", isRepeating: false,speed: self.ON_KEY_UP),
+        RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: self.ON_KEY_UP),
+        RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: (0.01,0)),
+        RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: self.ON_KEY_UP),//,
+        RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: self.ON_KEY_UP),
+        RMKey(self, action: "throw", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
+        
+        RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: self.ON_KEY_DOWN),
+        RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: self.ON_KEY_DOWN), //generically used for testing
+        RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: self.ON_KEY_DOWN),
+        RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: self.ON_KEY_DOWN)
+    ]
     
   ```
