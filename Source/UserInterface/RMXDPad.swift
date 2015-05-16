@@ -32,9 +32,9 @@ class RMXDPad : RMXInterface {
             self.motionManager.startMagnetometerUpdates()
         }
         
-        self.moveSpeed *= -0.2
+        RMXInterface.moveSpeed *= -0.2
         #if SceneKit
-            self.lookSpeed *= 0.1
+            RMXInterface.lookSpeed *= 0.1
             #else
         self.lookSpeed *= -0.02
         #endif
@@ -127,21 +127,22 @@ class RMXDPad : RMXInterface {
         
         func setLeftView() {
             
-            let view = leftView            
+            let view = leftView
+           
             let movement:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self,action: "handleMovement:")
 //            movement.numberOfTouchesRequired = 1
             movement.minimumPressDuration = 0
             view.addGestureRecognizer(movement)
             
+            
+            
+            
             view.userInteractionEnabled = true
-            
-            
-            let twoFingerTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,  action: "toggleAllGravity:")
-            twoFingerTap.numberOfTouchesRequired = 2
-            twoFingerTap.numberOfTapsRequired = 1
-            view.addGestureRecognizer(twoFingerTap)
-            
             self.gameView!.addSubview(leftView)
+            
+            
+            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
+            
         }
         
         func setRightView() {
@@ -152,16 +153,10 @@ class RMXDPad : RMXInterface {
             view.addGestureRecognizer(look)
             
 
-            view.addGestureRecognizer(UILongPressGestureRecognizer(target: self,  action: "longPressRight:"))
-            view.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: "handlePinch:"))
+//            view.addGestureRecognizer(UILongPressGestureRecognizer(target: self,  action: "extendArm:"))
             view.userInteractionEnabled = true
             self.gameView!.addSubview(rightView)
             
-            let twoFingerTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,  action: "toggleGravity:")
-            twoFingerTap.numberOfTouchesRequired = 2
-            twoFingerTap.numberOfTapsRequired = 1
-            view.addGestureRecognizer(twoFingerTap)
- 
                 
             // add a tap gesture recognizer
             view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
@@ -170,7 +165,7 @@ class RMXDPad : RMXInterface {
         }
         
         
-    
+//    self.gameView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
         
         setLeftView(); setRightView()//; setUpButtons()
         

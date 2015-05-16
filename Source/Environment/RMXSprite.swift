@@ -109,7 +109,7 @@ class RMXSprite : RMXSpriteManager {
     }
     private var armLength: RMFloatB = 0
     var reach: RMFloatB {
-        return self.node.scale.z + self.armLength
+        return self.radius * 3 + self.armLength
     }
     
     
@@ -372,7 +372,7 @@ extension RMXSprite {
 //           body.rollingFriction = 1000//0.99
             body.angularDamping = 0.99
             body.damping = 0.5
-            body.friction = 0.0
+            body.friction = 0.1
         } else {
             if self.node.geometry == nil {
                 self.node.physicsBody = SCNPhysicsBody.dynamicBody()//TODO check
@@ -407,7 +407,7 @@ extension RMXSprite {
         if let p = position {
             pos = p
         } else {
-            pos = SCNVector3Make(0,self.radius * 3, self.radius * 3 * 50)
+            pos = SCNVector3Make(0,self.radius * 3 * 5, self.radius * 3 * 15)
         }
         
         let cameraNode = SCNNode()

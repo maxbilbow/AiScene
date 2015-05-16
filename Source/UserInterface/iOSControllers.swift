@@ -33,11 +33,6 @@ extension RMXDPad {
             }
         }
     
-        func handleTapLeft(recognizer: UITapGestureRecognizer) {
-            self.log("Left Tap")
-            self.action(action: "grab")
-            _handleRelease(recognizer.state)
-        }
     
         func noTouches(recognizer: UIGestureRecognizer) {
             if recognizer.state == UIGestureRecognizerState.Ended {
@@ -71,7 +66,7 @@ extension RMXDPad {
         } else {
             let forward = RMFloatB(point.y - self.moveOrigin.y)
             let sideward = RMFloatB(point.x - self.moveOrigin.x)
-            self.action(action: "move", speed: self.moveSpeed, point: [sideward,0, forward])
+            self.action(action: "move", speed: RMXInterface.moveSpeed, point: [sideward,0, forward])
         }
         
     }
@@ -85,18 +80,12 @@ extension RMXDPad {
                         #else
                         let yDir:Float = 1
                         #endif
-                self.action(action: "look", speed: self.lookSpeed, point: [Float(point.x), yDir * Float(point.y)])
+                self.action(action: "look", speed: RMXInterface.lookSpeed, point: [Float(point.x), yDir * Float(point.y)])
             }
 //            _handleRelease(recognizer.state)
         }
     
-    func handlePinch(recognizer: UIPinchGestureRecognizer) {
-            let x: Float = Float(recognizer.scale) * 0.2
-            self.log()
-            self.action(action: "enlargeItem", speed: x)
-            _handleRelease(recognizer.state)
-        }
-        
+    
     func nextCamera(recogniser: UITapGestureRecognizer) {
             self.action(action: "nextCamera", speed: 1)
     }
@@ -108,38 +97,23 @@ extension RMXDPad {
     func switchEnvironment(recogniser: UITapGestureRecognizer){
             world?.environments.plusOne()
     }
-        func longPressLeft(recognizer: UILongPressGestureRecognizer) {
-            self.log()
-            if recognizer.state == UIGestureRecognizerState.Began {
-                self.action(action: "extendArm", speed: -1)
-                self.action(action: "toggleAllGravity")
-            } else if recognizer.state == UIGestureRecognizerState.Ended {
-                self.action(action: "extendArm", speed: 0)
-            }
-            _handleRelease(recognizer.state)
-        }
-        
-        func longPressRight(recognizer: UILongPressGestureRecognizer) {
+    
+        func extendArm(recognizer: UILongPressGestureRecognizer) {
             self.log()
             if recognizer.state == UIGestureRecognizerState.Began {
                 self.action(action: "extendArm", speed: 1)
-                self.action(action: "toggleAllGravity")
             } else if recognizer.state == UIGestureRecognizerState.Ended {
                 self.action(action: "extendArm", speed: 0)
             }
             _handleRelease(recognizer.state)
         }
     
-    func grabOrThrow(recognizer: UIGestureRecognizer) {
+    func grabOrThrow(recognizer: UITapGestureRecognizer) {
         let spriteAction = self.world!.activeSprite
-//        if let item = spriteAction.item  {
-//            spriteAction.throwItem(20 * item.mass)
-//            return
-//        }
-        
+
 
         // retrieve the SCNView
-        let scnView = self.view as! GameView
+        let scnView = self.gameView//.view as! GameView
         // check what nodes are tapped
         let p = recognizer.locationInView(scnView)
 

@@ -53,7 +53,7 @@ class RMSWorld  {
         return self.activeSprite.cameraNode
     }
 
-    lazy var activeSprite: RMXSprite = RMXSprite.Unique(self, asType: .PLAYER).asShape(radius: 5, height: 5, shape: .SPHERE, color: NSColor.yellowColor()).asPlayerOrAI()
+    lazy var activeSprite: RMXSprite = RMXSprite.Unique(self, asType: .PLAYER).asShape(radius: 5, height: 5, shape: .SPHERE, color: NSColor.redColor()).asPlayerOrAI()
 
     
     lazy var observer: RMXSprite = self.activeSprite
@@ -69,7 +69,7 @@ class RMSWorld  {
     
     func worldDidInitialize() {
         let radius = RMSWorld.RADIUS
-            self.scene.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 3,0)
+            self.scene.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
         
 //            earth.physicsField = SCNPhysicsField.radialGravityField()
 

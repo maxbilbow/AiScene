@@ -24,7 +24,7 @@ extension RMXDPad {
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
         if self.motionManager.deviceMotion != nil {
             let tilt = RMFloatB(self.motionManager.deviceMotion.gravity.y)
-            let tiltSpeed = RMFloatB(fabs(self.moveSpeed)*4)
+            let tiltSpeed = RMFloatB(fabs(RMXInterface.moveSpeed)*4)
             let tiltThreshold: RMFloatB = 0.1
             if tilt > tiltThreshold {
                 let speed = (1.0 + tilt) * tiltSpeed

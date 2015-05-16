@@ -95,7 +95,7 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         self.gameView!.showsStatistics = true
         
         // configure the view
-        self.gameView!.backgroundColor = NSColor.lightGrayColor()
+        self.gameView!.backgroundColor = NSColor.blackColor()
 
 //        self.world?.activeSprite.node.addObserver(self, selector: "somethingHappened:", name: "WHATEVER", object: nil)
         

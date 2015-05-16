@@ -32,6 +32,13 @@ class GameView: SCNView  {
         let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
         self.observer.node.addChildNode(head)
         head.camera = RMXCamera()
+        head.physicsBody!.mass = 0
+//        let bum = SCNNode()
+//        bum.physicsBody = SCNPhysicsBody()
+//        bum.physicsBody?.mass = RMFloat(self.observer.mass * 100)
+//        bum.position.y = -radius * 10
+//        bum.physicsBody?.resetTransform()
+//        self.observer.node.addChildNode(bum)
         
         head.position = SCNVector3Make(0, height * 0.9, 0)
         self.observer.addCamera(head)
