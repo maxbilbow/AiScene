@@ -33,8 +33,8 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     var timer: NSTimer? //CADisplayLink?
     var world: RMSWorld?
 
-    var lookSpeed: RMFloatB = 1
-    var moveSpeed: RMFloatB = 1
+    static var lookSpeed: RMFloatB = 1
+    static var moveSpeed: RMFloatB = 1
     
     var activeSprite: RMXSprite? {
         return self.world?.activeSprite

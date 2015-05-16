@@ -14,34 +14,36 @@ import SceneKit
 
 class RMSKeys : RMXInterface {
     
-    let ON_KEY_DOWN: (on:RMFloat,off:RMFloat) = (1,0)
-    let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
+    ///Key down, Key up options
+    static let ON_KEY_DOWN: (on:RMFloat,off:RMFloat) = (1,0)
+    static let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
+    static let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.moveSpeed * 2, 0)
+    static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.lookSpeed * 10, 0)
     
-    lazy var mv: (on:RMFloat,off:RMFloat) = (self.moveSpeed, 0)
-    
+    ///Key settings
     lazy var keys: [ RMKey ] = [
-        RMKey(self, action: "information", characters: "i", isRepeating: false,speed: self.ON_KEY_DOWN),
-        RMKey(self, action: "forward", characters: "w", speed: self.mv),
-        RMKey(self, action: "back", characters: "s", speed: self.mv),
-        RMKey(self, action: "left", characters: "a", speed: self.mv),
-        RMKey(self, action: "right", characters: "d", speed: self.mv),
-        RMKey(self, action: "up", characters: "e", speed: self.mv),
-        RMKey(self, action: "down", characters: "q", speed: self.mv),
-        RMKey(self, action: "rollLeft", characters: "z", speed: (self.lookSpeed*10,0)),
-        RMKey(self, action: "rollRight", characters: "x", speed: (self.lookSpeed*10,0)),
+        RMKey(self, action: "information", characters: "i", isRepeating: false,speed: ON_KEY_DOWN),
+        RMKey(self, action: "forward", characters: "w", speed: MOVE_SPEED),
+        RMKey(self, action: "back", characters: "s", speed: MOVE_SPEED),
+        RMKey(self, action: "left", characters: "a", speed: MOVE_SPEED),
+        RMKey(self, action: "right", characters: "d", speed: MOVE_SPEED),
+        RMKey(self, action: "up", characters: "e", speed: MOVE_SPEED),
+        RMKey(self, action: "down", characters: "q", speed: MOVE_SPEED),
+        RMKey(self, action: "rollLeft", characters: "z", speed: LOOK_SPEED),
+        RMKey(self, action: "rollRight", characters: "x", speed: LOOK_SPEED),
         RMKey(self, action: "jump", characters: " "),
-        RMKey(self, action: "toggleGravity", characters: "g", isRepeating: false,speed: self.ON_KEY_UP),
-        RMKey(self, action: "toggleAllGravity", characters: "G", isRepeating: false,speed: self.ON_KEY_UP),
-        RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: self.ON_KEY_UP),
+        RMKey(self, action: "toggleGravity", characters: "g", isRepeating: false,speed: ON_KEY_UP),
+        RMKey(self, action: "toggleAllGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
+        RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: ON_KEY_UP),
         RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: (0.01,0)),
-        RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: self.ON_KEY_UP),//,
-        RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: self.ON_KEY_UP),
+        RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: ON_KEY_UP),//,
+        RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: ON_KEY_UP),
         RMKey(self, action: "throw", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
         
-        RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: self.ON_KEY_DOWN),
-        RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: self.ON_KEY_DOWN), //generically used for testing
-        RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: self.ON_KEY_DOWN),
-        RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: self.ON_KEY_DOWN)
+        RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: ON_KEY_DOWN),
+        RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: ON_KEY_DOWN), //generically used for testing
+        RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
+        RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: ON_KEY_DOWN)
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
@@ -144,7 +146,7 @@ class RMSKeys : RMXInterface {
         //self.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(self.mouseDelta.x), RMFloat(self.mouseDelta.y)])
         if self.actionProcessor.isMouseLocked {
             let delta = self.mouseDelta
-            self.action(action: "look", speed: self.lookSpeed, point: [RMFloat(delta.x), RMFloat(delta.y)])
+            self.action(action: "look", speed: RMXInterface.lookSpeed, point: [RMFloat(delta.x), RMFloat(delta.y)])
 //            RMXLog("MOUSE: \(delta.x), \(delta.y)")
             
         }
