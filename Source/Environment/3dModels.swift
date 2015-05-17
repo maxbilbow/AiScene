@@ -51,7 +51,7 @@ class RMXModels {
             let source = SCNSceneSource(URL: url!, options: nil)
             let block = source!.entryWithIdentifier("Cube-mesh", withClass: SCNGeometry.self) as! SCNGeometry
             node = SCNNode(geometry: block)
-            node.scale *= 1 * radius
+//            node.scale *= 1 * radius
             break
         case ShapeType.PLANE.rawValue:
              hasColor = true
@@ -73,7 +73,7 @@ class RMXModels {
             let source = SCNSceneSource(URL: url!, options: nil)
             let block = source!.entryWithIdentifier("Cylinder_001-mesh", withClass: SCNGeometry.self) as! SCNGeometry
             node = SCNNode(geometry: block)
-            node.scale *= 1 * radius
+//            node.scale *= 1 * radius
             break
             
         

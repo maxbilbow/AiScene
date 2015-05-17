@@ -12,30 +12,33 @@ import GLKit
 
 extension RMX {
     static let RANDOM_MOVEMENT = true
-   
+    static var randomTimeInterval: Int {
+        return  random() % 600 + 1
+    }
     enum MoveState { case MOVING, TURNING, IDLE }
     static func addRandomMovement(to sprite: RMXSprite) {
         if let world = sprite.world {
-            NSLog("Adding AI to \(sprite.name)")
-           
-            var timeLimit = random() % 600 + 10
+            
+            var timeLimit = self.randomTimeInterval
             var timePassed = 0
-            let speed:RMFloatB = RMFloatB(random() % 18000) + 18000000 * sprite.mass
-          
+            let speed:RMFloatB = (RMFloatB(random() % 150) + 100) * sprite.mass
+            var print = false //sprite.rmxID == 5
             var state: MoveState = .MOVING
+            RMXLog("Adding AI to \(sprite.name), PRINT: \(print)")
             sprite.addBehaviour{ (isOn:Bool) -> () in
-                if !isOn { return }
+                if !isOn { if print { RMXLog("AI is OFF") }; return }
 //                if !self.RANDOM_MOVEMENT { return }
                 
-                
+                if print {  RMXLog("Start") }
                 switch state {
                 case .TURNING:
+                    if print { RMXLog("Turning with force: \(speed)") }
                     if sprite.hasItem {
 //                        sprite.turnToFace(world.activeSprite)
                         
                         sprite.throwItem(500)
                     }
-                    sprite.lookAround(theta: speed)
+                    sprite.lookAround(theta: speed / 10)
                     
                     
                 /*
@@ -49,9 +52,10 @@ extension RMX {
                     timePassed++
                     if timePassed > timeLimit {
                         state = .MOVING
-                        timeLimit = random() % 600 + 10
+                        timeLimit = self.randomTimeInterval
                     }
                 case .MOVING:
+                    if print { RMXLog("Moving with force: \(speed)") }
                     sprite.accelerateForward(speed)
                     timePassed++
                     if timePassed > timeLimit {
@@ -63,6 +67,8 @@ extension RMX {
                     fatalError()
                 }
             }
+        } else {
+            fatalError("Sprite came without world")
         }
     }
     
@@ -88,7 +94,7 @@ extension RMX {
     
     
     static func makePoppy(#world: RMSWorld) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite.Unique(world, asType: .AI).asShape(radius: 3, shape: .DOG).asPlayerOrAI()
+        let poppy: RMXSprite = RMXSprite.new(parent: world, type: .AI, isUnique: true).asShape(radius: 3, shape: .DOG).asPlayerOrAI()
 
         poppy.initPosition(startingPoint: RMXVector3Make(100,poppy.node.scale.y / 2,-50))
         var itemToWatch: RMXSprite! = nil

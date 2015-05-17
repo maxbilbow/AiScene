@@ -44,8 +44,8 @@ class RMSWorld  {
     static var TYPE: RMXWorldType = .DEFAULT
 
     var scene: SCNScene
-    lazy var sun: RMXSprite = RMXSprite.Unique(self, asType: .BACKGROUND).makeAsSun(rDist: RMSWorld.RADIUS)
-    lazy var earth: RMXSprite = RMXSprite.new(parent: self, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 15, color: NSColor.yellowColor()), type: .BACKGROUND)
+    lazy var sun: RMXSprite = RMXSprite.new(parent: self, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: RMSWorld.RADIUS)
+    lazy var earth: RMXSprite = RMXSprite.new(parent: self, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 15, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
     private let GRAVITY: RMFloatB = 0
     
     
@@ -53,7 +53,7 @@ class RMSWorld  {
         return self.activeSprite.cameraNode
     }
 
-    lazy var activeSprite: RMXSprite = RMXSprite.Unique(self, asType: .PLAYER).asShape(radius: 5, height: 5, shape: .SPHERE, color: NSColor.redColor()).asPlayerOrAI()
+    lazy var activeSprite: RMXSprite = RMXSprite.new(parent: self, type: .PLAYER, isUnique: true).asShape(radius: 5, height: 5, shape: .SPHERE, color: NSColor.redColor()).asPlayerOrAI()
 
     
     lazy var observer: RMXSprite = self.activeSprite
@@ -148,7 +148,7 @@ class RMSWorld  {
             if andNode {
                 self.scene.rootNode.addChildNode(child.node)
             }
-        RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
+        //RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
         self.childSpriteArray.set(child)
     }
     
@@ -192,7 +192,7 @@ class RMSWorld  {
 //        } else
         let node = RMXSprite.rootNode(n, rootNode: self.scene.rootNode)
         if node.name == nil || node.name == "" {
-            let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE)
+            let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE, isUnique: false)
             return sprite
         } else {
             for sprite in self.children {
@@ -201,7 +201,7 @@ class RMSWorld  {
                 }
             }
         }
-        let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE)
+        let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE, isUnique: false)
         //sprite.setNode(node)
         return sprite
     }
@@ -210,7 +210,7 @@ class RMSWorld  {
 //        self.sun.animate()
 //        self.poppy.animate()
 //        self.activeSprite.animate()
-        self.earth.physicsBody?.resetTransform()
+        self.earth.resetTransform()
         for child in self.children {
             child.animate(aiOn: self.aiOn)
         }

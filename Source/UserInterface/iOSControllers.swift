@@ -25,7 +25,7 @@ extension RMXDPad {
     
     func toggleAi(recogniser: UITapGestureRecognizer){
         self.world!.aiOn = !self.world!.aiOn
-        NSLog("aiOn: \(self.world!.aiOn)")
+        RMXLog("aiOn: \(self.world!.aiOn)")
         //self.world!.setBehaviours(self.world!.hasBehaviour)
     }
     

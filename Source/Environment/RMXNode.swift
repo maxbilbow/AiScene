@@ -152,8 +152,12 @@ extension RMXSprite {
     }
     
     func setPosition(position: RMXVector3? = nil, resetTransform: Bool = true){
-        self.node.position = position ?? self.getNode().position
-        self.node.orientation = self.getNode().orientation
+        self.node.transform = self.transform
+        if let position = position {
+            self.node.position = position
+        }
+//        self.node.orientation = self.getNode().orientation
+//        self.node.scale = self.getNode().scale
         
         if resetTransform {
             self.node.physicsBody?.resetTransform()

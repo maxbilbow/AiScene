@@ -156,16 +156,6 @@ class RMXSprite : RMXSpriteManager {
     }
     
     
-    class func Unique(parent:AnyObject?, asType type: RMXSpriteType = .PASSIVE) -> RMXSprite {
-        let result = RMXSprite.new(parent: parent!, type: type)
-        
-        result.type = type
-        result.isUnique = true
-        
-        return result
-    }
-
-    
     var jumpStrength: RMFloatB = 10
     var squatLevel:RMFloatB = 0
     private var _prepairingToJump: Bool = false
@@ -181,7 +171,7 @@ class RMXSprite : RMXSpriteManager {
 
     init(node: SCNNode = RMXNode(), type: RMXSpriteType){
         _node = node
-        
+        self.type = type
         self.spriteDidInitialize()
     }
     
@@ -210,10 +200,10 @@ class RMXSprite : RMXSpriteManager {
         }
     }
     
-    class func new(parent p: AnyObject, node: SCNNode? = nil, type: RMXSpriteType) -> RMXSprite {
+    class func new(parent p: AnyObject, node: SCNNode? = nil, type: RMXSpriteType, isUnique: Bool) -> RMXSprite {
         
         let sprite = RMXSprite(node: node ?? RMXNode(), type: type)
-    
+        sprite.isUnique = isUnique
             if let world = p as? RMSWorld {
                 world.insertChild(sprite, andNode: true)
             } else if let parent = p as? RMXSprite {
@@ -222,7 +212,7 @@ class RMXSprite : RMXSpriteManager {
             } else {
                 fatalError("Not yet compatable")
             }
-        if type == .AI {
+        if type == .AI && !sprite.isUnique {
             RMX.addRandomMovement(to: sprite)
         }
         return sprite
@@ -265,10 +255,11 @@ class RMXSprite : RMXSpriteManager {
     }
     
     func animate(aiOn: Bool = false) {
+        
         if let type = self.type {
+            self.processAi(aiOn: aiOn)
             switch type {
             case .AI:
-                self.processAi(aiOn: aiOn)
                 self.manipulate()
                 self.jumpTest()
                 break
@@ -291,7 +282,7 @@ class RMXSprite : RMXSpriteManager {
             for child in children {
                 child.animate()
             }
-        
+            
             
         }
     }

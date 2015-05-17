@@ -200,7 +200,7 @@ class RMXArt {
                     
             
                 if let sprite = world.getSprite(node: node, type: .AI) {
-                    RMX.addRandomMovement(to: sprite)
+                    
                 } else {
                     fatalError("should work")
 //                    world.scene.rootNode.addChildNode(node)
