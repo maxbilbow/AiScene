@@ -157,7 +157,8 @@ class RMXSprite : RMXSpriteManager {
     
     
     class func Unique(parent:AnyObject?, asType type: RMXSpriteType = .PASSIVE) -> RMXSprite {
-        let result = RMXSprite.new(parent: parent!)
+        let result = RMXSprite.new(parent: parent!, type: type)
+        
         result.type = type
         result.isUnique = true
         
@@ -178,7 +179,7 @@ class RMXSprite : RMXSpriteManager {
     var itemPosition: RMXVector3 = RMXVector3Zero
     
 
-    init(node: SCNNode = RMXNode()){
+    init(node: SCNNode = RMXNode(), type: RMXSpriteType){
         _node = node
         
         self.spriteDidInitialize()
@@ -189,7 +190,6 @@ class RMXSprite : RMXSpriteManager {
         self.setName()
     }
     
-    var usesBehaviour = true
 
     var hasItem: Bool {
         return self.item != nil
@@ -210,16 +210,11 @@ class RMXSprite : RMXSpriteManager {
         }
     }
     
-    class func new(parent p: AnyObject, node: SCNNode? = nil) -> RMXSprite {
+    class func new(parent p: AnyObject, node: SCNNode? = nil, type: RMXSpriteType) -> RMXSprite {
         
-        let sprite = RMXSprite(node: node ?? RMXNode())
+        let sprite = RMXSprite(node: node ?? RMXNode(), type: type)
     
             if let world = p as? RMSWorld {
-                
-//                let minHeight = parent.ground + sprite.height / 3
-//                if sprite.y < minHeight {
-//                    sprite.y = minHeight
-//                }
                 world.insertChild(sprite, andNode: true)
             } else if let parent = p as? RMXSprite {
                 parent.insertChild(sprite, andNode: false)//TODO:: is this right?
@@ -227,6 +222,9 @@ class RMXSprite : RMXSpriteManager {
             } else {
                 fatalError("Not yet compatable")
             }
+        if type == .AI {
+            RMX.addRandomMovement(to: sprite)
+        }
         return sprite
     }
     
@@ -245,6 +243,7 @@ class RMXSprite : RMXSpriteManager {
     
     func toggleGravity() {
         self.hasGravity = !self.hasGravity
+        
     }
     
     var theta: RMFloatB = 0
@@ -501,7 +500,7 @@ extension RMXSprite {
     func manipulate() {
         if let item = self.item {
             let fwd = self.forwardVector * -1
-            self.item!.setPosition(self.viewPoint + RMXVector3MultiplyScalar(fwd, self.reach + self.item!.reach))            
+            self.item!.setPosition(position: self.viewPoint + RMXVector3MultiplyScalar(fwd, self.reach + self.item!.reach))            
         }
     }
     
@@ -650,9 +649,9 @@ extension RMXSprite {
             if !self.hasGravity {
                 let climb = speed * 0.1
                 if self.altitude < object.altitude {
-                    self.node.physicsBody?.applyForce(SCNVector3Make(0,climb,0), impulse: true)
+                    self.node.physicsBody?.applyForce(SCNVector3Make(0,climb,0), impulse: false)
                 } else if self.altitude > object.altitude {
-                    self.node.physicsBody?.applyForce(SCNVector3Make(0,-climb / 2,0), impulse: true)
+                    self.node.physicsBody?.applyForce(SCNVector3Make(0,-climb / 2,0), impulse: false)
                 } else {
                     self.stop()
                     //RMXVector3SetY(&self.node.physicsBody!.velocity, 0)

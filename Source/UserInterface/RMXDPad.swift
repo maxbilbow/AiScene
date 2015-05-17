@@ -71,8 +71,8 @@ class RMXDPad : RMXInterface {
         func makeTopBar (view: UIView)  {
             let switchButton: UIButton = UIButton(frame: CGRectMake(0, 0, view.bounds.width / buttonCount, topBar))
             
-            switchButton.setTitle("<SWITCH> ", forState:UIControlState.Normal)
-            switchButton.addTarget(self, action: Selector("switchEnvironment:"), forControlEvents:UIControlEvents.TouchDown)
+            switchButton.setTitle("<RESET> ", forState:UIControlState.Normal)
+            switchButton.addTarget(self, action: Selector("resetTransform:"), forControlEvents:UIControlEvents.TouchDown)
             switchButton.enabled = true
             switchButton.backgroundColor = UIColor.grayColor()
             view.addSubview(switchButton)
@@ -97,9 +97,9 @@ class RMXDPad : RMXInterface {
             
             let playerGravity: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 3 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
             
-            playerGravity.setTitle("<My Gravity>", forState:UIControlState.Normal)
+            playerGravity.setTitle("<DATA>", forState:UIControlState.Normal)
             //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            playerGravity.addTarget(self, action: Selector("toggleGravity:"), forControlEvents:UIControlEvents.TouchDown)
+            playerGravity.addTarget(self, action: Selector("printData:"), forControlEvents:UIControlEvents.TouchDown)
             playerGravity.enabled = true
             playerGravity.backgroundColor = UIColor.grayColor()
             view.addSubview(playerGravity)
@@ -180,6 +180,11 @@ class RMXDPad : RMXInterface {
     
 }
 
+    #else
+
+class RMXDPad : RMXInterface {
+    
+}
 #endif
 
 

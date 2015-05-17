@@ -45,7 +45,7 @@ class RMSWorld  {
 
     var scene: SCNScene
     lazy var sun: RMXSprite = RMXSprite.Unique(self, asType: .BACKGROUND).makeAsSun(rDist: RMSWorld.RADIUS)
-    lazy var earth: RMXSprite = RMXSprite.new(parent: self, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 5, color: NSColor.yellowColor()))
+    lazy var earth: RMXSprite = RMXSprite.new(parent: self, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 15, color: NSColor.yellowColor()), type: .BACKGROUND)
     private let GRAVITY: RMFloatB = 0
     
     
@@ -76,7 +76,7 @@ class RMSWorld  {
 //            earth.physicsField!.categoryBitMask = Int(SCNPhysicsCollisionCategory.Default.rawValue)
 
         self.earth.setName(name: "The Ground")
-        self.earth.setPosition(RMXVector3Make(0,-RMSWorld.RADIUS * 2.5, 0))
+        self.earth.setPosition(position: RMXVector3Make(0,-RMSWorld.RADIUS * 2.5, 0))
         self.insertChild(self.earth, andNode: true)
 
         //cameras
@@ -164,12 +164,12 @@ class RMSWorld  {
         }
     }
   
-    private var _hasGravity: Bool {
+    var hasGravity: Bool {
         return self.scene.physicsWorld.gravity != SCNVector3Zero
     }
     private var _gravity = SCNVector3Zero
     func toggleGravity() {
-            if _hasGravity {
+            if self.hasGravity {
                 let gravity = self.scene.physicsWorld.gravity
                 _gravity = gravity == SCNVector3Zero ? SCNVector3Make(0, -2, 0) : gravity
                 self.scene.physicsWorld.gravity = SCNVector3Zero
@@ -185,15 +185,14 @@ class RMSWorld  {
 
     
     
-    func getSprite(#node: RMXNode) -> RMXSprite? {
+    func getSprite(node n: RMXNode, type: RMXSpriteType? = nil) -> RMXSprite? {
         
 //        if node.physicsBody == nil || node.physicsBody!.type == .Static {
 //            return nil
 //        } else
-
+        let node = RMXSprite.rootNode(n, rootNode: self.scene.rootNode)
         if node.name == nil || node.name == "" {
-            let n = RMXSprite.rootNode(node, rootNode: self.scene.rootNode)
-            let sprite = RMXSprite.new(parent: self, node: n)
+            let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE)
             return sprite
         } else {
             for sprite in self.children {
@@ -202,8 +201,8 @@ class RMSWorld  {
                 }
             }
         }
-        let sprite = RMXSprite.new(parent: self)
-        sprite.setNode(node)
+        let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE)
+        //sprite.setNode(node)
         return sprite
     }
     

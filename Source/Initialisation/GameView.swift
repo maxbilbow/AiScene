@@ -30,6 +30,8 @@ class GameView: SCNView  {
         let radius = RMFloatB((observer.geometry! as! SCNSphere).radius)
         let height = radius * 2 
         let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
+        head.physicsBody = SCNPhysicsBody()
+        head.physicsBody!.mass = -10
         self.observer.node.addChildNode(head)
         head.camera = RMXCamera()
         head.physicsBody!.mass = 0

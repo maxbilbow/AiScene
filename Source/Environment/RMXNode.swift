@@ -146,14 +146,18 @@ extension RMXSprite {
         if let sprite = sprite {
             #if SceneKit
             //self.insertChild(sprite)
-            sprite.setPosition(self.forwardVector)
+            sprite.setPosition(position: self.forwardVector)
             #endif
         }
     }
     
-    func setPosition(position: RMXVector3){
-        self.node.position = position
-        self.node.physicsBody?.resetTransform()
+    func setPosition(position: RMXVector3? = nil, resetTransform: Bool = true){
+        self.node.position = position ?? self.getNode().position
+        self.node.orientation = self.getNode().orientation
+        
+        if resetTransform {
+            self.node.physicsBody?.resetTransform()
+        }
     }
 }
 

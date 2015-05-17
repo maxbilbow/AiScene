@@ -15,6 +15,14 @@ import UIKit
 
 extension RMXDPad {
     
+    func resetTransform(recogniser: UITapGestureRecognizer) {
+//        self.activeSprite?.setAngle(roll: 0)
+        self.action(action: "reset")
+    }
+    func printData(recogniser: UITapGestureRecognizer){
+        self.action(action: "information")
+    }
+    
     func toggleAi(recogniser: UITapGestureRecognizer){
         self.world!.aiOn = !self.world!.aiOn
         NSLog("aiOn: \(self.world!.aiOn)")
@@ -70,6 +78,8 @@ extension RMXDPad {
         }
         
     }
+    
+    
     
         ///The event handling method
         func handleOrientation(recognizer: UIPanGestureRecognizer) {

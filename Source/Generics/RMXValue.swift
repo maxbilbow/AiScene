@@ -101,6 +101,13 @@ extension SCNVector3 {
         return "\(x.toData()) \(y.toData()) \(z.toData())"
     }
     
+    var asDegrees: String {
+        let pitch   = x / PI_OVER_180
+        let yaw     = y / PI_OVER_180
+        let roll    = z / PI_OVER_180
+        return "\(pitch.toData()) \(yaw.toData()) \(roll.toData())"
+    }
+    
     func negate() -> SCNVector3{
         return SCNVector3Make(-x,-y,-z)
     }

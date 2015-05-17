@@ -198,29 +198,14 @@ class RMXArt {
                 node.position = RMXVector3Make(randPos[0], randPos[1], randPos[2])
             
                     
-             
-            #if SceneKit
-                
-
-                if let sprite = world.getSprite(node: node) {
+            
+                if let sprite = world.getSprite(node: node, type: .AI) {
                     RMX.addRandomMovement(to: sprite)
                 } else {
-                    world.scene.rootNode.addChildNode(node)
+                    fatalError("should work")
+//                    world.scene.rootNode.addChildNode(node)
                 }
                 
-            #else
-                let sprite = RMXSprite.new(parent: world, node: node)
-                sprite.setColor(RMXArt.randomColor())
-
-            #endif
-//            let object: RMXSprite = RMXSprite.new(parent: world, nodeOnly: true)
-//            object.hasGravity = false
-//            object.setRadius(RMFloatB(random() % 9 + 2))
-//            object.initPosition(startingPoint:RMXVector3Make(randPos[0], randPos[1], randPos[2]))
-//            object.node.physicsBody!.mass = RMFloat(random()%15+1)/10
-//            object.setColor(color)
-//            #endif
-        
         }
     }
     

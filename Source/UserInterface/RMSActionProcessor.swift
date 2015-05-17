@@ -31,12 +31,18 @@ extension RMX {
 }
 class RMSActionProcessor {
     
+    var interface: RMXInterface {
+        return self.gameView.interface!
+    }
     //let keys: RMXController = RMXController()
     var activeSprite: RMXSprite {
         return self.world.observer
     }
     var world: RMSWorld
     
+    var scene: SCNScene {
+        return self.world.scene
+    }
     init(world: RMSWorld, gameView: GameView){
         self.world = world
         self.gameView = gameView
@@ -82,6 +88,15 @@ class RMSActionProcessor {
         case "yaw", "Yaw", "YAW":
             self.activeSprite.lookAround(theta: speed)
             return true
+        case "setRoll":
+            self.activeSprite.setAngle(roll: speed)
+            break
+        case "setPitch":
+            self.activeSprite.setAngle(pitch: speed)
+            break
+        case "setYaw":
+            self.activeSprite.setAngle(yaw: speed)
+            break
         case "rollLeft":
             self.activeSprite.lookAround(roll: -speed)
             return true
@@ -220,17 +235,40 @@ class RMSActionProcessor {
         var info = "\n     vel:\(sprite.velocity.print)\n     Pos:\(sprite.position.print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
         info += "\n       MASS: \(sprite.mass),  GRAVITY: \(physics.gravity.print)"
         info += "\n   FRICTION: \(node.physicsBody?.friction), Rolling Friction: \(node.physicsBody?.rollingFriction), restitution: \(node.physicsBody?.restitution) \n"
+        
+        //Accelerometer vs sprite angles
         return info
+        var angles   = "\n ANGLES: \n"
+        #if iOS
+        if let dPad: RMXDPad = self.interface as? RMXDPad {
+            if let att = dPad.motionManager.deviceMotion.attitude {
+                let attitude = SCNVector3Make(RMFloatB(att.pitch), RMFloatB(att.yaw), RMFloatB(att.roll))
+                angles      += "\n    - SPRITE: \(sprite.getNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
+                angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
+            }
+        }
+        #endif
+        return angles
     }
     func debug(_ yes: Bool = true){
         if yes {
-            RMXLog(_getInfo())
+            println(_getInfo())
         }
     }
     
+    var autoStablize: Bool = true
     func animate(){
         if self.extendArm != 0 {
             self.activeSprite.extendArmLength(self.extendArm)
+        }
+        if self.autoStablize && self.world.hasGravity {
+//            self.activeSprite.node.transform = self.activeSprite.getNode().transform
+//            self.activeSprite.resetTransform()
+            
+            var bottom = self.activeSprite.upVector * -1
+            bottom.y *= self.activeSprite.height
+            let force = SCNVector3Make(0, -200000, 0) //self.scene.physicsWorld.gravity * self.activeSprite.mass
+            self.activeSprite.physicsBody?.applyForce(force, atPosition: bottom, impulse: false)
         }
         self.debug(false)
     }
@@ -240,6 +278,14 @@ class RMSActionProcessor {
 //    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
     var isMouseLocked = false
     
+    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, pitch x: RMFloatB? = nil, yaw y: RMFloatB? = nil, roll z: RMFloatB? = nil){
+        let sprite = s ?? self.activeSprite
+        if let orientation = orientation {
+            RMXLog("not implemented")
+        } else {
+            sprite.setAngle(yaw: y, pitch: x, roll: z)
+        }
+    }
     
     func manipulate(action: String? = nil, sprite: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil) -> AnyObject? {
         if let action = action {

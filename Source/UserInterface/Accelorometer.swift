@@ -34,38 +34,41 @@ extension RMXDPad {
         let key = "accelerometerCounter"
 //        let i = self.world!.clock?.getCounter(forKey:key)
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
-        if self.motionManager.deviceMotion != nil {
-            tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
-            tilt("pitch", RMFloatB(self.motionManager.deviceMotion.gravity.z))
+        if let deviceMotion = self.motionManager.deviceMotion {
+//            tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
+            //tilt("pitch", RMFloatB(self.motionManager.deviceMotion.gravity.z))
 //            tilt("yaw", RMFloatB(self.motionManager.deviceMotion.gravity.x))
-            
+            if let attitude = deviceMotion.attitude {
+                //self.action(action: "setRoll",speed: RMFloatB(attitude.roll))
+                //self.action(action: "setPitch",speed: RMFloatB(-attitude.pitch))
+            }
             if !_testing { return }
             var x,y,z, q, r, s, t, u, v,a,b,c,e,f,g,h,i,j,k,l,m:Double
-            x = self.motionManager.deviceMotion.gravity.x
-            y = self.motionManager.deviceMotion.gravity.y
-            z = self.motionManager.deviceMotion.gravity.z
-            q = self.motionManager.deviceMotion.magneticField.field.x
-            r = self.motionManager.deviceMotion.magneticField.field.y
-            s = self.motionManager.deviceMotion.magneticField.field.z
-            t = self.motionManager.deviceMotion.rotationRate.x
-            u = self.motionManager.deviceMotion.rotationRate.y
-            v = self.motionManager.deviceMotion.rotationRate.z
-            a = self.motionManager.deviceMotion.attitude.pitch
-            b = self.motionManager.deviceMotion.attitude.roll
-            c = self.motionManager.deviceMotion.attitude.yaw
+            x = deviceMotion.gravity.x
+            y = deviceMotion.gravity.y
+            z = deviceMotion.gravity.z
+            q = deviceMotion.magneticField.field.x
+            r = deviceMotion.magneticField.field.y
+            s = deviceMotion.magneticField.field.z
+            t = deviceMotion.rotationRate.x
+            u = deviceMotion.rotationRate.y
+            v = deviceMotion.rotationRate.z
+            a = deviceMotion.attitude.pitch
+            b = deviceMotion.attitude.roll
+            c = deviceMotion.attitude.yaw
             e = self.motionManager.gyroData.rotationRate.x
             f = self.motionManager.gyroData.rotationRate.y
             g = self.motionManager.gyroData.rotationRate.z
-            if self.motionManager.magnetometerData != nil {
-                h = self.motionManager.magnetometerData.magneticField.x
-                i = self.motionManager.magnetometerData.magneticField.y
-                j = self.motionManager.magnetometerData.magneticField.z
+            if let magnetometerData = self.motionManager.magnetometerData {
+                h = magnetometerData.magneticField.x
+                i = magnetometerData.magneticField.y
+                j = magnetometerData.magneticField.z
             } else { h=0;i=0;j=0 }
-            k = self.motionManager.deviceMotion.userAcceleration.x
-            l = self.motionManager.deviceMotion.userAcceleration.y
-            m = self.motionManager.deviceMotion.userAcceleration.z
+            k = deviceMotion.userAcceleration.x
+            l = deviceMotion.userAcceleration.y
+            m = deviceMotion.userAcceleration.z
             
-            let d = self.motionManager.deviceMotion.magneticField.accuracy.value
+            let d = deviceMotion.magneticField.accuracy.value
             
             println("           Gravity,\(x.toData()),\(y.toData()),\(z.toData())")
             println("   Magnetic Field1,\(q.toData()),\(r.toData()),\(s.toData())")

@@ -13,6 +13,26 @@ import SceneKit
 
 extension RMXSprite {
     
+    func resetTransform() {
+        self.node.physicsBody?.resetTransform()
+    }
+    func setAngle(yaw: RMFloatB? = nil, pitch: RMFloatB? = nil, roll r: RMFloatB? = nil) {
+//        self.node.eulerAngles = self.getNode().eulerAngles
+//        self.node.eulerAngles = self.getNode().eulerAngles
+        self.setPosition(resetTransform: false)
+        if let theta = yaw {
+            self.node.orientation.y = 0
+        }
+        if let phi = pitch {
+            self.node.orientation.x = 0
+        }
+        if let roll = r {
+            self.node.orientation.z = 0
+        }
+        self.resetTransform()
+        
+    }
+    
     func lookAround(theta t: RMFloatB? = nil, phi p: RMFloatB? = nil, roll r: RMFloatB? = nil) {
         
         if let theta = t {

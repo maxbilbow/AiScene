@@ -12,99 +12,52 @@ import GLKit
 
 extension RMX {
     static let RANDOM_MOVEMENT = true
-    
-    static func addBasicCollisionTo(forNode sprite: RMXSprite){//, withActors actors: [Int:RMXSprite]){//, inObjets
-//        if sprite.type == .OBSERVER {
-            sprite.addBehaviour{ (isOn: Bool)->() in
-                if let children = sprite.world!.childSpriteArray.getCurrent() {
-                for child in children {
-                   // let child = closest.1
-//                    if sprite.isObserver{ print("\(child.rmxID) ")}
-                    if child.rmxID != sprite.rmxID && child.isAnimated {
-                        let distTest = sprite.node.scale.z + child.node.scale.z
-                        let dist = sprite.distanceTo(child)
-                        if dist <= distTest {
-//                            if sprite.isObserver{ print("HIT: \(child.rmxID)\n") }
-                            child.node.physicsBody!.velocity += sprite.node.physicsBody!.velocity
-                            sprite.world!.childSpriteArray.remove(child.rmxID)
-                            sprite.world!.childSpriteArray.makeFirst(child)
-                            return
-                        }
-                    }
-                }
-            }
-        }
-    
-//            if sprite.type != .OBSERVER {
-//                sprite.addBehaviour{ (isOn: Bool)->() in
-//                    if !isOn {
-//                        return
-//                    }
-//                    for player in actors {
-//                        let actor = player.1
-//                        if actor.rmxID != sprite.rmxID {
-//                            let distTest = actor.body!.radius + sprite.body!.radius
-//                            let dist = sprite.body!.distanceTo(actor)
-//                            if dist <= distTest {
-//                                sprite.body!.velocity = GLKVector3Add(sprite.body!.velocity, actor.body!.velocity)
-//                            }
-//                        }
-//                    }
-//                }
-//
-//      } 
-    }
+   
     enum MoveState { case MOVING, TURNING, IDLE }
     static func addRandomMovement(to sprite: RMXSprite) {
         if let world = sprite.world {
-            RMXLog("Adding AI to \(sprite.name)")
+            NSLog("Adding AI to \(sprite.name)")
+           
+            var timeLimit = random() % 600 + 10
             var timePassed = 0
-            var timeLimit = random() % 600
-            let speed:RMFloatB = RMFloatB(random() % 15000)/3
-            //                    let theta = Float(random() % 100)/100
-            //                    let phi = Float(random() % 100)/100
-            //                    var target = world.furthestObjectFrom(sprite)
-            
+            let speed:RMFloatB = RMFloatB(random() % 18000) + 18000000 * sprite.mass
+          
             var state: MoveState = .MOVING
             sprite.addBehaviour{ (isOn:Bool) -> () in
                 if !isOn { return }
-                if !self.RANDOM_MOVEMENT { return }
+//                if !self.RANDOM_MOVEMENT { return }
                 
                 
                 switch state {
                 case .TURNING:
-                    if timePassed >= timeLimit {
-                        if sprite.hasItem {
-                            sprite.turnToFace(world.activeSprite)
-                            sprite.throwItem(500)
-                        }
-                        timePassed = 0
-                        timeLimit = random() % 1600 + 10
+                    if sprite.hasItem {
+//                        sprite.turnToFace(world.activeSprite)
                         
-                        if sprite.distanceTo(point: RMXVector3Zero) > world.radius - 50 {
-                            state = .MOVING
-                            timeLimit = 600
-                        } else {
-                            let rmxID = random() % RMXSprite.COUNT
-                            if let target = world.childSpriteArray.get(rmxID) {
-                                sprite.headTo(target, speed: speed, doOnArrival: { (sender, objects) -> AnyObject? in
-                                    //                                        if let target = world.furthestObjectFrom(sprite) {
-                                    //
-                                    //                                        }
-                                    sprite.grabItem(item: target)
-                                    return nil
-                                })
-                                
-                                state = .MOVING
-                            }
-                        }
+                        sprite.throwItem(500)
                     }
-                    break
-                        
+                    sprite.lookAround(theta: speed)
                     
+                    
+                /*
+                    let rmxID = random() % RMXSprite.COUNT
+                    if let target = world.childSpriteArray.get(rmxID) {
+                        sprite.headTo(target, speed: speed, doOnArrival: { (sender, objects) -> AnyObject? in
+                            sprite.grabItem(item: target)
+                            return nil
+                        })
+                    } */
+                    timePassed++
+                    if timePassed > timeLimit {
+                        state = .MOVING
+                        timeLimit = random() % 600 + 10
+                    }
                 case .MOVING:
                     sprite.accelerateForward(speed)
                     timePassed++
+                    if timePassed > timeLimit {
+                        state = .TURNING
+                        timeLimit = random() % 600 + 10
+                    }
                     break
                 default:
                     fatalError()
