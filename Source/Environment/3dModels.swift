@@ -8,18 +8,24 @@
 
 import Foundation
 import SceneKit
-enum ShapeType: Int { case NULL = 0, CUBE = 1 , PLANE = 2, SPHERE = 3, CYLINDER = 4, FLOOR, ROCK, OILDRUM , AUSFB, PONGO, LAST, PILOT, DOG}
-class RMXModels {
+
+typealias RMXModels = RM3DModels
+
+enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, ROCK, OILDRUM , AUSFB, PONGO, LAST, PILOT,  PLANE, FLOOR, DOG, NULL }
+
+class RM3DModels : RMXModelsProtocol {
     
+    #if SceneKit
     var rock: SCNGeometry?
     var oilDrum: SCNGeometry?
-    var ausfb: SCNGeometry?
-    static let pongo = SCNScene(named:"art.scnassets/Pongo/other/The Limited 4.dae")
-    static let ausfb = SCNScene(named:"art.scnassets/AUSFB/ausfb.dae")
-    static let dog = SCNScene(named:"art.scnassets/Dog/Dog.dae")
-    static let pilot = SCNScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")
+//    var ausfb: SCNGeometry?
+    static let pongo = RMXScene(named:"art.scnassets/Pongo/other/The Limited 4.dae")
+    static let ausfb = RMXScene(named:"art.scnassets/AUSFB/ausfb.dae")
+    static let dog = RMXScene(named:"art.scnassets/Dog/Dog.dae")
+    static let pilot = RMXScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")
     
-    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXVector3? = nil, color: NSColor! = nil) -> SCNNode {
+   
+    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXVector3? = nil, color: NSColor! = nil) -> RMXNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
@@ -28,10 +34,10 @@ class RMXModels {
             radius = RMFloatB(scale.average)
         }
         
-        var node: SCNNode
+        var node: RMXNode
         switch(type){
         case ShapeType.CUBE.rawValue:
-            node = SCNNode(geometry: SCNBox(
+            node = RMXNode(geometry: SCNBox(
                 width: RMFloat(scale.x),
                 height:RMFloat(scale.y),
                 length:RMFloat(scale.z),
@@ -39,57 +45,60 @@ class RMXModels {
             )
             break
         case ShapeType.SPHERE.rawValue:
-            node = SCNNode(geometry: SCNSphere(radius: RMFloat(radius)))
+            node = RMXNode(geometry: SCNSphere(radius: RMFloat(radius)))
             hasColor = true
             break
         case ShapeType.CYLINDER.rawValue:
-            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height)))
+            node = RMXNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height)))
             hasColor = true
             break
         case ShapeType.ROCK.rawValue:
             let url = NSBundle.mainBundle().URLForResource("art.scnassets/Rock1", withExtension: "dae")
             let source = SCNSceneSource(URL: url!, options: nil)
             let block = source!.entryWithIdentifier("Cube-mesh", withClass: SCNGeometry.self) as! SCNGeometry
-            node = SCNNode(geometry: block)
-//            node.scale *= 1 * radius
+            node = RMXNode(geometry: block)
+            node.scale *= 1 * radius
             break
         case ShapeType.PLANE.rawValue:
              hasColor = true
-            node = SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
+            node = RMXNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
             break
         case ShapeType.FLOOR.rawValue:
             hasColor = true
-            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius)))
+            node = RMXNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius)))
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
             //node.geometry?.firstMaterial!.doubleSided = true
             
             break
         case ShapeType.PONGO.rawValue:
-            node = pongo?.rootNode.clone() as! SCNNode
+            node = pongo?.rootNode.clone() as! RMXNode
             node.scale *= 0.001 * radius
             break
         case ShapeType.OILDRUM.rawValue:
             let url = NSBundle.mainBundle().URLForResource("art.scnassets/oildrum/oildrum", withExtension: "dae")
             let source = SCNSceneSource(URL: url!, options: nil)
             let block = source!.entryWithIdentifier("Cylinder_001-mesh", withClass: SCNGeometry.self) as! SCNGeometry
-            node = SCNNode(geometry: block)
-//            node.scale *= 1 * radius
+            node = RMXNode(geometry: block)
+            node.scale *= 1 * radius
             break
             
         
         case ShapeType.DOG.rawValue:
-            node = dog!.rootNode.clone() as! SCNNode
+            node = dog!.rootNode.clone() as! RMXNode
             node.scale *= 1 * radius
             break
             
         case ShapeType.AUSFB.rawValue:
-            node = ausfb!.rootNode.clone() as! SCNNode
+            node = ausfb!.rootNode.clone() as! RMXNode
             node.scale *= 0.01 * radius
             break
-
-        default:
-            node = SCNNode()
+        case ShapeType.NULL.rawValue:
+            node = RMXNode()
             node.scale = scale
+            break
+        default:
+            node = RMXNode(geometry: SCNSphere(radius: RMFloat(radius)))
+            hasColor = true
         }
         
         
@@ -125,5 +134,9 @@ class RMXModels {
         
         return node
     }
+    
+    #elseif SpriteKit
+    
+    #endif
     
 }

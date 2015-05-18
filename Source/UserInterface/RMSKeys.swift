@@ -12,6 +12,17 @@ import AppKit
 import ApplicationServices
 import SceneKit
 
+    
+/// Contains Keys control mapping for a desktop interface.
+///
+/// For example, the following gives a forward momentum of '2' when 'w' is pressed, and 0 when 'w' is released:
+///
+///   let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (2, 0)
+///   var key = RMKey(self, action: "forward", characters: "w", speed: MOVE_SPEED)
+///
+/// The RMSActionProcessor class handles the application of the human term "forward", regardless of interface used. See also `RMXDPad` for iOS.
+///
+/// See also: `RMKeys` and  `RMSActionProcessor`.
 class RMSKeys : RMXInterface {
     
     ///Key down, Key up options
@@ -22,34 +33,44 @@ class RMSKeys : RMXInterface {
     
     ///Key settings
     lazy var keys: [ RMKey ] = [
-        RMKey(self, action: "information", characters: "i", isRepeating: false,speed: ON_KEY_DOWN),
-        RMKey(self, action: "forward", characters: "w", speed: MOVE_SPEED),
-        RMKey(self, action: "back", characters: "s", speed: MOVE_SPEED),
-        RMKey(self, action: "left", characters: "a", speed: MOVE_SPEED),
-        RMKey(self, action: "right", characters: "d", speed: MOVE_SPEED),
-        RMKey(self, action: "up", characters: "e", speed: MOVE_SPEED),
-        RMKey(self, action: "down", characters: "q", speed: MOVE_SPEED),
-        RMKey(self, action: "rollLeft", characters: "z", speed: LOOK_SPEED),
-        RMKey(self, action: "rollRight", characters: "x", speed: LOOK_SPEED),
-        RMKey(self, action: "jump", characters: " "),
-        RMKey(self, action: "toggleAllGravity", characters: "g", isRepeating: false,speed: ON_KEY_UP),
-        RMKey(self, action: "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
-        RMKey(self, action: "toggleAI", characters: "A", isRepeating: false,speed: ON_KEY_UP),
-        RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: ON_KEY_UP),
-        RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: (0.01,0)),
-        RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: ON_KEY_UP),//,
-        RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: ON_KEY_UP),
-        RMKey(self, action: "throw", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
-        
-        RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: ON_KEY_DOWN),
-        RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: ON_KEY_DOWN), //generically used for testing
-        RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
-        RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: ON_KEY_DOWN)
+    
+    // Basic Movement
+    RMKey(self, action: "forward", characters: "w", speed: MOVE_SPEED),
+    RMKey(self, action: "back", characters: "s", speed: MOVE_SPEED),
+    RMKey(self, action: "left", characters: "a", speed: MOVE_SPEED),
+    RMKey(self, action: "right", characters: "d", speed: MOVE_SPEED),
+    RMKey(self, action: "up", characters: "e", speed: MOVE_SPEED),
+    RMKey(self, action: "down", characters: "q", speed: MOVE_SPEED),
+    RMKey(self, action: "rollLeft", characters: "z", speed: LOOK_SPEED),
+    RMKey(self, action: "rollRight", characters: "x", speed: LOOK_SPEED),
+    RMKey(self, action: "jump", characters: " "),
+    RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: (0.01,0)),
+    
+    //Interactions
+    RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: "throw", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
+    
+    //Environmentals
+    RMKey(self, action: "toggleAllGravity", characters: "g", isRepeating: false,speed: ON_KEY_UP),
+    //RMKey(self, action: "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: "toggleAI", characters: "A", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: ON_KEY_UP),
+    
+    //Interface options
+    RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
+    
+    //Misc: generically used for testing
+    RMKey(self, action: "information", characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
+    RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: ON_KEY_DOWN)
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
         super.viewDidLoad(coder)
     }
+    
     func set(action a: String, characters k: String ) {
         let newKey = RMKey(self, action: a, characters: k)
         var exists = false
@@ -155,8 +176,11 @@ class RMSKeys : RMXInterface {
     }
 }
 
-
- class RMKey {
+/// Single mapping for a control on the desktop interface.
+/// This maps a most binary commands to the action processor
+///
+/// See also: `RMKeys` and  `RMSActionProcessor`.
+class RMKey {
 //    private var _key: String?
     var isPressed: Bool = false
     var action: String

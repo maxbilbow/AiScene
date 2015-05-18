@@ -8,7 +8,11 @@
 
 import Foundation
 import GLKit
+#if SceneKit
 import SceneKit
+    #elseif SpriteKit
+    import SpriteKit
+    #endif
 
 enum RMXWorldType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 class RMSWorld  {
@@ -29,8 +33,8 @@ class RMSWorld  {
     
     var ground: RMFloatB = RMSWorld.RADIUS
     
-    init(scene: SCNScene? = nil){
-        self.scene = scene ?? SCNScene(named: "art.scnassets/ship.dae")!
+    init(scene: RMXScene? = nil){
+        self.scene = scene ?? RMSWorld.DefaultScene()
         self.worldDidInitialize()
         
     }
@@ -43,13 +47,12 @@ class RMSWorld  {
     
     static var TYPE: RMXWorldType = .DEFAULT
 
-    var scene: SCNScene
-    lazy var sun: RMXSprite = RMXSprite.new(parent: self, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: RMSWorld.RADIUS)
-    lazy var earth: RMXSprite = RMXSprite.new(parent: self, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 15, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
+    var scene: RMXScene
+    
     private let GRAVITY: RMFloatB = 0
     
     
-    var activeCamera: SCNNode {
+    var activeCamera: RMXNode {
         return self.activeSprite.cameraNode
     }
 
@@ -58,44 +61,23 @@ class RMSWorld  {
     
     lazy var observer: RMXSprite = self.activeSprite
     lazy var poppy: RMXSprite = RMX.makePoppy(world: self)
-    lazy var players: [Int: RMXSprite] = [
-        self.activeSprite.rmxID: self.activeSprite ,
-        self.poppy.rmxID: self.poppy,
-        self.sun.rmxID: self.sun
+    
+    lazy var players: [String: RMXSprite] = [
+        self.activeSprite.name: self.activeSprite
     ]
     
     var type: RMXWorldType = .DEFAULT
 
     
-    func worldDidInitialize() {
-        let radius = RMSWorld.RADIUS
-            self.scene.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
-        
-//            earth.physicsField = SCNPhysicsField.radialGravityField()
-
-//            earth.physicsField!.categoryBitMask = Int(SCNPhysicsCollisionCategory.Default.rawValue)
-
-        self.earth.setName(name: "The Ground")
-        self.earth.setPosition(position: RMXVector3Make(0,-RMSWorld.RADIUS * 2.5, 0))
-        self.insertChild(self.earth, andNode: true)
-
-        //cameras
-        let sunCam: SCNNode = SCNNode()
-        self.scene.rootNode.addChildNode(sunCam)
-        
-        sunCam.camera = RMXCamera()
-        sunCam.position = RMXVector3Make(0 , 100, radius)
-        self.observer.addCamera(sunCam)
-        self.observer.addCamera(self.poppy.node)
-            
     
-        
+    func worldDidInitialize() {
+
         //DEFAULT
         self.environments.setType(.DEFAULT)
-        RMXArt.initializeTestingEnvironment(self,withAxis: true, withCubes: 100, radius: 500 + radius)
+        RMXArt.initializeTestingEnvironment(self,withAxis: true, withCubes: 300, radius: 500 + radius)
         self.insertChildren(children: self.players)
 
-        setWorldType()
+        self.setWorldType()
 
     }
   
@@ -146,7 +128,9 @@ class RMSWorld  {
         child.parentSprite = nil
         child.world = self
         if andNode {
+            #if SceneKit
             self.scene.rootNode.addChildNode(child.node)
+            #endif
         }
         //RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
         self.childSpriteArray.set(child)
@@ -158,7 +142,7 @@ class RMSWorld  {
         }
     }
 
-    func insertChildren(#children: [Int:RMXSprite], insertNodes:Bool = true){
+    func insertChildren(#children: [String:RMXSprite], insertNodes:Bool = true){
         for child in children {
             self.insertChild(child.1, andNode: insertNodes)
         }
@@ -210,7 +194,6 @@ class RMSWorld  {
 //        self.sun.animate()
 //        self.poppy.animate()
 //        self.activeSprite.animate()
-        self.earth.resetTransform()
         for child in self.children {
             child.animate(aiOn: self.aiOn)
         }

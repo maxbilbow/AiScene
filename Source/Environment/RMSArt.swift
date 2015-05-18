@@ -11,6 +11,7 @@ import GLKit
 
     import SceneKit
 
+
 class RMXArt {
     static let colorBronzeDiff: [Float]  = [ 0.8, 0.6, 0.0, 1.0 ]
     static let colorBronzeSpec: [Float]  = [ 1.0, 1.0, 0.4, 1.0 ]
@@ -178,7 +179,7 @@ class RMXArt {
             }
             randPos = thisRandom(&X,&Y,&Z)
             let chance = 1//(rand() % 6 + 1);
-            let size = RMFloatB(random() % 5 + 2)
+            let size = RMFloatB(random() % 8 + 2)
             var scale = RMXVector3Make(size,size,size)
             var shape: ShapeType
             var geo: SCNGeometry

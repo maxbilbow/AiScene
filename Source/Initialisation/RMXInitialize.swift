@@ -133,7 +133,6 @@ extension RMX {
                 if observer.hasItem {
                     itemToWatch = observer.item
                     state = .READY_TO_CHASE
-                    poppy.hasGravity = observer.hasGravity
                 } else {
                     idle(poppy)
                 }
@@ -141,7 +140,6 @@ extension RMX {
             case .READY_TO_CHASE:
                 if !observer.hasItem {
                     state = .CHASING
-                    poppy.hasGravity = itemToWatch.hasGravity
                 } else {
                     poppy.headTo(itemToWatch, speed: speed * 10, doOnArrival: getReady)
                 }
@@ -149,12 +147,10 @@ extension RMX {
             case .CHASING:
                 if  observer.hasItem {
                     itemToWatch = observer.item
-                    poppy.hasGravity = observer.hasGravity
                     state = .READY_TO_CHASE
                 } else if poppy.hasItem {
                     itemToWatch = nil
                     state = .FETCHING
-                    poppy.hasGravity = observer.hasGravity
                 } else {
                     poppy.headTo(itemToWatch, speed: speed * 10, doOnArrival: fetch, objects: observer)
                 }
@@ -162,13 +158,11 @@ extension RMX {
             case .FETCHING:
                 if !poppy.hasItem  {
                     state = .IDLE
-                    poppy.hasGravity = observer.hasGravity
                 } else {
                     poppy.headTo(observer, speed: speed * 10, doOnArrival: drop)
                 }
                 break
             default:
-                poppy.hasGravity = observer.hasGravity
                 if observer.hasItem {
                     state = .READY_TO_CHASE
                 } else {

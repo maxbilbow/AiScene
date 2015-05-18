@@ -12,7 +12,7 @@ import GLKit
 import SceneKit
 class RMXCamera : SCNCamera {
     
-    var pov: SCNNode? { return self.observer.node }
+    var pov: RMXNode? { return self.observer.node }
     var observer: RMXSprite! {
         return self.world.observer
     }

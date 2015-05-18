@@ -52,14 +52,14 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         return self.world?.activeCamera.camera as? RMXCamera
     }
     
-    init(gvc: GameViewController, scene: SCNScene? = nil){
+    init(gvc: GameViewController, scene: RMXScene? = nil){
         super.init()
         self.initialize(gvc)
         self.viewDidLoad(nil)
         NSLog("\(__FUNCTION__)")
     }
     
-    func initialize(gvc: GameViewController, scene: SCNScene? = nil) -> RMXInterface {
+    func initialize(gvc: GameViewController, scene: RMXScene? = nil) -> RMXInterface {
         self.gvc = gvc
         self.gameView = gvc.gameView
         
@@ -76,7 +76,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     
     func viewDidLoad(coder: NSCoder!){
         if self.world == nil {
-            self.world = RMSWorld(scene: SCNScene(coder: coder))
+            self.world = RMSWorld(scene: RMXScene(coder: coder))
         }
         self.setUpGestureRecognisers()
     }

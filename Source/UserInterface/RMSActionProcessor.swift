@@ -14,8 +14,11 @@ import AppKit
     
     #endif
 
-
+//#if SceneKit
     import SceneKit
+   // #elseif SpriteKit
+    import SpriteKit
+ //   #endif
 
 enum RMXMoveType { case PUSH, DRAG }
 
@@ -40,7 +43,7 @@ class RMSActionProcessor {
     }
     var world: RMSWorld
     
-    var scene: SCNScene {
+    var scene: RMXScene {
         return self.world.scene
     }
     init(world: RMSWorld, gameView: GameView){
@@ -283,7 +286,7 @@ class RMSActionProcessor {
 //    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
     var isMouseLocked = false
     
-    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, pitch x: RMFloatB? = nil, yaw y: RMFloatB? = nil, roll z: RMFloatB? = nil){
+    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloatB? = nil, yaw y: RMFloatB? = nil, roll z: RMFloatB? = nil) {
         let sprite = s ?? self.activeSprite
         if let orientation = orientation {
             RMXLog("not implemented")
@@ -297,7 +300,7 @@ class RMSActionProcessor {
             switch action {
                 case "throw", "Throw","grab", "Grab":
                     if let sprite = sprite {
-                        if let node = object?.node {
+                        if let node: RMXNode = object?.node {
                             if let body = node.physicsBody {
                                 switch (body.type){
                                 case .Static:
@@ -325,6 +328,8 @@ class RMSActionProcessor {
                                             NSLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
                                         } else {
                                             //                                   self.world?.observer.grabItem(item: item)
+                                            sprite.throwItem(0)
+                                            sprite.grabItem(item: item)
                                             NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
                                         }
                                     } else if item.type != RMXSpriteType.BACKGROUND {

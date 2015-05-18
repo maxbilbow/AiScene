@@ -13,7 +13,7 @@ public class RMXDebugger  {
 
 }
 extension RMX {
-    static var isDebugging: Bool { return true }
+    static var isDebugging: Bool { return false }
 }
 
 public func RMXLog(_ message: AnyObject? = "", sender: AnyObject = __FUNCTION__, file: AnyObject = __FILE__){

@@ -19,12 +19,12 @@ class ChildSpriteArray {
     //        var current: UnsafeMutablePointer<[Int:RMXSprite]> {
     //            return nodeArray[type.rawValue]
     //        }
-    private var nodeArray: [ [RMXSprite] ] = [ Array<RMXSprite>() ]
+    private var spriteArray: [ [RMXSprite] ] = [ Array<RMXSprite>() ]
     var current:[RMXSprite] {
-        return nodeArray[_key]
+        return spriteArray[_key]
     }
     func get(key: Int) -> RMXSprite? {
-        for (index, node) in enumerate(self.nodeArray[_key]) {
+        for (index, node) in enumerate(self.spriteArray[_key]) {
             if node.rmxID == key{
                 return node
             }
@@ -33,13 +33,13 @@ class ChildSpriteArray {
     }
     
     func set(node: RMXSprite) {
-        self.nodeArray[_key].append(node)
+        self.spriteArray[_key].append(node)
     }
     
     func remove(key: Int) -> RMXSprite? {
-        for (index, node) in enumerate(self.nodeArray[_key]) {
+        for (index, node) in enumerate(self.spriteArray[_key]) {
             if node.rmxID == key{
-                self.nodeArray[_key].removeAtIndex(index)
+                self.spriteArray[_key].removeAtIndex(index)
                 return node
             }
         }
@@ -64,15 +64,15 @@ class ChildSpriteArray {
     
     func makeFirst(node: RMXSprite){
         self.remove(node.rmxID)
-        self.nodeArray[_key].insert(node, atIndex: 0)
+        self.spriteArray[_key].insert(node, atIndex: 0)
     }
     init(parent p: AnyObject){
         self.parent = p
         if let parent = p as? RMSWorld {
-            self.nodeArray.reserveCapacity(RMXWorldType.DEFAULT.rawValue)
+            self.spriteArray.reserveCapacity(RMXWorldType.DEFAULT.rawValue)
             for (var i = 1; i <= RMXWorldType.DEFAULT.rawValue ; ++i){
                 let dict = Array<RMXSprite>()
-                self.nodeArray.append(dict)
+                self.spriteArray.append(dict)
             }
         }
     }

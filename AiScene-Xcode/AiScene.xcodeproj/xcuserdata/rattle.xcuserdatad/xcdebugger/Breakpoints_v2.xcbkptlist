@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSActionProcessor.swift"
-            timestampString = "453462823.86903"
+            timestampString = "453670214.156441"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "movement(_:speed:point:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,45 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "453413859.78619"
+            timestampString = "453672811.022454"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "289"
-            endingLineNumber = "289"
-            landmarkName = "animate(aiOn:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RMXSprite.debug (AiScene_OSX.RMXSprite)(Swift.Bool) -&gt; ()"
-                  moduleName = "AiScene-OSX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "453630935.422801"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "291"
-                  endingLineNumber = "291"
-                  offsetFromSymbolStart = "26">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RMXSprite.(debug (AiScene_OSX.RMXSprite) -&gt; (Swift.Bool) -&gt; ()).(default argument 0)"
-                  moduleName = "AiScene-OSX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "453630935.422982"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "290"
-                  endingLineNumber = "290"
-                  offsetFromSymbolStart = "8">
-               </Location>
-            </Locations>
+            startingLineNumber = "268"
+            endingLineNumber = "268"
+            landmarkName = "RMXSprite"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
