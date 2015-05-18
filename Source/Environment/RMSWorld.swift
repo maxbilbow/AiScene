@@ -145,9 +145,9 @@ class RMSWorld  {
     func insertChild(child: RMXSprite, andNode:Bool = true){
         child.parentSprite = nil
         child.world = self
-            if andNode {
-                self.scene.rootNode.addChildNode(child.node)
-            }
+        if andNode {
+            self.scene.rootNode.addChildNode(child.node)
+        }
         //RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
         self.childSpriteArray.set(child)
     }

@@ -14,6 +14,7 @@ class AiScene_OSXTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        testExample()
     }
     
     override func tearDown() {
@@ -26,10 +27,11 @@ class AiScene_OSXTests: XCTestCase {
         XCTAssert(true, "Pass")
     }
     
-    func testPerformanceExample() {
+    func testPerformanceExample(fn: () -> ()) {
         // This is an example of a performance test case.
         self.measureBlock() {
-            // Put the code you want to measure the time of here.
+           fn() // Put the code you want to measure the time of here.
+            
         }
     }
     
