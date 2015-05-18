@@ -216,6 +216,11 @@ class RMSActionProcessor {
                 self.activeSprite.node.physicsBody!.resetTransform()
             }
             break
+        case "toggleAI":
+            if speed == 1 {
+                self.world.aiOn = !self.world.aiOn
+                RMXLog("aiOn: \(self.world.aiOn)")
+            }
         case "information":
             if speed == 1 { println(_getInfo()) }
         default:
