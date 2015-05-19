@@ -15,6 +15,12 @@ import Foundation
 #elseif SpriteKit
     import SpriteKit
     typealias RMXScene = SKScene
+    
+    extension SKScene {
+        var rootNode: SKScene {
+            return self
+        }
+    }
 #endif
 
 

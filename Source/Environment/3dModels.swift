@@ -25,13 +25,16 @@ class RM3DModels : RMXModelsProtocol {
     static let pilot = RMXScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")
     
    
-    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXVector3? = nil, color: NSColor! = nil) -> RMXNode {
+    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
         var scale = s ?? SCNVector3Make(radius * 2,height * 2,radius * 2)
         if r == nil {
             radius = RMFloatB(scale.average)
+        }
+        if h == nil {
+            height = scale.y
         }
         
         var node: RMXNode

@@ -59,90 +59,41 @@ class RMXArt {
     }
     
     
-    class func drawPlane(world: RMSWorld) {
-        #if SceneKit
 
-            let plane = SCNNode(geometry: SCNPlane(
-                width: RMFloat(world.radius),
-                height:RMFloat(world.radius)
-                )
-)
-//        plane.geometry = RMXArt.PLANE
-//        plane.scale = world.node.scale
-       plane.eulerAngles.x = 90 * PI_OVER_180
-        plane.geometry!.firstMaterial!.doubleSided = true
-        plane.geometry!.firstMaterial!.diffuse.contents =  NSColor.yellowColor()
-            plane.physicsBody = SCNPhysicsBody.staticBody()
-            plane.physicsBody!.mass = 0
-            plane.physicsBody!.restitution = 0.0
-        world.scene.rootNode.addChildNode(plane)
-            
-        #else
-        
-        let ZX = RMXSprite.new(parent: world).asShape(radius: world.radius, shape: .CUBE)
-        
-            ZX.setColor(self.yellowVector)
-        ZX.isAnimated = false
-        ZX.initPosition(startingPoint: RMXVector3Make(ZX.position.x, -ZX.radius, ZX.position.z))
-        
-        world.insertChild(ZX)
-        #endif
-    }
     
     class func drawAxis(world: RMSWorld, radius: RMFloatB?) {//xCol y:(float*)yCol z:(float*)zCol{
         
         
         func drawAxis(axis: String) {
             var point =  -world.radius
-            #if !SceneKit
-            var color: GLKVector4
-                #else
-                var color: NSColor
-                #endif
+            var color: NSColor
             var scale: RMXVector3 = RMXVector3Make(10,10,10)
             switch axis {
             case "x":
-                #if !SceneKit
-                color = self.redVector
-                    #else
                 scale.x = radius ?? world.radius
-                    color = NSColor.redColor()
-                    #endif
+                color = NSColor.redColor()
                 break
             case "y":
-                #if !SceneKit
-                color = self.greenVector
-                    #else
                 scale.y = radius ?? world.radius
-                    color = NSColor.greenColor()
-                    #endif
+                color = NSColor.greenColor()
                 break
             case "z":
-                    #if !SceneKit
-                color = self.blueVector
-                        #else
                 scale.z = radius ?? world.radius
-                        color = NSColor.blueColor()
-                        #endif
+                color = NSColor.blueColor()
                 break
             default:
                 fatalError(__FUNCTION__)
             }
-         #if SceneKit
-                let node:SCNNode = SCNNode( geometry: (RMXArt.CUBE.copy() as? SCNGeometry)!)
-                node.geometry!.firstMaterial! = (RMXArt.CUBE.firstMaterial!.copy() as? SCNMaterial)!
-                node.geometry!.firstMaterial!.diffuse.contents = color
-                node.geometry!.firstMaterial!.specular.contents = color
-//                node.physicsBody = SCNPhysicsBody.staticBody()
-                node.scale = scale
-           
-                world.scene.rootNode.addChildNode(node)
-                println("axis: \(axis), scale: \(scale.print)")
-            #else
-            let sprite = RMXSprite(node: RMXModels.getNode(shapeType: ShapeType.CUBE.rawValue, scale: scale))
-            sprite.shapeType = .CUBE
-            world.insertChild(sprite)
-            #endif
+            let node:SCNNode = SCNNode( geometry: (RMXArt.CUBE.copy() as? SCNGeometry)!)
+            node.geometry!.firstMaterial! = (RMXArt.CUBE.firstMaterial!.copy() as? SCNMaterial)!
+            node.geometry!.firstMaterial!.diffuse.contents = color
+            node.geometry!.firstMaterial!.specular.contents = color
+//               node.physicsBody = SCNPhysicsBody.staticBody()
+            node.scale = scale
+        
+            world.scene.rootNode.addChildNode(node)
+            println("axis: \(axis), scale: \(scale.print)")
+            
             
         }
         

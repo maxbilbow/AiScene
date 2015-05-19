@@ -29,6 +29,15 @@ protocol RMXChildNode {
 #if SceneKit
 extension RMXSprite {
 
+    var transform: RMXMatrix4 {
+        return self.node.presentationNode().transform
+    }
+    
+    var position: RMXVector3 {
+        return self.node.presentationNode().position
+    }
+
+    
     func getNode() -> RMXNode {
         return self.node.presentationNode()
     }
@@ -129,6 +138,44 @@ extension RMXSprite {
         return self.node.presentationNode().scale
     }
     
+    func setRadius(radius: RMFloatB){
+        let s = radius * 2
+        self.node.scale = RMXVectorMake(s)
+    }
+    
+    var weight: RMFloatB {
+        return RMFloatB(self.node.physicsBody!.mass)// * self.world.gravity
+    }
+    
+    func distanceTo(point: RMXVector3 = RMXVector3Zero) -> RMFloatB{
+        return RMXVector3Distance(self.position, point)
+    }
+    
+    func distanceTo(object:RMXSprite) -> RMFloatB{
+        return RMXVector3Distance(self.position,object.position)
+    }
+    
+    var velocity: RMXVector {
+        if let body = self.physicsBody {
+            return body.velocity
+        } else {
+            return RMXVector3Zero
+        }
+    }
+    
+    func setPosition(position: RMXVector3? = nil, resetTransform: Bool = true){
+        self.node.transform = self.transform
+        if let position = position {
+            self.node.position = position
+        }
+        //        self.node.orientation = self.getNode().orientation
+        //        self.node.scale = self.getNode().scale
+        
+        if resetTransform {
+            self.node.physicsBody?.resetTransform()
+        }
+    }
+
     class func rootNode(node: RMXNode, rootNode: RMXNode) -> RMXNode {
         if node.parentNode == rootNode || node.parentNode == nil {
             RMXLog("RootNode: \(node.name)")
@@ -145,7 +192,34 @@ extension RMXSprite {
     
     
     #elseif SpriteKit
+    extension SKNode {
+        func presentationNode() -> SKNode {
+            return self
+        }
+        
+        var scale: RMXSize {
+            return RMXSize(width: self.xScale, height: self.yScale)
+        }
+        
+        var parentNode: SKNode? {
+            return self.parent
+        }
+        
+        var geometry: AnyObject? {
+            return nil
+        }
+    }
+    
     extension RMXSprite {
+        
+        var transform: RMXTransform {
+            return SCNVector4Make(RMFloatB(self.node.position.x), RMFloatB(self.node.position.y), RMFloatB(self.node.zPosition), RMFloatB(self.node.zRotation))
+        }
+        
+        var position: RMXPoint {
+            return self.node.position
+        }
+
         
         func getNode() -> SKNode {
             return self.node
@@ -163,7 +237,7 @@ extension RMXSprite {
         }
         
         
-        func applyForce(direction: RMXVector3, atPosition: RMXVector3? = nil, impulse: Bool = false) {
+        func applyForce(direction: RMXVector, atPosition: RMXPoint? = nil, impulse: Bool = false) {
             let dir = CGVector(dx: CGFloat(direction.x), dy: CGFloat(direction.y))
             if let atPosition = atPosition {
                 let pos = CGPoint(x: CGFloat(atPosition.x), y: CGFloat(atPosition.y))
@@ -173,7 +247,7 @@ extension RMXSprite {
             }
         }
         
-        func applyForce(impulse: CGVector, atPoint: CGPoint? = nil) {
+        func applyForce(impulse: RMXVector, atPoint: RMXPoint? = nil) {
             if let atPoint = atPoint {
                 self.node.physicsBody?.applyForce(impulse, atPoint: atPoint)
             } else {
@@ -182,22 +256,11 @@ extension RMXSprite {
         }
 
         func resetTransform() {
-            self.node.physicsBody?.resetTransform()
+            RMXLog("self.node.physicsBody?.resetTransform()")
         }
         
         func setAngle(yaw: RMFloatB? = nil, pitch: RMFloatB? = nil, roll r: RMFloatB? = nil) {
-            //        self.node.eulerAngles = self.getNode().eulerAngles
-            //        self.node.eulerAngles = self.getNode().eulerAngles
-            self.setPosition(resetTransform: false)
-            if let theta = yaw {
-                self.node.orientation.y = 0
-            }
-            if let phi = pitch {
-                self.node.orientation.x = 0
-            }
-            if let roll = r {
-                self.node.orientation.z = 0
-            }
+            RMXLog("yaw \(yaw), pitch \(pitch), roll \(roll)")
             self.resetTransform()
             
         }
@@ -207,56 +270,82 @@ extension RMXSprite {
             if let theta = t {
                 let axis = self.upVector
                 let speed = self.rotationSpeed * theta
-                self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
+                self.node.physicsBody!.applyTorque(RMFloat(-speed))
             }
-            if let phi = p {
-                let axis = self.leftVector
-                let speed = self.rotationSpeed * phi
-                self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, speed), impulse: false)
-            }
-            if let roll = r {
-                let axis = self.forwardVector
-                let speed = self.rotationSpeed * roll
-                self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
-                //            self.node.transform *= RMXMatrix4MakeRotation(speed * 0.0001, RMXVector3Make(0,0,1))
-            }
-            
         }
         
-        var orientation: RMXVector4 {
-            return self.node.presentationNode().orientation
+        var orientation: RMXQuaternion {
+            return self.node.zRotation
         }
         
         func accelerateForward(v: RMFloatB) {
             let force = self.forwardVector * -v * self.speed
             //RMXLog("\n Force:\(force.print)")
-            self.node.physicsBody!.applyForce(force, impulse: false)
+            self.node.physicsBody!.applyForce(force)
         }
         
         func accelerateUp(v: RMFloatB) {
             let force = self.upVector * -v * self.speed
             // RMXLog(force.print)
-            self.node.physicsBody!.applyForce(force, impulse: false)
+            self.node.physicsBody!.applyForce(force)
         }
         
         func accelerateLeft(v: RMFloatB) {
             let force = self.leftVector * -v * self.speed
             //RMXLog(force.print)
-            self.node.physicsBody!.applyForce(force, impulse: false)
+            self.node.physicsBody!.applyForce(force)
         }
         
         
         func completeStop(){
             self.stop()
-            self.node.physicsBody!.velocity = RMXVector3Zero
+            self.node.physicsBody!.velocity = RMXVectorZero
         }
         ///Stops all acceleration foces, not velocity
         func stop(){
             self.node.physicsBody!.clearAllForces()
         }
         
-        var scale: RMXVector3 {
+        var scale: RMXSize {
             return self.node.presentationNode().scale
+        }
+        
+        func setRadius(radius: RMFloatB){
+            let s = CGFloat(radius * 2)
+            self.node.xScale = s
+            self.node.yScale = s
+        }
+        
+        var weight: RMFloatB {
+            return RMFloatB(self.node.physicsBody!.mass)// * self.world.gravity
+        }
+        
+        func distanceTo(point: RMXVector3 = RMXVector3Zero) -> RMFloatB{
+            return 1//RMXVector3Distance(self.position, point)
+        }
+        
+        func distanceTo(object:RMXSprite) -> RMFloatB{
+            return 1//RMXVector3Distance(self.position,object.position)
+        }
+        
+        
+        
+        
+        var velocity: RMXVector {
+            if let body = self.physicsBody {
+                return body.velocity
+            } else {
+                return RMXVectorZero
+            }
+        }
+        
+        func setPosition(position: RMXPoint? = nil, resetTransform: Bool = true){
+            if let position = position {
+                self.node.position = position
+            }
+            //        self.node.orientation = self.getNode().orientation
+            //        self.node.scale = self.getNode().scale
+    
         }
         
         class func rootNode(node: RMXNode, rootNode: RMXNode) -> RMXNode {
@@ -292,7 +381,7 @@ extension RMXSprite {
     }
     
     
-    var viewPoint: RMXVector3{
+    var viewPoint: RMXPoint {
         return self.position - self.forwardVector
     }
     
@@ -312,29 +401,22 @@ extension RMXSprite {
 
 
 extension RMXSprite {
-    var transform: RMXMatrix4 {
-        return self.node.presentationNode().transform
-    }
-
-    var position: RMXVector3 {
-        return self.node.presentationNode().position
-    }
     
-    var upVector: RMXVector3 {
+    var upVector: RMXVector {
         let transform = self.transform
-        let v = RMXVector3Make(transform.m21, transform.m22, transform.m23)
+        let v: RMXVector = transform.up
         return v
     }
     
-    var leftVector: RMXVector3 {
+    var leftVector: RMXVector {
         let transform = self.transform
-        let v = RMXVector3Make(transform.m11,transform.m12,transform.m13)
+        let v: RMXVector = transform.left
         return v
     }
     
-    var forwardVector: RMXVector3 {
+    var forwardVector: RMXVector {
         let transform = self.transform
-        let v = RMXVector3Make(transform.m31, transform.m32, transform.m33)
+        let v: RMXVector = transform.forward
         return v
     }
 }
@@ -351,18 +433,6 @@ extension RMXSprite {
         }
     }
     
-    func setPosition(position: RMXVector3? = nil, resetTransform: Bool = true){
-        self.node.transform = self.transform
-        if let position = position {
-            self.node.position = position
-        }
-//        self.node.orientation = self.getNode().orientation
-//        self.node.scale = self.getNode().scale
-        
-        if resetTransform {
-            self.node.physicsBody?.resetTransform()
-        }
-    }
 }
 
 extension RMXSprite {
@@ -411,16 +481,12 @@ extension RMXSprite {
         self.setRotationSpeed(speed: 1 * PI_OVER_180 / 10)
 
         
-        let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .ABSTRACT, radius: 100)
-        lightNode.light = SCNLight()
-        lightNode.light!.type = SCNLightTypeOmni
-        lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
-        lightNode.geometry?.firstMaterial!.emission.intensity = 1
-        self.node.addChildNode(lightNode)
-       
+               
         self.rAxis = rAxis
-        self.node.pivot.m41 = rDist //(self.world!.radius) * 10
-//        self.node.position.y = 5000
+        #if SceneKit
+        self.node.pivot.m41 = rDist
+        #endif
+        
         return self
     }
     

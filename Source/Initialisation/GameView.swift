@@ -75,6 +75,13 @@ class GameView: SCNView  {
             sun.addBehaviour { (isOn) -> () in
                 sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
             }
+            let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .ABSTRACT, radius: 100)
+            lightNode.light = SCNLight()
+            lightNode.light!.type = SCNLightTypeOmni
+            lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
+            lightNode.geometry?.firstMaterial!.emission.intensity = 1
+            sun.node.addChildNode(lightNode)
+
             
             let earth: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
             
@@ -101,8 +108,7 @@ class GameView: SCNView  {
                 })
             }
             
-            
-            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 100, radius: worldRadius)
+            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 400, radius: worldRadius)
             
             //cameras
             let sunCam: RMXNode = RMXNode()

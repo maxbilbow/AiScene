@@ -17,7 +17,7 @@ enum ShapeType: Int { case NULL = 0, CUBE = 1 , PLANE = 2, SPHERE = 3, CYLINDER 
 class RM2DModels : RMXModelsProtocol {
     
     
-    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXVector3? = nil, color: NSColor! = nil) -> RMXNode  {
+    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode  {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius

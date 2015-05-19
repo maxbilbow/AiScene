@@ -8,6 +8,7 @@
 
 import SpriteKit
 
+typealias GameView = GameScene
 class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */

@@ -23,6 +23,26 @@ import SceneKit
     typealias RMXVector3 = SCNVector3
     typealias RMXVector4 = SCNVector4
     typealias RMXMatrix4 = SCNMatrix4
+
+
+#if SceneKit
+    typealias RMXVector = RMXVector3
+    typealias RMXPoint = RMXVector3
+    typealias RMXSize = RMXVector3
+    typealias RMXQuaternion = SCNVector4
+    typealias RMXTransform = SCNMatrix4
+    typealias RMXPhysicsBody = SCNPhysicsBody
+    let RMXVectorZero = RMXVector3Zero
+    #elseif SpriteKit
+    import SpriteKit
+    typealias RMXVector = CGVector
+    typealias RMXPoint = CGPoint
+    typealias RMXSize = CGSize
+    typealias RMXQuaternion = CGFloat
+    typealias RMXTransform = SCNVector4
+    typealias RMXPhysicsBody = SKPhysicsBody
+    let RMXVectorZero = CGVectorZero
+#endif
     typealias RMFloat = CGFloat
     #if OSX
         typealias RMFloatB = CGFloat
@@ -45,6 +65,7 @@ import SceneKit
 
 let GLKVector3Zero = GLKVector3Make(0,0,0)
 let GLKVector4Zero = GLKVector4Make(0,0,0,0)
+let CGVectorZero = CGVector(dx: 0,dy: 0)
 
 func RMXVector3Make(x:RMFloatB, y:RMFloatB, z:RMFloatB) -> RMXVector3 {
     #if true
@@ -54,6 +75,13 @@ func RMXVector3Make(x:RMFloatB, y:RMFloatB, z:RMFloatB) -> RMXVector3 {
     #endif
 }
 
+func RMXVectorMake(n: RMFloat) -> RMXVector {
+    #if SceneKit
+    return RMXVector3Make(n,n,n)
+    #elseif SpriteKit
+    return CGVector(dx: n, dy: n)
+    #endif
+}
 func RMXVector4Make(x:RMFloatB, y:RMFloatB, z:RMFloatB, w: RMFloatB) -> RMXVector4 {
     #if true
         return SCNVector4Make(x,y,z,w)
@@ -284,6 +312,34 @@ func *= (inout lhs:GLKMatrix4, rhs:GLKMatrix4) {
 
 func *= (inout lhs:SCNMatrix4, rhs:SCNMatrix4) {
     lhs = SCNMatrix4Mult(rhs,lhs)
+}
+
+func * (lhs: CGVector, rhs: CGFloat) -> CGVector {
+    return CGVector(dx: lhs.dx * rhs, dy: lhs.dy * rhs)
+}
+
+func * (lhs: CGVector, rhs: Float) -> CGVector {
+    return CGVector(dx: lhs.dx * CGFloat(rhs), dy: lhs.dy * CGFloat(rhs))
+}
+
+func - (lhs: CGPoint, rhs: CGVector) -> CGPoint {
+    return CGPoint(x: lhs.x - rhs.dx, y: lhs.y - rhs.dy)
+}
+
+func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
+    return CGPoint(x: lhs.x + rhs.dx, y: lhs.y + rhs.dy)
+}
+
+func <= (lhs: CGFloat, rhs: Float) -> Bool {
+    return Float(lhs) <= rhs
+}
+
+func * (lhs: CGVector, rhs: CGVector) -> CGVector {
+    return CGVector(dx: lhs.dx * rhs.dx, dy: lhs.dy * rhs.dy)
+}
+
+func + (lhs: CGVector, rhs: CGVector) -> CGVector {
+    return CGVector(dx: lhs.dx + rhs.dx, dy: lhs.dy + rhs.dy)
 }
 
 func RMXVector3Distance(a:RMXVector3,b:RMXVector3)->RMFloatB {

@@ -90,7 +90,7 @@ class RMXSprite : RMXSpriteManager {
         return "\(_name)-\(self.rmxID)"
     }
     
-    var centerOfView: RMXVector3 {
+    var centerOfView: RMXPoint {
         return self.position + self.forwardVector// * self.actions.reach
     }
     
@@ -112,7 +112,7 @@ class RMXSprite : RMXSpriteManager {
         
     }
     var altitude: RMFloatB {
-        return self.position.y
+        return RMFloatB(self.position.y)
     }
     private var armLength: RMFloatB = 0
     var reach: RMFloatB {
@@ -266,6 +266,7 @@ class RMXSprite : RMXSpriteManager {
         }
     }
     
+    #if SceneKit
     func debug(_ yes: Bool = true){
         if yes {
             let transform = self.node.transform
@@ -275,6 +276,13 @@ class RMXSprite : RMXSpriteManager {
             if self.isObserver { RMXLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
         }
     }
+    #elseif SpriteKit
+    func debug(_ yes: Bool = true){
+        if yes {
+        
+        }
+    }
+    #endif
     
     lazy var cameras: Array<RMXNode> = [ self.node ]
     var cameraNumber: Int = 0
@@ -302,21 +310,14 @@ extension RMXSprite {
     }
     
     
-    private func setShape(shapeType type: ShapeType, scale s: RMXVector3?) {
+    private func setShape(shapeType type: ShapeType, scale s: RMXSize?) {
             let scale = s ?? self.node.scale
             self.setNode(RMXModels.getNode(shapeType: type.rawValue, scale: scale))
     }
     
-    func asShape(radius: RMFloatB? = nil, height: RMFloatB? = nil, scale: RMXVector3? = nil, shape shapeType: ShapeType = .CUBE, asType type: RMXSpriteType = .PASSIVE, color: NSColor? = nil) -> RMXSprite {
+    func asShape(radius: RMFloatB? = nil, height: RMFloatB? = nil, scale: RMXSize? = nil, shape shapeType: ShapeType = .CUBE, asType type: RMXSpriteType = .PASSIVE, color: NSColor? = nil) -> RMXSprite {
         
-        func needsNewBody(n: RMXNode, type: SCNPhysicsBodyType = .Dynamic) -> Bool{
-            if let body = n.physicsBody {
-                if type == body.type {
-                    return false
-                }
-            }
-            return true
-        }
+        
         self.setNode(RMXModels.getNode(shapeType: shapeType.rawValue,mode: type, scale: scale, radius: radius, height: height, color: color))
         return self
     }
@@ -340,11 +341,15 @@ extension RMXSprite {
         if let body = self.node.physicsBody {
 //           body.rollingFriction = 1000//0.99
             body.angularDamping = 0.99
+            #if SceneKit
             body.damping = 0.5
+                #elseif SpriteKit
+                body.linearDamping = 0.5
+            #endif
             body.friction = 0.1
         } else {
             if self.node.geometry == nil {
-                self.node.physicsBody = SCNPhysicsBody.dynamicBody()//TODO check
+                self.node.physicsBody = RMXPhysicsBody.dynamicBody()//TODO check
             }
         }
             self.node.camera = RMXCamera()
@@ -440,11 +445,11 @@ extension RMXSprite {
     func throwItem(strength: RMFloatB) -> Bool
     {
         if let itemInHand = self.item {
-            let fwd4 = self.forwardVector * -1
-            let fwd3 = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
+            let fwd3: RMXVector = self.forwardVector * CGFloat(-1)
+//            let fwd3: RMXVector = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
 //            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
             if let body = itemInHand.node.physicsBody {
-                body.applyForce(self.velocity + RMXVector3MultiplyScalar(fwd3,strength), impulse: false)
+                itemInHand.applyForce(self.velocity + (fwd3 * strength), impulse: false)
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
                 RMXLog("\(itemInHand.name) had no body")
@@ -459,7 +464,7 @@ extension RMXSprite {
     
     func manipulate() {
         if let item = self.item {
-            let fwd = self.forwardVector * -1
+            let fwd: RMXVector = self.forwardVector * CGFloat(-1.0)
             self.item!.setPosition(position: self.viewPoint + RMXVector3MultiplyScalar(fwd, self.reach + self.item!.reach))            
         }
     }

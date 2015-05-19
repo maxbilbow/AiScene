@@ -176,7 +176,17 @@ extension SCNMatrix4 {
         return "\(row1)\n\(row2)\n\(row3)\n\(row4)\n"
     }
     
+    var up: SCNVector3 {
+        return SCNVector3Make(m21, m22, m23)
+    }
     
+    var left: SCNVector3 {
+        return SCNVector3Make(m11, m12, m13)
+    }
+    
+    var forward: SCNVector3 {
+        return SCNVector3Make(m31, m32, m33)
+    }
 }
 
 
@@ -187,5 +197,43 @@ extension GLKMatrix4 {
         let row3 = "   ROW3: \(m20.toData()) \(m21.toData()) \(m22.toData()) \(m23.toData())"
         let row4 = "   ROW4: \(m30.toData()) \(m31.toData()) \(m32.toData()) \(m33.toData())"
         return "\(row1)\n\(row2)\n\(row3)\n\(row4)\n"
+    }
+}
+
+
+extension CGVector {
+    var print: String {
+        return "\(dx.toData()) \(dy.toData())"
+    }
+    
+    var x: Float {
+        return Float(dx)
+    }
+    
+    var y: Float {
+        return Float(dy)
+    }
+}
+
+
+extension SCNQuaternion {
+    var up: CGVector  {
+        return CGVector(dx: RMFloat(x * sin(w)), dy: RMFloat(y * cos(w)))
+    }
+    
+    var left: CGVector {
+        return CGVector(dx: 0, dy: 0)
+    }
+    
+    var forward: CGVector {
+        return CGVector(dx: RMFloat(x * cos(w)), dy: RMFloat(y * sin(w)))
+    }
+
+}
+
+
+extension CGSize {
+    var average: CGFloat {
+        return (width + height) / 2
     }
 }
