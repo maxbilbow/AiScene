@@ -32,8 +32,12 @@ extension RMX {
         #endif
     }
 }
+
+
 class RMSActionProcessor {
     
+    var boomTimer: RMFloatB = 1
+
     var interface: RMXInterface {
         return self.gameView.interface!
     }
@@ -226,6 +230,14 @@ class RMSActionProcessor {
             }
         case "information":
             if speed == 1 { println(_getInfo()) }
+        case "explode":
+            if speed == 1 {
+                self.explode(force: self.boomTimer)
+                self.boomTimer = 1
+            } else if speed == 0 && self.boomTimer == 1 {
+                self.boomTimer = 2
+            }
+            break
         default:
             RMXLog("'\(action)' not recognised")
         }
@@ -265,6 +277,11 @@ class RMSActionProcessor {
     }
 
     func animate(){
+        if self.boomTimer > 1 {
+            self.boomTimer++
+            
+        }
+        println(self.boomTimer)
         if self.extendArm != 0 {
             self.activeSprite.extendArmLength(self.extendArm)
         }
@@ -346,14 +363,14 @@ class RMSActionProcessor {
         return nil
     }
     
-    func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 500) {
+    func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 5000) {
         let sprite = s ?? self.activeSprite
         if let world = sprite.world {
             for child in world.children {
                 let dist = sprite.distanceTo(child)
                 if  dist < range && child.physicsBody?.type != .Static && child != sprite {
                     let direction = RMXVector3Normalize(child.position - sprite.position)
-                    child.applyForce(direction * (force * 1000000 / (dist + 0.1)) , impulse: true)
+                    child.applyForce(direction * (force * 100000 / (dist + 0.1)) , impulse: true)
                 }
             }
         }

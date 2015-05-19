@@ -18,9 +18,11 @@ extension RMXDPad {
     func explode(recogniser: UILongPressGestureRecognizer) {
         //        self.activeSprite?.setAngle(roll: 0)
         if recogniser.state == .Ended {
-            self.actionProcessor.explode(force: self.boomTimer)
-            self.boomTimer = 1
+            self.action(action: "explode", speed: 1)
+            //self.actionProcessor.explode(force: self.boomTimer)
+            
         } else {
+            self.action(action: "explode", speed: 0)
             self.boomTimer++ //TODO: put this in the ActionProcessor class
         }
     }
