@@ -85,100 +85,13 @@ extension RMX {
     static func makePoppy(#world: RMSWorld) -> RMXSprite{
         let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.DOG.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true)
 
-        poppy.setPosition(position: RMXVector3Make(100,RMSWorld.RADIUS,-50))
+        poppy.setPosition(position: RMXVector3Make(100,10,-50))
         
-        var itemToWatch: RMXSprite! = nil
-        var timePassed = 0
-        var state: PoppyState = .IDLE
-        let speed:RMFloatB = 1800
-        let updateInterval = 1
+        RMXAi.playFetch(poppy, master: world.activeSprite)
+        RMXAi.autoStablise(poppy)
         
-        poppy.behaviours.append { (isOn: Bool) -> () in
-//            NSLog("State: \(state.rawValue) - Pos: \(poppy.position.print)")
-            func idle(sender: RMXSprite, objects: [AnyObject]? = []) -> AnyObject? {
-                sender.lookAround(theta: speed / 10)
-                sender.accelerateForward(speed)
-                return nil
-            }
-            
-            func fetch(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject? {
-                //                sender.body.hasGravity = (objects?[0] as! RMXSprite).hasGravity
-                return sender.grabItem(item: itemToWatch)
-            }
-            
-            func drop(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject?  {
-                sender.releaseItem()
-                return nil
-            }
-            
-            func getReady(sender: RMXSprite, objects: [AnyObject]?)  -> AnyObject? {
-                sender.completeStop()
-                return nil
-            }
-            
-            let observer = world.observer
-            switch (state) {
-            case .IDLE:
-                if observer.hasItem {
-                    itemToWatch = observer.item
-                    state = .READY_TO_CHASE
-                } else {
-                    idle(poppy)
-                    RMXLog("Idle: \(state.rawValue), velocity: \(poppy.velocity.print)")
-                }
-                break
-            case .READY_TO_CHASE:
-                if !observer.hasItem {
-                    state = .CHASING
-                } else {
-                    RMXLog("Ready to Chase: \(state.rawValue), velocity: \(poppy.velocity.print)")
-                    poppy.headTo(itemToWatch, speed: speed, doOnArrival: getReady)
-                }
-                break
-            case .CHASING:
-                if  observer.hasItem {
-                    itemToWatch = observer.item
-                    state = .READY_TO_CHASE
-                } else if poppy.hasItem {
-                    itemToWatch = nil
-                    state = .FETCHING
-                } else {
-                    RMXLog("Chasing: \(state.rawValue), velocity: \(poppy.velocity.print)")
-                    poppy.headTo(itemToWatch, speed: speed, doOnArrival: fetch, objects: observer)
-                }
-                break
-            case .FETCHING:
-                if !poppy.hasItem  {
-                    state = .IDLE
-                } else {
-                    poppy.headTo(observer, speed: speed, doOnArrival: drop)
-                    RMXLog("Fetching: \(state.rawValue), velocity: \(poppy.velocity.print)")
-                }
-                break
-            default:
-                if observer.hasItem {
-                    state = .READY_TO_CHASE
-                } else {
-                    state = .IDLE
-                    
-                }
-                fatalError("no state set")
-            }
-        }
         poppy.setColor(GLKVector4Make(0.1,0.1,0.1,1.0))
-        /*
-        #if SceneKit
-            let r: RMFloatB = 0.3
-            #else
-            let r = poppy.radius / 2
-            #endif
-        let head = RMXSprite.new(parent: poppy).asShape(scale: RMXVector3Make(r,r,r),shape: .SPHERE)
-        head.setRadius(r)
-        head.setColor(RMXVector4Make(0.1,0.1,0.1,0.1))
-        head.startingPoint = RMXVector3Make(0,head.node.scale.y, -head.node.scale.z)
-        head.node.position = head.startingPoint!
-        poppy.insertChild(head) */
-        
+
        
         return poppy
     }

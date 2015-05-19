@@ -95,14 +95,14 @@ class RMXDPad : RMXInterface {
             gravity.backgroundColor = UIColor.grayColor()
             view.addSubview(gravity)
             
-            let playerGravity: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 3 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
-            
-            playerGravity.setTitle("<DATA>", forState:UIControlState.Normal)
-            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            playerGravity.addTarget(self, action: Selector("printData:"), forControlEvents:UIControlEvents.TouchDown)
-            playerGravity.enabled = true
-            playerGravity.backgroundColor = UIColor.grayColor()
-            view.addSubview(playerGravity)
+            let explode: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 3 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
+        
+            explode.setTitle("<BOOM!>", forState:UIControlState.Normal)
+//            explode.addTarget(self, action: Selector("explode:"), forControlEvents:UIControlEvents.TouchDown)
+            explode.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "explode:"))
+            explode.enabled = true
+            explode.backgroundColor = UIColor.grayColor()
+            view.addSubview(explode)
             
             let jump: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 4 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
             
@@ -175,7 +175,7 @@ class RMXDPad : RMXInterface {
     var moveOrigin: CGPoint = CGPoint(x: 0,y: 0)
     var lookOrigin: CGPoint = CGPoint(x: 0,y: 0)
 
-    
+    var boomTimer: RMFloatB = 1
     
     
 }

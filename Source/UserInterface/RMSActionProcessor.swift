@@ -263,20 +263,10 @@ class RMSActionProcessor {
             println(_getInfo())
         }
     }
-    
-    var autoStablize: Bool = true
+
     func animate(){
         if self.extendArm != 0 {
             self.activeSprite.extendArmLength(self.extendArm)
-        }
-        if self.autoStablize && self.world.hasGravity {
-//            self.activeSprite.node.transform = self.activeSprite.getNode().transform
-//            self.activeSprite.resetTransform()
-            
-            var bottom = self.activeSprite.upVector * -1
-            bottom.y *= self.activeSprite.height
-            let force = SCNVector3Make(0, -200000, 0) //self.scene.physicsWorld.gravity * self.activeSprite.mass
-            self.activeSprite.physicsBody?.applyForce(force, atPosition: bottom, impulse: false)
         }
         self.debug(false)
     }
@@ -354,5 +344,18 @@ class RMSActionProcessor {
             
         }
         return nil
+    }
+    
+    func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 500) {
+        let sprite = s ?? self.activeSprite
+        if let world = sprite.world {
+            for child in world.children {
+                let dist = sprite.distanceTo(child)
+                if  dist < range && child.physicsBody?.type != .Static && child != sprite {
+                    let direction = RMXVector3Normalize(child.position - sprite.position)
+                    child.applyForce(direction * (force * 1000000 / (dist + 0.1)) , impulse: true)
+                }
+            }
+        }
     }
 }

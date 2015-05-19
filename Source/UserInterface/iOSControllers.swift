@@ -15,6 +15,16 @@ import UIKit
 
 extension RMXDPad {
     
+    func explode(recogniser: UILongPressGestureRecognizer) {
+        //        self.activeSprite?.setAngle(roll: 0)
+        if recogniser.state == .Ended {
+            self.actionProcessor.explode(force: self.boomTimer)
+            self.boomTimer = 1
+        } else {
+            self.boomTimer++ //TODO: put this in the ActionProcessor class
+        }
+    }
+    
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
         self.action(action: "reset")

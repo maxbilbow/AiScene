@@ -354,11 +354,10 @@ extension RMXSprite {
                 self.node.physicsBody = RMXPhysicsBody.dynamicBody()//TODO check
             }
         }
-            self.node.camera = RMXCamera()
-            self.armLength = self.radius * RMFloatB(2)
+        
+        self.armLength = self.radius * RMFloatB(3)
 
-        self.y = self.world!.radius
-        self.initPosition(startingPoint: position)
+        self.setPosition(position: position)
         self.addCamera()
         return self
     }
@@ -377,18 +376,29 @@ extension RMXSprite {
 
     func addCamera(position: SCNVector3? = nil) {
         var pos: SCNVector3
-        if let p = position {
-            pos = p
+        if let pos = position {
+            let cameraNode = RMXNode()
+            
+            self.cameras.append(cameraNode)
+            self.node.addChildNode(cameraNode)
+            cameraNode.position = pos
+            cameraNode.camera = RMXCamera()
+
+        } else if let cam = self.node.camera {
+            RMXLog("Camera Already Setup")
+            return
         } else {
+            self.node.camera = RMXCamera()
             pos = SCNVector3Make(0,self.radius * 3 * 5, self.radius * 3 * 15)
+            
+            let followNode = RMXNode()
+            
+            self.cameras.append(followNode)
+            self.node.addChildNode(followNode)
+            followNode.position = pos
+            followNode.camera = RMXCamera()
         }
         
-        let cameraNode = RMXNode()
-        
-        self.cameras.append(cameraNode)
-        self.node.addChildNode(cameraNode)
-        cameraNode.position = pos
-        cameraNode.camera = RMXCamera()
     }
     
     
@@ -597,7 +607,7 @@ extension RMXSprite {
             let direction = RMXVector3Normalize(object.position - self.position)
 
             
-            self.applyForce(direction * speed, atPosition: self.forwardVector * self.reach,  impulse: false)
+            self.applyForce(direction * speed, atPosition: self.forwardVector * (self.radius + 1),  impulse: false)
             
         } else {
             let result: AnyObject? = doOnArrival(sender: self, objects: objects)

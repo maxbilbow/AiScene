@@ -73,7 +73,6 @@ class RMSWorld  {
 
     
     lazy var observer: RMXSprite = self.activeSprite
-    lazy var poppy: RMXSprite = RMX.makePoppy(world: self)
     
     lazy var players: [String: RMXSprite] = [
         self.activeSprite.name: self.activeSprite

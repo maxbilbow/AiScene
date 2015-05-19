@@ -45,6 +45,7 @@ class GameView: SCNView  {
         if let world = self.world {
             
             //Set up player
+            let player = world.activeSprite
             let radius = RMFloatB((observer.geometry! as! SCNSphere).radius)
             let height = radius * 2
             let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
@@ -63,10 +64,11 @@ class GameView: SCNView  {
             head.position = SCNVector3Make(0, height * 0.9, 0)
             world.activeSprite.addCamera(head)
             self.pointOfView = head
-
-            //Set up Poppy
+            RMXAi.autoStablise(player)
             
-            world.players["Poppy"] = RMX.makePoppy(world: world)
+            //Set up Poppy
+            let poppy = RMX.makePoppy(world: world)
+//            world.players["Poppy"] =
             
             //Set up background
             let worldRadius = RMSWorld.RADIUS * 10
@@ -116,8 +118,9 @@ class GameView: SCNView  {
             
             sunCam.camera = RMXCamera()
             sunCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
-            world.observer.addCamera(sunCam)
-            world.observer.addCamera( world.poppy.node)
+            world.activeSprite.addCamera(sunCam)
+            poppy.addCamera()
+            world.activeSprite.cameras += poppy.cameras //.addCamera(poppy.cameraNode)//.node)
         }
     }
 
