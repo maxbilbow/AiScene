@@ -342,6 +342,14 @@ func + (lhs: CGVector, rhs: CGVector) -> CGVector {
     return CGVector(dx: lhs.dx + rhs.dx, dy: lhs.dy + rhs.dy)
 }
 
+func RMXVector3Normalize(vector: RMXVector) -> RMXVector {
+    #if SceneKit
+    return SCNVector3FromGLKVector3(GLKVector3Normalize(SCNVector3ToGLKVector3(vector)))
+    #elseif SpriteKit
+    return vector
+    #endif
+}
+
 func RMXVector3Distance(a:RMXVector3,b:RMXVector3)->RMFloatB {
     #if true
         let A = SCNVector3ToGLKVector3(a); let B = SCNVector3ToGLKVector3(b)

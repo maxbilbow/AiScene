@@ -96,7 +96,7 @@ class GameView: SCNView  {
             earth.addBehaviour({ (isOn) -> () in
                 earth.resetTransform()
             })
-            world.insertChild( earth, andNode: true)
+
             
             // retrieve the ship node
             if let node = self.scene?.rootNode.childNodeWithName("ship", recursively: true) {

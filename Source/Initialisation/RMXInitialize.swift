@@ -15,61 +15,50 @@ extension RMX {
     static var randomTimeInterval: Int {
         return  random() % 600 + 1
     }
+    static func randomSprite(world: RMSWorld) -> RMXSprite? {
+        return world.childSpriteArray.get(random() % RMXSprite.COUNT)
+    }
     enum MoveState { case MOVING, TURNING, IDLE }
     static func addRandomMovement(to sprite: RMXSprite) {
         if let world = sprite.world {
             
-            var timeLimit = self.randomTimeInterval
+            let timeLimit = self.randomTimeInterval
             var timePassed = 0
-            let speed:RMFloatB = (RMFloatB(random() % 150) + 100) * sprite.mass
+            let speed:RMFloatB = (RMFloatB(random() % 50) + 50) * sprite.mass
             var print = false //sprite.rmxID == 5
-            var state: MoveState = .MOVING
+            var target: RMXSprite? = self.randomSprite(world)
             RMXLog("Adding AI to \(sprite.name), PRINT: \(print)")
             sprite.addBehaviour{ (isOn:Bool) -> () in
                 if !isOn { if print { RMXLog("AI is OFF") }; return }
 //                if !self.RANDOM_MOVEMENT { return }
                 
-                if print {  RMXLog("Start") }
-                switch state {
-                case .TURNING:
-                    if print { RMXLog("Turning with force: \(speed)") }
-                    if sprite.hasItem {
-//                        sprite.turnToFace(world.activeSprite)
-                        
-                        sprite.throwItem(500)
-                    }
-                    sprite.lookAround(theta: speed / 10)
-                    
-                    
-                /*
-                    let rmxID = random() % RMXSprite.COUNT
-                    if let target = world.childSpriteArray.get(rmxID) {
-                        sprite.headTo(target, speed: speed, doOnArrival: { (sender, objects) -> AnyObject? in
-                            sprite.grabItem(item: target)
+                
+                if let tgt = target {
+                        sprite.headTo(tgt, speed: speed, doOnArrival: { (sender, objects) -> AnyObject? in
+                            if !tgt.isUnique {
+                                sprite.grabItem(item: tgt)
+                                target = nil
+                            } else {
+                                RMXLog("Won't grab \(tgt.name)")
+                            }
                             return nil
                         })
-                    } */
-                    timePassed++
-                    if timePassed > timeLimit {
-                        state = .MOVING
-                        timeLimit = self.randomTimeInterval
+                } else {
+//                    target = self.randomSprite(world)
+                    sprite.headTo(world.activeSprite, speed: 50)
+                }
+
+                if timePassed > timeLimit {
+//                    timeLimit = self.randomTimeInterval
+                    if sprite.hasItem {
+                        sprite.throwItem(500)
+                        target = self.randomSprite(world)
                     }
-                case .MOVING:
-                    if print { RMXLog("Moving with force: \(speed)") }
-                    sprite.accelerateForward(speed)
+                } else {
                     timePassed++
-                    if timePassed > timeLimit {
-                        state = .TURNING
-                        timeLimit = random() % 600 + 10
-                    }
-                    break
-                default:
-                    fatalError()
                 }
             }
-        } else {
-            fatalError("Sprite came without world")
-        }
+         }
     }
     
 
@@ -94,20 +83,20 @@ extension RMX {
     
     
     static func makePoppy(#world: RMSWorld) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite.new(parent: world, type: .AI, isUnique: true).asShape(radius: 3, shape: .DOG).asPlayerOrAI()
+        let poppy: RMXSprite = RMXSprite.new(parent: world, type: .AI, isUnique: true).asShape(radius: 3, shape: .DOG)//.asPlayerOrAI()
 
-        poppy.initPosition(startingPoint: RMXVector3Make(100,poppy.node.scale.y / 2,-50))
+        poppy.setPosition(position: RMXVector3Make(100,RMSWorld.RADIUS,-50))
+        
         var itemToWatch: RMXSprite! = nil
-//        poppy.isAlwaysActive = true
         var timePassed = 0
         var state: PoppyState = .IDLE
-        var speed: RMFloatB = 0.01
+        let speed:RMFloatB = 1800 * poppy.mass
         let updateInterval = 1
         
         poppy.behaviours.append { (isOn: Bool) -> () in
-            
+//            NSLog("State: \(state.rawValue) - Pos: \(poppy.position.print)")
             func idle(sender: RMXSprite, objects: [AnyObject]? = []) -> AnyObject? {
-                sender.lookAround(theta: 1)
+                sender.lookAround(theta: speed / 10)
                 sender.accelerateForward(speed)
                 return nil
             }
@@ -135,13 +124,15 @@ extension RMX {
                     state = .READY_TO_CHASE
                 } else {
                     idle(poppy)
+                    RMXLog("Idle: \(state.rawValue), velocity: \(poppy.velocity.print)")
                 }
                 break
             case .READY_TO_CHASE:
                 if !observer.hasItem {
                     state = .CHASING
                 } else {
-                    poppy.headTo(itemToWatch, speed: speed * 10, doOnArrival: getReady)
+                    RMXLog("Ready to Chase: \(state.rawValue), velocity: \(poppy.velocity.print)")
+                    poppy.headTo(itemToWatch, speed: speed, doOnArrival: getReady)
                 }
                 break
             case .CHASING:
@@ -152,14 +143,16 @@ extension RMX {
                     itemToWatch = nil
                     state = .FETCHING
                 } else {
-                    poppy.headTo(itemToWatch, speed: speed * 10, doOnArrival: fetch, objects: observer)
+                    RMXLog("Chasing: \(state.rawValue), velocity: \(poppy.velocity.print)")
+                    poppy.headTo(itemToWatch, speed: speed, doOnArrival: fetch, objects: observer)
                 }
                 break
             case .FETCHING:
                 if !poppy.hasItem  {
                     state = .IDLE
                 } else {
-                    poppy.headTo(observer, speed: speed * 10, doOnArrival: drop)
+                    poppy.headTo(observer, speed: speed, doOnArrival: drop)
+                    RMXLog("Fetching: \(state.rawValue), velocity: \(poppy.velocity.print)")
                 }
                 break
             default:
@@ -169,6 +162,7 @@ extension RMX {
                     state = .IDLE
                     
                 }
+                fatalError("no state set")
             }
         }
         poppy.setColor(GLKVector4Make(0.1,0.1,0.1,1.0))

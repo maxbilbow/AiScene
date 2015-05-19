@@ -324,7 +324,7 @@ class RMSActionProcessor {
                                 if let item = self.world.getSprite(node: node) {
                                     if let itemInHand = sprite.item {
                                         if item.name == itemInHand.name {
-                                            sprite.throwItem(speed * item.mass)
+                                            sprite.throwItem(speed)
                                             NSLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
                                         } else {
                                             //                                   self.world?.observer.grabItem(item: item)
@@ -342,7 +342,7 @@ class RMSActionProcessor {
                             }
                         } else {
                             if let itemInHand = sprite.item {
-                                sprite.throwItem(speed * itemInHand.mass)
+                                sprite.throwItem(speed)
                                 NSLog("Node \(itemInHand.name) was thrown with force: \(speed) x \(itemInHand.mass)")
                             }
                         }

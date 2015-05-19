@@ -304,6 +304,7 @@ extension RMXSprite {
         self.y = self.y ?? point.y
         self.z = self.z ?? point.z
         self.startingPoint = RMXVector3Make(self.x!,self.y!,self.z!)
+        self.resetTransform()
         //self.node.position = startingPoint
         
         
@@ -449,7 +450,7 @@ extension RMXSprite {
 //            let fwd3: RMXVector = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
 //            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
             if let body = itemInHand.node.physicsBody {
-                itemInHand.applyForce(self.velocity + (fwd3 * strength), impulse: false)
+                itemInHand.applyForce(self.velocity + fwd3 * strength * itemInHand.mass + self.forwardVector, impulse: false)
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
                 RMXLog("\(itemInHand.name) had no body")
@@ -587,22 +588,15 @@ extension RMXSprite {
     }
     
     func headTo(object: RMXSprite, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
-        let dist = self.turnToFace(object, rSpeed: speed)
+        let dist = RMXVector3Distance(self.position, object.position)
         if  dist >= fabs(object.reach + self.reach) {
             #if OPENGL_OSX
                 speed *= 0.5
             #endif
-            self.accelerateForward(speed)
-            let climb = speed * 0.1
-            if self.altitude < object.altitude {
-                self.applyForce(SCNVector3Make(0,climb,0), impulse: false)
-            } else if self.altitude > object.altitude {
-                self.applyForce(SCNVector3Make(0,-climb / 2,0), impulse: false)
-            } else {
-                self.stop()
-                //RMXVector3SetY(&self.node.physicsBody!.velocity, 0)
-            }
+            let direction = RMXVector3Normalize(object.position - self.position)
+
             
+            self.applyForce(direction * speed, atPosition: self.forwardVector * self.reach,  impulse: false)
             
         } else {
             let result: AnyObject? = doOnArrival(sender: self, objects: objects)
@@ -613,6 +607,7 @@ extension RMXSprite {
     }
     
 ///TODO Theta may be -ve?
+    @availability(*,obsoleted=1.0)
     func turnToFace(object: RMXSprite, rSpeed: RMFloatB = 1) -> RMFloatB {
         var goto = object.centerOfView
         
