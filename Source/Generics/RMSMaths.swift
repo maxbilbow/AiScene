@@ -75,7 +75,7 @@ func RMXVector3Make(x:RMFloatB, y:RMFloatB, z:RMFloatB) -> RMXVector3 {
     #endif
 }
 
-func RMXVectorMake(n: RMFloat) -> RMXVector {
+func RMXVectorMake(n: RMFloatB) -> RMXVector {
     #if SceneKit
     return RMXVector3Make(n,n,n)
     #elseif SpriteKit

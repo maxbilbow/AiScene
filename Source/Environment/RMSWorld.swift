@@ -67,7 +67,9 @@ class RMSWorld  {
         return self.activeSprite.cameraNode
     }
 
-    lazy var activeSprite: RMXSprite = RMXSprite.new(parent: self, type: .PLAYER, isUnique: true).asShape(radius: 5, height: 5, shape: .SPHERE, color: NSColor.redColor()).asPlayerOrAI()
+    lazy var activeSprite: RMXSprite = RMXSprite.new(parent: self,
+        node: RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .PLAYER, radius: 5, height: 5, color: NSColor.redColor()),
+        type: .PLAYER, isUnique: true).asPlayerOrAI() ///TODO: SetNode must remove replacing node (if told / default?)
 
     
     lazy var observer: RMXSprite = self.activeSprite

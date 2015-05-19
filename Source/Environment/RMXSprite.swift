@@ -316,6 +316,7 @@ extension RMXSprite {
             self.setNode(RMXModels.getNode(shapeType: type.rawValue, scale: scale))
     }
     
+    @availability(*,unavailable)
     func asShape(radius: RMFloatB? = nil, height: RMFloatB? = nil, scale: RMXSize? = nil, shape shapeType: ShapeType = .CUBE, asType type: RMXSpriteType = .PASSIVE, color: NSColor? = nil) -> RMXSprite {
         
         
@@ -446,7 +447,7 @@ extension RMXSprite {
     func throwItem(strength: RMFloatB) -> Bool
     {
         if let itemInHand = self.item {
-            let fwd3: RMXVector = self.forwardVector * CGFloat(-1)
+            let fwd3: RMXVector = self.forwardVector * RMFloatB(-1)
 //            let fwd3: RMXVector = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
 //            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
             if let body = itemInHand.node.physicsBody {
@@ -465,7 +466,7 @@ extension RMXSprite {
     
     func manipulate() {
         if let item = self.item {
-            let fwd: RMXVector = self.forwardVector * CGFloat(-1.0)
+            let fwd: RMXVector = self.forwardVector * RMFloatB(-1.0)
             self.item!.setPosition(position: self.viewPoint + RMXVector3MultiplyScalar(fwd, self.reach + self.item!.reach))            
         }
     }

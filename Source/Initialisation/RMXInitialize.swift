@@ -83,14 +83,14 @@ extension RMX {
     
     
     static func makePoppy(#world: RMSWorld) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite.new(parent: world, type: .AI, isUnique: true).asShape(radius: 3, shape: .DOG)//.asPlayerOrAI()
+        let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.DOG.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true)
 
         poppy.setPosition(position: RMXVector3Make(100,RMSWorld.RADIUS,-50))
         
         var itemToWatch: RMXSprite! = nil
         var timePassed = 0
         var state: PoppyState = .IDLE
-        let speed:RMFloatB = 1800 * poppy.mass
+        let speed:RMFloatB = 1800
         let updateInterval = 1
         
         poppy.behaviours.append { (isOn: Bool) -> () in

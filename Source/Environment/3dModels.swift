@@ -84,8 +84,6 @@ class RM3DModels : RMXModelsProtocol {
             node = RMXNode(geometry: block)
             node.scale *= 1 * radius
             break
-            
-        
         case ShapeType.DOG.rawValue:
             node = dog!.rootNode.clone() as! RMXNode
             node.scale *= 1 * radius
