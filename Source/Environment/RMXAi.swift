@@ -14,9 +14,9 @@ class RMXAi {
     class func autoStablise(sprite: RMXSprite) {
         let ai: AiBehaviour = { (isOn) -> () in
             if self.autoStabilise && sprite.world!.hasGravity {
-                var bottom = sprite.upVector * -1
-                bottom.y *= sprite.height
-                let force = RMXVector3Make(0, -200000, 0) //self.scene.physicsWorld.gravity * self.activeSprite.mass
+                var bottom = sprite.upVector * sprite.boundingBox.min.y * sprite.scale
+//                bottom.y *= sprite.height
+                let force = sprite.world!.gravity * sprite.mass
                 sprite.physicsBody?.applyForce(force, atPosition: bottom, impulse: false)
             }
         }
@@ -35,7 +35,7 @@ class RMXAi {
             //            NSLog("State: \(state.rawValue) - Pos: \(poppy.position.print)")
             func idle(sender: RMXSprite, objects: [AnyObject]? = []) -> AnyObject? {
                 sender.lookAround(theta: speed / 10)
-                sender.accelerateForward(speed)
+                //sender.accelerateForward(speed)
                 return nil
             }
             
@@ -75,8 +75,8 @@ class RMXAi {
                 break
             case .CHASING:
                 if  observer.hasItem {
-                    itemToWatch = observer.item
-                    state = .READY_TO_CHASE
+                    itemToWatch = nil
+                    state = .IDLE
                 } else if poppy.hasItem {
                     itemToWatch = nil
                     state = .FETCHING
@@ -86,20 +86,15 @@ class RMXAi {
                 }
                 break
             case .FETCHING:
-                if !poppy.hasItem  {
+                if !poppy.hasItem || observer.hasItem {
                     state = .IDLE
-                } else {
+                }  else {
                     poppy.headTo(observer, speed: speed, doOnArrival: drop)
                     RMXLog("Fetching: \(state.rawValue),  pos: \(poppy.position.print)")
                 }
                 break
             default:
-                if observer.hasItem {
-                    state = .READY_TO_CHASE
-                } else {
                     state = .IDLE
-                    
-                }
                 fatalError("no state set")
             }
         }

@@ -112,21 +112,21 @@ extension SCNVector3 {
         return SCNVector3Make(-x,-y,-z)
     }
     
-    func distanceTo(v: SCNVector3) -> CGFloat{
+    func distanceTo(v: SCNVector3) -> RMFloatB{
         let A = SCNVector3ToGLKVector3(self); let B = SCNVector3ToGLKVector3(v)
-        return CGFloat(GLKVector3Distance(A,B))
+        return RMFloatB(GLKVector3Distance(A,B))
         //return RMXVector3Distance(self, v)
     }
     
-    var size: RMFloat {
-        return RMFloat(self.distanceTo(SCNVector3Zero))
+    var size: RMFloatB {
+        return self.distanceTo(SCNVector3Zero)
     }
     
-    var sum: RMFloat {
-        return RMFloat(x + y + z)
+    var sum: RMFloatB {
+        return x + y + z
     }
     
-    var average: RMFloat {
+    var average: RMFloatB {
         return self.sum / 3
     }
 }
@@ -185,7 +185,7 @@ extension SCNMatrix4 {
     }
     
     var forward: SCNVector3 {
-        return SCNVector3Make(m31, m32, m33)
+        return SCNVector3Make(-m31, -m32, -m33)
     }
 }
 

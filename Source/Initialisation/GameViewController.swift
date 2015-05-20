@@ -91,7 +91,7 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
     }
     
     func somethingHappened(thing: AnyObject){
-        println(thing)
+        RMXLog(thing)
     }
 
 

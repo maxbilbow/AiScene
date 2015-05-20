@@ -43,7 +43,9 @@ class RMXSprite : RMXSpriteManager {
         return world!.scene
     }
     var radius: RMFloatB {
-        return RMFloatB(self.scale.average)
+        
+       // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
+        return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
     }
     static var COUNT: Int = 0
     var rmxID: Int = RMXSprite.COUNT
@@ -99,12 +101,12 @@ class RMXSprite : RMXSpriteManager {
     func setName(name: String? = nil) {
         if let name = name {
             self._name = name
-            NSLog("Name set to \(self.name)")
+            RMXLog("Name set to \(self.name)")
         } else if let name = self.node.name {
-            NSLog("node is '\(name)' (!= \(self.name)) - sprite will be named '\(_name)-\(name)-\(self.rmxID)'")
+            RMXLog("node is '\(name)' (!= \(self.name)) - sprite will be named '\(_name)-\(name)-\(self.rmxID)'")
             if self.name != name { self._name += "-\(name)" }
         } else {
-            NSLog(self.node.name ?? "node is nameless - but will be named '\(self.name)'")
+            RMXLog(self.node.name ?? "node is nameless - but will be named '\(self.name)'")
             //self.node.name = self.name
         }
         self.node.name = self.name
@@ -114,9 +116,23 @@ class RMXSprite : RMXSpriteManager {
     var altitude: RMFloatB {
         return RMFloatB(self.position.y)
     }
-    private var armLength: RMFloatB = 0
+    
+    func setAltitude(y: RMFloatB, resetTransform: Bool = true) {
+        self.node.position.y = y
+        if resetTransform {
+            self.resetTransform()
+        }
+    }
+    
+    private var _armLength: RMFloatB?
+    private var _reach: RMFloatB?
+    
+    var armLength: RMFloatB {
+        return _armLength ?? self.reach
+    }
+    
     var reach: RMFloatB {
-        return self.radius * 3 + self.armLength
+        return self.boundingBox.max.z * self.scale.z
     }
     
     
@@ -164,8 +180,10 @@ class RMXSprite : RMXSpriteManager {
     private var _ignoreNextJump:Bool = false
 
     
-
-    var item: RMXSprite?
+    private var _itemInHand: RMXSprite?
+    var item: RMXSprite? {
+        return _itemInHand
+    }
     var itemPosition: RMXVector3 = RMXVector3Zero
     
 
@@ -202,6 +220,8 @@ class RMXSprite : RMXSpriteManager {
             }
         if type == .AI && !sprite.isUnique {
             RMX.addRandomMovement(to: sprite)
+        } else {
+            sprite.addCamera()
         }
         return sprite
     }
@@ -332,13 +352,10 @@ extension RMXSprite {
         }
     }
     
-    func asPlayerOrAI(position: RMXVector3 = RMXVector3Zero) -> RMXSprite {
+    func asPlayerOrAI() -> RMXSprite {
         if self.type == nil {
             self.type = .PLAYER
         }
-        
-        self.speed = 1000 * self.mass / 10
-        self.rotationSpeed = 150 * self.mass / 10
 
         if let body = self.node.physicsBody {
 //           body.rollingFriction = 1000//0.99
@@ -350,15 +367,11 @@ extension RMXSprite {
             #endif
             body.friction = 0.1
         } else {
-            if self.node.geometry == nil {
-                self.node.physicsBody = RMXPhysicsBody.dynamicBody()//TODO check
-            }
+            fatalError("Should already have physics body")
         }
-        
-        self.armLength = self.radius * RMFloatB(3)
+    
 
-        self.setPosition(position: position)
-        self.addCamera()
+//        self.addCamera()
         return self
     }
     func getNextCamera() -> RMXNode {
@@ -389,13 +402,14 @@ extension RMXSprite {
             return
         } else {
             self.node.camera = RMXCamera()
-            pos = SCNVector3Make(0,self.radius * 3 * 5, self.radius * 3 * 15)
+            pos = SCNVector3Make(0,self.height * 3, self.radius * 2 * 5)
             
             let followNode = RMXNode()
-            
+            followNode.camera?.technique
             self.cameras.append(followNode)
             self.node.addChildNode(followNode)
             followNode.position = pos
+            followNode.eulerAngles.x = -5 * PI_OVER_180
             followNode.camera = RMXCamera()
         }
         
@@ -454,14 +468,13 @@ extension RMXSprite {
 }
 extension RMXSprite {
     
-    func throwItem(strength: RMFloatB) -> Bool
+    func throwItem(strength: RMFloatB = 1) -> Bool
     {
         if let itemInHand = self.item {
-            let fwd3: RMXVector = self.forwardVector * RMFloatB(-1)
-//            let fwd3: RMXVector = RMXVector3Make(fwd4.x, fwd4.y, fwd4.z)
-//            self.item!.node.physicsBody!.velocity = self.node.physicsBody!.velocity + RMXVector3MultiplyScalar(fwd3,strength)
+            let fwd: RMXVector = self.forwardVector
             if let body = itemInHand.node.physicsBody {
-                itemInHand.applyForce(self.velocity + fwd3 * strength * itemInHand.mass + self.forwardVector, impulse: false)
+                body.type = .Dynamic
+                itemInHand.applyForce(self.velocity + fwd * strength * itemInHand.mass + self.forwardVector, impulse: false)
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
                 RMXLog("\(itemInHand.name) had no body")
@@ -474,19 +487,42 @@ extension RMXSprite {
         }
     }
     
+    func printBounds() {
+        var min = RMXVector3Zero
+        var max = min
+        self.node.getBoundingBoxMin(&min, max: &max)
+        let radius = RMXVector3Length(max * self.scale)
+        RMXLog("\(self.name) pos: \(self.position.print), R: \(radius.toData()), boxMin: \(min.print), boxMax: \(max.print)")
+    }
     func manipulate() {
         if let item = self.item {
-            let fwd: RMXVector = self.forwardVector * RMFloatB(-1.0)
-            self.item!.setPosition(position: self.viewPoint + RMXVector3MultiplyScalar(fwd, self.reach + self.item!.reach))            
+            let minAlt = item.height // 2
+            let fwd: RMXVector = self.forwardVector
+            var newPos = self.position + RMXVector3MultiplyScalar(fwd, self.armLength + item.reach)
+            if newPos.y < minAlt {
+                newPos.y = minAlt
+                //println("newNewPos: \(newPos.print), minAlt: \(minAlt.toData()), height: \(item.height.toData())")
+            }
+           
+            item.setPosition(position: newPos)//, resetTransform: false)
+           
         }
     }
     
-    private func setItem(item itemIn: RMXSprite?){
+    private func setItem(item itemIn: RMXSprite?) {
         if let item = itemIn {
-            self.item = item
-            self.armLength = self.reach
+            _itemInHand = item
+            _armLength = self.reach + item.radius //TODO: What if too short?
+            if let body = _itemInHand?.node.physicsBody {
+                body.type = .Kinematic
+            }
         } else if let item = self.item {
-            self.item = nil
+            if let body = _itemInHand?.node.physicsBody {
+                body.type = .Dynamic
+            }
+            _itemInHand = nil
+            _armLength = self.reach
+            
         }
     }
     
@@ -520,16 +556,31 @@ extension RMXSprite {
     
     func extendArmLength(i: RMFloatB)    {
         if self.armLength + i > 1 {
-            self.armLength += i
+            self.setReach(self.reach + i)
         }
     }
     
     
     enum JumpState { case PREPARING_TO_JUMP, JUMPING, GOING_UP, COMING_DOWN, NOT_JUMPING }
     
-    var height: RMFloatB {
-        return self.radius * 3 // sself.node.scale.y
+    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
+        var center: SCNVector3 = SCNVector3Zero
+        var radius: RMFloat = 0
+        self.node.getBoundingSphereCenter(&center, radius: &radius)
+        return (center, RMFloatB(radius))
     }
+    
+    var boundingBox: (min: RMXVector, max: RMXVector) {
+        var min: SCNVector3 = SCNVector3Zero
+        var max: SCNVector3 = SCNVector3Zero
+        self.node.getBoundingBoxMin(&min, max: &max)
+        return (min, max)
+    }
+    
+    var height: RMFloatB {
+        return self.boundingBox.max.y * self.scale.y//.radius * 2 // sself.node.scale.y
+    }
+    
     
     func jumpTest() -> JumpState {
         switch (_jumpState) {
@@ -590,7 +641,7 @@ extension RMXSprite {
     }
 
     func setReach(reach: RMFloatB) {
-        self.armLength = reach
+        _armLength = reach < self.reach ? self.reach : reach
     }
     
     private class func stop(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject? {
@@ -606,7 +657,7 @@ extension RMXSprite {
             #endif
             let direction = RMXVector3Normalize(object.position - self.position)
 
-            
+            let front: RMXVector = self.boundingBox.max * self.forwardVector * self.scale.z // self.boundingBox.max * self.radius
             self.applyForce(direction * speed, atPosition: self.forwardVector * (self.radius + 1),  impulse: false)
             
         } else {

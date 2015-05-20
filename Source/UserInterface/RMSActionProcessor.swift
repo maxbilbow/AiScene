@@ -61,7 +61,15 @@ class RMSActionProcessor {
     private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
     private var _panThreshold: RMFloatB = 70
     
-    func movement(action: String!, speed: RMFloatB = 1,  point: [RMFloatB]) -> Bool{
+    func moveSpeed(inout speed: RMFloatB) {
+        speed *= 1000 * self.activeSprite.mass / 10
+    }
+    
+    func turnSpeed(inout speed: RMFloatB) {
+        speed *= 150 * self.activeSprite.mass / 10
+    }
+    
+    func movement(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB]) -> Bool{
         
         switch action {
         case nil:
@@ -69,6 +77,7 @@ class RMSActionProcessor {
             return true
         case "move", "Move", "MOVE":
             if point.count == 3 {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateForward(point[2] * speed)
                 self.activeSprite.accelerateLeft(point[0] * speed)
                 self.activeSprite.accelerateUp(point[1] * speed)
@@ -82,17 +91,21 @@ class RMSActionProcessor {
             _movement = (0,0,0)
             return true
         case "look", "Look", "LOOK":
+            self.turnSpeed(&speed)
             if point.count == 2 {
                 self.activeSprite.lookAround(theta: point[0] * speed,phi: point[1] * speed)
             }
             return true
         case "roll", "Roll", "ROLL":
+            self.turnSpeed(&speed)
             self.activeSprite.lookAround(roll: speed)
             return true
         case "pitch", "Pitch", "PITCH":
+            self.turnSpeed(&speed)
             self.activeSprite.lookAround(phi: speed)
             return true
         case "yaw", "Yaw", "YAW":
+            self.turnSpeed(&speed)
             self.activeSprite.lookAround(theta: speed)
             return true
         case "setRoll":
@@ -115,6 +128,7 @@ class RMSActionProcessor {
                 self.activeSprite.stop()
             }
             else {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateForward(speed)
             }
             return true
@@ -123,6 +137,7 @@ class RMSActionProcessor {
                 self.activeSprite.stop()
             }
             else {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateForward(-speed)
             }
             return true
@@ -131,6 +146,7 @@ class RMSActionProcessor {
                 self.activeSprite.stop()
             }
             else {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateLeft(speed)
             }
             return true
@@ -139,6 +155,7 @@ class RMSActionProcessor {
                 self.activeSprite.stop()
             }
             else {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateLeft(-speed)
             }
             return true
@@ -147,6 +164,7 @@ class RMSActionProcessor {
                 self.activeSprite.stop()
             }
             else {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateUp(-speed)
             }
             return true
@@ -155,6 +173,7 @@ class RMSActionProcessor {
                 self.activeSprite.stop()
             }
             else {
+                moveSpeed(&speed)
                 self.activeSprite.accelerateUp(speed)
             }
             return true
@@ -272,16 +291,16 @@ class RMSActionProcessor {
     }
     func debug(_ yes: Bool = true){
         if yes {
-            println(_getInfo())
+            NSLog(_getInfo())
         }
     }
 
     func animate(){
         if self.boomTimer > 1 {
             self.boomTimer++
-            
+            RMXLog(self.boomTimer)
         }
-        println(self.boomTimer)
+        
         if self.extendArm != 0 {
             self.activeSprite.extendArmLength(self.extendArm)
         }
@@ -311,13 +330,13 @@ class RMSActionProcessor {
                             if let body = node.physicsBody {
                                 switch (body.type){
                                 case .Static:
-                                    NSLog("Node is static")
+                                    RMXLog("Node is static")
                                     return nil
                                 case .Dynamic:
-                                    NSLog("Node is Dynamic")
+                                    RMXLog("Node is Dynamic")
                                     break
                                 case .Kinematic:
-                                    NSLog("Node is Kinematic")
+                                    RMXLog("Node is Kinematic")
                                     break
                                 default:
                                     fatalError("Something went wrong")
@@ -325,32 +344,32 @@ class RMSActionProcessor {
                             }
                             let rootNode = RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
                             if rootNode == sprite.node {
-                                NSLog("Node is self")
+                                RMXLog("Node is self")
                                 //return
                             } else {
                                 if let item = self.world.getSprite(node: node) {
                                     if let itemInHand = sprite.item {
                                         if item.name == itemInHand.name {
-                                            sprite.throwItem(speed)
-                                            NSLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
+                                            sprite.throwItem(strength: speed)
+                                            RMXLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
                                         } else {
                                             //                                   self.world?.observer.grabItem(item: item)
-                                            sprite.throwItem(0)
+                                            sprite.throwItem()
                                             sprite.grabItem(item: item)
-                                            NSLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
+                                            RMXLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
                                         }
                                     } else if item.type != RMXSpriteType.BACKGROUND {
                                         sprite.grabItem(item: item)
-                                        NSLog("Node is grabbable: \(item.name)")
+                                        RMXLog("Node is grabbable: \(item.name)")
                                     } else {
-                                        NSLog("Node was NOT grabbable: \(item.name)")
+                                        RMXLog("Node was NOT grabbable: \(item.name)")
                                     }
                                 }
                             }
                         } else {
                             if let itemInHand = sprite.item {
-                                sprite.throwItem(speed)
-                                NSLog("Node \(itemInHand.name) was thrown with force: \(speed) x \(itemInHand.mass)")
+                                sprite.throwItem(strength: speed)
+                                RMXLog("Node \(itemInHand.name) was thrown with force: \(speed) x \(itemInHand.mass)")
                             }
                         }
                     }

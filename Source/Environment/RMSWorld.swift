@@ -166,18 +166,22 @@ class RMSWorld  {
     
     private var _gravity = ZERO_GRAVITY
     
+    var gravity: RMXVector3 {
+        return self.scene.physicsWorld.gravity
+    }
+    
     func toggleGravity() {
             if self.hasGravity {
                 let gravity = self.scene.physicsWorld.gravity
                 _gravity = gravity == RMSWorld.ZERO_GRAVITY ? RMSWorld.EARTH_GRAVITY : gravity
                 self.scene.physicsWorld.gravity = RMSWorld.ZERO_GRAVITY
-                NSLog("Gravity off: \(self.scene.physicsWorld.gravity.print)")
+                RMXLog("Gravity off: \(self.scene.physicsWorld.gravity.print)")
             } else {
                 if _gravity == RMSWorld.ZERO_GRAVITY {
                      _gravity = RMSWorld.EARTH_GRAVITY
                 }
                 self.scene.physicsWorld.gravity = _gravity
-                NSLog("Gravity on: \(self.scene.physicsWorld.gravity.print)")
+                RMXLog("Gravity on: \(self.scene.physicsWorld.gravity.print)")
             }
     }
 
@@ -216,6 +220,6 @@ extension RMSWorld {
         for child in children{
             child.aiOn = areOn
         }
-        NSLog("aiOn: \(self.aiOn)")
+        RMXLog("aiOn: \(self.aiOn)")
     }
 }

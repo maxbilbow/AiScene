@@ -1,10 +1,17 @@
-// Playground - noun: a place where people can play
+//: Playground - noun: a place where people can play
 
 import Cocoa
+import SceneKit
 import GLKit
+var str = "Hello, playground"
 
-func number(first: Int) -> (Int ->Int) {
-    return { second in return first * second }
+func RMXVector3Length(v: SCNVector3) -> CGFloat {
+
+        return CGFloat(GLKVector3Length(SCNVector3ToGLKVector3(v)))
+
 }
 
-number(2)(number(2)(2))
+
+let vector = SCNVector3Make(-1,-1,-1)
+
+RMXVector3Length(vector)

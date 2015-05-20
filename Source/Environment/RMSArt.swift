@@ -92,7 +92,7 @@ class RMXArt {
             node.scale = scale
         
             world.scene.rootNode.addChildNode(node)
-            println("axis: \(axis), scale: \(scale.print)")
+            RMXLog("axis: \(axis), scale: \(scale.print)")
             
             
         }

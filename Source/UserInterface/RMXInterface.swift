@@ -56,7 +56,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         super.init()
         self.initialize(gvc)
         self.viewDidLoad(nil)
-        NSLog("\(__FUNCTION__)")
+        RMXLog("\(__FUNCTION__)")
     }
     
     func initialize(gvc: GameViewController, scene: RMXScene? = nil) -> RMXInterface {
@@ -96,7 +96,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     
     func debug() {
         if debugData != ""{
-            println("\(debugData)")
+            RMXLog("\(debugData)")
 //            self.log("\n x\(leftPanData.x.toData()), y\(leftPanData.y)",sender: "LEFT")
 //            self.log("x\(rightPanData.x.toData()), y\(rightPanData.y.toData())",sender: "RIGHT")
         }

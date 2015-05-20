@@ -86,7 +86,7 @@ extension RMXDPad {
             }
         }
         else {
-            NSLog("No motion?!")
+            RMXLog("No motion?!")
         }
         // println()
     }

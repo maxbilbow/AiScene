@@ -107,7 +107,7 @@ extension RMXSprite {
     }
     
     func accelerateForward(v: RMFloatB) {
-        let force = self.forwardVector * -v * self.speed
+        let force = self.forwardVector * v * self.speed
         //RMXLog("\n Force:\(force.print)")
         self.node.physicsBody!.applyForce(force, impulse: false)
     }
@@ -181,7 +181,7 @@ extension RMXSprite {
             RMXLog("RootNode: \(node.name)")
             return node
         } else {
-            println(node.parentNode)
+            RMXLog(node.parentNode)
             return self.rootNode(node.parentNode!, rootNode: rootNode)
         }
     }
@@ -353,7 +353,7 @@ extension RMXSprite {
                 RMXLog("RootNode: \(node.name)")
                 return node
             } else {
-                println(node.parentNode)
+                RMXLog(node.parentNode)
                 return self.rootNode(node.parentNode!, rootNode: rootNode)
             }
         }

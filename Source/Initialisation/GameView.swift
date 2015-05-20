@@ -110,7 +110,8 @@ class GameView: SCNView  {
                 })
             }
             
-            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 400, radius: worldRadius)
+            
+            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 100, radius: earth.radius)
             
             //cameras
             let sunCam: RMXNode = RMXNode()
@@ -119,8 +120,10 @@ class GameView: SCNView  {
             sunCam.camera = RMXCamera()
             sunCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
             world.activeSprite.addCamera(sunCam)
-            poppy.addCamera()
+//            poppy.addCamera()
             world.activeSprite.cameras += poppy.cameras //.addCamera(poppy.cameraNode)//.node)
+            world.activeSprite.cameras += earth.cameras
+            world.activeSprite.cameras += sun.cameras
         }
     }
 

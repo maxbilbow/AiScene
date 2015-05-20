@@ -153,6 +153,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = MyPlayground.playground; path = ../../MyPlayground.playground; sourceTree = "<group>"; };
 		6C4A286A1B03ACCC001C3F5B /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
 		6C4A286B1B03ACCC001C3F5B /* IMG_0014.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IMG_0014.png; sourceTree = "<group>"; };
 		6C4A286C1B03ACCC001C3F5B /* pop1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = pop1.jpg; sourceTree = "<group>"; };
@@ -179,7 +180,7 @@
 		6C73A8E41B0A75DC00187A61 /* RMXScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXScene.swift; sourceTree = "<group>"; };
 		6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/SceneKit.framework; sourceTree = DEVELOPER_DIR; };
-		6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXAi.swift; sourceTree = "<group>"; };
+		6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAi.swift; path = ../Environment/RMXAi.swift; sourceTree = "<group>"; };
 		6C92998B1AE5432000E71811 /* AiScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C92998F1AE5432000E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C9299971AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -445,7 +446,6 @@
 				6C73A8E41B0A75DC00187A61 /* RMXScene.swift */,
 				6C9299BF1AE544C000E71811 /* RMXSprite.swift */,
 				6C4A28831B049FF9001C3F5B /* Observers.swift */,
-				6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */,
 			);
 			path = Environment;
 			sourceTree = "<group>";
@@ -473,9 +473,11 @@
 		6C9299C81AE544C000E71811 /* Initialisation */ = {
 			isa = PBXGroup;
 			children = (
+				6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */,
 				6C9299C91AE544C000E71811 /* GameView.swift */,
 				6C9299CA1AE544C000E71811 /* GameViewController.swift */,
 				6C9299CB1AE544C000E71811 /* RMXInitialize.swift */,
+				6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */,
 			);
 			path = Initialisation;
 			sourceTree = "<group>";

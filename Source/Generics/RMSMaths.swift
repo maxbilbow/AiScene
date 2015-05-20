@@ -26,9 +26,9 @@ import SceneKit
 
 
 #if SceneKit
-    typealias RMXVector = RMXVector3
-    typealias RMXPoint = RMXVector3
-    typealias RMXSize = RMXVector3
+    typealias RMXVector = SCNVector3
+    typealias RMXPoint = SCNVector3
+    typealias RMXSize = SCNVector3
     typealias RMXQuaternion = SCNVector4
     typealias RMXTransform = SCNMatrix4
     typealias RMXPhysicsBody = SCNPhysicsBody
@@ -272,9 +272,11 @@ func *= (inout lhs: RMXVector3, rhs: RMFloatB) {
     lhs = RMXVector3MultiplyScalar(lhs, rhs)
 }
 
-func * (inout lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
+func * (lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
     return SCNVector3FromGLKVector3(GLKVector3Multiply(SCNVector3ToGLKVector3(lhs), SCNVector3ToGLKVector3(rhs)))
 }
+
+
 
 func *= (inout lhs: SCNVector3, rhs: SCNVector3) {
     lhs = lhs * rhs
@@ -477,7 +479,7 @@ func RMXGetPhi(vectorA A: GLKVector2, vectorB B: GLKVector2) -> RMFloatB{
     let beta: Float = acosf(delta.y/r)
     //    let theta: Float = GLKMathRadiansToDegrees(atanf(delta.x/delta.y))
     let result = alpha //alpha * beta >= 0 ? beta : TWO_PI - beta
-    NSLog("PHI: \(GLKMathRadiansToDegrees(alpha))")
+    RMXLog("PHI: \(GLKMathRadiansToDegrees(alpha))")
     return RMFloatB(alpha.isNaN ? 0 : result)
 }
 

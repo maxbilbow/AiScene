@@ -51,7 +51,7 @@ extension RMX {
                 if timePassed > timeLimit {
 //                    timeLimit = self.randomTimeInterval
                     if sprite.hasItem {
-                        sprite.throwItem(500)
+                        sprite.throwItem(strength: 500)
                         target = self.randomSprite(world)
                     }
                 } else {
@@ -83,8 +83,8 @@ extension RMX {
     
     
     static func makePoppy(#world: RMSWorld) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.DOG.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true)
-
+        let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.DOG.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true).asPlayerOrAI()
+        
         poppy.setPosition(position: RMXVector3Make(100,10,-50))
         
         RMXAi.playFetch(poppy, master: world.activeSprite)
