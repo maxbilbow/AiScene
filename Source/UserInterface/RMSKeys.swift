@@ -6,12 +6,46 @@
 //  Copyright (c) 2015 Rattle Media. All rights reserved.
 //
 
+extension RMXInterface {
+//    static let MOVE_FORWARD: String = "forward"
+//    static let MOVE_BACKWARD: String = "backward"
+//    static let MOVE_LEFT: String = "left"
+//    static let MOVE_RIGHT: String = "right"
+//    static let MOVE_UP: String = "up"
+//    static let MOVE_DOWN: String = "down"
+//    static let ROLL_LEFT: String = "rollLeft"
+//    static let ROLL_RIGHT: String = "rollRight"
+//    static let JUMP: String = "jump"
+//    static let ROTATE: String = "look"
+//    
+//    //Interactions
+//    static let GRAB_ITEM: String = "grab"
+//    static let THROW_ITEM: String = "throwItem"
+//    static let BOOM: String = "explode"
+//    
+//    //Environmentals
+//    static let TOGGLE_GRAVITY: String = "toggleAllGravity"
+//    //static let XXX: String = "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
+//    static let TOGGLE_AI: String = "toggleAI"
+//    static let RESET: String = "reset"
+//    
+//    //Interface options
+//    static let LOCK_CURSOR: String = "lockMouse"
+//    static let NEXT_CAMERA: String = "nextCamera"
+//    static let PREV_CAMERA: String = "previousCamera"
+//    
+//    //Misc: generically used for testing
+//    static let GET_INFO: String = "information"
+//    static let ZOOM_IN: String = "zoomIn"
+//    static let ZOOM_OUT: String = "zoomOut"
+}
+
 #if OSX
 import Foundation
 import AppKit
 import ApplicationServices
 import SceneKit
-
+   
     
 /// Contains Keys control mapping for a desktop interface.
 ///
@@ -35,37 +69,37 @@ class RMSKeys : RMXInterface {
     lazy var keys: [ RMKey ] = [
     
     // Basic Movement
-    RMKey(self, action: "forward", characters: "w", speed: MOVE_SPEED),
-    RMKey(self, action: "back", characters: "s", speed: MOVE_SPEED),
-    RMKey(self, action: "left", characters: "a", speed: MOVE_SPEED),
-    RMKey(self, action: "right", characters: "d", speed: MOVE_SPEED),
-    RMKey(self, action: "up", characters: "e", speed: MOVE_SPEED),
-    RMKey(self, action: "down", characters: "q", speed: MOVE_SPEED),
-    RMKey(self, action: "rollLeft", characters: "z", speed: LOOK_SPEED),
-    RMKey(self, action: "rollRight", characters: "x", speed: LOOK_SPEED),
-    RMKey(self, action: "jump", characters: " "),
-    RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: LOOK_SPEED),
+    RMKey(self, action: MOVE_FORWARD, characters: "w", speed: MOVE_SPEED),
+    RMKey(self, action: MOVE_BACKWARD, characters: "s", speed: MOVE_SPEED),
+    RMKey(self, action: MOVE_LEFT, characters: "a", speed: MOVE_SPEED),
+    RMKey(self, action: MOVE_RIGHT, characters: "d", speed: MOVE_SPEED),
+    RMKey(self, action: MOVE_UP, characters: "e", speed: MOVE_SPEED),
+    RMKey(self, action: MOVE_DOWN, characters: "q", speed: MOVE_SPEED),
+    RMKey(self, action: ROLL_LEFT, characters: "z", speed: LOOK_SPEED),
+    RMKey(self, action: ROLL_RIGHT, characters: "x", speed: LOOK_SPEED),
+    RMKey(self, action: JUMP, characters: " "),
+    RMKey(self, action: ROTATE, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
     
     //Interactions
-    RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: "throwItem", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
-    RMKey(self, action: "explode", characters: "b", isRepeating: false,  speed: ON_KEY_UP),
+    RMKey(self, action: GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: THROW_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: (0,20)),
+    RMKey(self, action: BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
     
     //Environmentals
-    RMKey(self, action: "toggleAllGravity", characters: "g", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: TOGGLE_GRAVITY, characters: "g", isRepeating: false,speed: ON_KEY_UP),
     //RMKey(self, action: "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
-    RMKey(self, action: "toggleAI", characters: "A", isRepeating: false,speed: ON_KEY_UP),
-    RMKey(self, action: "reset", characters: "R", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: TOGGLE_AI, characters: "A", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: RESET, characters: "R", isRepeating: false,speed: ON_KEY_UP),
     
     //Interface options
-    RMKey(self, action: "lockMouse", characters: "m", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: "nextCamera", characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: "previousCamera", characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: LOCK_CURSOR, characters: "m", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: NEXT_CAMERA, characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
     
     //Misc: generically used for testing
-    RMKey(self, action: "information", characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
-    RMKey(self, action: "zoomIn", characters: "=", isRepeating: true, speed: MOVE_SPEED),
-    RMKey(self, action: "zoomOut", characters: "-", isRepeating: true, speed: MOVE_SPEED)
+    RMKey(self, action: GET_INFO, characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
+    RMKey(self, action: ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
+    RMKey(self, action: ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED)
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
@@ -82,9 +116,9 @@ class RMSKeys : RMXInterface {
                 exists = true
                 break
             }
-            if !exists {
-                self.keys.append(newKey)
-            }
+        }
+        if !exists {
+            self.keys.append(newKey)
         }
     }
     

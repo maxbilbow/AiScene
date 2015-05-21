@@ -22,6 +22,45 @@ import QuartzCore
 
 
 class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
+    
+    static let MOVE_FORWARD: String = "forward"
+    static let MOVE_BACKWARD: String = "back"
+    static let MOVE_LEFT: String = "left"
+    static let MOVE_RIGHT: String = "right"
+    static let MOVE_UP: String = "up"
+    static let MOVE_DOWN: String = "down"
+    static let ROLL_LEFT: String = "rollLeft"
+    static let ROLL_RIGHT: String = "rollRight"
+    static let JUMP: String = "jump"
+    static let ROTATE: String = "look"
+    
+    //Interactions
+    static let GRAB_ITEM: String = "grab"
+    static let THROW_ITEM: String = "throwItem"
+    static let BOOM: String = "explode"
+    
+    //Environmentals
+    static let TOGGLE_GRAVITY: String = "toggleAllGravity"
+    //static let XXX: String = "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
+    static let TOGGLE_AI: String = "toggleAI"
+    static let RESET: String = "reset"
+    
+    //Interface options
+    static let LOCK_CURSOR: String = "lockMouse"
+    static let NEXT_CAMERA: String = "nextCamera"
+    static let PREV_CAMERA: String = "previousCamera"
+    
+    //Misc: generically used for testing
+    static let GET_INFO: String = "information"
+    static let ZOOM_IN: String = "zoomIn"
+    static let ZOOM_OUT: String = "zoomOut"
+    
+    //Non-ASCKI commands
+    static let MOVE_CURSOR_PASSIVE: String = "mouseMoved"
+    static let LEFT_CLICK: String = "Mouse 1"
+    static let RIGHT_CLICK: String = "Mouse 2"
+    
+    
     lazy var actionProcessor: RMSActionProcessor = RMSActionProcessor(world: self.world!, gameView: self.gameView)
     private let _isDebugging = false
     var debugData: String = "No Data"

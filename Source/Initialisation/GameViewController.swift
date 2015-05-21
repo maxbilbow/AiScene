@@ -80,14 +80,9 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         // configure the view
         self.gameView!.backgroundColor = NSColor.blackColor()
 
-//        self.world?.activeSprite.node.addObserver(self, selector: "somethingHappened:", name: "WHATEVER", object: nil)
+
         
-//        let notificationCenter = NSNotificationCenter.defaultCenter()
-//        let mainQueue = NSOperationQueue.mainQueue()
-//        
-//        var observer = notificationCenter.addObserverForName(UITextFieldTextDidChangeNotification, object: nil, queue: mainQueue) { _ in
-//            self.sendButton.enabled = self.messageField.text.utf16count > 0
-//        }
+//        RMX.setKeyboard(self.interface as! RMSKeys, type: .French)
     }
     
     func somethingHappened(thing: AnyObject){

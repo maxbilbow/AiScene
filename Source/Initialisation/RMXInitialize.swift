@@ -49,12 +49,27 @@ extension RMX {
     
 
     
-    #if OPENGL_OSX
-    static func SetUpGLProxy(type: RMXWorldType) -> RMSWorld {
-        RMXGLProxy.run(type)
-        return RMXGLProxy.world
+    enum KeyboardType { case French, UK }
+    
+    ///Adapt the keyboard for different layouts.
+    static func setKeyboard(inteface: RMSKeys, type: KeyboardType = .UK) {
+        switch type {
+        case .French:
+            inteface.set(action: RMXInterface.MOVE_FORWARD, characters: "z")
+            inteface.set(action: RMXInterface.MOVE_LEFT, characters: "q")
+            inteface.set(action: RMXInterface.MOVE_DOWN, characters: "a")
+            inteface.set(action: RMXInterface.ROLL_LEFT, characters: "w")
+            
+            inteface.set(action: RMXInterface.NEXT_CAMERA, characters: "=")
+            inteface.set(action: RMXInterface.PREV_CAMERA, characters: ":")
+            
+            inteface.set(action: RMXInterface.ZOOM_IN, characters: "-")
+            inteface.set(action: RMXInterface.ZOOM_OUT, characters: ")")
+            break
+        default:
+            break
+        }
     }
-    #endif
 }
 
 

@@ -42,7 +42,7 @@
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "453870533.413351"
+                  timestampString = "453902205.165996"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "333"
@@ -57,7 +57,7 @@
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "453870533.413533"
+                  timestampString = "453902205.166176"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "332"
@@ -80,6 +80,22 @@
             startingLineNumber = "443"
             endingLineNumber = "443"
             landmarkName = "addCamera(position:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/UserInterface/RMSKeys.swift"
+            timestampString = "453900386.336761"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
+            landmarkName = "set(action:characters:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
