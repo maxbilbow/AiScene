@@ -8,6 +8,7 @@
 
 import Foundation
 import SpriteKit
+import AppKit
 
 
 protocol RMXModelsProtocol {
@@ -15,10 +16,3 @@ protocol RMXModelsProtocol {
 }
 
 
-extension RMXModels {
-    
-    class func getImage() -> UIImage {
-       return UIImage(named: "art.scnassets/2D/circle_shape.png")!
-    }
-    
-}

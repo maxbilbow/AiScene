@@ -48,7 +48,7 @@ class RMSKeys : RMXInterface {
     
     //Interactions
     RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: "throw", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
+    RMKey(self, action: "throwItem", characters: "Mouse 2", isRepeating: false,  speed: (0,20)),
     RMKey(self, action: "explode", characters: "b", isRepeating: false,  speed: ON_KEY_UP),
     
     //Environmentals

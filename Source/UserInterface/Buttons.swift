@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
+extension RMXModels {
+    
+    class func getImage() -> RMImage {
+        return UIImage(named: "art.scnassets/2D/circle_shape.png")!
+    }
+    
+}
+
 extension RMXDPad {
     internal func getButton(frame: CGRect) -> UIView {
         let buttonBase = UIView(frame: frame)

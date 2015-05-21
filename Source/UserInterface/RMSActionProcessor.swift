@@ -377,7 +377,10 @@ class RMSActionProcessor {
                                 }
                             }
                         }
+                    } else if let item = sprite.item{
+                        sprite.throwItem(strength: speed)
                     }
+                    
                 break
             default:
                 NSLog("Action '\(action)' not recognised")
