@@ -22,6 +22,10 @@ class RMXDPad : RMXInterface {
     let motionManager: CMMotionManager = CMMotionManager()
    
     
+    var moveButtonPad: UIImageView?// = RMXModels.getImage()
+    var moveButton: UIView?
+    var jumpButton: UIButton?
+    var boomButton: UIButton?
     
     override func viewDidLoad(coder: NSCoder!){
         super.viewDidLoad(coder)
@@ -52,14 +56,14 @@ class RMXDPad : RMXInterface {
 //        button.setImage(image, forState: UIControlState.Normal)
         let topBar: CGFloat = 40; let buttonCount: CGFloat = 5
         func makeBottomLeftBar (view: UIView)  {
-            let lastCam: UIButton = UIButton(frame: CGRectMake(0, view.bounds.height - 30, view.bounds.width / 3, 20))
+            let lastCam: UIButton = UIButton(frame: CGRectMake(0, view.bounds.height - 30, view.bounds.width / 6, 20))
             
             lastCam.setTitle("< CAM ", forState:UIControlState.Normal)
             lastCam.addTarget(self, action: Selector("previousCamera:"), forControlEvents:UIControlEvents.TouchDown)
             lastCam.enabled = true
             view.addSubview(lastCam)
             
-            let nextCam: UIButton = UIButton(frame: CGRectMake(view.bounds.width / 3, view.bounds.height - 30, view.bounds.width / 3, 20))
+            let nextCam: UIButton = UIButton(frame: CGRectMake(view.bounds.width / 6, view.bounds.height - 30, view.bounds.width / 6, 20))
             
             nextCam.setTitle("CAM >", forState:UIControlState.Normal)
 //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
@@ -108,67 +112,71 @@ class RMXDPad : RMXInterface {
             
             jump.setTitle("<JUMP>", forState:UIControlState.Normal)
             //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            jump.addTarget(self, action: Selector("jump:"), forControlEvents:UIControlEvents.TouchDown)
+            jump.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "explode:"))
             jump.enabled = true
             jump.backgroundColor = UIColor.grayColor()
             view.addSubview(jump)
         }
+        
+
+        
 
         
         
         let w = self.gameView!.bounds.size.width
         let h = self.gameView!.bounds.size.height - topBar
         let leftView: UIView = UIImageView(frame: CGRectMake(0, topBar, w/2, h))
-        let rightView: UIView = UIImageView(frame: CGRectMake(w/2, topBar, w/2, h))
+        let rightView: UIView = UIImageView(frame: CGRectMake(w / 3, topBar, w * 2 / 3, h))
+        rightView.userInteractionEnabled = true
         makeTopBar(self.gameView)
-        makeBottomLeftBar(leftView)
+        makeBottomLeftBar(self.gameView)
         
         
         
-        func setLeftView() {
-            
-            let view = leftView
-           
-            let movement:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self,action: "handleMovement:")
-//            movement.numberOfTouchesRequired = 1
-            movement.minimumPressDuration = 0
-            view.addGestureRecognizer(movement)
-            
-            
-            
-            
-            view.userInteractionEnabled = true
-            self.gameView!.addSubview(leftView)
-            
-            
-            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
-            
-        }
         
-        func setRightView() {
-            
-            let view = rightView
-            let look:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self,action: "handleOrientation:")
-//            look.minimumPressDuration = 0
-            view.addGestureRecognizer(look)
-            
+        
+        
+        //setLeftView(); //setRightView()//; setUpButtons()
+        
+        
 
-//            view.addGestureRecognizer(UILongPressGestureRecognizer(target: self,  action: "extendArm:"))
-            view.userInteractionEnabled = true
-            self.gameView!.addSubview(rightView)
-            
-                
-            // add a tap gesture recognizer
-            view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
-           
+        var bounds = self.moveButtonCenter//CGRectMake(origin.x, origin.y, size.width, size.height)
+        bounds.size = CGSize(width: bounds.size.width + 10, height: bounds.size.height + 10)
+        bounds.origin.x -= 5
+        bounds.origin.y -= 5
+        self.moveButton = self.moveButton(bounds.size, origin: bounds.origin)
+        
+        self.gameView.addSubview(self.moveButton!)
+        self.gameView.bringSubviewToFront(self.moveButton!)
+        
+        let padImage: UIImage = RMXModels.getImage()
+        self.moveButtonPad = UIImageView(frame: self.moveButtonCenter)//(image: padImage)
+        self.moveButtonPad!.image = padImage
+        self.moveButtonPad?.setNeedsDisplay()
+        self.gameView.addSubview(self.moveButtonPad!)
 
-        }
         
+        self.jumpButton = UIButton(frame: self.jumpButtonCenter)
+        self.jumpButton?.setImage(RMXModels.getImage(), forState: UIControlState.Normal)
+//        self.jumpButton?.setNeedsDisplay()
+        self.jumpButton?.addTarget(self, action: Selector("jump:"), forControlEvents:UIControlEvents.TouchDown)
+        self.jumpButton!.enabled = true
+        self.gameView.addSubview(self.jumpButton!)
         
-//    self.gameView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
+        self.boomButton = UIButton(frame: self.boomButtonCenter)
+        self.boomButton?.setImage(RMXModels.getImage(), forState: UIControlState.Normal)
+//        self.boomButton?.setNeedsDisplay()
+        self.boomButton?.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "explode:"))
+        self.boomButton!.enabled = true
+        self.gameView.addSubview(self.boomButton!)
         
-        setLeftView(); setRightView()//; setUpButtons()
+        // add a tap gesture recognizer
+        self.gameView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
+        rightView.addGestureRecognizer(UIPanGestureRecognizer(target: self,action: "handleOrientation:"))
+        self.gameView.addSubview(rightView)
         
+        self.gameView.bringSubviewToFront(self.boomButton!)
+        self.gameView.bringSubviewToFront(self.jumpButton!)
     }
     
     var i = 0

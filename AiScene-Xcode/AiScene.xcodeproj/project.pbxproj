@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6C4A28721B03ACCC001C3F5B /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286A1B03ACCC001C3F5B /* icons.xcassets */; };
-		6C4A28731B03ACCC001C3F5B /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286A1B03ACCC001C3F5B /* icons.xcassets */; };
 		6C4A28741B03ACCC001C3F5B /* IMG_0014.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286B1B03ACCC001C3F5B /* IMG_0014.png */; };
 		6C4A28751B03ACCC001C3F5B /* IMG_0014.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286B1B03ACCC001C3F5B /* IMG_0014.png */; };
 		6C4A28761B03ACCC001C3F5B /* pop1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286C1B03ACCC001C3F5B /* pop1.jpg */; };
@@ -126,6 +125,8 @@
 		6C929A351AE54DCA00E71811 /* RMXQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C51AE544C000E71811 /* RMXQuestions.swift */; };
 		6C929A361AE54DCA00E71811 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C61AE544C000E71811 /* RMXValue.swift */; };
 		6C929A371AE54E3E00E71811 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299F01AE544D500E71811 /* art.scnassets */; };
+		6CB6A1A31B0D267100136DCF /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB6A1A21B0D267100136DCF /* Buttons.swift */; };
+		6CB6A1A41B0D311E00136DCF /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286A1B03ACCC001C3F5B /* icons.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -225,6 +226,7 @@
 		6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AiScene-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C929A141AE5497900E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiScene_OSXTests.swift; sourceTree = "<group>"; };
+		6CB6A1A21B0D267100136DCF /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +498,7 @@
 			children = (
 				6C9299D01AE544C000E71811 /* Accelorometer.swift */,
 				6C9299D11AE544C000E71811 /* iOSControllers.swift */,
+				6CB6A1A21B0D267100136DCF /* Buttons.swift */,
 				6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */,
 				6C9299D31AE544C000E71811 /* RMSKeys.swift */,
 				6C9299D41AE544C000E71811 /* RMXDPad.swift */,
@@ -756,12 +759,12 @@
 				6C4A287B1B03ACCC001C3F5B /* Icon.png in Resources */,
 				6C929A371AE54E3E00E71811 /* art.scnassets in Resources */,
 				6C4A28751B03ACCC001C3F5B /* IMG_0014.png in Resources */,
+				6CB6A1A41B0D311E00136DCF /* icons.xcassets in Resources */,
 				6C4A28791B03ACCC001C3F5B /* pop1.png in Resources */,
 				6C4A28811B03ACCC001C3F5B /* texture_numbers.png in Resources */,
 				6C4A28771B03ACCC001C3F5B /* pop1.jpg in Resources */,
 				6C4A287F1B03ACCC001C3F5B /* texture_poppy.png in Resources */,
 				6C929A0A1AE5497900E71811 /* MainMenu.xib in Resources */,
-				6C4A28731B03ACCC001C3F5B /* icons.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,6 +847,7 @@
 				6C9299EF1AE544C000E71811 /* RMXInterface.swift in Sources */,
 				6C9299D81AE544C000E71811 /* RMSArt.swift in Sources */,
 				6C9299E41AE544C000E71811 /* RMXValue.swift in Sources */,
+				6CB6A1A31B0D267100136DCF /* Buttons.swift in Sources */,
 				6C73A8E51B0A75DC00187A61 /* RMXScene.swift in Sources */,
 				6C9299E21AE544C000E71811 /* RMXDebugger.swift in Sources */,
 				6C9299ED1AE544C000E71811 /* RMSKeys.swift in Sources */,

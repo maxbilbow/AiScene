@@ -181,7 +181,7 @@ extension SCNMatrix4 {
     }
     
     var left: SCNVector3 {
-        return SCNVector3Make(m11, m12, m13)
+        return SCNVector3Make(-m11, -m12, -m13)
     }
     
     var forward: SCNVector3 {
@@ -236,4 +236,11 @@ extension CGSize {
     var average: CGFloat {
         return (width + height) / 2
     }
+}
+
+extension CGPoint {
+    var print: String {
+        return "\(x.toData()) \(y.toData())"
+    }
+    
 }

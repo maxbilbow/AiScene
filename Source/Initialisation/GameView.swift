@@ -46,13 +46,14 @@ class GameView: SCNView  {
             
             //Set up player
             let player = world.activeSprite
+            player.setPosition(position: RMXVector3Make(0, 50, 50))//, resetTransform: <#Bool#>
             let radius = RMFloatB((observer.geometry! as! SCNSphere).radius)
             let height = radius * 2
             let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
             head.physicsBody = SCNPhysicsBody()
             head.physicsBody!.mass = -10
             world.activeSprite.node.addChildNode(head)
-            head.camera = RMXCamera()
+            head.camera = RMX.standardCamera()
             head.physicsBody!.mass = 0
             //        let bum = SCNNode()
             //        bum.physicsBody = SCNPhysicsBody()
@@ -111,13 +112,13 @@ class GameView: SCNView  {
             }
             
             
-            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 100, radius: earth.radius)
+            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 150, radius: earth.radius / 2)
             
             //cameras
             let sunCam: RMXNode = RMXNode()
             world.scene.rootNode.addChildNode(sunCam)
             
-            sunCam.camera = RMXCamera()
+            sunCam.camera = RMX.standardCamera()
             sunCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
             world.activeSprite.addCamera(sunCam)
 //            poppy.addCamera()

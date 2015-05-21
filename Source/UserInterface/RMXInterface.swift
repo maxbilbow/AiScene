@@ -49,7 +49,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     
     
     var activeCamera: RMXCamera? {
-        return self.world?.activeCamera.camera as? RMXCamera
+        return self.world?.activeCamera.camera
     }
     
     init(gvc: GameViewController, scene: RMXScene? = nil){

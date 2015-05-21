@@ -20,7 +20,7 @@ extension RMXDPad {
 //        }
         
         func tilt(direction: String, tilt: RMFloatB){
-            let rollSpeed = RMFloatB(fabs(RMXInterface.moveSpeed)*4)
+            let rollSpeed = -RMFloatB(fabs(RMXInterface.moveSpeed)*4)
             let rollThreshold: RMFloatB = 0.1
             if tilt > rollThreshold {
                 let speed = (1.0 + tilt) * rollSpeed
@@ -35,7 +35,7 @@ extension RMXDPad {
 //        let i = self.world!.clock?.getCounter(forKey:key)
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
         if let deviceMotion = self.motionManager.deviceMotion {
-//            tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
+            tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
             //tilt("pitch", RMFloatB(self.motionManager.deviceMotion.gravity.z))
 //            tilt("yaw", RMFloatB(self.motionManager.deviceMotion.gravity.x))
             if let attitude = deviceMotion.attitude {

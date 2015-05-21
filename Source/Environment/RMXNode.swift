@@ -113,13 +113,13 @@ extension RMXSprite {
     }
     
     func accelerateUp(v: RMFloatB) {
-        let force = self.upVector * -v * self.speed
+        let force = self.upVector * v * self.speed
         // RMXLog(force.print)
         self.node.physicsBody!.applyForce(force, impulse: false)
     }
     
     func accelerateLeft(v: RMFloatB) {
-        let force = self.leftVector * -v * self.speed
+        let force = self.leftVector * v * self.speed
         //RMXLog(force.print)
         self.node.physicsBody!.applyForce(force, impulse: false)
     }
@@ -132,6 +132,7 @@ extension RMXSprite {
     ///Stops all acceleration foces, not velocity
     func stop(){
         self.node.physicsBody!.clearAllForces()
+        self.acceleration = nil
     }
     
     var scale: RMXVector3 {
@@ -144,7 +145,7 @@ extension RMXSprite {
     }
     
     var weight: RMFloatB {
-        return RMFloatB(self.node.physicsBody!.mass)// * self.world.gravity
+        return RMFloatB(self.node.physicsBody!.mass) * self.world!.gravity.size * 2
     }
     
     func distanceTo(point: RMXVector3 = RMXVector3Zero) -> RMFloatB{
@@ -389,7 +390,7 @@ extension RMXSprite {
     
     
     var isGrounded: Bool {
-        return self.position.y <= self.height / 2
+        return (self.velocity.y == 0 && self.world?.hasGravity != nil)
     }
     
     var upThrust: RMFloatB {

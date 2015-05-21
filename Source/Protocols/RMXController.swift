@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import SceneKit
 
 protocol RMXControllerProtocol {
     var world: RMSWorld? { get }
     var activeSprite: RMXSprite? { get }
-    var activeCamera: RMXCamera? { get }
+    var activeCamera: SCNCamera? { get }
 }

@@ -272,11 +272,30 @@ func *= (inout lhs: RMXVector3, rhs: RMFloatB) {
     lhs = RMXVector3MultiplyScalar(lhs, rhs)
 }
 
+func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+    return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+}
+
 func * (lhs: SCNVector3, rhs: SCNVector3) -> SCNVector3 {
     return SCNVector3FromGLKVector3(GLKVector3Multiply(SCNVector3ToGLKVector3(lhs), SCNVector3ToGLKVector3(rhs)))
 }
 
+func * (lhs: CGPoint, rhs: RMFloat) -> CGPoint {
+    return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
+}
 
+
+func * (lhs: CGSize, rhs: RMFloat) -> CGSize {
+    return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
+}
+
+func + (lhs: CGSize, rhs: CGSize) -> CGSize {
+    return CGSize(width: lhs.width * rhs.width, height: lhs.height * rhs.height)
+}
+
+func + (lhs: CGPoint, rhs: CGSize) -> CGPoint {
+    return CGPoint(x: lhs.x * rhs.width, y: lhs.y * rhs.height)
+}
 
 func *= (inout lhs: SCNVector3, rhs: SCNVector3) {
     lhs = lhs * rhs

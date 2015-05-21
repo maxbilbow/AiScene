@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSActionProcessor.swift"
-            timestampString = "453819039.82647"
+            timestampString = "453860807.028745"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "173"
+            endingLineNumber = "173"
             landmarkName = "movement(_:speed:point:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "453821510.146574"
+            timestampString = "453860807.028745"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "288"
-            endingLineNumber = "288"
+            startingLineNumber = "330"
+            endingLineNumber = "330"
             landmarkName = "RMXSprite"
             landmarkType = "3">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "453821716.635859"
+            timestampString = "453860807.028745"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "401"
-            endingLineNumber = "401"
+            startingLineNumber = "443"
+            endingLineNumber = "443"
             landmarkName = "addCamera(position:)"
             landmarkType = "5">
          </BreakpointContent>

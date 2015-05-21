@@ -15,17 +15,7 @@ import UIKit
 
 extension RMXDPad {
     
-    func explode(recogniser: UILongPressGestureRecognizer) {
-        //        self.activeSprite?.setAngle(roll: 0)
-        if recogniser.state == .Ended {
-            self.action(action: "explode", speed: 1)
-            //self.actionProcessor.explode(force: self.boomTimer)
-            
-        } else {
-            self.action(action: "explode", speed: 0)
-            self.boomTimer++ //TODO: put this in the ActionProcessor class
-        }
-    }
+    
     
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
@@ -41,11 +31,10 @@ extension RMXDPad {
         //self.world!.setBehaviours(self.world!.hasBehaviour)
     }
     
-    func jump(recogniser: UITapGestureRecognizer){
-        self.action(action: "jump", speed: 1)
-    }
     
-        private func _handleRelease(state: UIGestureRecognizerState) {
+    
+    @availability(*,deprecated=1)
+        internal func _handleRelease(state: UIGestureRecognizerState) {
             if state == UIGestureRecognizerState.Ended {
                 self.action(action: "stop")
                 self.action(action: "extendArm", speed: 0)
@@ -53,43 +42,31 @@ extension RMXDPad {
             }
         }
     
-    
+    @availability(*,deprecated=1)
         func noTouches(recognizer: UIGestureRecognizer) {
             if recognizer.state == UIGestureRecognizerState.Ended {
                 self.action(action: "stop")
                 self.log("noTouches?")
             }
-            _handleRelease(recognizer.state)
+//            _handleRelease(recognizer.state)
         }
 
         
         func toggleGravity(recognizer: UITapGestureRecognizer) {
             self.log()
             self.action(action: "toggleGravity", speed: 1)
-            _handleRelease(recognizer.state)
+//            _handleRelease(recognizer.state)
         }
         
         
     func toggleAllGravity(recognizer: UITapGestureRecognizer) {
         self.log()
         self.action(action: "toggleAllGravity", speed: 1)
-        _handleRelease(recognizer.state)
+//        _handleRelease(recognizer.state)
     }
     
     
-    func handleMovement(recogniser: UILongPressGestureRecognizer){
-        let point = recogniser.locationInView(recogniser.view)
-        if recogniser.state == .Began {
-            self.moveOrigin = point
-        } else if recogniser.state == .Ended {
-            _handleRelease(recogniser.state)
-        } else {
-            let forward = RMFloatB(point.y - self.moveOrigin.y)
-            let sideward = RMFloatB(point.x - self.moveOrigin.x)
-            self.action(action: "move", speed: RMXInterface.moveSpeed, point: [sideward,0, forward])
-        }
-        
-    }
+   
     
     
     
@@ -97,12 +74,8 @@ extension RMXDPad {
         func handleOrientation(recognizer: UIPanGestureRecognizer) {
             if recognizer.numberOfTouches() == 1 {
                 let point = recognizer.velocityInView(self.view)
-                    #if SceneKit
-                        let yDir:Float = -1
-                        #else
-                        let yDir:Float = 1
-                        #endif
-                self.action(action: "look", speed: RMXInterface.lookSpeed, point: [Float(point.x), yDir * Float(point.y)])
+                
+                self.action(action: "look", speed: RMXInterface.lookSpeed, point: [-Float(point.x), Float(point.y)])
             }
 //            _handleRelease(recognizer.state)
         }
@@ -127,7 +100,7 @@ extension RMXDPad {
             } else if recognizer.state == UIGestureRecognizerState.Ended {
                 self.action(action: "extendArm", speed: 0)
             }
-            _handleRelease(recognizer.state)
+           
         }
     
     func grabOrThrow(recognizer: UITapGestureRecognizer) {

@@ -46,6 +46,7 @@ class RM3DModels : RMXModelsProtocol {
                 length:RMFloat(scale.z),
                 chamferRadius:0.0)
             )
+            hasColor = true
             break
         case ShapeType.SPHERE.rawValue:
             node = RMXNode(geometry: SCNSphere(radius: RMFloat(radius)))
@@ -113,10 +114,11 @@ class RM3DModels : RMXModelsProtocol {
             node.physicsBody = SCNPhysicsBody.dynamicBody()
             node.physicsBody!.restitution = 0.1
             break
-        case .WORLD, .BACKGROUND:
+        case .BACKGROUND:
             node.physicsBody = SCNPhysicsBody.staticBody()
-            node.physicsBody!.restitution = 0.0
-            node.physicsBody!.damping = 1
+            node.physicsBody!.restitution = 0.1
+            node.physicsBody!.damping = 1000
+            node.physicsBody!.angularDamping = 1000
         case .KINEMATIC:
             node.physicsBody = SCNPhysicsBody.kinematicBody()
             node.physicsBody!.restitution = 0.1
@@ -128,13 +130,16 @@ class RM3DModels : RMXModelsProtocol {
         }
         
         if type != ShapeType.NULL.rawValue {
-            node.physicsBody!.mass = 4 *  CGFloat(PI * radius * radius)// * 600
+            node.physicsBody!.mass = 4 * CGFloat(PI * radius * radius)// * 600
         } else {
             node.physicsBody!.mass = 0
         }
         
         return node
     }
+    
+    
+    
     
     #elseif SpriteKit
     

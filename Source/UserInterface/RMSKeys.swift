@@ -29,7 +29,7 @@ class RMSKeys : RMXInterface {
     static let ON_KEY_DOWN: (on:RMFloat,off:RMFloat) = (1,0)
     static let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
     static let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.moveSpeed * 2, 0)
-    static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.lookSpeed * 10, 0)
+    static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.lookSpeed * -10, 0)
     
     ///Key settings
     lazy var keys: [ RMKey ] = [
@@ -44,7 +44,7 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: "rollLeft", characters: "z", speed: LOOK_SPEED),
     RMKey(self, action: "rollRight", characters: "x", speed: LOOK_SPEED),
     RMKey(self, action: "jump", characters: " "),
-    RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: (0.01,0)),
+    RMKey(self, action: "look", characters: "mouseMoved", isRepeating: false,speed: LOOK_SPEED),
     
     //Interactions
     RMKey(self, action: "grab", characters: "Mouse 1", isRepeating: false, speed: ON_KEY_UP),
@@ -64,12 +64,13 @@ class RMSKeys : RMXInterface {
     
     //Misc: generically used for testing
     RMKey(self, action: "information", characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
-    RMKey(self, action: "increase", characters: "=", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: "decrease", characters: "-", isRepeating: false, speed: ON_KEY_DOWN)
+    RMKey(self, action: "zoomIn", characters: "=", isRepeating: true, speed: MOVE_SPEED),
+    RMKey(self, action: "zoomOut", characters: "-", isRepeating: true, speed: MOVE_SPEED)
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
         super.viewDidLoad(coder)
+        RMXInterface.lookSpeed *= -1
     }
     
     func set(action a: String, characters k: String ) {

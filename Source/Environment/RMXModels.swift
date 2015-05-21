@@ -13,3 +13,12 @@ import SpriteKit
 protocol RMXModelsProtocol {
     static func getNode(shapeType type: Int, mode: RMXSpriteType, radius r: RMFloatB?, height h: RMFloatB?, scale s: RMXSize?, color: NSColor!) -> RMXNode
 }
+
+
+extension RMXModels {
+    
+    class func getImage() -> UIImage {
+       return UIImage(named: "art.scnassets/2D/circle_shape.png")!
+    }
+    
+}

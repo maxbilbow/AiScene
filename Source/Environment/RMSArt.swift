@@ -46,7 +46,7 @@ class RMXArt {
     
     #endif
     
-    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloatB = 1000, radius: RMFloatB? = nil) -> RMSWorld {
+    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloatB = 1000, radius: RMFloatB = RMSWorld.RADIUS) -> RMSWorld {
         
         //RMXArt.drawPlane(world)
         if drawAxis {
@@ -61,46 +61,60 @@ class RMXArt {
     
 
     
-    class func drawAxis(world: RMSWorld, radius: RMFloatB?) {//xCol y:(float*)yCol z:(float*)zCol{
+    class func drawAxis(world: RMSWorld, radius: RMFloatB = RMSWorld.RADIUS) {//xCol y:(float*)yCol z:(float*)zCol{
         
         
         func drawAxis(axis: String) {
             var point =  -world.radius
             var color: NSColor
-            var scale: RMXVector3 = RMXVector3Make(10,10,10)
+            var scale: RMXVector3 = RMXVectorMake(10)
+            var position = RMXVector3Make(0, scale.y / 2, 0)
             switch axis {
             case "x":
-                scale.x = radius ?? world.radius
+                scale.x = radius * 2
                 color = NSColor.redColor()
                 break
             case "y":
-                scale.y = radius ?? world.radius
                 color = NSColor.greenColor()
+                position.y = scale.y + radius / 2
+                scale.y = radius
                 break
             case "z":
-                scale.z = radius ?? world.radius
+                scale.z = radius * 2
                 color = NSColor.blueColor()
                 break
+            case "z1":
+                color = NSColor.blueColor()
+                position.z = (radius + scale.y) / 2
+                scale.z = radius
+                break
+            case "z2":
+                color = NSColor.blueColor()
+                position.z = -(radius + scale.y) / 2// -radius / 2 - scale.y
+                scale.z = radius
+                break
+
             default:
                 fatalError(__FUNCTION__)
             }
-            let node:SCNNode = SCNNode( geometry: (RMXArt.CUBE.copy() as? SCNGeometry)!)
-            node.geometry!.firstMaterial! = (RMXArt.CUBE.firstMaterial!.copy() as? SCNMaterial)!
-            node.geometry!.firstMaterial!.diffuse.contents = color
-            node.geometry!.firstMaterial!.specular.contents = color
-//               node.physicsBody = SCNPhysicsBody.staticBody()
-            node.scale = scale
-        
-            world.scene.rootNode.addChildNode(node)
+            let node:SCNNode = RMXModels.getNode(shapeType: ShapeType.CUBE.rawValue, mode: .PASSIVE, radius: 1, scale: scale, color: color)
+            node.position = position
+            node.physicsBody!.mass *= 1000
+            node.physicsBody!.damping = 1000
+            node.physicsBody!.angularDamping = 1000
+            let sprite = RMXSprite.new(parent: world, node: node, type: .BACKGROUND, isUnique: true)
+            sprite.addBehaviour({ (isOn) -> () in
+                sprite.setPosition(position: position, resetTransform: true)
+            })
             RMXLog("axis: \(axis), scale: \(scale.print)")
             
             
         }
-        
-        
+
         drawAxis("x")
         drawAxis("y")
-        drawAxis("z")
+        drawAxis("z1")
+        drawAxis("z2")
     }
     
     class func randomObjects(world: RMSWorld, noOfShapes: RMFloatB = 100, radius r: RMFloatB? = nil)    {
