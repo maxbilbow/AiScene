@@ -8,7 +8,7 @@
 
 import Foundation
 import SpriteKit
-import AppKit
+//import AppKit
 
 
 protocol RMXModelsProtocol {

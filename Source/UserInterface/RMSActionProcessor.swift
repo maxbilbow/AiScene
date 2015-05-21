@@ -249,7 +249,16 @@ class RMSActionProcessor {
                 RMXLog("aiOn: \(self.world.aiOn)")
             }
         case "information":
-            if speed == 1 { println(_getInfo()) }
+            if speed == 1 {
+//                println(self.getData())
+                self.interface.dataView!.hidden = !self.interface.dataView!.hidden
+//                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
+                if !self.interface.dataView!.hidden {
+                    self.interface.dataView!.text = self.getData()
+                    
+                }
+//                self.interface.dataView!.setTitle(_getInfo())
+            } 
         case "explode":
             if speed == 1 {
                 self.explode(force: self.boomTimer)
@@ -276,7 +285,7 @@ class RMSActionProcessor {
         
     }
     
-    private func _getInfo() -> String {
+    func getData() -> String {
         let node = self.activeSprite.node//.presentationNode()
         let sprite = self.activeSprite
         let physics = self.world.scene.physicsWorld
@@ -300,7 +309,7 @@ class RMSActionProcessor {
     }
     func debug(_ yes: Bool = true){
         if yes {
-            NSLog(_getInfo())
+            NSLog(self.getData())
         }
     }
 

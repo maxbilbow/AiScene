@@ -33,38 +33,6 @@
             endingLineNumber = "330"
             landmarkName = "RMXSprite"
             landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RMXSprite.debug (AiScene_OSX.RMXSprite)(Swift.Bool) -&gt; ()"
-                  moduleName = "AiScene-OSX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "453902205.165996"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "333"
-                  endingLineNumber = "333"
-                  offsetFromSymbolStart = "26">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RMXSprite.(debug (AiScene_OSX.RMXSprite) -&gt; (Swift.Bool) -&gt; ()).(default argument 0)"
-                  moduleName = "AiScene-OSX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "453902205.166176"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "332"
-                  endingLineNumber = "332"
-                  offsetFromSymbolStart = "8">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -86,15 +54,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSKeys.swift"
-            timestampString = "453900386.336761"
+            timestampString = "453915725.897946"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "set(action:characters:)"
             landmarkType = "5">
          </BreakpointContent>

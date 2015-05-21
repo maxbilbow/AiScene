@@ -11,8 +11,10 @@ import QuartzCore
     import GLKit
 #if iOS
     import UIKit
+    typealias RMDataView = UITextView
     #elseif OSX
-    
+    import AppKit
+    typealias RMDataView = NSTextView
 #endif
 
 
@@ -78,14 +80,8 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     var activeSprite: RMXSprite? {
         return self.world?.activeSprite
     }
-    
-    #if iOS
-    var view: UIView {
-        return self.gvc!.gameView!
-    }
-    #endif
 
-    
+    var dataView: RMDataView?
     
     var activeCamera: RMXCamera? {
         return self.world?.activeCamera.camera
@@ -117,6 +113,12 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         if self.world == nil {
             self.world = RMSWorld(scene: RMXScene(coder: coder))
         }
+        self.dataView = RMDataView(frame: self.gameView.bounds)
+        self.dataView!.hidden = true
+//        self.dataView!.backgroundColor = NSColor.blueColor()
+//        self.dataView!.enabled = true
+        self.gameView.addSubview(self.dataView!)
+//        self.dataView!.alpha = 0.5
         self.setUpGestureRecognisers()
     }
     func setUpTimers(){
@@ -147,11 +149,22 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
         self.update()
     }
-
+    
+    internal func printDataToScreen(data: String) {
+//        self.dataView.
+//        self.dataView!.text = data
+        RMXLog(data)
+    }
     
     func update(){
         self.actionProcessor.animate()
         self.world?.animate()
+        if !self.dataView!.hidden {
+//            let view: NSTextField = dataView!
+//            self.dataView?.display()
+            self.printDataToScreen(self.actionProcessor.getData())            
+        }
+
     }
     
     ///Stop all inputs (i.e. no gestures received)

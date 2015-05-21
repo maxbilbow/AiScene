@@ -473,7 +473,7 @@ extension RMXSprite {
         #endif
     }
     
-    func makeAsSun(rDist: RMFloatB = 1000, rAxis: RMXVector3 = RMXVector3Make(0,0,1)) -> RMXSprite {
+    func makeAsSun(rDist: RMFloatB = 1000, rAxis: RMXVector3 = RMXVector3Make(1,0,0)) -> RMXSprite {
         if self.type == nil {
             self.type = .BACKGROUND
         }
@@ -485,7 +485,7 @@ extension RMXSprite {
                
         self.rAxis = rAxis
         #if SceneKit
-        self.node.pivot.m41 = rDist
+        self.node.pivot.m43 = -rDist
         #endif
         
         return self

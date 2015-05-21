@@ -9,10 +9,16 @@
 import Foundation
 import UIKit
 
+#if iOS
+    typealias RMImage = UIImage
+    #elseif OSX
+    typealias RMImage = NSImage
+    #endif
+
 extension RMXModels {
     
     class func getImage() -> RMImage {
-        return UIImage(named: "art.scnassets/2D/circle_shape.png")!
+        return RMImage(named: "art.scnassets/2D/circle_shape.png")!
     }
     
 }
@@ -21,15 +27,8 @@ extension RMXDPad {
     internal func getButton(frame: CGRect) -> UIView {
         let buttonBase = UIView(frame: frame)
         buttonBase.alpha = 0.5
-        //        buttonBase.layer.cornerRadius = 50;
+                buttonBase.layer.cornerRadius = 20
         buttonBase.backgroundColor = UIColor.blueColor()
-        
-        
-        
-        
-        
-        
-        
         buttonBase.userInteractionEnabled = true
         
         return buttonBase

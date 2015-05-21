@@ -103,8 +103,16 @@ class RMSKeys : RMXInterface {
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
-        super.viewDidLoad(coder)
         RMXInterface.lookSpeed *= -1
+        
+        super.viewDidLoad(coder)
+        
+        
+        
+    }
+    
+    override func setUpGestureRecognisers() {
+//        self.dataView.
     }
     
     func set(action a: String, characters k: String ) {
@@ -401,10 +409,13 @@ extension GameView {
                 material.emission.contents = NSColor.redColor()
                 
                 SCNTransaction.commit()
+            } else if self.interface!.dataView!.hidden == false {
+                self.interface!.dataView!.hidden = true
             }
         }
         super.mouseDown(theEvent)
     }
+    
 
 }
 

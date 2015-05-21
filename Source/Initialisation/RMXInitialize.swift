@@ -51,7 +51,8 @@ extension RMX {
     
     enum KeyboardType { case French, UK }
     
-    ///Adapt the keyboard for different layouts.
+    #if OSX
+    ///Adapt the keyboard for different layouts
     static func setKeyboard(inteface: RMSKeys, type: KeyboardType = .UK) {
         switch type {
         case .French:
@@ -70,6 +71,7 @@ extension RMX {
             break
         }
     }
+    #endif
 }
 
 

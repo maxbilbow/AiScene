@@ -42,10 +42,24 @@ class RMXDPad : RMXInterface {
             #else
         self.lookSpeed *= -0.02
         #endif
+        
+       
+        
     }
     override func update() {
         super.update()
         self.accelerometer()
+    }
+
+    private var _count: Int = 0
+    override func printDataToScreen(data: String) {
+        super.printDataToScreen(data)
+//        self.dataView!.text = data
+//        ++_count
+//        if _count > 60 {
+//            self.dataView?.text = data
+//            _count = 0
+//        }
     }
 //    
 //    override var view: RMXView {
@@ -55,6 +69,10 @@ class RMXDPad : RMXInterface {
 //        let image = UIImage(contentsOfFile: "popNose.png")
 //        button.setImage(image, forState: UIControlState.Normal)
         let topBar: CGFloat = 40; let buttonCount: CGFloat = 5
+        
+        self.dataView!.backgroundColor = UIColor.grayColor()
+        self.dataView?.alpha = 0.3
+        self.dataView?.bounds = CGRectMake(0, topBar, self.gameView.bounds.width, self.gameView.bounds.height - topBar )
         func makeBottomLeftBar (view: UIView)  {
             let lastCam: UIButton = UIButton(frame: CGRectMake(0, view.bounds.height - 30, view.bounds.width / 6, 20))
             
@@ -110,9 +128,9 @@ class RMXDPad : RMXInterface {
             
             let jump: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 4 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
             
-            jump.setTitle("<JUMP>", forState:UIControlState.Normal)
+            jump.setTitle("<DATA>", forState:UIControlState.Normal)
             //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            jump.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "explode:"))
+            jump.addTarget(self, action: Selector( "printData:"), forControlEvents:UIControlEvents.TouchDown)
             jump.enabled = true
             jump.backgroundColor = UIColor.grayColor()
             view.addSubview(jump)
