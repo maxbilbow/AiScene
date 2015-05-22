@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SceneKit
 
 public class RMXDebugger  {
     
@@ -23,3 +24,20 @@ public func RMXLog(_ message: AnyObject? = "", sender: AnyObject = __FUNCTION__,
     }
 }
 
+var textStorage: NSTextStorage = NSTextStorage()
+/*
+
+public func RMXPrintToScreen(string: AnyObject! = nil, window: RMDataView?) {
+//    textStorage.setAttributedString(NSAttributedString) = string
+    if let view: RMDataView = window {
+        NSLog(string.description)
+        let text = NSTextContainer()
+//        text.string
+        view.string = string.description
+        NSLog(view.string!)
+    } else {
+        NSLog("hello")
+    }
+}
+
+*/

@@ -228,13 +228,13 @@ class RMSActionProcessor {
             break
         case "nextCamera":
             if speed == 1 {
-                let cameraNode = self.activeSprite.getNextCamera()
+                let cameraNode = self.interface.getNextCamera()
                 self.gameView.pointOfView = cameraNode
             }
             break
         case "previousCamera":
             if speed == 1 {
-                let cameraNode = self.activeSprite.getPreviousCamera()
+                let cameraNode = self.interface.getPreviousCamera()
                 self.gameView.pointOfView = cameraNode
             }
             break
@@ -254,7 +254,9 @@ class RMSActionProcessor {
                 self.interface.dataView!.hidden = !self.interface.dataView!.hidden
 //                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
                 if !self.interface.dataView!.hidden {
-                    self.interface.dataView!.text = self.getData()
+//                    self.interface.dataView!.text = self.getData()
+                    let string: String = self.getData()
+                    string.drawAtPoint(CGPoint(x: 500,y: 500), withAttributes: nil)
                     
                 }
 //                self.interface.dataView!.setTitle(_getInfo())
@@ -268,12 +270,12 @@ class RMSActionProcessor {
             }
             break
         case "zoomIn":
-            --self.world.activeCamera.camera!.xFov
-            --self.world.activeCamera.camera!.yFov //= SCNTechnique.
+            --self.gameView.pointOfView!.camera!.xFov
+            --self.gameView.pointOfView!.camera!.yFov //= SCNTechnique.
             return true
         case "zoomOut":
-            ++self.world.activeCamera.camera!.xFov
-            ++self.world.activeCamera.camera!.yFov
+            ++self.gameView.pointOfView!.camera!.xFov
+            ++self.gameView.pointOfView!.camera!.yFov
             return true
         default:
             RMXLog("'\(action)' not recognised")
@@ -309,7 +311,7 @@ class RMSActionProcessor {
     }
     func debug(_ yes: Bool = true){
         if yes {
-            NSLog(self.getData())
+            NSLog(self.getData() as String)
         }
     }
 

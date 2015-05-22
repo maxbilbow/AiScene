@@ -53,13 +53,13 @@ class RMXDPad : RMXInterface {
 
     private var _count: Int = 0
     override func printDataToScreen(data: String) {
-        super.printDataToScreen(data)
-//        self.dataView!.text = data
-//        ++_count
-//        if _count > 60 {
-//            self.dataView?.text = data
-//            _count = 0
-//        }
+//        super.printDataToScreen(data)
+        self.dataView!.text = data
+        ++_count
+        if _count > 60 {
+            self.dataView?.text = data
+            _count = 0
+        }
     }
 //    
 //    override var view: RMXView {

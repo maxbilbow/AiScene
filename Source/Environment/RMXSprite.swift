@@ -33,10 +33,11 @@ class RMXSprite : RMXSpriteManager {
         return self.children.isEmpty
     }
     
+    var usesCameraVectors = false
     
-    var cameraNode: RMXNode {
-        return self.cameras[self.cameraNumber]
-    }
+//    var cameraNode: RMXNode {
+//        return self.cameras[self.cameraNumber]
+//    }
     
     var color: GLKVector4 = GLKVector4Make(0.5,0.5,0.5,1)
     var scene: RMXScene? {
@@ -160,7 +161,7 @@ class RMXSprite : RMXSpriteManager {
     }
     
     var back: RMXVector {
-        return self.boundingBox.min * self.upVector * self.scale.z
+        return self.boundingBox.min * self.forwardVector * self.scale.z
     }
     
     var left: RMXVector {
@@ -347,7 +348,7 @@ class RMXSprite : RMXSpriteManager {
     #endif
     
     lazy var cameras: Array<RMXNode> = [ self.node ]
-    var cameraNumber: Int = 0
+//    var cameraNumber: Int = 0
 
 }
 
@@ -416,18 +417,10 @@ extension RMXSprite {
 //        self.addCamera()
         return self
     }
-    func getNextCamera() -> RMXNode {
-        self.cameraNumber = self.cameraNumber + 1 >= self.cameras.count ? 0 : self.cameraNumber + 1
-        return self.cameras[self.cameraNumber]
-    }
     
-    func getPreviousCamera() -> RMXNode {
-        self.cameraNumber = self.cameraNumber - 1 < 0 ? self.cameras.count - 1 : self.cameraNumber - 1
-        return self.cameras[self.cameraNumber]
-    }
-    func addCamera(cameraNode: RMXNode){
-        self.cameras.append(cameraNode)
-    }
+//    func addCamera(cameraNode: RMXNode){
+//        self.cameras.append(cameraNode)
+//    }
 
     func addCamera(position: SCNVector3? = nil) {
         var pos: SCNVector3

@@ -106,7 +106,7 @@ class RMSKeys : RMXInterface {
         RMXInterface.lookSpeed *= -1
         
         super.viewDidLoad(coder)
-        
+//        self.gameView
         
         
     }

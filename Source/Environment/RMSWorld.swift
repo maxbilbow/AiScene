@@ -49,7 +49,7 @@ class RMSWorld  {
         self.worldDidInitialize()
         
     }
-    
+
     var radius: RMFloatB {
         return RMSWorld.RADIUS
     }
@@ -63,9 +63,7 @@ class RMSWorld  {
     private let GRAVITY: RMFloatB = 0
     
     
-    var activeCamera: RMXNode {
-        return self.activeSprite.cameraNode
-    }
+    
 
     lazy var activeSprite: RMXSprite = RMXSprite.new(parent: self,
         node: RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .PLAYER, radius: 5, height: 5, color: NSColor.redColor()),
@@ -79,8 +77,6 @@ class RMSWorld  {
     ]
     
     var type: RMXWorldType = .DEFAULT
-
-    
     
     func worldDidInitialize() {
 

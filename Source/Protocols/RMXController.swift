@@ -12,5 +12,5 @@ import SceneKit
 protocol RMXControllerProtocol {
     var world: RMSWorld? { get }
     var activeSprite: RMXSprite? { get }
-    var activeCamera: SCNCamera? { get }
+    var activeCamera: RMXNode? { get }
 }

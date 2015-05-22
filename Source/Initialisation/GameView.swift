@@ -63,7 +63,7 @@ class GameView: SCNView  {
             //        self.observer.node.addChildNode(bum)
             
             head.position = SCNVector3Make(0, height * 0.9, 0)
-            world.activeSprite.addCamera(head)
+            world.activeSprite.cameras.append(head)
             self.pointOfView = head
             RMXAi.autoStablise(player)
             
@@ -120,11 +120,21 @@ class GameView: SCNView  {
             
             sunCam.camera = RMX.standardCamera()
             sunCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
-            world.activeSprite.addCamera(sunCam)
+            sun.cameras.append(sunCam)
 //            poppy.addCamera()
-            world.activeSprite.cameras += poppy.cameras //.addCamera(poppy.cameraNode)//.node)
-            world.activeSprite.cameras += earth.cameras
-            world.activeSprite.cameras += sun.cameras
+           
+            self.interface?.cameras += world.activeSprite.cameras
+            self.interface!.cameras += poppy.cameras //.addCamera(poppy.cameraNode)//.node)
+            self.interface!.cameras += earth.cameras
+            self.interface!.cameras += sun.cameras
+            
+            let topCam: RMXNode = RMXNode()
+            topCam.position.y = RMSWorld.RADIUS * 5
+            topCam.eulerAngles.x = -90 * PI_OVER_180
+            topCam.camera = RMX.standardCamera()
+            self.interface?.cameras.append(topCam)
+            
+            
         }
     }
 

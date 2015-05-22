@@ -43,7 +43,7 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         let scene = self.world!.scene
         
         // create and add a camera to the scene
-        let cameraNode = self.gameView!.world!.activeCamera
+        let cameraNode = self.interface!.activeCamera
 
         self.gameView?.pointOfView = cameraNode
         

@@ -85,17 +85,17 @@ extension RMXSprite {
     func lookAround(theta t: RMFloatB? = nil, phi p: RMFloatB? = nil, roll r: RMFloatB? = nil) {
         
         if let theta = t {
-            let axis = self.upVector
+            let axis = self.transform.up
             let speed = self.rotationSpeed * theta
             self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
         }
         if let phi = p {
-            let axis = self.leftVector
+            let axis = self.transform.left
             let speed = self.rotationSpeed * phi
             self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, speed), impulse: false)
         }
         if let roll = r {
-            let axis = self.forwardVector
+            let axis = self.transform.forward
             let speed = self.rotationSpeed * roll
             self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
             //            self.node.transform *= RMXMatrix4MakeRotation(speed * 0.0001, RMXVector3Make(0,0,1))
@@ -107,21 +107,25 @@ extension RMXSprite {
     }
     
     func accelerateForward(v: RMFloatB) {
-        let force = self.forwardVector * v * self.speed
-        //RMXLog("\n Force:\(force.print)")
-        self.node.physicsBody!.applyForce(force, impulse: false)
+        let vector = self.usesCameraVectors ? RMXVector3Make(0,0,-1) : self.forwardVector
+        let force = vector * v * self.speed
+        let point =  self.usesCameraVectors ? self.front : RMXVector3Zero
+        self.applyForce(force, atPosition: point)
     }
     
     func accelerateUp(v: RMFloatB) {
-        let force = self.upVector * v * self.speed
-        // RMXLog(force.print)
-        self.node.physicsBody!.applyForce(force, impulse: false)
+        let vector = self.usesCameraVectors ? RMXVector3Make(0,1,0) : self.upVector
+        let force = vector * v * self.speed
+        let point =  self.usesCameraVectors ? self.front : RMXVector3Zero
+        self.applyForce(force, atPosition: point)
     }
     
+    
     func accelerateLeft(v: RMFloatB) {
-        let force = self.leftVector * v * self.speed
-        //RMXLog(force.print)
-        self.node.physicsBody!.applyForce(force, impulse: false)
+        let vector = self.usesCameraVectors ? RMXVector3Make(-1,0,0) : self.leftVector
+        let force = vector * v * self.speed
+        let point =  self.usesCameraVectors ? self.front : RMXVector3Zero
+        self.applyForce(force, atPosition: point)
     }
     
     
@@ -404,21 +408,16 @@ extension RMXSprite {
 extension RMXSprite {
     
     var upVector: RMXVector {
-        let transform = self.transform
-        let v: RMXVector = transform.up
-        return v
+        return self.transform.up
     }
     
     var leftVector: RMXVector {
-        let transform = self.transform
-        let v: RMXVector = transform.left
-        return v
+
+        return self.transform.left
     }
     
     var forwardVector: RMXVector {
-        let transform = self.transform
-        let v: RMXVector = transform.forward
-        return v
+        return self.transform.forward
     }
 }
 
