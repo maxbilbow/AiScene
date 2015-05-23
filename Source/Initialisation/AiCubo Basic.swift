@@ -13,11 +13,12 @@ import SceneKit
 
 class AiCubo {
     enum Type { case TEST, EMPTY, SOCCER, POOL }
-    class func setUpWorld(interface: RMXInterface?, type: Type = .TEST){
+    class func setUpWorld(interface: RMXInterface?, type: Type = .EMPTY){
         if let interface = interface {
             if let world = interface.world {
                 switch type {
                 case .EMPTY:
+                    world.activeSprite = self.simpleSprite(interface, type: .PLAYER)
                     world.cameras += interface.activeSprite!.cameras
                     if world.hasGravity {
                         world.toggleGravity()
@@ -159,7 +160,10 @@ class AiCubo {
             topCam.eulerAngles.x = -90 * PI_OVER_180
             topCam.camera = RMX.standardCamera()
             world.cameras.append(topCam)
+            
+            world.scene.physicsWorld
         }
+        
     }
     
     

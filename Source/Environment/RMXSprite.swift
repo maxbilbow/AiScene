@@ -651,9 +651,9 @@ extension RMXSprite {
     }
     
     func prepareToJump() -> Bool{
-        if _jumpState != .GOING_UP {//&& self.isGrounded {
+        if _jumpState == .NOT_JUMPING && self.velocity.y == 0 {//&& self.isGrounded {
             _jumpState = .PREPARING_TO_JUMP
-            _maxSquat = self.height / 4
+            _maxSquat = 1 + self.height / 4
             return true
         } else {
             return false
@@ -664,9 +664,17 @@ extension RMXSprite {
         return fabs(self.weight * self.jumpStrength)// * self.squatLevel/_maxSquat)
     }
     func jump() {
-        if self.velocity.y <= 0 {
+//        NSLog(self.node.physicsBody!.velocity.print)
+        if self.position.y < self.height * 10 {
             self.applyForce(RMXVector3Make(0, _jumpStrength, 0), impulse: true)
         }
+//            _jumpState = .GOING_UP
+//        } else {
+//            _jumpState = .NOT_JUMPING
+//        }
+//        _jumpState = .NOT_JUMPING
+
+        
         
     }
 

@@ -69,7 +69,7 @@ class RMSActionProcessor {
         speed *= 150 * sprite.mass / 10
     }
     
-    func movement(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB], sprite: RMXSprite? = nil) -> Bool{
+    func action(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB], sprite: RMXSprite? = nil) -> Bool{
         let sprite = sprite ?? self.activeSprite
         switch action {
         case nil:
@@ -186,11 +186,11 @@ class RMSActionProcessor {
             }
             return true
         case "jump":
-            if speed == 0 {
+            if speed == 1 {
                 sprite.jump()
             }
             else {
-                sprite.prepareToJump()
+//                sprite.prepareToJump()
             }
             return true
         case "throw":
@@ -266,24 +266,29 @@ class RMSActionProcessor {
             }
         case "information":
             if speed == 1 {
-//                println(self.getData())
+                NSLog(self.getData())
                 self.interface.dataView!.hidden = !self.interface.dataView!.hidden
 //                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
                 if !self.interface.dataView!.hidden {
-//                    self.interface.dataView!.text = self.getData()
-                    let string: String = self.getData()
-                    string.drawAtPoint(CGPoint(x: 500,y: 500), withAttributes: nil)
-                    
+                    self.interface.dataView!.text = self.getData()
+//                    let string: String = self.getData()
+//                    string.drawAtPoint(CGPoint(x: 500,y: 500), withAttributes: nil)
+//                    
                 }
 //                self.interface.dataView!.setTitle(_getInfo())
             } 
         case "explode":
             if speed == 1 {
-                self.explode(force: self.boomTimer)
+                if let item = sprite.item {
+                    self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
+                } else {
+                    self.explode(force: self.boomTimer)
+                }
                 self.boomTimer = 1
             } else if speed == 0 && self.boomTimer == 1 {
                 self.boomTimer = 2
             }
+            
             return true
         case "zoomIn":
             --self.gameView.pointOfView!.camera!.xFov

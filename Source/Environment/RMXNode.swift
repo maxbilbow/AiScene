@@ -149,7 +149,7 @@ extension RMXSprite {
     }
     
     var weight: RMFloatB {
-        return RMFloatB(self.node.physicsBody!.mass) * self.world!.gravity.size * 2
+        return RMFloatB(self.node.physicsBody!.mass) * self.world!.gravity.size 
     }
     
     func distanceTo(point: RMXVector3 = RMXVector3Zero) -> RMFloatB{
@@ -162,7 +162,7 @@ extension RMXSprite {
     
     var velocity: RMXVector {
         if let body = self.physicsBody {
-            return body.velocity
+            return body.velocity //body.velocity
         } else {
             return RMXVector3Zero
         }

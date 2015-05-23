@@ -106,7 +106,8 @@ extension RMXDPad {
         return frame
     }
     
-    func jump(recogniser: UITapGestureRecognizer){
-        self.action(action: "jump", speed: 1)
+    func jump(recogniser: UILongPressGestureRecognizer){
+        let speed: RMFloatB = recogniser.state == .Ended ? 1 : 0
+        self.action(action: "jump", speed: speed)
     }
 }

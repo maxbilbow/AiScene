@@ -177,6 +177,6 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }
 
     func action(action: String = "reset",speed: RMFloatB = 1, point: [RMFloatB] = []) {
-        self.actionProcessor.movement( action,speed: speed, point: point)
+        self.actionProcessor.action( action,speed: speed, point: point)
     }
 }

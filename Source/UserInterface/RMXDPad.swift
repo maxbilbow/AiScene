@@ -54,12 +54,12 @@ class RMXDPad : RMXInterface {
     private var _count: Int = 0
     override func printDataToScreen(data: String) {
 //        super.printDataToScreen(data)
-        self.dataView!.text = data
-        ++_count
-        if _count > 60 {
-            self.dataView?.text = data
-            _count = 0
-        }
+////        self.dataView!.text = data
+//        ++_count
+//        if _count > 60 {
+//            self.dataView?.text = data
+//            _count = 0
+//        }
     }
 //    
 //    override var view: RMXView {
@@ -177,14 +177,18 @@ class RMXDPad : RMXInterface {
         self.jumpButton = UIButton(frame: self.jumpButtonCenter)
         self.jumpButton?.setImage(RMXModels.getImage(), forState: UIControlState.Normal)
 //        self.jumpButton?.setNeedsDisplay()
-        self.jumpButton?.addTarget(self, action: Selector("jump:"), forControlEvents:UIControlEvents.TouchDown)
+        let jump = UILongPressGestureRecognizer(target: self, action: "jump:")
+        jump.minimumPressDuration = 0.0
+        self.jumpButton?.addGestureRecognizer(jump)
         self.jumpButton!.enabled = true
         self.gameView.addSubview(self.jumpButton!)
         
         self.boomButton = UIButton(frame: self.boomButtonCenter)
         self.boomButton?.setImage(RMXModels.getImage(), forState: UIControlState.Normal)
 //        self.boomButton?.setNeedsDisplay()
-        self.boomButton?.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "explode:"))
+        let explode = UILongPressGestureRecognizer(target: self, action: "explode:")
+        explode.minimumPressDuration = 0.0
+        self.boomButton?.addGestureRecognizer(explode)
         self.boomButton!.enabled = true
         self.gameView.addSubview(self.boomButton!)
         

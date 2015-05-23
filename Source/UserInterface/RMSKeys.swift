@@ -77,7 +77,7 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: MOVE_DOWN, characters: "q", speed: MOVE_SPEED),
     RMKey(self, action: ROLL_LEFT, characters: "z", speed: LOOK_SPEED),
     RMKey(self, action: ROLL_RIGHT, characters: "x", speed: LOOK_SPEED),
-    RMKey(self, action: JUMP, characters: " "),
+    RMKey(self, action: JUMP, characters: " ", speed: ON_KEY_UP),
     RMKey(self, action: ROTATE, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
     
     //Interactions

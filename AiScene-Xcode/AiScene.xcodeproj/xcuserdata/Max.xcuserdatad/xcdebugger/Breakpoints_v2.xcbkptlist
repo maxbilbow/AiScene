@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "169"
             endingLineNumber = "169"
-            landmarkName = "movement(_:speed:point:)"
+            landmarkName = "action(_:speed:point:sprite:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,13 +26,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSActionProcessor.swift"
-            timestampString = "453761428.914874"
+            timestampString = "454106073.48528"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
-            landmarkName = "manipulate(action:sprite:object:speed:point:)"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
+            landmarkName = "animate()"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Environment/RMXNode.swift"
+            timestampString = "454107357.330695"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "RMXSprite"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

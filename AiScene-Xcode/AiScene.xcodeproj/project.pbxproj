@@ -44,7 +44,6 @@
 		6C73A8CB1B0A6BE700187A61 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
 		6C73A8CE1B0A6C7C00187A61 /* RMSPhysicsBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */; };
 		6C73A8CF1B0A6C8C00187A61 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
-		6C73A8D01B0A6C8F00187A61 /* RMXSprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RMXSprite.swift */; };
 		6C73A8D11B0A6C9600187A61 /* RMSEquations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C11AE544C000E71811 /* RMSEquations.swift */; };
 		6C73A8D21B0A6C9600187A61 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C21AE544C000E71811 /* RMSMaths.swift */; };
 		6C73A8D31B0A6C9600187A61 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C31AE544C000E71811 /* RMX.swift */; };
@@ -789,7 +788,6 @@
 				6C73A8A71B0A66E300187A61 /* GameScene.swift in Sources */,
 				6C73A8CF1B0A6C8C00187A61 /* RMXNode.swift in Sources */,
 				6C73A8E71B0A75DF00187A61 /* RMXScene.swift in Sources */,
-				6C73A8D01B0A6C8F00187A61 /* RMXSprite.swift in Sources */,
 				6C73A8D21B0A6C9600187A61 /* RMSMaths.swift in Sources */,
 				6C73A8CA1B0A6BE400187A61 /* RMSWorld.swift in Sources */,
 				6C73A8C51B0A6BB600187A61 /* RMXDPad.swift in Sources */,
