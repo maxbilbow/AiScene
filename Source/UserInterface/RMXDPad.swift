@@ -188,6 +188,8 @@ class RMXDPad : RMXInterface {
         self.boomButton!.enabled = true
         self.gameView.addSubview(self.boomButton!)
         
+        
+        self.gameView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: "zoom:"))
         // add a tap gesture recognizer
         self.gameView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "grabOrThrow:"))
         rightView.addGestureRecognizer(UIPanGestureRecognizer(target: self,action: "handleOrientation:"))

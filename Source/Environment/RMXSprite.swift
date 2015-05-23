@@ -33,7 +33,7 @@ class RMXSprite : RMXSpriteManager {
         return self.children.isEmpty
     }
     
-    var usesCameraVectors = false
+    var usesWorldCoordinates = false
     
 //    var cameraNode: RMXNode {
 //        return self.cameras[self.cameraNumber]
@@ -187,11 +187,11 @@ class RMXSprite : RMXSpriteManager {
     
     
     var isObserver: Bool {
-        return self == self.world!.observer
+        return self == self.world!.observer!
     }
     
     var isActiveSprite: Bool {
-        return self == self.world!.activeSprite
+        return self == self.world!.activeSprite!
     }
     
     
@@ -257,7 +257,7 @@ class RMXSprite : RMXSpriteManager {
         if type == .AI && !sprite.isUnique {
             RMXAi.addRandomMovement(to: sprite)
         } else {
-            sprite.addCamera()
+            sprite.addCameras()
         }
         return sprite
     }
@@ -347,7 +347,7 @@ class RMXSprite : RMXSpriteManager {
     }
     #endif
     
-    lazy var cameras: Array<RMXNode> = [ self.node ]
+    var cameras: Array<RMXNode> = Array<RMXNode>()
 //    var cameraNumber: Int = 0
 
 }
@@ -422,38 +422,31 @@ extension RMXSprite {
 //        self.cameras.append(cameraNode)
 //    }
 
-    func addCamera(position: SCNVector3? = nil) {
+    internal func addCameras() {
         var pos: SCNVector3
-        if let pos = position {
-            let cameraNode = RMXNode()
-            
-            self.cameras.append(cameraNode)
-            self.node.addChildNode(cameraNode)
-            cameraNode.position = pos
-            cameraNode.camera = RMX.standardCamera()
-
-        } else if let cam = self.node.camera {
-            RMXLog("Camera Already Setup")
-            return
-        } else {
+        if self.cameras.count == 0 {
             self.node.camera = RMX.standardCamera()
-            let yScale: RMFloatB = self.type == .BACKGROUND ? 2 : 3
+            
+            let yScale: RMFloatB = self.type == .BACKGROUND ? 1 : 3
             let zScale: RMFloatB = self.type == .BACKGROUND ? 2 : 2 * 5
             pos = SCNVector3Make(0,self.height * yScale, self.radius * zScale)
             
             let followNode = RMXNode()
-            followNode.camera?.technique
+//            followNode.camera?.technique
             self.cameras.append(followNode)
             self.node.addChildNode(followNode)
-            followNode.position = pos
-            if zScale > 1 { followNode.eulerAngles.x = -5 * PI_OVER_180 }
+            followNode.position.y = pos.y
+//            followNode.pivot.m41 = pos.x
+//            followNode.pivot.m42 = pos.y
+            followNode.pivot.m43 = -pos.z
+            if zScale > 1 { followNode.eulerAngles.x = -15 * PI_OVER_180 }
             followNode.camera = RMX.standardCamera()
+        } else {
+            fatalError("cameras already set up for \(self.name)")
         }
         
     }
     
-    
-   
 }
 
 
@@ -690,13 +683,15 @@ extension RMXSprite {
         return nil
     }
     
-    func headTo(object: RMXSprite, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
-        let dist = RMXVector3Distance(self.position, object.position)
-        if  dist >= fabs(object.reach + self.reach) {
+    func headTo(object: RMXSprite?, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
+        let target = object?.position ?? self.position * 10
+        let dist = RMXVector3Distance(self.position, target)
+        let reach = object?.reach ?? 0
+        if  dist >= fabs(reach + self.reach) {
             #if OPENGL_OSX
                 speed *= 0.5
             #endif
-            let direction = RMXVector3Normalize(object.position - self.position)
+            let direction = RMXVector3Normalize(target - self.position)
 
             let front: RMXVector = self.boundingBox.max * self.forwardVector * self.scale.z // self.boundingBox.max * self.radius
             self.applyForce(direction * speed, atPosition: self.forwardVector * (self.radius + 1),  impulse: false)

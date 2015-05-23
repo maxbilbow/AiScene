@@ -43,7 +43,7 @@ class RMSActionProcessor {
     }
     //let keys: RMXController = RMXController()
     var activeSprite: RMXSprite {
-        return self.world.observer
+        return self.world.activeSprite!
     }
     var world: RMSWorld
     
@@ -61,151 +61,157 @@ class RMSActionProcessor {
     private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
     private var _panThreshold: RMFloatB = 70
     
-    func moveSpeed(inout speed: RMFloatB) {
-        speed *= 1000 * self.activeSprite.mass / 10
+    func moveSpeed(inout speed: RMFloatB, sprite: RMXSprite) {
+        speed *= 1000 * sprite.mass / 10
     }
     
-    func turnSpeed(inout speed: RMFloatB) {
-        speed *= 150 * self.activeSprite.mass / 10
+    func turnSpeed(inout speed: RMFloatB, sprite: RMXSprite) {
+        speed *= 150 * sprite.mass / 10
     }
     
-    func movement(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB]) -> Bool{
-        
+    func movement(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB], sprite: RMXSprite? = nil) -> Bool{
+        let sprite = sprite ?? self.activeSprite
         switch action {
         case nil:
             RMXLog("ACTION IS NIL")
             return true
         case "move", "Move", "MOVE":
             if point.count == 3 {
-                self.moveSpeed(&speed)
-                self.activeSprite.accelerateForward(point[2] * speed)
-                self.activeSprite.accelerateLeft(point[0] * speed)
-                self.activeSprite.accelerateUp(point[1] * speed)
-                self.activeSprite.acceleration = RMXVector3Make(point[0] * speed, point[1] * speed, point[2] * speed)
+                self.moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateForward(point[2] * speed)
+                sprite.accelerateLeft(point[0] * speed)
+                sprite.accelerateUp(point[1] * speed)
+                sprite.acceleration = RMXVector3Make(point[0] * speed, point[1] * speed, point[2] * speed)
             }
             return true
         case "Stop", "stop", "STOP":
-            self.activeSprite.stop()
+            sprite.stop()
             _movement = (0,0,0)
             return true
         case "look", "Look", "LOOK":
-            self.turnSpeed(&speed)
+            
             if point.count == 2 {
-                self.activeSprite.lookAround(theta: point[0] * -speed,phi: point[1] * speed)
+                if sprite.usesWorldCoordinates {
+//                    self.world.activeCamera!.transform = SCNMatrix4Rotate(self.world.activeCamera!.transform, point[0] * -PI_OVER_180, 0, 1, 0)
+                    self.world.activeCamera?.eulerAngles.y -= point[0] * 0.3 * -speed * PI_OVER_180
+                } else {
+                    self.turnSpeed(&speed, sprite: sprite)
+                    sprite.lookAround(theta: point[0] * -speed,phi: point[1] * speed)
+                }
             }
             return true
         case "roll", "Roll", "ROLL", "rollLeft":
-            self.turnSpeed(&speed)
-            self.activeSprite.lookAround(roll: speed)
+            self.turnSpeed(&speed,sprite: sprite)
+            sprite.lookAround(roll: speed)
             return true
         case "rollRight":
-            self.turnSpeed(&speed)
-            self.activeSprite.lookAround(roll: -speed)
+            self.turnSpeed(&speed, sprite: sprite)
+            sprite.lookAround(roll: -speed)
             return true
         case "pitch", "Pitch", "PITCH":
-            self.turnSpeed(&speed)
-            self.activeSprite.lookAround(phi: speed)
+            self.turnSpeed(&speed, sprite: sprite)
+            sprite.lookAround(phi: speed)
             return true
         case "yaw", "Yaw", "YAW":
-            self.turnSpeed(&speed)
-            self.activeSprite.lookAround(theta: speed)
+            self.turnSpeed(&speed, sprite: sprite)
+            sprite.lookAround(theta: speed)
             return true
         case "setRoll":
-            self.activeSprite.setAngle(roll: speed)
+            sprite.setAngle(roll: speed)
             break
         case "setPitch":
-            self.activeSprite.setAngle(pitch: speed)
+            sprite.setAngle(pitch: speed)
             break
         case "setYaw":
-            self.activeSprite.setAngle(yaw: speed)
+            sprite.setAngle(yaw: speed)
             break
         case "rollLeft":
-            self.activeSprite.lookAround(roll: -speed)
+            sprite.lookAround(roll: -speed)
             return true
         case "rollRight":
-            self.activeSprite.lookAround(roll: speed)
+            sprite.lookAround(roll: speed)
             return true
         case "forward":
             if speed == 0 {
-                self.activeSprite.stop()
+                sprite.stop()
             }
             else {
-                moveSpeed(&speed)
-                self.activeSprite.accelerateForward(speed)
+                moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateForward(speed)
             }
             return true
         case "back":
             if speed == 0 {
-                self.activeSprite.stop()
+                sprite.stop()
             }
             else {
-                moveSpeed(&speed)
-                self.activeSprite.accelerateForward(-speed)
+                moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateForward(-speed)
             }
             return true
         case "left":
             if speed == 0 {
-                self.activeSprite.stop()
+                sprite.stop()
             }
             else {
-                moveSpeed(&speed)
-                self.activeSprite.accelerateLeft(speed)
+                moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateLeft(speed)
             }
             return true
         case "right":
             if speed == 0 {
-                self.activeSprite.stop()
+                sprite.stop()
             }
             else {
-                moveSpeed(&speed)
-                self.activeSprite.accelerateLeft(-speed)
+                moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateLeft(-speed)
             }
             return true
         case "up":
             if speed == 0 {
-                self.activeSprite.stop()
+                sprite.stop()
             }
             else {
-                moveSpeed(&speed)
-                self.activeSprite.accelerateUp(speed)
+                moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateUp(speed)
             }
             return true
         case "down":
             if speed == 0 {
-                self.activeSprite.stop()
+                sprite.stop()
             }
             else {
-                moveSpeed(&speed)
-                self.activeSprite.accelerateUp(-speed)
+                moveSpeed(&speed, sprite: sprite)
+                sprite.accelerateUp(-speed)
             }
             return true
         case "jump":
             if speed == 0 {
-                self.activeSprite.jump()
+                sprite.jump()
             }
             else {
-                self.activeSprite.prepareToJump()
+                sprite.prepareToJump()
             }
             return true
         case "throw":
             if speed != 0 {//depreciated perhaps
-                if self.activeSprite.hasItem {
-                    RMXLog("Throw: \(self.activeSprite.item?.name) with speed: \(speed)")
-                    self.manipulate(action: "throw", sprite: self.activeSprite, object: self.activeSprite.item, speed: speed)
+                if sprite.hasItem {
+                    RMXLog("Throw: \(sprite.item?.name) with speed: \(speed)")
+                    self.manipulate(action: "throw", sprite: sprite, object: sprite.item, speed: speed)
                 }
             }
             return true
         case "enlargeItem":
-            if self.activeSprite.hasItem {
-                let size = (self.activeSprite.item?.radius)! * speed
+            if sprite.hasItem {
+                let size = (sprite.item?.radius)! * speed
                 if size > 0.5 && size < 15 {
-                    self.activeSprite.item?.setRadius(size)
-                    self.activeSprite.item?.node.physicsBody!.mass *= RMFloat(size)
+                    sprite.item?.setRadius(size)
+                    sprite.item?.node.physicsBody!.mass *= RMFloat(size)
                 }
             }
             return true
         case "extendArm":
-            if self.activeSprite.hasItem {
+            if sprite.hasItem {
                 if self.extendArm != speed {
                     self.extendArm = speed * 5
                 }
@@ -213,36 +219,41 @@ class RMSActionProcessor {
             return true
         case "toggleAllGravity":
             if speed == 1 { self.world.toggleGravity() }
-            break
+            return true
         case "toggleGravity":
-            self.activeSprite.toggleGravity()
-            break
+            sprite.toggleGravity()
+            return true
         case "lockMouse":
             if speed == 1 { self.isMouseLocked = !self.isMouseLocked }
-            break
+            return true
         case "switchEnvitonment":
             if speed == 1 { self.world.environments.plusOne() }
-            break
+            return true
         case "toggleFog":
             RMX.toggleFog()
-            break
+            return true
         case "nextCamera":
             if speed == 1 {
-                let cameraNode = self.interface.getNextCamera()
+                let cameraNode = self.world.getNextCamera()
                 self.gameView.pointOfView = cameraNode
+                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).name == sprite.name {
+                    sprite.usesWorldCoordinates = false
+                } else {
+                    sprite.usesWorldCoordinates = true
+                }
             }
-            break
+            return true
         case "previousCamera":
             if speed == 1 {
-                let cameraNode = self.interface.getPreviousCamera()
+                let cameraNode = self.world.getPreviousCamera()
                 self.gameView.pointOfView = cameraNode
             }
-            break
+            return true
         case "reset":
             if speed == 1 {
-                self.activeSprite.setPosition(position: RMXVector3Make(0, 50, 50))
+                sprite.setPosition(position: RMXVector3Make(0, 50, 50))
             }
-            break
+            return true
         case "toggleAI":
             if speed == 1 {
                 self.world.aiOn = !self.world.aiOn
@@ -268,7 +279,7 @@ class RMSActionProcessor {
             } else if speed == 0 && self.boomTimer == 1 {
                 self.boomTimer = 2
             }
-            break
+            return true
         case "zoomIn":
             --self.gameView.pointOfView!.camera!.xFov
             --self.gameView.pointOfView!.camera!.yFov //= SCNTechnique.
@@ -277,6 +288,19 @@ class RMSActionProcessor {
             ++self.gameView.pointOfView!.camera!.xFov
             ++self.gameView.pointOfView!.camera!.yFov
             return true
+        case "zoom":
+            if let cameraNode = self.gameView.pointOfView {
+                if cameraNode.camera!.xFov + Double(speed) > 100 || cameraNode.camera!.xFov + Double(speed) < 5 {
+//                    cameraNode.transform.m43 += speed
+                    return false
+                } else {
+                    cameraNode.camera!.xFov += Double(speed)
+                    cameraNode.camera!.yFov += Double(speed)
+//                    NSLog(self.gameView.pointOfView!.camera!.yFov.toData())
+                    return true
+                }
+            }
+            return false
         default:
             RMXLog("'\(action)' not recognised")
         }

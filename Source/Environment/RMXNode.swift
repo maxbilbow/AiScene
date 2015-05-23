@@ -107,24 +107,24 @@ extension RMXSprite {
     }
     
     func accelerateForward(v: RMFloatB) {
-        let vector = self.usesCameraVectors ? RMXVector3Make(0,0,-1) : self.forwardVector
+        let vector = self.usesWorldCoordinates ? self.world!.forwardVector : self.forwardVector
         let force = vector * v * self.speed
-        let point =  self.usesCameraVectors ? self.front : RMXVector3Zero
+        let point =  self.usesWorldCoordinates ? self.front : RMXVector3Zero
         self.applyForce(force, atPosition: point)
     }
     
     func accelerateUp(v: RMFloatB) {
-        let vector = self.usesCameraVectors ? RMXVector3Make(0,1,0) : self.upVector
+        let vector = self.usesWorldCoordinates ? self.world!.upVector : self.upVector
         let force = vector * v * self.speed
-        let point =  self.usesCameraVectors ? self.front : RMXVector3Zero
+        let point =  self.usesWorldCoordinates ? self.front : RMXVector3Zero
         self.applyForce(force, atPosition: point)
     }
     
     
     func accelerateLeft(v: RMFloatB) {
-        let vector = self.usesCameraVectors ? RMXVector3Make(-1,0,0) : self.leftVector
+        let vector = self.usesWorldCoordinates ? self.world!.leftVector : self.leftVector
         let force = vector * v * self.speed
-        let point =  self.usesCameraVectors ? self.front : RMXVector3Zero
+        let point =  self.usesWorldCoordinates ? self.front : RMXVector3Zero
         self.applyForce(force, atPosition: point)
     }
     

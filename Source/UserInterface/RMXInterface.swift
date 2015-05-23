@@ -62,7 +62,10 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let LEFT_CLICK: String = "Mouse 1"
     static let RIGHT_CLICK: String = "Mouse 2"
     
-    var cameras: Array<RMXNode> = Array<RMXNode>()
+
+    var activeCamera: RMXNode? {
+        return self.world?.activeCamera
+    }
     
     lazy var actionProcessor: RMSActionProcessor = RMSActionProcessor(world: self.world!, gameView: self.gameView)
     private let _isDebugging = false
@@ -89,32 +92,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
 //        return self.world?.activeCamera.camera
 //    }
 //    
-    var activeCamera: RMXNode? {
-        return self.cameras[self.cameraNumber]
-    }
-    
-    func getNextCamera() -> RMXNode {
-        self.cameraNumber = self.cameraNumber + 1 >= self.cameras.count ? 0 : self.cameraNumber + 1
-        let cameraNode = self.cameras[self.cameraNumber]
-        self.activeSprite?.usesCameraVectors = self.activeSprite?.cameras.filter({ (node: SCNNode) -> Bool in
-            return node === cameraNode
-        }).count == 0
-//        NSLog("CAM===\(self.activeSprite?.usesCameraVectors)")
-        return cameraNode
-    }
-    
-    func getPreviousCamera() -> RMXNode {
-        self.cameraNumber = self.cameraNumber - 1 < 0 ? self.cameras.count - 1 : self.cameraNumber - 1
-        let cameraNode = self.cameras[self.cameraNumber]
-        self.activeSprite?.usesCameraVectors = self.activeSprite?.cameras.filter({ (node: SCNNode) -> Bool in
-            return node === cameraNode
-        }).count == 0
-        //        NSLog("CAM===\(self.activeSprite?.usesCameraVectors)")
-        return cameraNode
-    }
-    
-    var cameraNumber: Int = 0
-    
+        
     init(gvc: GameViewController, scene: RMXScene? = nil){
         super.init()
         self.initialize(gvc)
@@ -180,6 +158,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     
     func printDataToScreen(data: String){
 //        RMXPrintToScreen(string: data, self.dataView)
+        NSLog(data)
     }
     
     func update(){

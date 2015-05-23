@@ -11,6 +11,11 @@ import GLKit
 
     import SceneKit
 
+#if iOS
+    typealias RMColor = UIColor
+    #elseif OSX
+    typealias RMColor = NSColor
+    #endif
 
 class RMXArt {
     static let colorBronzeDiff: [Float]  = [ 0.8, 0.6, 0.0, 1.0 ]
@@ -179,12 +184,24 @@ class RMXArt {
     class func randomColor() -> GLKVector4 {
     //float rCol[4];
         var rCol = GLKVector4Make(
-            Float(random() % 800)/500,
-            Float(random() % 800)/500,
-            Float(random() % 800)/500,
+            Float(random() % 10)/10,
+            Float(random() % 10)/10,
+            Float(random() % 10)/10,
         1)
 
-    return rCol
+        return rCol
+    }
+    
+    class func randomNSColor() -> RMColor {
+            //float rCol[4];
+        var rCol = RMColor(
+            red: RMFloat(random() % 10)/10,
+            green: RMFloat(random() % 10)/10,
+            blue: RMFloat(random() % 10)/10,
+            alpha: 1.0
+           )
+        
+        return rCol
     }
    
 }

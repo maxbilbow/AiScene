@@ -24,6 +24,8 @@
 		6C4A28811B03ACCC001C3F5B /* texture_numbers.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A28711B03ACCC001C3F5B /* texture_numbers.png */; };
 		6C4A28841B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
 		6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
+		6C6DD1A61B10C7F300107FAD /* AiCubo Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */; };
+		6C6DD1A71B10CA8800107FAD /* AiCubo Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */; };
 		6C73A8A31B0A66E300187A61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8A21B0A66E300187A61 /* AppDelegate.swift */; };
 		6C73A8A51B0A66E300187A61 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6C73A8A41B0A66E300187A61 /* GameScene.sks */; };
 		6C73A8A71B0A66E300187A61 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8A61B0A66E300187A61 /* GameScene.swift */; };
@@ -164,6 +166,7 @@
 		6C4A28701B03ACCC001C3F5B /* texture_poppy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_poppy.png; sourceTree = "<group>"; };
 		6C4A28711B03ACCC001C3F5B /* texture_numbers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_numbers.png; sourceTree = "<group>"; };
 		6C4A28831B049FF9001C3F5B /* Observers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observers.swift; sourceTree = "<group>"; };
+		6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AiCubo Basic.swift"; sourceTree = "<group>"; };
 		6C73A89E1B0A66E300187A61 /* AiSprite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiSprite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C73A8A11B0A66E300187A61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C73A8A21B0A66E300187A61 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -478,6 +481,7 @@
 				6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */,
 				6C9299C91AE544C000E71811 /* GameView.swift */,
 				6C9299CA1AE544C000E71811 /* GameViewController.swift */,
+				6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */,
 				6C9299CB1AE544C000E71811 /* RMXInitialize.swift */,
 				6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */,
 			);
@@ -842,6 +846,7 @@
 				6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */,
 				6C9299DC1AE544C000E71811 /* RMXClock.swift in Sources */,
 				6C9299E71AE544C000E71811 /* RMXInitialize.swift in Sources */,
+				6C6DD1A61B10C7F300107FAD /* AiCubo Basic.swift in Sources */,
 				6C73A8DF1B0A6E8000187A61 /* RMXModels.swift in Sources */,
 				6C9299EC1AE544C000E71811 /* RMSActionProcessor.swift in Sources */,
 				6C9299EF1AE544C000E71811 /* RMXInterface.swift in Sources */,
@@ -892,6 +897,7 @@
 				6C929A321AE54DCA00E71811 /* RMSMaths.swift in Sources */,
 				6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */,
 				6C929A281AE5499D00E71811 /* RMXSprite.swift in Sources */,
+				6C6DD1A71B10CA8800107FAD /* AiCubo Basic.swift in Sources */,
 				6C929A261AE5499D00E71811 /* RMXClock.swift in Sources */,
 				6C929A291AE549A300E71811 /* RMXController.swift in Sources */,
 				6C929A341AE54DCA00E71811 /* RMXDebugger.swift in Sources */,

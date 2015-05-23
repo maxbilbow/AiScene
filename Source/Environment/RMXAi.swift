@@ -16,7 +16,10 @@ class RMXAi {
             if self.autoStabilise && sprite.world!.hasGravity {
                 //var bottom = sprite.upVector * sprite.boundingBox.min.y * sprite.scale
 //                bottom.y *= sprite.height
-                let force = sprite.world!.gravity * sprite.mass
+                var force = sprite.world!.gravity * sprite.mass
+                if sprite.usesWorldCoordinates {
+//                    force *= RMX.gravity * -1
+                }
                 sprite.physicsBody?.applyForce(force, atPosition: sprite.bottom, impulse: false)
             }
         }
@@ -141,7 +144,7 @@ class RMXAi {
                     })
                 } else {
                     //                    target = self.randomSprite(world)
-                    sprite.headTo(world.activeSprite, speed: 50)
+                    sprite.headTo(world.activeSprite!, speed: 50)
                 }
                 
                 if timePassed > timeLimit {

@@ -10,7 +10,9 @@ import Foundation
 import GLKit
 
 #if iOS
-
+    extension RMX {
+        static var gravity: RMXVector3 = RMXVector3Make(0,-1,0)
+    }
 extension RMXDPad {
     func accelerometer() {
 //        if true { return }
@@ -37,10 +39,18 @@ extension RMXDPad {
         if let deviceMotion = self.motionManager.deviceMotion {
             tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
             //tilt("pitch", RMFloatB(self.motionManager.deviceMotion.gravity.z))
-//            tilt("yaw", RMFloatB(self.motionManager.deviceMotion.gravity.x))
+//            tilt("yaw", RMFloatB(self.motionManager.deviceMotion.gravity.x)
+            func updateGravity() {
+                let g = deviceMotion.gravity
+                RMX.gravity.x = RMFloatB(g.x)
+                RMX.gravity.y = RMFloatB(g.y)
+                RMX.gravity.z = RMFloatB(g.z)
+            }
+//            updateGravity()
             if let attitude = deviceMotion.attitude {
                 //self.action(action: "setRoll",speed: RMFloatB(attitude.roll))
                 //self.action(action: "setPitch",speed: RMFloatB(-attitude.pitch))
+                
             }
             if !_testing { return }
             var x,y,z, q, r, s, t, u, v,a,b,c,e,f,g,h,i,j,k,l,m:Double

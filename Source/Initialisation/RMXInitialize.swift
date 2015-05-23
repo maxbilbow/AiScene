@@ -33,12 +33,12 @@ extension RMX {
     
     
     
-    static func makePoppy(#world: RMSWorld) -> RMXSprite{
+    static func makePoppy(#world: RMSWorld, master: RMXSprite) -> RMXSprite{
         let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.DOG.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true).asPlayerOrAI()
         
         poppy.setPosition(position: RMXVector3Make(100,10,-50))
         
-        RMXAi.playFetch(poppy, master: world.activeSprite)
+        RMXAi.playFetch(poppy, master: master)
         RMXAi.autoStablise(poppy)
         
         poppy.setColor(GLKVector4Make(0.1,0.1,0.1,1.0))

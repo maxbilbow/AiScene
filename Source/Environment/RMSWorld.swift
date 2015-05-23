@@ -26,6 +26,33 @@ class RMSWorld  {
     static let EARTH_GRAVITY = CGVector(dx: 0, dy:-9.8)
     #endif
     
+    var cameras: Array<RMXNode> = Array<RMXNode>()
+    
+    var activeCamera: RMXNode? {
+        return self.cameras[self.cameraNumber]
+    }
+    
+    func getNextCamera() -> RMXNode {
+        self.cameraNumber = self.cameraNumber + 1 >= self.cameras.count ? 0 : self.cameraNumber + 1
+        let cameraNode = self.cameras[self.cameraNumber]
+//        self.activeSprite?.usesWorldCoordinates = self.activeSprite?.cameras.filter({ (node: SCNNode) -> Bool in
+//            return node === cameraNode
+//        }).count == 0
+
+        return cameraNode
+    }
+    
+    func getPreviousCamera() -> RMXNode {
+        self.cameraNumber = self.cameraNumber - 1 < 0 ? self.cameras.count - 1 : self.cameraNumber - 1
+        let cameraNode = self.cameras[self.cameraNumber]
+//        self.activeSprite?.usesWorldCoordinates = self.activeSprite?.cameras.filter({ (node: SCNNode) -> Bool in
+//            return node === cameraNode
+//        }).count == 0
+        return cameraNode
+    }
+    
+    var cameraNumber: Int = 0
+
     
     var aiOn = false
     lazy var environments: ChildSpriteArray = ChildSpriteArray(parent: self)
@@ -65,16 +92,15 @@ class RMSWorld  {
     
     
 
-    lazy var activeSprite: RMXSprite = RMXSprite.new(parent: self,
-        node: RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .PLAYER, radius: 5, height: 5, color: NSColor.redColor()),
-        type: .PLAYER, isUnique: true).asPlayerOrAI() ///TODO: SetNode must remove replacing node (if told / default?)
-
+    var activeSprite: RMXSprite?
     
-    lazy var observer: RMXSprite = self.activeSprite
+    var observer: RMXSprite? {
+        return self.activeSprite ?? self.children.first
+    }
     
-    lazy var players: [String: RMXSprite] = [
-        self.activeSprite.name: self.activeSprite
-    ]
+//    lazy var players: [String: RMXSprite] = [
+//        self.activeSprite.name: self.activeSprite
+//    ]
     
     var type: RMXWorldType = .DEFAULT
     
@@ -83,7 +109,7 @@ class RMSWorld  {
         //DEFAULT
         self.environments.setType(.DEFAULT)
         
-        self.insertChildren(children: self.players)
+//        self.insertChildren(children: self.players)
 
         self.setWorldType()
 
@@ -218,4 +244,20 @@ extension RMSWorld {
         }
         RMXLog("aiOn: \(self.aiOn)")
     }
+}
+
+extension RMSWorld {
+
+    var forwardVector: RMXVector {
+        return self.activeCamera?.worldTransform.forward ?? RMXVector3Make(0,0,-1)
+    }
+    
+    var upVector: RMXVector {
+        return self.activeCamera?.worldTransform.up ?? RMXVector3Make(0,1,0)
+    }
+    
+    var leftVector: RMXVector {
+        return self.activeCamera?.worldTransform.left ?? RMXVector3Make(-1,0,0)
+    }
+    
 }
