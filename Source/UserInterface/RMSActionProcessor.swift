@@ -247,6 +247,11 @@ class RMSActionProcessor {
             if speed == 1 {
                 let cameraNode = self.world.getPreviousCamera()
                 self.gameView.pointOfView = cameraNode
+                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).name == sprite.name {
+                    sprite.usesWorldCoordinates = false
+                } else {
+                    sprite.usesWorldCoordinates = true
+                }
             }
             return true
         case "reset":

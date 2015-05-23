@@ -81,8 +81,9 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         self.gameView!.backgroundColor = NSColor.blackColor()
 
 
-        
+        #if OSX
 //        RMX.setKeyboard(self.interface as! RMSKeys, type: .French)
+        #endif
     }
     
     func somethingHappened(thing: AnyObject){
