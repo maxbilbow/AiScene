@@ -161,6 +161,41 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         NSLog(data)
     }
     
+    func processHit(point p: CGPoint) {
+        if let hitResults = self.gameView.hitTest(p, options: nil) {
+            // check that we clicked on at least one object
+            if hitResults.count > 0 {
+                // retrieved the first clicked object
+                let result: AnyObject! = hitResults[0]
+//                NSLog(result.)
+                
+                self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000)
+                
+                // get its material
+                let material = result.node!.geometry!.firstMaterial!
+                
+                // highlight it
+                SCNTransaction.begin()
+                SCNTransaction.setAnimationDuration(0.5)
+                
+                // on completion - unhighlight
+                SCNTransaction.setCompletionBlock {
+                    SCNTransaction.begin()
+                    SCNTransaction.setAnimationDuration(0.5)
+                    
+                    material.emission.contents = RMColor.blackColor()
+                    
+                    SCNTransaction.commit()
+                }
+                
+                material.emission.contents = RMColor.redColor()
+                
+                SCNTransaction.commit()
+            }
+        }
+
+    }
+    
     func update(){
         self.actionProcessor.animate()
         self.world?.animate()

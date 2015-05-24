@@ -386,6 +386,8 @@ class RMSActionProcessor {
 //                        direction = object?.presentationNode().position
                         if let tgt:RMXNode = object?.node {
                             sprite.throwItem(strength: speed, atNode: tgt)
+                        } else if let point = position {
+                            sprite.throwItem(strength: speed, atPoint: point)
                         } else {
                             sprite.throwItem(strength: speed)
                         }

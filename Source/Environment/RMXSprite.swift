@@ -498,11 +498,13 @@ extension RMXSprite {
 }
 extension RMXSprite {
     
-    func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
+    func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
         
         if let itemInHand = self.item {
             var direction: RMXVector = self.forwardVector
-            if targetNode != nil {
+            if let point = point {
+                direction = (point - itemInHand.position).normalised
+            } else if targetNode != nil {
                 let target = RMXSprite.rootNode(targetNode!, rootNode: self.scene!.rootNode)
                 if target.physicsBody?.type != .Static && self.node != target && itemInHand.node != target {
                     direction = (target.presentationNode().position - itemInHand.position).normalised
