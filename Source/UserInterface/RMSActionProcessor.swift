@@ -270,7 +270,9 @@ class RMSActionProcessor {
                 self.interface.dataView!.hidden = !self.interface.dataView!.hidden
 //                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
                 if !self.interface.dataView!.hidden {
+                    #if iOS
                     self.interface.dataView!.text = self.getData()
+                    #endif
 //                    let string: String = self.getData()
 //                    string.drawAtPoint(CGPoint(x: 500,y: 500), withAttributes: nil)
 //                    
@@ -375,12 +377,20 @@ class RMSActionProcessor {
         }
     }
     
-    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil) -> AnyObject? {
+    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> AnyObject? {
         let sprite = s ?? self.activeSprite
         if let action = action {
             switch action {
                 case "throw", "Throw","grab", "Grab":
-                    if let node: RMXNode = object?.node {
+                    if let item = sprite.item{
+//                        direction = object?.presentationNode().position
+                        if let tgt:RMXNode = object?.node {
+                            sprite.throwItem(strength: speed, atNode: tgt)
+                        } else {
+                            sprite.throwItem(strength: speed)
+                        }
+
+                    } else if let node: RMXNode = object?.node {
                         if let body = node.physicsBody {
                             switch (body.type){
                             case .Static:
@@ -422,8 +432,6 @@ class RMSActionProcessor {
                                 }
                             }
                         }
-                    } else if let item = sprite.item{
-                        sprite.throwItem(strength: speed)
                     }
                     
                 break

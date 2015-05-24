@@ -498,13 +498,20 @@ extension RMXSprite {
 }
 extension RMXSprite {
     
-    func throwItem(strength: RMFloatB = 1) -> Bool
-    {
+    func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
+        
         if let itemInHand = self.item {
-            let fwd: RMXVector = self.forwardVector
+            var direction: RMXVector = self.forwardVector
+            if targetNode != nil {
+                let target = RMXSprite.rootNode(targetNode!, rootNode: self.scene!.rootNode)
+                if target.physicsBody?.type != .Static && self.node != target && itemInHand.node != target {
+                    direction = (target.presentationNode().position - itemInHand.position).normalised
+                }
+            }
+            
             if let body = itemInHand.node.physicsBody {
                 body.type = .Dynamic
-                itemInHand.applyForce(self.velocity + fwd * strength * itemInHand.mass + self.forwardVector, impulse: false)
+                itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
                 RMXLog("\(itemInHand.name) had no body")
@@ -692,24 +699,24 @@ extension RMXSprite {
     }
     
     func headTo(object: RMXSprite?, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
-        let target = object?.position ?? self.position * 10
-        let dist = RMXVector3Distance(self.position, target)
-        let reach = object?.reach ?? 0
-        if  dist >= fabs(reach + self.reach) {
-            #if OPENGL_OSX
-                speed *= 0.5
-            #endif
-            let direction = RMXVector3Normalize(target - self.position)
-
-            let front: RMXVector = self.boundingBox.max * self.forwardVector * self.scale.z // self.boundingBox.max * self.radius
-            self.applyForce(direction * speed, atPosition: self.forwardVector * (self.radius + 1),  impulse: false)
-            
-        } else {
-            let result: AnyObject? = doOnArrival(sender: self, objects: objects)
-            return result ?? dist
+        if let object = object {
+            let target = object.position //?? self.position * 10
+            let dist = RMXVector3Distance(self.position, target)
+            let reach = object.radius // ?? self.radius
+            if  dist >= fabs(reach + self.reach) * 2 {
+                #if OPENGL_OSX
+                    speed *= 0.5
+                #endif
+                let direction = RMXVector3Normalize(target - self.position)
+                self.applyForce(direction * speed, atPosition: self.front,  impulse: false)
+                
+            } else {
+                let result: AnyObject? = doOnArrival(sender: self, objects: objects)
+                return result ?? dist
+            }
+            return dist
         }
-        return dist
-
+        return nil
     }
     
 ///TODO Theta may be -ve?

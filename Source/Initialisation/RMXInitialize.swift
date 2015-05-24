@@ -34,7 +34,7 @@ extension RMX {
     
     
     static func makePoppy(#world: RMSWorld, master: RMXSprite) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.DOG.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true).asPlayerOrAI()
+        let poppy: RMXSprite = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, mode: .AI, radius: 10), type: .AI, isUnique: true).asPlayerOrAI()
         
         poppy.setPosition(position: RMXVector3Make(100,10,-50))
         

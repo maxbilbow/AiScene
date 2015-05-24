@@ -101,6 +101,10 @@ extension SCNVector3 {
         return "\(x.toData()) \(y.toData()) \(z.toData())"
     }
     
+    var normalised: SCNVector3 {
+        return RMXVector3Normalize(self)
+    }
+    
     var asDegrees: String {
         let pitch   = x / PI_OVER_180
         let yaw     = y / PI_OVER_180

@@ -28,7 +28,7 @@ extension RMSWorld {
     
     class func DefaultScene() -> RMXScene {
         #if SceneKit
-        return RMXScene(named: "art.scnassets/SnowTerrain/SnowTerrain.dae")!//ship.dae")!
+        return RMXScene()//named: "art.scnassets/SnowTerrain/SnowTerrain.dae")!//ship.dae")!
         #elseif SpriteKit
         return RMXScene(fileNamed:"Spaceship")
         #endif

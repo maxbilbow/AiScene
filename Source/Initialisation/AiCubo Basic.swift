@@ -40,21 +40,12 @@ class AiCubo {
     }
     
     class func simpleSprite(interface: RMXInterface, sprite: RMXSprite? = nil, type: RMXSpriteType = .PASSIVE) -> RMXSprite {
-        let player = sprite ?? RMXSprite.new(parent: interface.world!, node: RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, radius: 5, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: false).asPlayerOrAI()
+        let player = sprite ?? RMXSprite.new(parent: interface.world!, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, radius: 5, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: false).asPlayerOrAI()
         player.setPosition(position: RMXVector3Random(max: 50, min: -50))//(0, 50, 50))//, resetTransform: <#Bool#>
-        let radius = RMFloatB((player.geometry! as! SCNSphere).radius)
-        let height = radius * 2
-        let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
-        head.physicsBody = SCNPhysicsBody()
-        head.physicsBody!.mass = -10
-        player.node.addChildNode(head)
-        head.camera = RMX.standardCamera()
-        head.physicsBody!.mass = 0
-        
-        
-        head.position = SCNVector3Make(0, height * 0.9, 0)
-        player.cameras.append(head)
-        
+
+        if let head = player.node.childNodeWithName("head", recursively: false) {
+            player.cameras.append(head)
+        }
         
         RMXAi.autoStablise(player)
 

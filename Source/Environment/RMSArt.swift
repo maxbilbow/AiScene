@@ -149,7 +149,7 @@ class RMXArt {
             }
             randPos = thisRandom(&X,&Y,&Z)
             let chance = 1//(rand() % 6 + 1);
-            let size = RMFloatB(random() % 8 + 2)
+            let size = RMFloatB(random() % 8 + 4)
             var scale = RMXVector3Make(size,size,size)
             var shape: ShapeType
             var geo: SCNGeometry
@@ -163,19 +163,19 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color, mode: .AI)
+            let isBobbleMan = switcher == ShapeType.BOBBLE_MAN.rawValue || switcher == ShapeType.PONGO.rawValue
+            type = isBobbleMan ? .AI : .PASSIVE
+            let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color, mode: type)
             
                 
                 node.position = RMXVector3Make(randPos[0], randPos[1], randPos[2])
             
-                    
             
-                if let sprite = world.getSprite(node: node, type: .AI) {
-                    
-                } else {
-                    fatalError("should work")
-//                    world.scene.rootNode.addChildNode(node)
-                }
+            
+            let sprite = RMXSprite.new(parent: world, node: node, type: type, isUnique: false)
+            if isBobbleMan {
+                RMXAi.autoStablise(sprite)
+            }
                 
         }
     }

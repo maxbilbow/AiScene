@@ -11,7 +11,7 @@ import SceneKit
 
 typealias RMXModels = RM3DModels
 
-enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, ROCK, OILDRUM , AUSFB, PONGO, LAST, PILOT,  PLANE, FLOOR, DOG, NULL }
+enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, ROCK, OILDRUM, BOBBLE_MAN, LAST, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
 
 class RM3DModels : RMXModelsProtocol {
     
@@ -89,10 +89,20 @@ class RM3DModels : RMXModelsProtocol {
             node = dog!.rootNode.clone() as! RMXNode
             node.scale *= 1 * radius
             break
-            
         case ShapeType.AUSFB.rawValue:
             node = ausfb!.rootNode.clone() as! RMXNode
             node.scale *= 0.01 * radius
+            break
+        case ShapeType.BOBBLE_MAN.rawValue:
+            node = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: mode, radius: radius, color: color)
+            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
+            head.name = "head"
+            head.camera = RMX.standardCamera()
+//            head.physicsBody = SCNPhysicsBody()
+//            head.physicsBody!.mass = -10
+            node.addChildNode(head)
+            head.position = SCNVector3Make(0, 2 * radius * 0.9, 0) //TODO check
+//            radius = 0 ///to make mass zero
             break
         case ShapeType.NULL.rawValue:
             node = RMXNode()

@@ -38,7 +38,7 @@ extension RMXSprite {
     }
 
     
-    func getNode() -> RMXNode {
+    func presentationNode() -> RMXNode {
         return self.node.presentationNode()
     }
     var geometry: SCNGeometry? {

@@ -121,6 +121,7 @@ extension RMXDPad {
                 // retrieved the first clicked object
                 let result: AnyObject! = hitResults[0]
                 
+                
                 self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000)
 
                 // get its material
