@@ -46,7 +46,7 @@ class RMXAi {
         poppy.behaviours.append { (isOn: Bool) -> () in
             //            NSLog("State: \(state.rawValue) - Pos: \(poppy.position.print)")
             func idle(sender: RMXSprite, objects: [AnyObject]? = []) -> AnyObject? {
-                sender.lookAround(theta: speed / 10)
+//                sender.lookAround(theta: speed / 10)
                 //sender.accelerateForward(speed)
                 return nil
             }

@@ -249,14 +249,22 @@ extension RMSWorld {
 extension RMSWorld {
 
     var forwardVector: RMXVector {
+
         return self.activeCamera?.worldTransform.forward ?? RMXVector3Make(0,0,-1)
     }
     
     var upVector: RMXVector {
+
         return self.activeCamera?.worldTransform.up ?? RMXVector3Make(0,1,0)
     }
     
     var leftVector: RMXVector {
+
+//        println("\n   presnode WT: \(self.activeCamera?.presentationNode().transform.left.print)")
+//        println("   presnode  T: \(self.activeCamera?.presentationNode().transform.left.print)")
+//        println("     normal WT: \(self.activeCamera?.worldTransform.left.print)")
+//        println("     normal  T: \(self.activeCamera?.transform.left.print)")
+        
         return self.activeCamera?.worldTransform.left ?? RMXVector3Make(-1,0,0)
     }
     

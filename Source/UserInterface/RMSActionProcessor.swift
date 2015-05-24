@@ -338,7 +338,7 @@ class RMSActionProcessor {
         if let dPad: RMXDPad = self.interface as? RMXDPad {
             if let att = dPad.motionManager.deviceMotion.attitude {
                 let attitude = SCNVector3Make(RMFloatB(att.pitch), RMFloatB(att.yaw), RMFloatB(att.roll))
-                angles      += "\n    - SPRITE: \(sprite.getNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
+                angles      += "\n    - SPRITE: \(sprite.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
                 angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
             }
         }

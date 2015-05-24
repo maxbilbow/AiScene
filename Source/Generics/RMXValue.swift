@@ -191,6 +191,10 @@ extension SCNMatrix4 {
     var forward: SCNVector3 {
         return SCNVector3Make(-m31, -m32, -m33)
     }
+    
+    var position: SCNVector3 {
+        return SCNVector3Make(m41, m42, m43)
+    }
 }
 
 
