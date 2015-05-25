@@ -114,8 +114,10 @@ extension RMXDPad {
         let scnView = self.gameView//.view as! GameView
         // check what nodes are tapped
         let p = recognizer.locationInView(scnView)
+        
+        self.processHit(point: p)
 
-        self.processHit(scnView.hitTest(p, options: nil))
+//        self.processHit(scnView.hitTest(p, options: nil))
     }
 
     

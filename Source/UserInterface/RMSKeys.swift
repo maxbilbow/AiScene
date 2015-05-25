@@ -382,40 +382,7 @@ extension GameView {
         // check what nodes are clicked
         let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
         self.interface!.processHit(point: p)
-        
-//        if let hitResults = self.hitTest(p, options: nil) {
-//            // check that we clicked on at least one object
-//            if hitResults.count > 0 {
-//                // retrieved the first clicked object
-//                let result: AnyObject! = hitResults[0]
-//                
-//                self.interface!.actionProcessor.manipulate(action: "throw", sprite: self.interface!.activeSprite, object: result, speed: 18000)
-//            
-//                // get its material
-//                let material = result.node!.geometry!.firstMaterial!
-//                
-//                // highlight it
-//                SCNTransaction.begin()
-//                SCNTransaction.setAnimationDuration(0.5)
-//                
-//                // on completion - unhighlight
-//                SCNTransaction.setCompletionBlock {
-//                    SCNTransaction.begin()
-//                    SCNTransaction.setAnimationDuration(0.5)
-//                    
-//                    material.emission.contents = NSColor.blackColor()
-//                    
-//                    SCNTransaction.commit()
-//                }
-//                
-//                material.emission.contents = NSColor.redColor()
-//                
-//                SCNTransaction.commit()
-//            } else if self.interface!.dataView!.hidden == false {
-//                self.interface!.dataView!.hidden = true
-//            }
-//        }
-        
+                
         super.mouseDown(theEvent)
     }
     

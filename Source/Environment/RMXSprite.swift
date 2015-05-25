@@ -17,6 +17,9 @@ enum RMXSpriteType { case  AI, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC 
 protocol RMXSpriteManager {
 //    
 }
+
+
+
 class RMXSprite : RMXSpriteManager {
     
     lazy var environments: ChildSpriteArray = ChildSpriteArray(parent: self)
@@ -259,6 +262,7 @@ class RMXSprite : RMXSpriteManager {
         } else {
             sprite.addCameras()
         }
+        RMXBrain.giveBrainTo(sprite)
         return sprite
     }
     

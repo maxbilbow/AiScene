@@ -131,7 +131,7 @@ class AiCubo {
             }
             
             
-            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 150, radius: earth.radius / 2)
+            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 200, radius: earth.radius / 2)
             
             //cameras
             let sunCam: RMXNode = RMXNode()

@@ -89,11 +89,5 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
     func somethingHappened(thing: AnyObject){
         RMXLog(thing)
     }
-    #if iOS
-    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
-//        NSLog(fromInterfaceOrientation.rawValue.description)
-        super.didRotateFromInterfaceOrientation(fromInterfaceOrientation)
-    }
-    #endif
-
+    
 }

@@ -173,6 +173,7 @@ class RMXArt {
             
             
             let sprite = RMXSprite.new(parent: world, node: node, type: type, isUnique: false)
+            
             if isBobbleMan {
                 RMXAi.autoStablise(sprite)
             }

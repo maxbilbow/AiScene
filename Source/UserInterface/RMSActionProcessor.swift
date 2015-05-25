@@ -408,14 +408,14 @@ class RMSActionProcessor {
                                 fatalError("Something went wrong")
                             }
                         }
-                        let rootNode = RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
+                        let rootNode = node.getRootNode(inScene: self.scene)// RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
                         if rootNode == sprite.node {
                             RMXLog("Node is self")
                             if let item = sprite.item{
                                 sprite.throwItem(strength: speed)
                             }
                         } else {
-                            if let item = self.world.getSprite(node: node) {
+                            if let item = rootNode.sprite {// self.world.getSprite(node: node) {
                                 if let itemInHand = sprite.item {
                                     if item.name == itemInHand.name {
                                         sprite.throwItem(strength: speed)

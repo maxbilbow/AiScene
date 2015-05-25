@@ -208,7 +208,7 @@ class RMSWorld  {
     }
 
     
-    
+    @availability(*,unavailable)
     func getSprite(node n: RMXNode, type: RMXSpriteType? = nil) -> RMXSprite? {
     
         let node = RMXSprite.rootNode(n, rootNode: self.scene.rootNode)
