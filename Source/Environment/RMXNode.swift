@@ -133,10 +133,12 @@ extension RMXSprite {
         self.stop()
         self.node.physicsBody!.velocity = RMXVector3Zero
     }
+    
+    
     ///Stops all acceleration foces, not velocity
     func stop(){
         self.node.physicsBody!.clearAllForces()
-        self.acceleration = nil
+//        self.acceleration = nil
     }
     
     var scale: RMXVector3 {

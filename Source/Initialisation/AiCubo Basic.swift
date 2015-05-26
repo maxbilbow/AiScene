@@ -13,16 +13,30 @@ import SceneKit
 
 class AiCubo {
     enum Type { case TEST, EMPTY, SOCCER, POOL }
-    class func setUpWorld(interface: RMXInterface?, type: Type = .EMPTY){
+    
+    class func basicPlayer(world: RMSWorld) -> RMXSprite {
+        //Set up player
+        let player = self.simpleSprite(world, sprite: world.activeSprite, type: .PLAYER)
+        world.cameras += player.cameras
+        world.activeSprite = player
+        self.addTrailingCamera(to: player)
+        return player
+    }
+    
+    class func setUpWorld(interface: RMXInterface?, type: Type = .EMPTY, backupWorld: Bool = false){
         if let interface = interface {
             if let world = interface.world {
+                world.deleteWorld(backup: backupWorld)
+                //SetUpEnvironment
                 switch type {
                 case .EMPTY:
-                    world.activeSprite = self.simpleSprite(interface, type: .PLAYER)
-                    world.cameras += interface.activeSprite!.cameras
+                    self.basicPlayer(world)
                     if world.hasGravity {
                         world.toggleGravity()
                     }
+                    let poppy = RMX.makePoppy(world: world, master: world.activeSprite!)
+                    RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 1, radius: world.radius / 2)
+                    
                     break
                 case .TEST:
                     _testingEnvironment(interface)
@@ -30,6 +44,14 @@ class AiCubo {
                     _testingEnvironment(interface)
                     break
                 }
+                let ambientLightNode = SCNNode()
+                ambientLightNode.light = SCNLight()
+                ambientLightNode.light!.type = SCNLightTypeAmbient
+                ambientLightNode.light!.color = NSColor.darkGrayColor()
+                world.scene.rootNode.addChildNode(ambientLightNode)
+                interface.gameView!.scene = world.scene
+                interface.gameView.pointOfView = world.activeCamera
+
             } else {
                 fatalError("World not initialised")
             }
@@ -37,10 +59,11 @@ class AiCubo {
             fatalError("inteface not initialised")
         }
         
+        
     }
     
-    class func simpleSprite(interface: RMXInterface, sprite: RMXSprite? = nil, type: RMXSpriteType = .PASSIVE) -> RMXSprite {
-        let player = sprite ?? RMXSprite.new(parent: interface.world!, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, radius: 5, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: false).asPlayerOrAI()
+    class func simpleSprite(world: RMSWorld, sprite: RMXSprite? = nil, type: RMXSpriteType = .PASSIVE) -> RMXSprite {
+        let player = sprite ?? RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, radius: 5, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: false).asPlayerOrAI()
         player.setPosition(position: RMXVector3Random(max: 50, min: -50))//(0, 50, 50))//, resetTransform: <#Bool#>
 
         if let head = player.node.childNodeWithName("head", recursively: false) {
@@ -72,18 +95,10 @@ class AiCubo {
     
     internal class func _testingEnvironment(interface: RMXInterface){
         if let world = interface.world {
-            
-            //Set up player
-            let player = self.simpleSprite(interface, sprite: world.activeSprite, type: .PLAYER)
-            world.cameras += player.cameras
-            if world.activeSprite == nil {
-                world.activeSprite = player
-            }
-            self.addTrailingCamera(to: player)
-        
+            let player = self.basicPlayer(world)
             
             //Set Up Player 2
-            let p2 = self.simpleSprite(interface)
+            let p2 = self.simpleSprite(world)
             world.cameras += p2.cameras
             
             //Set up Poppy
@@ -152,7 +167,6 @@ class AiCubo {
             topCam.camera = RMX.standardCamera()
             world.cameras.append(topCam)
             
-            world.scene.physicsWorld
         }
         
     }

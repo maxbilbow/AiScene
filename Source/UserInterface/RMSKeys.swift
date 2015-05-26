@@ -62,7 +62,7 @@ class RMSKeys : RMXInterface {
     ///Key down, Key up options
     static let ON_KEY_DOWN: (on:RMFloat,off:RMFloat) = (1,0)
     static let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
-    static let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.moveSpeed * 2, 0)
+    static let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.moveSpeed, 0)
     static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.lookSpeed * -10, 0)
     
     ///Key settings
@@ -95,6 +95,7 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: LOCK_CURSOR, characters: "m", isRepeating: false, speed: ON_KEY_UP),
     RMKey(self, action: NEXT_CAMERA, characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: PAUSE_GAME, characters: "p", isRepeating: false, speed: ON_KEY_UP),
     
     //Misc: generically used for testing
     RMKey(self, action: GET_INFO, characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing

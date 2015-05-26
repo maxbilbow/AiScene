@@ -51,6 +51,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let LOCK_CURSOR: String = "lockMouse"
     static let NEXT_CAMERA: String = "nextCamera"
     static let PREV_CAMERA: String = "previousCamera"
+    static let PAUSE_GAME: String = "pauseGame"
     
     //Misc: generically used for testing
     static let GET_INFO: String = "information"
@@ -79,7 +80,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     var world: RMSWorld?
 
     static var lookSpeed: RMFloatB = 1
-    static var moveSpeed: RMFloatB = 1
+    static var moveSpeed: RMFloatB = 2
     
     var activeSprite: RMXSprite? {
         return self.world?.activeSprite
@@ -196,13 +197,23 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
 
     }
     
+    var scene: RMXScene? {
+        return self.world?.scene
+    }
+    
+    var isPaused: Bool {
+        return self.scene?.paused ?? true
+    }
+    
     func update(){
-        self.actionProcessor.animate()
-        self.world?.animate()
-        if !self.dataView!.hidden {
-//            let view: NSTextField = dataView!
-//            self.dataView?.display()
-            self.printDataToScreen(self.actionProcessor.getData())
+        if !self.isPaused {
+            self.actionProcessor.animate()
+            self.world?.animate()
+            if !self.dataView!.hidden {
+    //            let view: NSTextField = dataView!
+    //            self.dataView?.display()
+                self.printDataToScreen(self.actionProcessor.getData())
+            }
         }
 
     }
@@ -213,5 +224,44 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
 
     func action(action: String = "reset",speed: RMFloatB = 1, point: [RMFloatB] = []) {
         self.actionProcessor.action( action,speed: speed, point: point)
+    }
+    
+    
+    func hideButtons(hide: Bool) {
+        
+    }
+    
+    func pauseGame(sender: AnyObject?) {
+        self.scene?.paused = !self.scene!.paused
+//        self.pauseMenu?.hidden = false
+//        self.menuAccessBar?.hidden = true
+        self.hideButtons(self.scene!.paused)
+        
+    }
+    
+    func unPauseGame(sender: AnyObject?) {
+        self.scene?.paused = false
+//        self.pauseMenu?.hidden = true
+//        self.menuAccessBar?.hidden = false
+        self.hideButtons(false)
+    }
+    
+    func optionsMenu(sender: AnyObject?) {
+        NSLog("Show Options")
+        
+    }
+    
+    func exitToMainMenu(sender: AnyObject?) {
+        NSLog("End Simulation")
+
+    }
+    
+    var _switch = true
+    func restartSession(sender: AnyObject?) {
+        //        self.world?.deleteWorld(backup: false)
+        AiCubo.setUpWorld(self, type: _switch ? .EMPTY : .TEST)
+        _switch = !_switch
+        self.gameView!.scene = self.scene
+        self.unPauseGame(sender)
     }
 }

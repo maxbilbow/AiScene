@@ -92,9 +92,6 @@ extension RMXDPad {
         self.action(action: "previousCamera", speed: 1)
     }
 
-    func switchEnvironment(recogniser: UITapGestureRecognizer){
-            world?.environments.plusOne()
-    }
     
         func extendArm(recognizer: UILongPressGestureRecognizer) {
             self.log()

@@ -5,13 +5,8 @@ import SceneKit
 import GLKit
 var str = "Hello, playground"
 
-func RMXVector3Length(v: SCNVector3) -> CGFloat {
+let PI = 3.14159265358979323846
 
-        return CGFloat(GLKVector3Length(SCNVector3ToGLKVector3(v)))
+let PI_OVER_180 = PI / 180
 
-}
-
-
-let vector = SCNVector3Make(-1,-1,-1)
-
-RMXVector3Length(vector)
+let q = 60 * PI_OVER_180

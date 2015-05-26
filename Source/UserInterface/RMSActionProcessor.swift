@@ -81,7 +81,7 @@ class RMSActionProcessor {
                 sprite.accelerateForward(point[2] * speed)
                 sprite.accelerateLeft(point[0] * speed)
                 sprite.accelerateUp(point[1] * speed)
-                sprite.acceleration = RMXVector3Make(point[0] * speed, point[1] * speed, point[2] * speed)
+//                sprite.acceleration = RMXVector3Make(point[0] * speed, point[1] * speed, point[2] * speed)
             }
             return true
         case "Stop", "stop", "STOP":
@@ -93,10 +93,23 @@ class RMSActionProcessor {
             if point.count == 2 {
                 if sprite.usesWorldCoordinates {
 //                    self.world.activeCamera!.transform = SCNMatrix4Rotate(self.world.activeCamera!.transform, point[0] * -PI_OVER_180, 0, 1, 0)
-                    self.world.activeCamera?.eulerAngles.y -= point[0] * 0.3 * -speed * PI_OVER_180
+//                    if let cameraNode = self.world.activeCamera {
+                        self.world.activeCamera!.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
+                    let phi = self.world.activeCamera!.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                    if phi < 1 && phi > -1 {
+                        self.world.activeCamera!.eulerAngles.x = phi
+                    }
+//                    }
                 } else {
+                    if self.world.hasGravity {
+                        let phi = self.world.activeCamera!.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                        if phi < 1 && phi > -1 {
+                            self.world.activeCamera!.eulerAngles.x = phi
+                        }
+                    }
                     self.turnSpeed(&speed, sprite: sprite)
                     sprite.lookAround(theta: point[0] * -speed,phi: point[1] * speed)
+
                 }
             }
             return true
@@ -136,7 +149,7 @@ class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                moveSpeed(&speed, sprite: sprite)
+                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateForward(speed)
             }
             return true
@@ -145,7 +158,7 @@ class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                moveSpeed(&speed, sprite: sprite)
+                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateForward(-speed)
             }
             return true
@@ -154,7 +167,7 @@ class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                moveSpeed(&speed, sprite: sprite)
+                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateLeft(speed)
             }
             return true
@@ -163,7 +176,7 @@ class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                moveSpeed(&speed, sprite: sprite)
+                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateLeft(-speed)
             }
             return true
@@ -172,7 +185,7 @@ class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                moveSpeed(&speed, sprite: sprite)
+                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateUp(speed)
             }
             return true
@@ -181,7 +194,7 @@ class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                moveSpeed(&speed, sprite: sprite)
+                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateUp(-speed)
             }
             return true
@@ -227,7 +240,7 @@ class RMSActionProcessor {
             if speed == 1 { self.isMouseLocked = !self.isMouseLocked }
             return true
         case "switchEnvitonment":
-            if speed == 1 { self.world.environments.plusOne() }
+//            if speed == 1 { self.world.environments.plusOne() }
             return true
         case "toggleFog":
             RMX.toggleFog()
@@ -313,6 +326,11 @@ class RMSActionProcessor {
                 }
             }
             return false
+        case RMXInterface.PAUSE_GAME:
+            if speed == 1 {
+                self.interface.pauseGame(speed)
+            } 
+            break
         default:
             RMXLog("'\(action)' not recognised")
         }
@@ -322,28 +340,43 @@ class RMSActionProcessor {
         return false
         
     }
-    
-    func getData() -> String {
+    enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES }
+    func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
         let node = self.activeSprite.node//.presentationNode()
         let sprite = self.activeSprite
         let physics = self.world.scene.physicsWorld
-        var info = "\n     vel:\(sprite.velocity.print)\n     Pos:\(sprite.position.print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
-        info += "\n       MASS: \(sprite.mass),  GRAVITY: \(physics.gravity.print)"
-        info += "\n   FRICTION: \(node.physicsBody?.friction), Rolling Friction: \(node.physicsBody?.rollingFriction), restitution: \(node.physicsBody?.restitution) \n"
-        
-        //Accelerometer vs sprite angles
-        return info
-        var angles   = "\n ANGLES: \n"
-        #if iOS
-        if let dPad: RMXDPad = self.interface as? RMXDPad {
-            if let att = dPad.motionManager.deviceMotion.attitude {
-                let attitude = SCNVector3Make(RMFloatB(att.pitch), RMFloatB(att.yaw), RMFloatB(att.roll))
-                angles      += "\n    - SPRITE: \(sprite.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
-                angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
+        var info: String = ""
+        switch type {
+        case .PLAYER_INFO:
+            info += "\n        vel:\(sprite.velocity.print)\n     Pos:\(sprite.position.print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
+            info += "\n       MASS: \(sprite.mass),  GRAVITY: \(physics.gravity.print)"
+            info += "\n   FRICTION: \(node.physicsBody?.friction), Rolling Friction: \(node.physicsBody?.rollingFriction), restitution: \(node.physicsBody?.restitution) \n"
+            
+            //Accelerometer vs sprite angles
+            return info
+        case .ANGLES:
+            var angles   = "\n ANGLES: \n"
+            #if iOS
+            if let dPad: RMXDPad = self.interface as? RMXDPad {
+                if let att = dPad.motionManager.deviceMotion.attitude {
+                    let attitude = SCNVector3Make(RMFloatB(att.pitch), RMFloatB(att.yaw), RMFloatB(att.roll))
+                    angles      += "\n    - SPRITE: \(sprite.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
+                    angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
+                }
             }
+            #endif
+            return angles
+        case .ACTIVE_CAMERA:
+            let rootNode = self.world.activeCamera?.getRootNode(inScene: self.scene)
+            info += "\n --- RootNode: \(rootNode?.name) ---\n"
+            info += "   cam: \n\(self.world.activeCamera!.presentationNode().worldTransform.print)\n"
+            info += " world: \(self.world.leftVector.print)   rootNode: \(rootNode?.presentationNode().worldTransform.left.print)\n"
+            info += "      : \(self.world.upVector.print)           : \(rootNode?.presentationNode().worldTransform.up.print)\n"
+            info += "      : \(self.world.forwardVector.print)           : \(rootNode?.presentationNode().worldTransform.forward.print)\n\n"
+            return info
+        default:
+            return info
         }
-        #endif
-        return angles
     }
     func debug(_ yes: Bool = true){
         if yes {
@@ -355,6 +388,16 @@ class RMSActionProcessor {
         if self.boomTimer > 1 {
             self.boomTimer++
             RMXLog(self.boomTimer)
+        }
+        
+        if !self.world.hasGravity {
+            if let activeCamera = self.world.activeSprite?.activeCamera {
+                if activeCamera.eulerAngles.x > 0.01 {
+                    activeCamera.eulerAngles.x -= 0.01
+                } else if activeCamera.eulerAngles.x < -0.01 {
+                    activeCamera.eulerAngles.x += 0.01
+                }
+            }
         }
         
         if self.extendArm != 0 {
@@ -382,7 +425,7 @@ class RMSActionProcessor {
         if let action = action {
             switch action {
                 case "throw", "Throw","grab", "Grab":
-                    if let item = sprite.item{
+                    if let item = sprite.item {
 //                        direction = object?.presentationNode().position
                         if let tgt:RMXNode = object?.node {
                             sprite.throwItem(strength: speed, atNode: tgt)

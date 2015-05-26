@@ -22,7 +22,7 @@ extension RMXDPad {
 //        }
         
         func tilt(direction: String, tilt: RMFloatB){
-            let rollSpeed = -RMFloatB(fabs(RMXInterface.moveSpeed)*4)
+            let rollSpeed = self.rollSpeed
             let rollThreshold: RMFloatB = 0.1
             if tilt > rollThreshold {
                 let speed = (1.0 + tilt) * rollSpeed

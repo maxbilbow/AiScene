@@ -20,12 +20,15 @@ class RMXDPad : RMXInterface {
      let _hasMotion = true
     
     let motionManager: CMMotionManager = CMMotionManager()
-   
+    let rollSpeed: RMFloatB = -1
     
     var moveButtonPad: UIImageView?// = RMXModels.getImage()
     var moveButton: UIView?
     var jumpButton: UIButton?
     var boomButton: UIButton?
+    var topBar: UIView?
+    var menuAccessBar: UIView?
+    var pauseMenu: UIView?
     
     override func viewDidLoad(coder: NSCoder!){
         super.viewDidLoad(coder)
@@ -36,7 +39,7 @@ class RMXDPad : RMXInterface {
             self.motionManager.startMagnetometerUpdates()
         }
         
-        RMXInterface.moveSpeed *= -0.2
+        RMXInterface.moveSpeed *= 2 //-0.01 //-0.4
         #if SceneKit
             RMXInterface.lookSpeed *= 0.1
             #else
@@ -46,6 +49,9 @@ class RMXDPad : RMXInterface {
        
         
     }
+    
+   
+    
     override func update() {
         super.update()
         self.accelerometer()
@@ -65,76 +71,145 @@ class RMXDPad : RMXInterface {
 //    override var view: RMXView {
 //        return super.view as! RMXView
 //    }
+    
+    func getRect(withinRect bounds: CGRect? = nil, row: (CGFloat, CGFloat), col: (CGFloat, CGFloat)) -> CGRect {
+        let bounds = bounds ?? self.gameView.bounds
+        return CGRectMake(bounds.width * (col.0 - 1) / col.1, bounds.height * (row.0 - 1) / row.1, bounds.width / col.1, bounds.height / row.1)
+    }
+    
+    func makeButton(title: String? = nil, selector: String? = nil, view: UIView? = nil, row: (CGFloat, CGFloat), col: (CGFloat, CGFloat)) -> UIButton {
+        let view = view ?? self.gameView
+        let btn = UIButton(frame: getRect(withinRect: view?.bounds, row: row, col: col))//(view!.bounds.width * col.0 / col.1, view!.bounds.height * row.0 / row.1, view!.bounds.width / col.1, view!.bounds.height / row.1))
+        if let title = title {
+            btn.setTitle(title, forState:UIControlState.Normal)
+        }
+        if let selector = selector {
+            btn.addTarget(self, action: Selector(selector), forControlEvents:UIControlEvents.TouchDown)
+        }
+        
+        btn.enabled = true
+        view?.addSubview(btn)
+        return btn
+    }
+    
+    func showTopBar(recogniser: UIGestureRecognizer) {
+        if let topBar = self.topBar {
+            topBar.hidden = !topBar.hidden
+            self.menuAccessBar!.hidden = !self.menuAccessBar!.hidden
+        }
+    }
+    
+    override func hideButtons(hide: Bool) {
+        self.moveButton?.hidden = hide
+        self.moveButtonPad?.hidden = hide
+        self.jumpButton?.hidden = hide
+        self.boomButton?.hidden = hide
+        super.hideButtons(hide)
+    }
+    
+   override  func pauseGame(sender: AnyObject?) {
+        super.pauseGame(sender)
+        self.pauseMenu?.hidden = false
+        self.menuAccessBar?.hidden = true
+        self.hideButtons(true)
+        
+    }
+    
+    override func unPauseGame(sender: AnyObject?) {
+        super.unPauseGame(sender)
+        self.pauseMenu?.hidden = true
+        self.menuAccessBar?.hidden = false
+        self.hideButtons(false)
+    }
+    
+    override func optionsMenu(sender: AnyObject?) {
+        super.optionsMenu(sender)
+    }
+    
+    override func exitToMainMenu(sender: AnyObject?) {
+        super.exitToMainMenu(sender)
+    }
+
+    override func restartSession(sender: AnyObject?) {
+        super.restartSession(sender)
+    }
+    
+    var topBarBounds: CGRect {
+        return CGRectMake(0,0, self.gameView.bounds.width, self.gameView.bounds.height * 0.1)
+    }
+    
+    internal func makePauseMenu() {
+        self.menuAccessBar = UIView(frame: self.topBarBounds)
+        self.makeButton(title: "      +", selector: "showTopBar:", view: self.menuAccessBar, row: (1,1), col: (self.topColumns,self.topColumns))
+        self.makeButton(title: "||     ", selector: "pauseGame:" , view: self.menuAccessBar, row: (1,1), col: (1,self.topColumns))
+        
+        self.gameView.addSubview(self.menuAccessBar!)
+        
+        self.pauseMenu = UIView(frame: self.topBarBounds)
+        self.pauseMenu!.hidden = true
+        self.pauseMenu?.backgroundColor = UIColor.grayColor()
+        
+        self.makeButton(title: "||     ", selector: "unPauseGame:" , view: self.pauseMenu, row: (1,1), col: (1,self.topColumns))
+        self.makeButton(title: "Restart", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (3,6))
+        self.makeButton(title: "Options", selector: "optionsMenu:", view: self.pauseMenu, row: (1,1), col: (3,4))
+        self.makeButton(title: "Exit to main menu", selector: "exitToMainMenu:", view: self.pauseMenu, row: (1,1), col: (4,4))
+
+        
+        
+        let last: CGFloat = self.topColumns; let rows: CGFloat = 1// view.bounds.height / height
+        self.gameView.addSubview(self.pauseMenu!)
+    }
+    
+    private let topColumns: CGFloat = 7
+    
+    internal func makeTopBar ()  {
+        
+        self.topBar = UIView(frame: self.topBarBounds)
+        self.topBar!.backgroundColor = UIColor.grayColor()
+        self.topBar!.hidden = true
+        
+        let view = self.topBar!
+        
+        let last: CGFloat = self.topColumns; let rows: CGFloat = 1// view.bounds.height / height
+        
+        
+        self.makeButton(title: "  < CAM", selector: "previousCamera:", view: view, row: (1,rows), col: (1,self.topColumns))
+        
+        self.makeButton(title: "  RESET", selector: "resetTransform:", view: view, row: (1,rows), col: (2,self.topColumns)) //UIButton(frame: rect(1))
+        
+        self.makeButton(title: "   AI  ", selector: "toggleAi:", view: view, row: (1,rows), col: (3,self.topColumns))
+        
+        self.makeButton(title: " GRAV  ", selector: "toggleAllGravity:", view: view, row: (1,rows), col: (4,self.topColumns))
+        
+        self.makeButton(title: " DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
+        
+        self.makeButton(title: "  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (6,self.topColumns))
+        
+        self.makeButton(title: "      -", selector: "showTopBar:", view: view, row: (1,rows), col: (last,self.topColumns))
+        
+        self.gameView.addSubview(self.topBar!)
+//        self.gameView.addSubview(self.menuAccessBar!)
+        
+    }
+    
     override func setUpGestureRecognisers(){
 //        let image = UIImage(contentsOfFile: "popNose.png")
 //        button.setImage(image, forState: UIControlState.Normal)
-        let topBar: CGFloat = 40; let buttonCount: CGFloat = 5
+//        let topBar: CGFloat = 40;
+        self.makeTopBar()
+        self.makePauseMenu()
         
+        
+        
+        let topBar = self.topBar!
         self.dataView!.backgroundColor = UIColor.grayColor()
         self.dataView?.alpha = 0.3
-        self.dataView?.bounds = CGRectMake(0, topBar, self.gameView.bounds.width, self.gameView.bounds.height - topBar )
-        func makeBottomLeftBar (view: UIView)  {
-            let lastCam: UIButton = UIButton(frame: CGRectMake(0, view.bounds.height - 30, view.bounds.width / 6, 20))
-            
-            lastCam.setTitle("< CAM ", forState:UIControlState.Normal)
-            lastCam.addTarget(self, action: Selector("previousCamera:"), forControlEvents:UIControlEvents.TouchDown)
-            lastCam.enabled = true
-            view.addSubview(lastCam)
-            
-            let nextCam: UIButton = UIButton(frame: CGRectMake(view.bounds.width / 6, view.bounds.height - 30, view.bounds.width / 6, 20))
-            
-            nextCam.setTitle("CAM >", forState:UIControlState.Normal)
-//            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            nextCam.addTarget(self, action: Selector("nextCamera:"), forControlEvents:UIControlEvents.TouchDown)
-            nextCam.enabled = true
-            view.addSubview(nextCam)
-        }
+        self.dataView?.bounds = CGRectMake(0, topBar.bounds.height, self.gameView.bounds.width, self.gameView.bounds.height - topBar.bounds.height )
         
-        func makeTopBar (view: UIView)  {
-            let switchButton: UIButton = UIButton(frame: CGRectMake(0, 0, view.bounds.width / buttonCount, topBar))
-            
-            switchButton.setTitle("<RESET> ", forState:UIControlState.Normal)
-            switchButton.addTarget(self, action: Selector("resetTransform:"), forControlEvents:UIControlEvents.TouchDown)
-            switchButton.enabled = true
-            switchButton.backgroundColor = UIColor.grayColor()
-            view.addSubview(switchButton)
-            
-            let behaviours: UIButton = UIButton(frame: CGRectMake(view.bounds.width / buttonCount, 0, view.bounds.width / buttonCount, topBar))
-            
-            behaviours.setTitle("<Toggle AI>", forState:UIControlState.Normal)
-            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            behaviours.addTarget(self, action: Selector("toggleAi:"), forControlEvents:UIControlEvents.TouchDown)
-            behaviours.enabled = true
-            behaviours.backgroundColor = UIColor.grayColor()
-            view.addSubview(behaviours)
-            
-            let gravity: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 2 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
-            
-            gravity.setTitle("<Gravity>", forState:UIControlState.Normal)
-            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            gravity.addTarget(self, action: Selector("toggleAllGravity:"), forControlEvents:UIControlEvents.TouchDown)
-            gravity.enabled = true
-            gravity.backgroundColor = UIColor.grayColor()
-            view.addSubview(gravity)
-            
-            let explode: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 3 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
         
-            explode.setTitle("<BOOM!>", forState:UIControlState.Normal)
-//            explode.addTarget(self, action: Selector("explode:"), forControlEvents:UIControlEvents.TouchDown)
-            explode.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "explode:"))
-            explode.enabled = true
-            explode.backgroundColor = UIColor.grayColor()
-            view.addSubview(explode)
-            
-            let jump: UIButton = UIButton(frame: CGRectMake(view.bounds.width * 4 / buttonCount, 0, view.bounds.width / buttonCount, topBar))
-            
-            jump.setTitle("<DATA>", forState:UIControlState.Normal)
-            //            behaviours.setTitle("BHAVIOURS OFF", forState:UIControlState.Selected)
-            jump.addTarget(self, action: Selector( "printData:"), forControlEvents:UIControlEvents.TouchDown)
-            jump.enabled = true
-            jump.backgroundColor = UIColor.grayColor()
-            view.addSubview(jump)
-        }
+       
+        
+        
         
 
         
@@ -142,12 +217,15 @@ class RMXDPad : RMXInterface {
         
         
         let w = self.gameView!.bounds.size.width
-        let h = self.gameView!.bounds.size.height - topBar
-        let leftView: UIView = UIImageView(frame: CGRectMake(0, topBar, w/2, h))
-        let rightView: UIView = UIImageView(frame: CGRectMake(w / 3, topBar, w * 2 / 3, h))
+        let h = self.gameView!.bounds.size.height - topBar.bounds.height
+        let leftView: UIView = UIImageView(frame: CGRectMake(0, topBar.bounds.height, w/2, h))
+        let rightView: UIView = UIImageView(frame: CGRectMake(w / 3, topBar.bounds.height, w * 2 / 3, h))
         rightView.userInteractionEnabled = true
-        makeTopBar(self.gameView)
-        makeBottomLeftBar(self.gameView)
+        
+        
+    
+        
+
         
         
         
@@ -171,6 +249,10 @@ class RMXDPad : RMXInterface {
         self.moveButtonPad = UIImageView(frame: self.moveButtonCenter)//(image: padImage)
         self.moveButtonPad!.image = padImage
         self.moveButtonPad?.setNeedsDisplay()
+        let handleMovement: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self,action: "handleMovement:")
+        handleMovement.minimumPressDuration = 0.0
+        self.moveButtonPad!.addGestureRecognizer(handleMovement)
+        self.moveButtonPad!.userInteractionEnabled = true
         self.gameView.addSubview(self.moveButtonPad!)
 
         

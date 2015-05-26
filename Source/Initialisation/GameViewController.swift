@@ -39,7 +39,7 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         self.view = GameView(frame: self.view.bounds)
         #endif
         self.gameView!.initialize(self, interface: self.interface!)
-        self.world?.setWorldType()
+//        self.world?.setWorldType()
         let scene = self.world!.scene
         
         // create and add a camera to the scene
@@ -49,19 +49,6 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
         
         // create and add a light to the scene
         
-        
-        
-       
-
-        
-        // create and add an ambient light to the scene
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light!.type = SCNLightTypeAmbient
-        ambientLightNode.light!.color = NSColor.darkGrayColor()
-        scene.rootNode.addChildNode(ambientLightNode)
-        
-       
         
         
         

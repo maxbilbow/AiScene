@@ -138,7 +138,7 @@ class RMXAi {
         return  random() % 600 + 300
     }
     static func randomSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE) -> RMXSprite? {
-        return world.childSpriteArray.get(random() % RMXSprite.COUNT)
+        return SpriteArray.get(random() % RMXSprite.COUNT, inArray: world.children)
     }
     
     enum MoveState { case MOVING, TURNING, IDLE }

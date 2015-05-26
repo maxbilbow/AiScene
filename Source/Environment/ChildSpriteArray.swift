@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChildSpriteArray {
+class SpriteArray {
     var parent: AnyObject
     private var type: RMXWorldType {
         return (self.parent as? RMSWorld)!.type ?? .NULL
@@ -23,6 +23,16 @@ class ChildSpriteArray {
     var current:[RMXSprite] {
         return spriteArray[_key]
     }
+    
+    class func get(key: Int, inArray array: Array<RMXSprite>) -> RMXSprite? {
+        for node in array {
+            if node.rmxID == key{
+                return node
+            }
+        }
+        return nil
+    }
+    
     func get(key: Int) -> RMXSprite? {
         for (index, node) in enumerate(self.spriteArray[_key]) {
             if node.rmxID == key{

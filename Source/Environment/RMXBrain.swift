@@ -38,12 +38,7 @@ extension RMXNode {
     func getRootNode(inScene scene: RMXScene) -> RMXNode {
         return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
     }
-    
-    var rootNode: RMXNode {
-        
-        return self
-    }
-    
+
 }
 
 class RMXBrain : RMXNode {

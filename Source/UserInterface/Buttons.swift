@@ -27,9 +27,9 @@ extension RMXDPad {
     internal func getButton(frame: CGRect) -> UIView {
         let buttonBase = UIView(frame: frame)
         buttonBase.alpha = 0.5
-                buttonBase.layer.cornerRadius = 20
+        buttonBase.layer.cornerRadius = 20
         buttonBase.backgroundColor = UIColor.blueColor()
-        buttonBase.userInteractionEnabled = true
+//        buttonBase.userInteractionEnabled = true
         
         return buttonBase
 
@@ -39,13 +39,20 @@ extension RMXDPad {
         let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
         let baseButton = self.getButton(frame)
         
-        let handleMovement: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self,action: "handleMovement:")
-        handleMovement.minimumPressDuration = 0.0
-        baseButton.addGestureRecognizer(handleMovement)
+        
         return baseButton
     }
 
-    
+    private func _limit(x: CGFloat, limit lim: CGFloat? = nil) -> CGFloat {
+        let limit: CGFloat = lim ?? CGFloat(RMXInterface.moveSpeed)
+        if x > limit {
+            return limit
+        } else if x < -limit {
+            return -limit
+        } else {
+            return x
+        }
+    }
     func handleMovement(recogniser: UILongPressGestureRecognizer){
         let point = recogniser.locationInView(self.gameView)
         if recogniser.state == .Began {
@@ -55,17 +62,18 @@ extension RMXDPad {
             self.action(action: "stop")
         } else {
             let move = CGPoint(x: point.x - self.moveOrigin.x, y: point.y - self.moveOrigin.y)
-            
-            var bMove = move
-            let x = log10(1 + 100 * move.x * move.x)
-            let y = log10(1 + 100 * move.y * move.y)
-            bMove.x = move.x > 0 ? x : -x
-            bMove.y = move.y > 0 ? y : -y
             let rect = self.moveButtonCenter
-            self.moveButtonPad!.center = point + move * -0.3 //rect.origin + bMove//self.moveOrigin + move
+            var bMove = move
+            let limX = rect.size.width * 0.5 ; let limY = rect.size.height * 0.5
+            let x = _limit(move.x, limit: limX) // log10(1 + 100 * move.x * move.x)
+            let y = _limit(move.y, limit: limY)//log10(1 + 100 * move.y * move.y)
+            bMove.x = x //move.x > 0 ? x : -x
+            bMove.y = y //move.y > 0 ? y : -y
+            
+            self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + bMove * 1//move * -0.3 //rect.origin + bMove//self.moveOrigin + move
             self.moveButtonPad?.setNeedsDisplay()
-            self.action(action: "move", speed: RMXInterface.moveSpeed, point: [RMFloatB(bMove.x),0, RMFloatB(bMove.y)])
-//            NSLog(bMove.print)
+            self.action(action: "move", speed: -RMXInterface.moveSpeed, point: [RMFloatB(x / limX ),0, RMFloatB(y / limY)])
+//            NSLog("FWD: \((x / limX).toData()), SIDE: \((y / limY).toData())),  TOTAL: \(1)")
         }
         
     }

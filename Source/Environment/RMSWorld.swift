@@ -35,19 +35,12 @@ class RMSWorld  {
     func getNextCamera() -> RMXNode {
         self.cameraNumber = self.cameraNumber + 1 >= self.cameras.count ? 0 : self.cameraNumber + 1
         let cameraNode = self.cameras[self.cameraNumber]
-//        self.activeSprite?.usesWorldCoordinates = self.activeSprite?.cameras.filter({ (node: SCNNode) -> Bool in
-//            return node === cameraNode
-//        }).count == 0
-
         return cameraNode
     }
     
     func getPreviousCamera() -> RMXNode {
         self.cameraNumber = self.cameraNumber - 1 < 0 ? self.cameras.count - 1 : self.cameraNumber - 1
         let cameraNode = self.cameras[self.cameraNumber]
-//        self.activeSprite?.usesWorldCoordinates = self.activeSprite?.cameras.filter({ (node: SCNNode) -> Bool in
-//            return node === cameraNode
-//        }).count == 0
         return cameraNode
     }
     
@@ -55,19 +48,28 @@ class RMSWorld  {
 
     
     var aiOn = false
-    lazy var environments: ChildSpriteArray = ChildSpriteArray(parent: self)
-
-    var children: [RMXSprite] {
-        return environments.current
-    }
     
-    var childSpriteArray: ChildSpriteArray{
-        return self.environments
-    }
+    @availability(*,unavailable)
+    lazy var environments: SpriteArray = SpriteArray(parent: self)
+
+    var children: Array<RMXSprite> = Array<RMXSprite>()
+//    var children: [RMXSprite] {
+//        return environments.current
+//    }
+    
     var hasChildren: Bool {
         return self.children.isEmpty
     }
     
+    func deleteWorld(backup: Bool = false) {
+        self.children.removeAll()
+        self.cameras.removeAll()
+        self._gravity = RMSWorld.ZERO_GRAVITY
+        self.scene = RMSWorld.DefaultScene()
+        self.activeSprite = nil
+        self.aiOn = false
+        self.cameraNumber = 0
+    }
     
     var ground: RMFloatB = RMSWorld.RADIUS
     
@@ -106,21 +108,15 @@ class RMSWorld  {
     
     func worldDidInitialize() {
 
-        //DEFAULT
-        self.environments.setType(.DEFAULT)
-        
-//        self.insertChildren(children: self.players)
-
-        self.setWorldType()
-
     }
   
+    @availability(*,deprecated=1)
     func setWorldType(worldType type: RMXWorldType = .DEFAULT){
         self.type = type
-        self.environments.setType(type)
+//        self.environments.setType(type)
     }
     
-    
+    @availability(*,deprecated=1)
     func closestObjectTo(sender: RMXSprite)->RMXSprite? {
         var closest: Int = -1
         var dista: RMFloatB = RMFloatB.infinity// = sender.body.distanceTo(closest)
@@ -134,12 +130,12 @@ class RMSWorld  {
                 }
             }
         }
-        if let result = self.childSpriteArray.get(closest) {
+        if let result = SpriteArray.get(closest, inArray: self.children) {
                 return result
             }
         return nil
     }
-    
+    @availability(*,deprecated=1)
     func furthestObjectFrom(sender: RMXSprite)->RMXSprite? {
         var furthest: Int = -1
         var dista: RMFloatB = 0// = sender.body.distanceTo(closest)
@@ -153,7 +149,7 @@ class RMSWorld  {
                 }
             }
         }
-        if let result = self.childSpriteArray.get(furthest){
+        if let result = SpriteArray.get(furthest, inArray: self.children){
                 return result
         }   else { return nil }
     }
@@ -167,7 +163,8 @@ class RMSWorld  {
             #endif
         }
         //RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
-        self.childSpriteArray.set(child)
+//        self.childSpriteArray.set(child)
+        self.children.append(child)
     }
     
     func insertChildren(children: [RMXSprite], insertNodes:Bool = true){
@@ -237,6 +234,7 @@ class RMSWorld  {
 
 
 extension RMSWorld {
+   @availability(*,unavailable)
     func setBehaviours(areOn: Bool){
         self.aiOn = areOn
         for child in children{
@@ -249,23 +247,15 @@ extension RMSWorld {
 extension RMSWorld {
 
     var forwardVector: RMXVector {
-
-        return self.activeCamera?.worldTransform.forward ?? RMXVector3Make(0,0,-1)
+        return self.activeCamera!.presentationNode().worldTransform.forward// ?? RMXVector3Make(0,0,-1)
     }
     
     var upVector: RMXVector {
-
-        return self.activeCamera?.worldTransform.up ?? RMXVector3Make(0,1,0)
+        return self.activeCamera!.presentationNode().worldTransform.up// ?? RMXVector3Make(0,1,0)
     }
     
     var leftVector: RMXVector {
-
-//        println("\n   presnode WT: \(self.activeCamera?.presentationNode().transform.left.print)")
-//        println("   presnode  T: \(self.activeCamera?.presentationNode().transform.left.print)")
-//        println("     normal WT: \(self.activeCamera?.worldTransform.left.print)")
-//        println("     normal  T: \(self.activeCamera?.transform.left.print)")
-        
-        return self.activeCamera?.worldTransform.left ?? RMXVector3Make(-1,0,0)
+        return self.activeCamera!.presentationNode().worldTransform.left// ?? RMXVector3Make(-1,0,0)
     }
     
 }

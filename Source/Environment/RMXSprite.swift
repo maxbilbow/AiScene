@@ -22,14 +22,14 @@ protocol RMXSpriteManager {
 
 class RMXSprite : RMXSpriteManager {
     
-    lazy var environments: ChildSpriteArray = ChildSpriteArray(parent: self)
+    lazy var environments: SpriteArray = SpriteArray(parent: self)
     var aiOn: Bool = false
     
     var children: [RMXSprite] {
         return environments.current
     }
     
-    var childSpriteArray: ChildSpriteArray{
+    var childSpriteArray: SpriteArray{
         return self.environments
     }
     var hasChildren: Bool {
@@ -288,7 +288,7 @@ class RMXSprite : RMXSpriteManager {
     var speed:RMFloatB = 1
 
     
-    var acceleration: RMXVector3?// = RMXVector3Zero
+//    var acceleration: RMXVector3?// = RMXVector3Zero
     private let _zNorm = 90 * PI_OVER_180
     
     func processAi(aiOn isOn: Bool = true) {
@@ -319,11 +319,11 @@ class RMXSprite : RMXSpriteManager {
                 break
             }
             
-            if let acc = self.acceleration {
-                self.accelerateForward(acc.z)
-                self.accelerateLeft(acc.x)
-                self.accelerateUp(acc.y)
-            }
+//            if let acc = self.acceleration {
+//                self.accelerateForward(acc.z)
+//                self.accelerateLeft(acc.x)
+//                self.accelerateUp(acc.y)
+//            }
             
             for child in children {
                 child.animate()
@@ -502,6 +502,15 @@ extension RMXSprite {
 }
 extension RMXSprite {
     
+    var activeCamera: RMXNode? {
+        for node in self.node.childNodes {
+            if node as? NSObject == self.world?.activeCamera {
+                return node as? RMXNode
+            }
+        }
+        return nil
+    }
+    
     func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
         
         if let itemInHand = self.item {
@@ -513,6 +522,13 @@ extension RMXSprite {
                 if target.physicsBody?.type != .Static && self.node != target && itemInHand.node != target {
                     direction = (target.presentationNode().position - itemInHand.position).normalised
                 }
+            }
+            
+            
+            if let cameraNode = self.activeCamera {
+                let gradient = cameraNode.eulerAngles.x
+                let mat = GLKMatrix4MakeRotation(Float(gradient), Float(1.0), 0.0, 0.0)
+                direction = SCNVector3FromGLKVector3( GLKMatrix4MultiplyVector3WithTranslation(mat, SCNVector3ToGLKVector3( direction)))
             }
             
             if let body = itemInHand.node.physicsBody {

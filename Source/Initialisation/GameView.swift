@@ -31,12 +31,12 @@ class GameView: SCNView  {
     }
     
         
-      
-    func setWorld(type: RMXWorldType){
-        if self.world!.type != type {
-            self.world!.setWorldType(worldType: type)
-        }
-    }
+//      
+//    func setWorld(type: RMXWorldType){
+//        if self.world!.type != type {
+//            self.world!.setWorldType(worldType: type)
+//        }
+//    }
     
     
     
