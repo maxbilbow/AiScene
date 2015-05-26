@@ -38,6 +38,10 @@ extension RMXNode {
     func getRootNode(inScene scene: RMXScene) -> RMXNode {
         return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
     }
+    
+    var rmxID: Int? {
+        return self.sprite?.rmxID
+    }
 
 }
 

@@ -12,7 +12,7 @@ import SceneKit
 
 
 class AiCubo {
-    enum Type { case TEST, EMPTY, SOCCER, POOL }
+    enum Type { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE }
     
     class func basicPlayer(world: RMSWorld) -> RMXSprite {
         //Set up player
@@ -40,6 +40,13 @@ class AiCubo {
                     break
                 case .TEST:
                     _testingEnvironment(interface)
+                    break
+                case .DOMED:
+                    _domedEnvironment(interface)
+                    break
+                case .IN_GLOBE:
+                    _insideGlobe(interface)
+                    break
                 default:
                     _testingEnvironment(interface)
                     break
@@ -93,6 +100,34 @@ class AiCubo {
         }
     }
     
+    internal class func _insideGlobe(interface: RMXInterface) {
+        if let world = interface.world {
+            _testingEnvironment(interface)
+            let earth = world.scene.rootNode.childNodeWithName("Earth", recursively: true)!
+            let globe = RMXSprite.new(parent: world, node: RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 10, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
+            globe.node.geometry!.firstMaterial?.doubleSided = true
+            if let gNode: SCNSphere = globe.node.geometry as? SCNSphere {
+                gNode.geodesic = true
+                
+            }
+            world.scene.rootNode.replaceChildNode(earth, with: globe.node)
+            for child in world.children {
+                if child.rmxID != globe.rmxID {
+                    child.node.removeFromParentNode()
+                    globe.node.addChildNode(child.node)//TODO: fix it
+                }
+            }
+            
+            world.toggleGravity()
+        }
+        
+    }
+    
+    internal class func _domedEnvironment(interface: RMXInterface) {
+        _testingEnvironment(interface)
+        
+    }
+    
     internal class func _testingEnvironment(interface: RMXInterface){
         if let world = interface.world {
             let player = self.basicPlayer(world)
@@ -128,7 +163,8 @@ class AiCubo {
             
             //            earth.physicsField!.categoryBitMask = Int(SCNPhysicsCollisionCategory.Default.rawValue)
             
-            earth.setName(name: "The Ground")
+            earth.setName(name: "Earth")
+//            earth.node.name = "Earth"
             earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
             earth.addBehaviour({ (isOn) -> () in
                 earth.resetTransform()

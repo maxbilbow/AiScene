@@ -12,7 +12,7 @@ import GLKit
 
 extension RMX {
     
-
+    @availability(*,unavailable)
     static func buildScene(world: RMSWorld) -> RMSWorld{
         
 //        let poppy = self.makePoppy(world: world)

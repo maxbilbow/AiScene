@@ -160,7 +160,7 @@ class RMXDPad : RMXInterface {
         self.gameView.addSubview(self.pauseMenu!)
     }
     
-    private let topColumns: CGFloat = 7
+    private let topColumns: CGFloat = 8
     
     internal func makeTopBar ()  {
         
@@ -183,7 +183,9 @@ class RMXDPad : RMXInterface {
         
         self.makeButton(title: " DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
         
-        self.makeButton(title: "  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (6,self.topColumns))
+        self.makeButton(title: " Video ", selector: "startVideo:", view: view, row: (1,rows), col: (6,self.topColumns))
+        
+        self.makeButton(title: "  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (last - 1,self.topColumns))
         
         self.makeButton(title: "      -", selector: "showTopBar:", view: view, row: (1,rows), col: (last,self.topColumns))
         

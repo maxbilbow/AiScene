@@ -249,7 +249,7 @@ class RMSActionProcessor {
             if speed == 1 {
                 let cameraNode = self.world.getNextCamera()
                 self.gameView.pointOfView = cameraNode
-                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).name == sprite.name {
+                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).rmxID == sprite.rmxID {
                     sprite.usesWorldCoordinates = false
                 } else {
                     sprite.usesWorldCoordinates = true
@@ -260,7 +260,7 @@ class RMSActionProcessor {
             if speed == 1 {
                 let cameraNode = self.world.getPreviousCamera()
                 self.gameView.pointOfView = cameraNode
-                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).name == sprite.name {
+                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).rmxID == sprite.rmxID {
                     sprite.usesWorldCoordinates = false
                 } else {
                     sprite.usesWorldCoordinates = true

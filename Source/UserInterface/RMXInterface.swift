@@ -17,7 +17,7 @@ import QuartzCore
     typealias RMDataView = NSTextView
 #endif
 
-
+import AVFoundation
     import SceneKit
 
     typealias RendererDelegate = SCNSceneRendererDelegate
@@ -116,6 +116,41 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         return self
     }
     
+    
+    func startVideo(sender: AnyObject?){
+        let captureSession = AVCaptureSession()
+        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        if let videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo) {
+            var err: NSError? = nil
+            if let videoIn : AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &err) as? AVCaptureDeviceInput {
+                if(err == nil){
+                    if (captureSession.canAddInput(videoIn as AVCaptureInput)){
+                        captureSession.addInput(videoIn as AVCaptureDeviceInput)
+                    }
+                    else {
+                        println("Failed to add video input.")
+                    }
+                }
+                else {
+                    println("Failed to create video input.")
+                }
+            }
+            else {
+                println("Failed to create video capture device.")
+            }
+        }
+        captureSession.startRunning()
+        previewLayer.frame = self.gameView.bounds
+        self.gameView.layer.addSublayer(previewLayer)
+        let sceneView = UIView()
+        sceneView.frame = self.gameView.bounds
+        sceneView.backgroundColor = UIColor.clearColor()
+        self.gameView.addSubview(sceneView)
+        self.gameView.sendSubviewToBack(sceneView)
+//       AiCubo.setUpWorld(self, type: .TEST)
+    }
     
     func viewDidLoad(coder: NSCoder!){
         if self.world == nil {

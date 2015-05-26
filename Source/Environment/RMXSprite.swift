@@ -113,7 +113,7 @@ class RMXSprite : RMXSpriteManager {
             RMXLog(self.node.name ?? "node is nameless - but will be named '\(self.name)'")
             //self.node.name = self.name
         }
-        self.node.name = self.name
+        self.node.name = self._name
         
         
     }

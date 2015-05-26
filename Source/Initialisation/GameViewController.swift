@@ -15,7 +15,7 @@ import QuartzCore
     #elseif OSX
     typealias ViewController = NSViewController
     #endif
-
+import AVFoundation
 class GameViewController: ViewController, SCNSceneRendererDelegate {
     #if iOS
     weak var gameView: GameView? {
@@ -35,7 +35,9 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
     override func awakeFromNib(){
         // create a new scene
         #if iOS
-        
+            
+            
+            
         self.view = GameView(frame: self.view.bounds)
         #endif
         self.gameView!.initialize(self, interface: self.interface!)

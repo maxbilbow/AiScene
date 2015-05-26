@@ -117,6 +117,7 @@ class RM3DModels : RMXModelsProtocol {
         if hasColor && color != nil {
             node.geometry!.firstMaterial!.diffuse.contents = color
             node.geometry!.firstMaterial!.specular.contents = color
+            
         }
         
         switch (mode){

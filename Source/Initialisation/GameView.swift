@@ -7,6 +7,7 @@
 //
 
 import SceneKit
+import AVFoundation
 
 class GameView: SCNView  {
     
@@ -28,7 +29,9 @@ class GameView: SCNView  {
         self.delegate = self.interface
     
         AiCubo.setUpWorld(self.interface, type: .TEST)
+        
     }
+    
     
         
 //      
