@@ -50,8 +50,6 @@
 		6C73A8E61B0A75DE00187A61 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8E41B0A75DC00187A61 /* RMXScene.swift */; };
 		6C73A8E71B0A75DF00187A61 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8E41B0A75DC00187A61 /* RMXScene.swift */; };
 		6C73A8E81B0A7C5200187A61 /* RMXInitialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CB1AE544C000E71811 /* RMXInitialize.swift */; };
-		6C86CE6E1B0669DB00ED6054 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */; };
-		6C86CE701B0669FF00ED6054 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */; };
 		6C8CCAF41B0B5E3000D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
 		6C8CCAF51B0B5EF800D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
 		6C8CCAF61B0B5EF800D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
@@ -164,8 +162,6 @@
 		6C73A8DA1B0A6E5F00187A61 /* 2dModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 2dModels.swift; sourceTree = "<group>"; };
 		6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXModels.swift; sourceTree = "<group>"; };
 		6C73A8E41B0A75DC00187A61 /* RMXScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXScene.swift; sourceTree = "<group>"; };
-		6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
-		6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/SceneKit.framework; sourceTree = DEVELOPER_DIR; };
 		6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAi.swift; path = ../Environment/RMXAi.swift; sourceTree = "<group>"; };
 		6C92998B1AE5432000E71811 /* AiScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C92998F1AE5432000E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -233,7 +229,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C86CE6E1B0669DB00ED6054 /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +243,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C86CE701B0669FF00ED6054 /* SceneKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,8 +320,6 @@
 			isa = PBXGroup;
 			children = (
 				50B563EC1B13A7F2008AB47D /* RMXBrain.swift */,
-				6C86CE6F1B0669FF00ED6054 /* SceneKit.framework */,
-				6C86CE6D1B0669DB00ED6054 /* SceneKit.framework */,
 				6C4A28821B03ACDB001C3F5B /* Media */,
 				6C9299F01AE544D500E71811 /* art.scnassets */,
 				6C9299B31AE544C000E71811 /* Source */,
@@ -1160,7 +1152,7 @@
 				);
 				INFOPLIST_FILE = "AiScene-OSX/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DOSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -1174,7 +1166,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "AiScene-OSX/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DOSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;

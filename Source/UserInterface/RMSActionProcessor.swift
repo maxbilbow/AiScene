@@ -330,7 +330,22 @@ class RMSActionProcessor {
             if speed == 1 {
                 self.interface.pauseGame(speed)
             } 
-            break
+            return true
+        case RMXInterface.KEYBOARD_LAYOUT:
+            if speed == 1 {
+                switch self.interface.keyboard {
+                case .French:
+                    self.interface.setKeyboard(type: .UK)
+                    break
+                case .UK:
+                    self.interface.setKeyboard(type: .French)
+                    break
+                default:
+                    self.interface.setKeyboard(type: .UK)
+                    break
+                }
+            }
+            return true
         default:
             RMXLog("'\(action)' not recognised")
         }

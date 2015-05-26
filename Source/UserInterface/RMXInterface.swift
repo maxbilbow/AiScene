@@ -52,6 +52,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let NEXT_CAMERA: String = "nextCamera"
     static let PREV_CAMERA: String = "previousCamera"
     static let PAUSE_GAME: String = "pauseGame"
+    static let KEYBOARD_LAYOUT: String = "switchKeyboard"
     
     //Misc: generically used for testing
     static let GET_INFO: String = "information"
@@ -85,7 +86,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     var activeSprite: RMXSprite? {
         return self.world?.activeSprite
     }
-
+    internal var keyboard: KeyboardType = .UK
     
     var dataView: RMDataView?
     
@@ -218,6 +219,10 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
 
     }
     
+    enum KeyboardType { case French, UK }
+    func setKeyboard(type: KeyboardType = .UK)  {
+        self.keyboard = type
+    }
     ///Stop all inputs (i.e. no gestures received)
     ///@virtual
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }

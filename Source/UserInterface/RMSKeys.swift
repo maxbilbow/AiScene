@@ -96,6 +96,7 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: NEXT_CAMERA, characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: PAUSE_GAME, characters: "p", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: KEYBOARD_LAYOUT, characters: "k", isRepeating: false, speed: ON_KEY_UP),
     
     //Misc: generically used for testing
     RMKey(self, action: GET_INFO, characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
@@ -219,6 +220,39 @@ class RMSKeys : RMXInterface {
         }
 //        RMXLog("\(self.mouseDelta.x), \(self.mouseDelta.y)")
     }
+    
+    ///Adapt the keyboard for different layouts
+    override func setKeyboard(type: KeyboardType = .UK) {
+        super.setKeyboard(type: type)
+        switch type {
+        case .French:
+            self.set(action: RMXInterface.MOVE_FORWARD, characters: "z")
+            self.set(action: RMXInterface.MOVE_LEFT, characters: "q")
+            self.set(action: RMXInterface.MOVE_DOWN, characters: "a")
+            self.set(action: RMXInterface.ROLL_LEFT, characters: "w")
+            
+            self.set(action: RMXInterface.NEXT_CAMERA, characters: "=")
+            self.set(action: RMXInterface.PREV_CAMERA, characters: ":")
+            
+            self.set(action: RMXInterface.ZOOM_IN, characters: "-")
+            self.set(action: RMXInterface.ZOOM_OUT, characters: ")")
+            break
+        case .UK:
+            self.set(action: RMXInterface.MOVE_FORWARD, characters: "w")
+            self.set(action: RMXInterface.MOVE_LEFT, characters: "a")
+            self.set(action: RMXInterface.MOVE_DOWN, characters: "q")
+            self.set(action: RMXInterface.ROLL_LEFT, characters: "z")
+            
+            self.set(action: RMXInterface.NEXT_CAMERA, characters: ".")
+            self.set(action: RMXInterface.PREV_CAMERA, characters: ",")
+            
+            self.set(action: RMXInterface.ZOOM_IN, characters: "=")
+            self.set(action: RMXInterface.ZOOM_OUT, characters: "-")
+            break
+        default:
+            break
+        }
+    }
 }
 
 /// Single mapping for a control on the desktop interface.
@@ -299,6 +333,8 @@ class RMKey {
             self.keys.action(action: self.action, speed: self.speed.on, point: self.values)
         }
     }
+    
+    
 }
 
 func ==(lhs: RMKey, rhs: Int) -> Bool{
