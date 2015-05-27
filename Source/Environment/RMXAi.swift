@@ -34,111 +34,41 @@ class RMXAi {
         }
     }
     
-    class func playFetch(poppy: RMXSprite, master observer: RMXSprite) {
-        var itemToWatch: RMXSprite! = nil
-        var timePassed = 0
-        var state: PoppyState = .IDLE
+    class func playFetch(poppy: RMXSprite, master: RMXSprite) {
+        var itemToWatch: RMXNode?
         let speed:RMFloatB = 150 * (poppy.mass + 1)
-        let updateInterval = 1
-        var lastPosition: RMXVector = poppy.position
-//        var lastDistToTarget: RMFloatB = 0
+        poppy.speed = speed
+        poppy.world?.interface.collider.trackers.append(poppy.tracker)
         
+        let READY_TO_CHASE = "ready"; let CHASING = "chasing"; let BRINGING_IT_BACK = "fetching"
         poppy.behaviours.append { (isOn: Bool) -> () in
-            //            NSLog("State: \(state.rawValue) - Pos: \(poppy.position.print)")
-            func idle(sender: RMXSprite, objects: [AnyObject]? = []) -> AnyObject? {
-//                sender.lookAround(theta: speed / 10)
-                //sender.accelerateForward(speed)
-                return nil
-            }
-
-            
-            
-            
-            
-            func fetch(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject? {
-                //                sender.body.hasGravity = (objects?[0] as! RMXSprite).hasGravity
-                return sender.grabItem(item: itemToWatch)
-            }
-            
-            func drop(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject?  {
-                sender.releaseItem()
-                sender.completeStop()
-                poppy.world?.interface.av.sounds["pop2"]?.play()
-                return nil
-            }
-            
-            func getReady(sender: RMXSprite, objects: [AnyObject]?)  -> AnyObject? {
-                sender.completeStop()
-                poppy.world?.interface.av.sounds["pop1"]?.play()
-                return nil
-            }
-            
-            func doIfStuck() {
-                if self.isStuck(poppy, target: itemToWatch ?? observer, lastPosition: lastPosition) {
-                    poppy.jump()
-                } else {
-                    lastPosition = poppy.position
-//                    lastDistToTarget = poppy.distanceTo(itemToWatch ?? observer)
-                }
-            }
-            
-            switch (state) {
-            case .IDLE:
-                if let item = observer.item {
-                    if item != poppy {
-                        itemToWatch = item
-                        state = .READY_TO_CHASE
-                       
-                    }
-                } else {
-                    idle(poppy)
-                    RMXLog("Idle: \(state.rawValue), pos: \(poppy.position.print)")
-                }
-                break
-            case .READY_TO_CHASE:
-                if !observer.hasItem {
-                    let col: CollisionRequest = {
-                        
-                    }
-                    poppy.world?.interface.av.requests.append(CollisionRequest {
-                        
+            if master.hasItem && !master.isHolding(poppy) {
+                poppy.releaseItem()
+                poppy.tracker.state = READY_TO_CHASE
+                itemToWatch = master.item!.node
+                poppy.tracker.setTarget(target: itemToWatch, doOnArrival: { (target: RMXNode?) -> () in
+                    if master.isHolding(target) {
+                        poppy.world?.interface.collider.sounds["pop1"]?.play()
+//                            poppy.tracker.pauseFor(10)
+                    } else {
+                        poppy.grab(node: target)
+                        poppy.tracker.setTarget(target: master.node, doOnArrival: { (target: RMXNode?) -> () in
+                            poppy.world?.interface.collider.sounds["pop2"]?.play()
+                            poppy.releaseItem()
+                            poppy.tracker.state = RMXTracker.IDLE
+                            poppy.tracker.setTarget()
+                            
                         })
-                    state = .CHASING
-                } else {
-                    RMXLog("Ready to Chase: \(state.rawValue),  pos: \(poppy.position.print)")
-                    poppy.headTo(itemToWatch, speed: speed, doOnArrival: getReady)
-                    doIfStuck()
-                }
-                break
-            case .CHASING:
-                if  observer.hasItem {
-                    itemToWatch = nil
-                    state = .IDLE
-                } else if poppy.hasItem {
-                    itemToWatch = nil
-                    state = .FETCHING
-                } else {
-                    RMXLog("Chasing: \(state.rawValue),  pos: \(poppy.position.print)")
-                    poppy.headTo(itemToWatch, speed: speed, doOnArrival: fetch, objects: observer)
-                    doIfStuck()
-                }
-                break
-            case .FETCHING:
-                if !poppy.hasItem || observer.hasItem {
-                    state = .IDLE
-                }  else {
-                    poppy.headTo(observer, speed: speed, doOnArrival: drop)
-                    RMXLog("Fetching: \(state.rawValue),  pos: \(poppy.position.print)")
-                    doIfStuck()
-                }
-                break
-            default:
-                    state = .IDLE
-                fatalError("no state set")
+                    }
+                    
+                })
             }
         }
-    
     }
+    
+
+    
+    
 
     
     static let RANDOM_MOVEMENT = true
@@ -172,7 +102,7 @@ class RMXAi {
             var chasingAction: () -> (AnyObject?) =  {
                 if let t = target {
                     if !t.isUnique {//.type != RMXSpriteType.BACKGROUND {
-                        sprite.grabItem(item: t)
+                        sprite.grab(item: t)
                         target = nil
                         timePassed = -timeLimit
                     } else {

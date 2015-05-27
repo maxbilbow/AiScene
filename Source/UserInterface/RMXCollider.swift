@@ -14,6 +14,7 @@ typealias CollisionRequest = (contact: SCNPhysicsContact) -> Bool
 
 class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
+    enum type { case Began, Updated, Ended }
     var world: RMSWorld? {
         return self.interface.world
     }
@@ -39,7 +40,7 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     "pop1" : RMXCollider.getPlayer("pop1", ofType: "m4a")
     ]
 
-    var requests: Array<CollisionRequest> = Array<CollisionRequest>()
+    var trackers: Array<RMXTracker> = Array<RMXTracker>()
     
     init(interface: RMXInterface) {
         self.interface = interface
@@ -65,35 +66,19 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     func physicsWorld(world: SCNPhysicsWorld, didBeginContact contact: SCNPhysicsContact) {
         if contact.nodeA.rmxID == self.activeSprite?.rmxID {
-//            NSLog("START: NodeA hit \(contact.nodeB.sprite?.name)")
             didBeginContact(contact)
         }
-        for (index, request) in enumerate(self.requests){
-            if request(contact) {
-                let removed = self.requests.removeAtIndex(index)
-            }
+        for tracker in self.trackers {
+            tracker.checkForCollision(contact)
         }
-//        } else if contact.nodeB.rmxID == self.activeSprite?.rmxID {
-//            NSLog("START: NodeB hit \(contact.nodeA.sprite?.name)")
-////            didBeginContact(contact)
-//        }
     }
     
     func physicsWorld(world: SCNPhysicsWorld, didUpdateContact contact: SCNPhysicsContact) {
-//        if contact.nodeA.rmxID == self.activeSprite?.rmxID {
-//            NSLog("UPDATE: NodeA hit \(contact.nodeB.sprite?.name)")
-//        } else if contact.nodeB.rmxID == self.activeSprite?.rmxID {
-//            NSLog("UPDATE: NodeB hit \(contact.nodeA.sprite?.name)")
-//        }
+
     }
     
     func physicsWorld(world: SCNPhysicsWorld, didEndContact contact: SCNPhysicsContact) {
-//        if contact.nodeA.rmxID == self.activeSprite?.rmxID {
-//            NSLog("END: NodeA hit \(contact.nodeB.sprite?.name)")
-//            self.didEndContact(contact)
-//        } else if contact.nodeB.rmxID == self.activeSprite?.rmxID {
-//            NSLog("END: NodeB hit \(contact.nodeA.sprite?.name)")
-//        }
+
     }
 
 }

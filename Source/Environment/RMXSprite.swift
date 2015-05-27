@@ -21,7 +21,11 @@ protocol RMXSpriteManager {
 
 
 class RMXSprite : RMXSpriteManager {
-    var hitTarget = false
+    lazy var tracker: RMXTracker = RMXTracker(sprite: self)
+//    var hitTarget = false
+//    var target: RMXSprite?
+//    var doOnArrival: ((sender: RMXSprite, target: AnyObject)-> AnyObject?)?
+    
     lazy var environments: SpriteArray = SpriteArray(parent: self)
     var aiOn: Bool = false
     
@@ -128,6 +132,19 @@ class RMXSprite : RMXSpriteManager {
         }
     }
     
+    func isHolding(id: Int) -> Bool{
+        return self.item?.rmxID == id
+    }
+    
+    func isHolding(item: RMXSprite?) -> Bool{
+        return self.item?.rmxID == item?.rmxID
+    }
+    
+    func isHolding(node: RMXNode?) -> Bool{
+        return self.item?.rmxID == node?.rmxID
+    }
+    
+    
     private var _reach: RMFloatB?
     
     var reach: RMFloatB {
@@ -182,7 +199,7 @@ class RMXSprite : RMXSpriteManager {
     var x,y,z: RMFloatB?
     
     
-   
+    
     
     var behaviours: [(Bool) -> ()] = Array<(Bool) -> ()>()
 
@@ -304,12 +321,12 @@ class RMXSprite : RMXSpriteManager {
             switch type {
             case .AI:
                 self.manipulate()
-                self.jumpTest()
-                
+//                self.jumpTest()
+                self.tracker.headToTarget()
                 break
             case .PLAYER:
                 self.manipulate()
-                self.jumpTest()
+//                self.jumpTest()
                 break
             case .PASSIVE:
                 break
@@ -536,8 +553,8 @@ extension RMXSprite {
                 itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
                 let dist = self.distanceTo(point: world!.activeCamera!.presentationNode().position)
                 if self.isActiveSprite {
-                    self.world!.interface.av.sounds[RMXInterface.THROW_ITEM]?.volume = dist < 10 ? 1 : Float(10 / dist)
-                    self.world!.interface.av.sounds[RMXInterface.THROW_ITEM]?.play()
+                    self.world!.interface.collider.sounds[RMXInterface.THROW_ITEM]?.volume = dist < 10 ? 1 : Float(10 / dist)
+                    self.world!.interface.collider.sounds[RMXInterface.THROW_ITEM]?.play()
                 }
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
@@ -594,9 +611,13 @@ extension RMXSprite {
         return self.distanceTo(item) <= self.reach + item.radius
     }
     
-    func grabItem(item itemIn: RMXSprite? = nil) -> RMXSprite? {
+    func grab(node: RMXNode? = nil) -> RMXSprite? {
+        return self.grab(item: node?.sprite)
+    }
+    
+    func grab(item: RMXSprite? = nil) -> RMXSprite? {
         if self.hasItem { return self.item }
-        if let item = itemIn {
+        if let item = item {
             if self.isWithinReachOf(item) || true {
                 self.setItem(item: item)
                 return item
@@ -612,7 +633,6 @@ extension RMXSprite {
     }
     
     func releaseItem() {
-        if item != nil { RMXLog("DROPPED: \(item!.name)") }
         if self.item != nil {
             self.setItem(item: nil)
         }
@@ -725,14 +745,27 @@ extension RMXSprite {
         return nil
     }
     
+       
+//    func doIfStuck() {
+//        if RMXAi.isStuck(self, target: self.target, lastPosition: lastPosition) {
+//            poppy.jump()
+//        } else {
+//            lastPosition = poppy.position
+//            //                    lastDistToTarget = poppy.distanceTo(itemToWatch ?? observer)
+//        }
+//    }
+
+    
+   
     
     ///TODO hitCondition instead of self.hitTarget
+    @availability(*,deprecated=1)
     func headTo(object: RMXSprite?, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
         if let object = object {
             let target = object.position //?? self.position * 10
             let dist = RMXVector3Distance(self.position, target)
             let reach = object.radius // ?? self.radius
-            if !self.hitTarget {// dist >= fabs(reach + self.reach) * 2 {
+            if dist >= fabs(reach + self.reach) * 2 {
                 #if OPENGL_OSX
                     speed *= 0.5
                 #endif

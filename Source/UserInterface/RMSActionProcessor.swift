@@ -201,7 +201,7 @@ class RMSActionProcessor {
         case RMXInterface.JUMP:
             if speed == 1 {
                 sprite.jump()
-                self.interface.av.sounds[action]?.play()
+                self.interface.collider.sounds[action]?.play()
             }
             else {
 //                sprite.prepareToJump()
@@ -299,7 +299,7 @@ class RMSActionProcessor {
                     self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
                 } else {
                     self.explode(force: self.boomTimer)
-                    self.interface.av.sounds[RMXInterface.BOOM]?.play()
+                    self.interface.collider.sounds[RMXInterface.BOOM]?.play()
                 }
                 self.boomTimer = 1
             } else if speed == 0 && self.boomTimer == 1 {
@@ -483,11 +483,11 @@ class RMSActionProcessor {
                                     } else {
                                         //                                   self.world?.observer.grabItem(item: item)
                                         sprite.throwItem()
-                                        sprite.grabItem(item: item)
+                                        sprite.grab(item: item)
                                         RMXLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
                                     }
                                 } else if item.type != RMXSpriteType.BACKGROUND {
-                                    sprite.grabItem(item: item)
+                                    sprite.grab(item: item)
                                     RMXLog("Node is grabbable: \(item.name)")
                                 } else {
                                     RMXLog("Node was NOT grabbable: \(item.name)")

@@ -43,6 +43,26 @@ extension RMXNode {
         return self.sprite?.rmxID
     }
 
+    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
+        var center: RMXVector3 = RMXVector3Zero
+        var radius: RMFloat = 0
+        self.getBoundingSphereCenter(&center, radius: &radius)
+        return (center, RMFloatB(radius))
+    }
+    
+    var boundingBox: (min: RMXVector, max: RMXVector) {
+        var min: RMXVector3 = RMXVector3Zero
+        var max: RMXVector3 = RMXVector3Zero
+        self.getBoundingBoxMin(&min, max: &max)
+        return (min, max)
+    }
+    
+    var radius: RMFloatB {
+        
+        // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
+        return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
+    }
+
 }
 
 class RMXBrain : RMXNode {

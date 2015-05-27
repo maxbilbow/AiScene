@@ -64,7 +64,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let LEFT_CLICK: String = "Mouse 1"
     static let RIGHT_CLICK: String = "Mouse 2"
     
-    lazy var av: RMXCollider = RMXCollider(interface: self)
+    lazy var collider: RMXCollider = RMXCollider(interface: self)
 
     var activeCamera: RMXNode? {
         return self.world?.activeCamera

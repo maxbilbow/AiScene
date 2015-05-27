@@ -96,7 +96,7 @@ class RMSWorld   {
     
     func setScene(scene: RMXScene? = nil){
         self._scene = scene ?? RMSWorld.DefaultScene()
-        self._scene.physicsWorld.contactDelegate = self.interface.av
+        self._scene.physicsWorld.contactDelegate = self.interface.collider
         self.interface.gameView.scene = self._scene
     }
     
