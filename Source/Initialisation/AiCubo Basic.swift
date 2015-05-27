@@ -202,7 +202,7 @@ class AiCubo {
             topCam.eulerAngles.x = -90 * PI_OVER_180
             topCam.camera = RMX.standardCamera()
             world.cameras.append(topCam)
-            
+            world.aiOn = true
         }
         
     }

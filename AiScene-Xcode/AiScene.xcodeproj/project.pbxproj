@@ -222,7 +222,7 @@
 		6C9299C21AE544C000E71811 /* RMSMaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSMaths.swift; sourceTree = "<group>"; };
 		6C9299C31AE544C000E71811 /* RMX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMX.swift; sourceTree = "<group>"; };
 		6C9299C41AE544C000E71811 /* RMXDebugger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXDebugger.swift; sourceTree = "<group>"; };
-		6C9299C51AE544C000E71811 /* RMXQuestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXQuestions.swift; sourceTree = "<group>"; };
+		6C9299C51AE544C000E71811 /* RMXQuestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXQuestions.swift; path = Generics/RMXQuestions.swift; sourceTree = "<group>"; };
 		6C9299C61AE544C000E71811 /* RMXValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXValue.swift; sourceTree = "<group>"; };
 		6C9299C91AE544C000E71811 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		6C9299CA1AE544C000E71811 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -298,6 +298,7 @@
 			isa = PBXGroup;
 			children = (
 				6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */,
+				6C9299C51AE544C000E71811 /* RMXQuestions.swift */,
 				50B563EC1B13A7F2008AB47D /* RMXBrain.swift */,
 				5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */,
 				50BF107D1B16030D00680768 /* RMXTracker.swift */,
@@ -486,7 +487,6 @@
 				6C9299C21AE544C000E71811 /* RMSMaths.swift */,
 				6C9299C31AE544C000E71811 /* RMX.swift */,
 				6C9299C41AE544C000E71811 /* RMXDebugger.swift */,
-				6C9299C51AE544C000E71811 /* RMXQuestions.swift */,
 				6C9299C61AE544C000E71811 /* RMXValue.swift */,
 			);
 			path = Generics;

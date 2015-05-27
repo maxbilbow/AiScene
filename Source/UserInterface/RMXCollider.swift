@@ -68,8 +68,10 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
         if contact.nodeA.rmxID == self.activeSprite?.rmxID {
             didBeginContact(contact)
         }
-        for tracker in self.trackers {
-            tracker.checkForCollision(contact)
+        if contact.nodeB.sprite?.type != .BACKGROUND && contact.nodeA.sprite?.type != .BACKGROUND {
+            for tracker in self.trackers {
+                tracker.checkForCollision(contact)
+            }
         }
     }
     

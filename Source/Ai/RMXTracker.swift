@@ -23,6 +23,10 @@ class RMXTracker {
         return self.isActive ? _target : nil
     }
     
+    var hasTarget: Bool {
+        return _target != nil
+    }
+    
     var doOnArrival, doOnLeave, doWhileTouching: ((target: RMXNode?)->())?
     
     init(sprite: RMXSprite) {
@@ -47,18 +51,10 @@ class RMXTracker {
         }
     }
     
-    func setTarget(target: RMXNode? = nil, speed: RMFloatB? = nil, doOnArrival: ((target: RMXNode?) -> ())? = nil) {
-        
-//        if let target = target as? RMXSprite {
-//            self._target = target.node
-//        } else if let target = target as? RMXNode {
-//            self._target = target
-//        } else {
-//            _target = nil
-//        }
+    func setTarget(target: RMXNode? = nil, speed: RMFloatB? = nil, afterTime limit: Int = 0, doOnArrival: ((target: RMXNode?) -> ())? = nil) {
+        _limit = limit
+        _count = 0
         _target = target
-//        self.isActive = _target != nil
-        
         self.doOnArrival = doOnArrival //!= nil ? doOnArrival : { self.pauseFor(10) }
 //        self.doOnLeave = doOnLeave != nil ? doOnLeave : { self._target = lastTarget }
 //        self.hitTarget = false
@@ -67,12 +63,8 @@ class RMXTracker {
         }
     }
     
-    private var _count: Int = 0 ; private var _limit: Int = 10
-    func pauseFor(_ seconds: Int = 10){
-        _limit = 10
-//        self.isActive = false
-    }
-
+    private var _count: Int = 0 ; private var _limit: Int = 0
+   
     
     func checkForCollision(contact: SCNPhysicsContact) -> Bool {
         if let target = self.target {
@@ -86,22 +78,22 @@ class RMXTracker {
         return false
     }
     
-    internal func headToTarget(target: AnyObject? = nil) {
+    internal func headToTarget() {
         if let target = self.target {
-            let direction = RMXVector3Normalize(target.presentationNode().position - self.sprite.position)
-            self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.sprite.front,  impulse: false)
-            if self.isStuck {
-                self.sprite.jump()
+            if _limit > 0 && _count > _limit {
+                self.doOnArrival?(target: self.target)
+                _count = 0
             } else {
-                self.lastPosition = self.sprite.position
+                ++_count
+                let direction = RMXVector3Normalize(target.presentationNode().position - self.sprite.position)
+                self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.sprite.front,  impulse: false)
+                if self.isStuck {
+                    self.sprite.jump()
+                } else {
+                    self.lastPosition = self.sprite.position
+                }
             }
         }
-//        else if !isActive {
-//            ++_count
-//            if _count > _limit {
-//                self.isActive = true
-//            }
-//        }
     }
 
 }

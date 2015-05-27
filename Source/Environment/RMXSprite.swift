@@ -12,7 +12,7 @@ import SceneKit
 import GLKit
     
 enum JumpState { case PREPARING_TO_JUMP, JUMPING, GOING_UP, COMING_DOWN, NOT_JUMPING }
-enum RMXSpriteType { case  AI, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC }
+enum RMXSpriteType { case  AI, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC, PLAYER_OR_AI }
 
 protocol RMXSpriteManager {
 //    
@@ -28,6 +28,12 @@ class RMXSprite : RMXSpriteManager {
     
     lazy var environments: SpriteArray = SpriteArray(parent: self)
     var aiOn: Bool = false
+    
+    var holder: RMXSprite?
+    
+    var isHeld: Bool {
+        return self.holder != nil
+    }
     
     var children: [RMXSprite] {
         return environments.current
@@ -593,6 +599,7 @@ extension RMXSprite {
     private func setItem(item itemIn: RMXSprite?) {
         if let item = itemIn {
             _itemInHand = item
+            _itemInHand?.holder = self
             self.setReach() //= self.armLength + item.radius //TODO: What if too short?
             if let body = _itemInHand?.node.physicsBody {
                 body.type = .Kinematic
@@ -601,6 +608,7 @@ extension RMXSprite {
             if let body = _itemInHand?.node.physicsBody {
                 body.type = .Dynamic
             }
+            _itemInHand?.holder = nil
             _itemInHand = nil
             self.setReach(reach: self.reach + item.radius)
             
@@ -619,7 +627,7 @@ extension RMXSprite {
         if self.hasItem { return self.item }
         if let item = item {
             if self.isWithinReachOf(item) || true {
-                self.setItem(item: item)
+                self.setItem(item: item.isHeld ? item.holder : item)
                 return item
             }
         }

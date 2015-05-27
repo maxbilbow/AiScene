@@ -62,6 +62,14 @@ extension RMXNode {
         // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
         return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
     }
+    
+    var isHeld: Bool {
+        return self.sprite?.isHeld ?? false
+    }
+    
+    var holder: RMXSprite? {
+        return self.sprite?.holder
+    }
 
 }
 

@@ -67,7 +67,7 @@ class RMSWorld   {
         self._gravity = RMSWorld.ZERO_GRAVITY
         self.setScene()
         self.activeSprite = nil
-        self.aiOn = false
+        self.aiOn = false//TODO check if this is right as default
         self.cameraNumber = 0
     }
     
