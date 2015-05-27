@@ -7,6 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5031F3AB1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */; };
+		5031F3AC1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */; };
+		5031F3AD1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */; };
+		5031F3B11B15B0AA00FAB551 /* pop1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3AF1B15B0AA00FAB551 /* pop1.m4a */; };
+		5031F3B21B15B0AA00FAB551 /* pop1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3AF1B15B0AA00FAB551 /* pop1.m4a */; };
+		5031F3B31B15B0AA00FAB551 /* pop1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3AF1B15B0AA00FAB551 /* pop1.m4a */; };
+		5031F3B41B15B0AA00FAB551 /* pop2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3B01B15B0AA00FAB551 /* pop2.m4a */; };
+		5031F3B51B15B0AA00FAB551 /* pop2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3B01B15B0AA00FAB551 /* pop2.m4a */; };
+		5031F3B61B15B0AA00FAB551 /* pop2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3B01B15B0AA00FAB551 /* pop2.m4a */; };
+		5031F3B81B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3B71B15B25C00FAB551 /* Air Pressure Blast 1.caf */; };
+		5031F3B91B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3B71B15B25C00FAB551 /* Air Pressure Blast 1.caf */; };
+		5031F3BA1B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3B71B15B25C00FAB551 /* Air Pressure Blast 1.caf */; };
+		5031F3BC1B15B72D00FAB551 /* Heavy Drag.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3BB1B15B72D00FAB551 /* Heavy Drag.caf */; };
+		5031F3BD1B15B72D00FAB551 /* Heavy Drag.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3BB1B15B72D00FAB551 /* Heavy Drag.caf */; };
+		5031F3BE1B15B72D00FAB551 /* Heavy Drag.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3BB1B15B72D00FAB551 /* Heavy Drag.caf */; };
+		5031F3C01B15B74E00FAB551 /* Turntable Scratch 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3BF1B15B74E00FAB551 /* Turntable Scratch 2.caf */; };
+		5031F3C11B15B74E00FAB551 /* Turntable Scratch 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3BF1B15B74E00FAB551 /* Turntable Scratch 2.caf */; };
+		5031F3C21B15B74E00FAB551 /* Turntable Scratch 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3BF1B15B74E00FAB551 /* Turntable Scratch 2.caf */; };
+		5031F3C41B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */; };
+		5031F3C51B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */; };
+		5031F3C61B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */; };
+		5031F3C81B15B85100FAB551 /* Baseball Catch.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3C71B15B85100FAB551 /* Baseball Catch.caf */; };
+		5031F3C91B15B85100FAB551 /* Baseball Catch.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3C71B15B85100FAB551 /* Baseball Catch.caf */; };
+		5031F3CA1B15B85100FAB551 /* Baseball Catch.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3C71B15B85100FAB551 /* Baseball Catch.caf */; };
+		5031F3CC1B15B87C00FAB551 /* Body Hit 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */; };
+		5031F3CD1B15B87C00FAB551 /* Body Hit 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */; };
+		5031F3CE1B15B87C00FAB551 /* Body Hit 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */; };
 		50B563ED1B13A7F2008AB47D /* RMXBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* RMXBrain.swift */; };
 		50B563EE1B13A7F2008AB47D /* RMXBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* RMXBrain.swift */; };
 		50B563EF1B13A7F2008AB47D /* RMXBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* RMXBrain.swift */; };
@@ -142,6 +169,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAVProcessor.swift; path = UserInterface/RMXAVProcessor.swift; sourceTree = "<group>"; };
+		5031F3AF1B15B0AA00FAB551 /* pop1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop1.m4a; sourceTree = "<group>"; };
+		5031F3B01B15B0AA00FAB551 /* pop2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop2.m4a; sourceTree = "<group>"; };
+		5031F3B71B15B25C00FAB551 /* Air Pressure Blast 1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Air Pressure Blast 1.caf"; sourceTree = "<group>"; };
+		5031F3BB1B15B72D00FAB551 /* Heavy Drag.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Heavy Drag.caf"; sourceTree = "<group>"; };
+		5031F3BF1B15B74E00FAB551 /* Turntable Scratch 2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Turntable Scratch 2.caf"; sourceTree = "<group>"; };
+		5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Air Reverse Burst 2.caf"; sourceTree = "<group>"; };
+		5031F3C71B15B85100FAB551 /* Baseball Catch.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Baseball Catch.caf"; sourceTree = "<group>"; };
+		5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Body Hit 01.caf"; sourceTree = "<group>"; };
 		50B563EC1B13A7F2008AB47D /* RMXBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXBrain.swift; sourceTree = "<group>"; };
 		6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = MyPlayground.playground; path = ../../MyPlayground.playground; sourceTree = "<group>"; };
 		6C4A286A1B03ACCC001C3F5B /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
@@ -170,8 +206,6 @@
 		6C9299A21AE5432100E71811 /* AiSceneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiSceneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C9299A71AE5432100E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C9299A81AE5432100E71811 /* AiSceneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiSceneTests.swift; sourceTree = "<group>"; };
-		6C9299B51AE544C000E71811 /* CWrappers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CWrappers.c; sourceTree = "<group>"; };
-		6C9299B61AE544C000E71811 /* Vertices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vertices.h; sourceTree = "<group>"; };
 		6C9299B81AE544C000E71811 /* 3dModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 3dModels.swift; sourceTree = "<group>"; };
 		6C9299B91AE544C000E71811 /* RMSArt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSArt.swift; sourceTree = "<group>"; };
 		6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSPhysicsBody.swift; sourceTree = "<group>"; };
@@ -256,9 +290,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5031F3A91B15ABFF00FAB551 /* AV */ = {
+			isa = PBXGroup;
+			children = (
+				5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */,
+			);
+			name = AV;
+			sourceTree = "<group>";
+		};
+		5031F3AE1B15B0AA00FAB551 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */,
+				5031F3BF1B15B74E00FAB551 /* Turntable Scratch 2.caf */,
+				5031F3C71B15B85100FAB551 /* Baseball Catch.caf */,
+				5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */,
+				5031F3BB1B15B72D00FAB551 /* Heavy Drag.caf */,
+				5031F3B71B15B25C00FAB551 /* Air Pressure Blast 1.caf */,
+				5031F3AF1B15B0AA00FAB551 /* pop1.m4a */,
+				5031F3B01B15B0AA00FAB551 /* pop2.m4a */,
+			);
+			name = Audio;
+			path = ../Audio;
+			sourceTree = "<group>";
+		};
 		6C4A28821B03ACDB001C3F5B /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				5031F3AE1B15B0AA00FAB551 /* Audio */,
 				6C4A286A1B03ACCC001C3F5B /* icons.xcassets */,
 			);
 			name = Media;
@@ -384,7 +443,7 @@
 		6C9299B31AE544C000E71811 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				6C9299B41AE544C000E71811 /* C */,
+				5031F3A91B15ABFF00FAB551 /* AV */,
 				6C73A8D91B0A6D7900187A61 /* Art */,
 				6C9299B71AE544C000E71811 /* Environment */,
 				6C9299C01AE544C000E71811 /* Generics */,
@@ -395,15 +454,6 @@
 			);
 			name = Source;
 			path = ../Source;
-			sourceTree = "<group>";
-		};
-		6C9299B41AE544C000E71811 /* C */ = {
-			isa = PBXGroup;
-			children = (
-				6C9299B51AE544C000E71811 /* CWrappers.c */,
-				6C9299B61AE544C000E71811 /* Vertices.h */,
-			);
-			path = C;
 			sourceTree = "<group>";
 		};
 		6C9299B71AE544C000E71811 /* Environment */ = {
@@ -685,9 +735,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C73A8B11B0A66E300187A61 /* LaunchScreen.xib in Resources */,
+				5031F3BE1B15B72D00FAB551 /* Heavy Drag.caf in Resources */,
+				5031F3B61B15B0AA00FAB551 /* pop2.m4a in Resources */,
+				5031F3C61B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */,
 				6C73A8AE1B0A66E300187A61 /* Images.xcassets in Resources */,
+				5031F3C21B15B74E00FAB551 /* Turntable Scratch 2.caf in Resources */,
 				6C73A8A51B0A66E300187A61 /* GameScene.sks in Resources */,
+				5031F3B31B15B0AA00FAB551 /* pop1.m4a in Resources */,
+				5031F3CA1B15B85100FAB551 /* Baseball Catch.caf in Resources */,
 				6C73A8AC1B0A66E300187A61 /* Main.storyboard in Resources */,
+				5031F3BA1B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */,
+				5031F3CE1B15B87C00FAB551 /* Body Hit 01.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -703,9 +761,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C4A28721B03ACCC001C3F5B /* icons.xcassets in Resources */,
+				5031F3BC1B15B72D00FAB551 /* Heavy Drag.caf in Resources */,
+				5031F3B41B15B0AA00FAB551 /* pop2.m4a in Resources */,
+				5031F3C41B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */,
 				6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */,
+				5031F3C01B15B74E00FAB551 /* Turntable Scratch 2.caf in Resources */,
 				6C9299F11AE544D500E71811 /* art.scnassets in Resources */,
+				5031F3B11B15B0AA00FAB551 /* pop1.m4a in Resources */,
+				5031F3C81B15B85100FAB551 /* Baseball Catch.caf in Resources */,
 				6C9299981AE5432000E71811 /* Main.storyboard in Resources */,
+				5031F3B81B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */,
+				5031F3CC1B15B87C00FAB551 /* Body Hit 01.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,9 +786,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5031F3B21B15B0AA00FAB551 /* pop1.m4a in Resources */,
+				5031F3BD1B15B72D00FAB551 /* Heavy Drag.caf in Resources */,
+				5031F3C11B15B74E00FAB551 /* Turntable Scratch 2.caf in Resources */,
 				6C929A371AE54E3E00E71811 /* art.scnassets in Resources */,
+				5031F3C51B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */,
+				5031F3CD1B15B87C00FAB551 /* Body Hit 01.caf in Resources */,
+				5031F3B91B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */,
 				6CB6A1A41B0D311E00136DCF /* icons.xcassets in Resources */,
+				5031F3B51B15B0AA00FAB551 /* pop2.m4a in Resources */,
 				6C929A0A1AE5497900E71811 /* MainMenu.xib in Resources */,
+				5031F3C91B15B85100FAB551 /* Baseball Catch.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -768,6 +842,7 @@
 				6C73A8D61B0A6C9600187A61 /* RMXValue.swift in Sources */,
 				6C73A8D31B0A6C9600187A61 /* RMX.swift in Sources */,
 				6C73A8D51B0A6C9600187A61 /* RMXQuestions.swift in Sources */,
+				5031F3AD1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -790,6 +865,7 @@
 				6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */,
 				6C9299DE1AE544C000E71811 /* RMXSprite.swift in Sources */,
 				6C9299E11AE544C000E71811 /* RMX.swift in Sources */,
+				5031F3AB1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */,
 				6C9299E51AE544C000E71811 /* GameView.swift in Sources */,
 				6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */,
 				6C9299E91AE544C000E71811 /* RMXViewController.swift in Sources */,
@@ -834,6 +910,7 @@
 			files = (
 				6C929A1D1AE5499900E71811 /* GameView.swift in Sources */,
 				6C8CCAF51B0B5EF800D8DC99 /* RMXAi.swift in Sources */,
+				5031F3AC1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */,
 				6C73A8E61B0A75DE00187A61 /* RMXScene.swift in Sources */,
 				6C929A201AE5499D00E71811 /* ChildSpriteArray.swift in Sources */,
 				6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */,

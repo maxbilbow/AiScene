@@ -64,6 +64,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let LEFT_CLICK: String = "Mouse 1"
     static let RIGHT_CLICK: String = "Mouse 2"
     
+    lazy var av: RMXAVProcessor = RMXAVProcessor(interface: self)
 
     var activeCamera: RMXNode? {
         return self.world?.activeCamera
@@ -107,7 +108,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         self.gameView = gvc.gameView
         
         if self.world == nil {
-            self.world = RMSWorld(scene: scene)
+            self.world = RMSWorld(interface: self)
         }
 //        self.world!.clock = RMXClock(world: self.world!, interface: self)
 
@@ -118,43 +119,12 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     
     
     func startVideo(sender: AnyObject?){
-        let captureSession = AVCaptureSession()
-        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
-        if let videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo) {
-            var err: NSError? = nil
-            if let videoIn : AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &err) as? AVCaptureDeviceInput {
-                if(err == nil){
-                    if (captureSession.canAddInput(videoIn as AVCaptureInput)){
-                        captureSession.addInput(videoIn as AVCaptureDeviceInput)
-                    }
-                    else {
-                        println("Failed to add video input.")
-                    }
-                }
-                else {
-                    println("Failed to create video input.")
-                }
-            }
-            else {
-                println("Failed to create video capture device.")
-            }
-        }
-        captureSession.startRunning()
-        previewLayer.frame = self.gameView.bounds
-        self.gameView.layer.addSublayer(previewLayer)
-        let sceneView = UIView()
-        sceneView.frame = self.gameView.bounds
-        sceneView.backgroundColor = UIColor.clearColor()
-        self.gameView.addSubview(sceneView)
-        self.gameView.sendSubviewToBack(sceneView)
-//       AiCubo.setUpWorld(self, type: .TEST)
+    
     }
     
     func viewDidLoad(coder: NSCoder!){
         if self.world == nil {
-            self.world = RMSWorld(scene: RMXScene(coder: coder))
+            self.world = RMSWorld(interface: self, scene: RMXScene(coder: coder))
         }
         self.dataView = RMDataView(frame: self.gameView.bounds)
         self.dataView!.hidden = true

@@ -63,11 +63,13 @@ class RMXAi {
             func drop(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject?  {
                 sender.releaseItem()
                 sender.completeStop()
+                poppy.world?.interface.av.sounds["pop2"]?.play()
                 return nil
             }
             
             func getReady(sender: RMXSprite, objects: [AnyObject]?)  -> AnyObject? {
                 sender.completeStop()
+                poppy.world?.interface.av.sounds["pop1"]?.play()
                 return nil
             }
             
@@ -86,6 +88,7 @@ class RMXAi {
                     if item != poppy {
                         itemToWatch = item
                         state = .READY_TO_CHASE
+                       
                     }
                 } else {
                     idle(poppy)

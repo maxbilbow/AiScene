@@ -534,6 +534,11 @@ extension RMXSprite {
             if let body = itemInHand.node.physicsBody {
                 body.type = .Dynamic
                 itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
+                let dist = self.distanceTo(point: world!.activeCamera!.presentationNode().position)
+                if self.isActiveSprite {
+                    self.world!.interface.av.sounds[RMXInterface.THROW_ITEM]?.volume = dist < 10 ? 1 : Float(10 / dist)
+                    self.world!.interface.av.sounds[RMXInterface.THROW_ITEM]?.play()
+                }
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
                 RMXLog("\(itemInHand.name) had no body")

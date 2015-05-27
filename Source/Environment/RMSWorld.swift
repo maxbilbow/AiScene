@@ -16,7 +16,7 @@ import SceneKit
 
 
 enum RMXWorldType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
-class RMSWorld  {
+class RMSWorld   {
     
     #if SceneKit
     static let ZERO_GRAVITY = RMXVector3Zero
@@ -65,7 +65,7 @@ class RMSWorld  {
         self.children.removeAll()
         self.cameras.removeAll()
         self._gravity = RMSWorld.ZERO_GRAVITY
-        self.scene = RMSWorld.DefaultScene()
+        self.setScene()
         self.activeSprite = nil
         self.aiOn = false
         self.cameraNumber = 0
@@ -73,12 +73,15 @@ class RMSWorld  {
     
     var ground: RMFloatB = RMSWorld.RADIUS
     
-    init(scene: RMXScene? = nil){
-        self.scene = scene ?? RMSWorld.DefaultScene()
+    var interface: RMXInterface
+    
+    init(interface: RMXInterface, scene: RMXScene? = nil){
+        self.interface = interface
+//        super.init()
+        self.setScene(scene: scene)
         self.worldDidInitialize()
-        
     }
-
+    
     var radius: RMFloatB {
         return RMSWorld.RADIUS
     }
@@ -87,7 +90,17 @@ class RMSWorld  {
     
     static var TYPE: RMXWorldType = .DEFAULT
 
-    var scene: RMXScene
+    var scene: RMXScene {
+        return self._scene
+    }
+    
+    func setScene(scene: RMXScene? = nil){
+        self._scene = scene ?? RMSWorld.DefaultScene()
+        self._scene.physicsWorld.contactDelegate = self.interface.av
+        self.interface.gameView.scene = self._scene
+    }
+    
+    private var _scene: RMXScene! = nil
     
     private let GRAVITY: RMFloatB = 0
     
@@ -107,7 +120,7 @@ class RMSWorld  {
     var type: RMXWorldType = .DEFAULT
     
     func worldDidInitialize() {
-
+        
     }
   
     @availability(*,deprecated=1)
@@ -228,8 +241,10 @@ class RMSWorld  {
         for child in self.children {
             child.animate(aiOn: self.aiOn)
         }
+        self.scene.physicsWorld.updateCollisionPairs()
     }
 
+    
 }
 
 

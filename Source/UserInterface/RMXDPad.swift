@@ -72,6 +72,44 @@ class RMXDPad : RMXInterface {
 //        return super.view as! RMXView
 //    }
     
+    override func startVideo(sender: AnyObject?) {
+        super.startVideo(sender)
+        
+        let captureSession = AVCaptureSession()
+        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        if let videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo) {
+            var err: NSError? = nil
+            if let videoIn : AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &err) as? AVCaptureDeviceInput {
+                if(err == nil){
+                    if (captureSession.canAddInput(videoIn as AVCaptureInput)){
+                        captureSession.addInput(videoIn as AVCaptureDeviceInput)
+                    }
+                    else {
+                        println("Failed to add video input.")
+                    }
+                }
+                else {
+                    println("Failed to create video input.")
+                }
+            }
+            else {
+                println("Failed to create video capture device.")
+            }
+        }
+        captureSession.startRunning()
+        previewLayer.frame = self.gameView.bounds
+        self.gameView.layer.addSublayer(previewLayer)
+        let sceneView = UIView()
+        sceneView.frame = self.gameView.bounds
+        sceneView.backgroundColor = UIColor.clearColor()
+        self.gameView.addSubview(sceneView)
+        self.gameView.sendSubviewToBack(sceneView)
+        //       AiCubo.setUpWorld(self, type: .TEST)
+
+    }
+    
     func getRect(withinRect bounds: CGRect? = nil, row: (CGFloat, CGFloat), col: (CGFloat, CGFloat)) -> CGRect {
         let bounds = bounds ?? self.gameView.bounds
         return CGRectMake(bounds.width * (col.0 - 1) / col.1, bounds.height * (row.0 - 1) / row.1, bounds.width / col.1, bounds.height / row.1)
