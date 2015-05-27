@@ -31,7 +31,7 @@ class RMXAi {
         var itemToWatch: RMXNode?
         let speed:RMFloatB = 150 * (poppy.mass + 1)
         poppy.speed = speed
-        poppy.world?.interface.collider.trackers.append(poppy.tracker)
+//        poppy.world?.interface.collider.trackers.append(poppy.tracker)
         var count: Int = 0; let limit = 100
         
         poppy.behaviours.append { (isOn: Bool) -> () in
@@ -103,7 +103,7 @@ class RMXAi {
         let speed:RMFloatB = (RMFloatB(random() % 50) + 50) * sprite.mass
         sprite.speed = speed
         if let world = sprite.world {
-            sprite.world?.interface.collider.trackers.append(sprite.tracker)
+//            sprite.world?.interface.collider.trackers.append(sprite.tracker)
             sprite.behaviours.append { (isOn: Bool) -> () in
                 if !isOn { return }
                 if !sprite.tracker.hasTarget && !sprite.hasItem {

@@ -31,6 +31,7 @@ class RMXTracker {
     
     init(sprite: RMXSprite) {
         self.sprite = sprite
+        self.sprite.world!.interface.collider.trackers.append(self)
     }
     
     static let IDLE = "Idle"
@@ -41,7 +42,7 @@ class RMXTracker {
     var state: String = IDLE
     
     let updateInterval = 1
-    lazy var lastPosition: RMXVector = self.sprite.position
+    var lastPosition: RMXVector = RMXVector3Zero
 
     var isStuck: Bool {
         if let target = target {

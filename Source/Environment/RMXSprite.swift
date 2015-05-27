@@ -327,14 +327,15 @@ class RMXSprite : RMXSpriteManager {
             switch type {
             case .AI:
                 self.manipulate()
-//                self.jumpTest()
                 self.tracker.headToTarget()
+//                self.jumpTest()
                 break
             case .PLAYER:
                 self.manipulate()
 //                self.jumpTest()
                 break
             case .PASSIVE:
+                self.tracker.headToTarget()
                 break
             case .BACKGROUND:
                break
@@ -598,11 +599,20 @@ extension RMXSprite {
     
     private func setItem(item itemIn: RMXSprite?) {
         if let item = itemIn {
-            _itemInHand = item
-            _itemInHand?.holder = self
-            self.setReach() //= self.armLength + item.radius //TODO: What if too short?
-            if let body = _itemInHand?.node.physicsBody {
-                body.type = .Kinematic
+            if self.isWithinReachOf(item) {
+                _itemInHand = item
+                _itemInHand?.holder = self
+                self.setReach() //= self.armLength + item.radius //TODO: What if too short?
+                if let body = _itemInHand?.node.physicsBody {
+                    body.type = .Kinematic
+                }
+            } else {
+                let speed = item.speed
+                item.tracker.setTarget(target: self.node, speed: 500 * (item.mass + 1), doOnArrival: { (target) -> () in
+                    self.setItem(item: item)
+                    item.tracker.setTarget()
+                    item.speed = speed
+                })
             }
         } else if let item = self.item {
             if let body = _itemInHand?.node.physicsBody {
@@ -626,10 +636,8 @@ extension RMXSprite {
     func grab(item: RMXSprite? = nil) -> RMXSprite? {
         if self.hasItem { return self.item }
         if let item = item {
-            if self.isWithinReachOf(item) || true {
                 self.setItem(item: item.isHeld ? item.holder : item)
                 return item
-            }
         }
 //        } else if let item = self.world!.closestObjectTo(self) {
 //            if self.item == nil && self.isWithinReachOf(item) {
