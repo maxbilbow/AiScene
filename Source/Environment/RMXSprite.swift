@@ -21,7 +21,7 @@ protocol RMXSpriteManager {
 
 
 class RMXSprite : RMXSpriteManager {
-    
+    var hitTarget = false
     lazy var environments: SpriteArray = SpriteArray(parent: self)
     var aiOn: Bool = false
     
@@ -725,12 +725,14 @@ extension RMXSprite {
         return nil
     }
     
+    
+    ///TODO hitCondition instead of self.hitTarget
     func headTo(object: RMXSprite?, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
         if let object = object {
             let target = object.position //?? self.position * 10
             let dist = RMXVector3Distance(self.position, target)
             let reach = object.radius // ?? self.radius
-            if  dist >= fabs(reach + self.reach) * 2 {
+            if !self.hitTarget {// dist >= fabs(reach + self.reach) * 2 {
                 #if OPENGL_OSX
                     speed *= 0.5
                 #endif

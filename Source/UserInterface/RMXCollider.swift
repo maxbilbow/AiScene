@@ -10,7 +10,9 @@ import Foundation
 import SceneKit
 import AVFoundation
 
-class RMXAVProcessor: NSObject, SCNPhysicsContactDelegate {
+typealias CollisionRequest = (contact: SCNPhysicsContact) -> Bool
+
+class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     var world: RMSWorld? {
         return self.interface.world
@@ -30,13 +32,14 @@ class RMXAVProcessor: NSObject, SCNPhysicsContactDelegate {
     }
     
     var sounds: [String:AVAudioPlayer] = [
-    RMXInterface.BOOM : RMXAVProcessor.getPlayer("Air Reverse Burst 2", ofType: "caf"),
-    RMXInterface.JUMP : RMXAVProcessor.getPlayer("Baseball Catch", ofType: "caf"),
-    RMXInterface.THROW_ITEM : RMXAVProcessor.getPlayer("Baseball Catch", ofType: "caf"),
-    "pop2" : RMXAVProcessor.getPlayer("pop2", ofType: "m4a"),
-    "pop1" : RMXAVProcessor.getPlayer("pop1", ofType: "m4a")
+    RMXInterface.BOOM : RMXCollider.getPlayer("Air Reverse Burst 2", ofType: "caf"),
+    RMXInterface.JUMP : RMXCollider.getPlayer("Baseball Catch", ofType: "caf"),
+    RMXInterface.THROW_ITEM : RMXCollider.getPlayer("Baseball Catch", ofType: "caf"),
+    "pop2" : RMXCollider.getPlayer("pop2", ofType: "m4a"),
+    "pop1" : RMXCollider.getPlayer("pop1", ofType: "m4a")
     ]
 
+    var requests: Array<CollisionRequest> = Array<CollisionRequest>()
     
     init(interface: RMXInterface) {
         self.interface = interface
@@ -48,7 +51,6 @@ class RMXAVProcessor: NSObject, SCNPhysicsContactDelegate {
         sounds[RMXInterface.BOOM]?.volume = 0.3
         
     }
-    
     
     
     // Initial setup
@@ -65,6 +67,11 @@ class RMXAVProcessor: NSObject, SCNPhysicsContactDelegate {
         if contact.nodeA.rmxID == self.activeSprite?.rmxID {
 //            NSLog("START: NodeA hit \(contact.nodeB.sprite?.name)")
             didBeginContact(contact)
+        }
+        for (index, request) in enumerate(self.requests){
+            if request(contact) {
+                let removed = self.requests.removeAtIndex(index)
+            }
         }
 //        } else if contact.nodeB.rmxID == self.activeSprite?.rmxID {
 //            NSLog("START: NodeB hit \(contact.nodeA.sprite?.name)")

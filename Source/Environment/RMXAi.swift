@@ -5,7 +5,7 @@
 //  Created by Max Bilbow on 19/05/2015.
 //  Copyright (c) 2015 Rattle Media. All rights reserved.
 //
-
+import SceneKit
 import Foundation
 
 typealias AiBehaviour = (Bool) -> ()
@@ -97,6 +97,12 @@ class RMXAi {
                 break
             case .READY_TO_CHASE:
                 if !observer.hasItem {
+                    let col: CollisionRequest = {
+                        
+                    }
+                    poppy.world?.interface.av.requests.append(CollisionRequest {
+                        
+                        })
                     state = .CHASING
                 } else {
                     RMXLog("Ready to Chase: \(state.rawValue),  pos: \(poppy.position.print)")

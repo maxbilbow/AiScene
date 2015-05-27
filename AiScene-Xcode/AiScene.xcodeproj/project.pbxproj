@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5031F3AB1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */; };
-		5031F3AC1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */; };
-		5031F3AD1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */; };
+		5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
+		5031F3AC1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
+		5031F3AD1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
 		5031F3B11B15B0AA00FAB551 /* pop1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3AF1B15B0AA00FAB551 /* pop1.m4a */; };
 		5031F3B21B15B0AA00FAB551 /* pop1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3AF1B15B0AA00FAB551 /* pop1.m4a */; };
 		5031F3B31B15B0AA00FAB551 /* pop1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3AF1B15B0AA00FAB551 /* pop1.m4a */; };
@@ -169,7 +169,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAVProcessor.swift; path = UserInterface/RMXAVProcessor.swift; sourceTree = "<group>"; };
+		5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXCollider.swift; path = UserInterface/RMXCollider.swift; sourceTree = "<group>"; };
 		5031F3AF1B15B0AA00FAB551 /* pop1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop1.m4a; sourceTree = "<group>"; };
 		5031F3B01B15B0AA00FAB551 /* pop2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop2.m4a; sourceTree = "<group>"; };
 		5031F3B71B15B25C00FAB551 /* Air Pressure Blast 1.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Air Pressure Blast 1.caf"; sourceTree = "<group>"; };
@@ -293,7 +293,7 @@
 		5031F3A91B15ABFF00FAB551 /* AV */ = {
 			isa = PBXGroup;
 			children = (
-				5031F3AA1B15AC4800FAB551 /* RMXAVProcessor.swift */,
+				5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */,
 			);
 			name = AV;
 			sourceTree = "<group>";
@@ -842,7 +842,7 @@
 				6C73A8D61B0A6C9600187A61 /* RMXValue.swift in Sources */,
 				6C73A8D31B0A6C9600187A61 /* RMX.swift in Sources */,
 				6C73A8D51B0A6C9600187A61 /* RMXQuestions.swift in Sources */,
-				5031F3AD1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */,
+				5031F3AD1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -865,7 +865,7 @@
 				6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */,
 				6C9299DE1AE544C000E71811 /* RMXSprite.swift in Sources */,
 				6C9299E11AE544C000E71811 /* RMX.swift in Sources */,
-				5031F3AB1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */,
+				5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
 				6C9299E51AE544C000E71811 /* GameView.swift in Sources */,
 				6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */,
 				6C9299E91AE544C000E71811 /* RMXViewController.swift in Sources */,
@@ -910,7 +910,7 @@
 			files = (
 				6C929A1D1AE5499900E71811 /* GameView.swift in Sources */,
 				6C8CCAF51B0B5EF800D8DC99 /* RMXAi.swift in Sources */,
-				5031F3AC1B15AC4800FAB551 /* RMXAVProcessor.swift in Sources */,
+				5031F3AC1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
 				6C73A8E61B0A75DE00187A61 /* RMXScene.swift in Sources */,
 				6C929A201AE5499D00E71811 /* ChildSpriteArray.swift in Sources */,
 				6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */,
