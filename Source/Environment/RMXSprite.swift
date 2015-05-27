@@ -589,7 +589,6 @@ extension RMXSprite {
             var newPos = self.position + RMXVector3MultiplyScalar(fwd, self.reach + item.radius)
             if newPos.y < minAlt {
                 newPos.y = minAlt
-                //println("newNewPos: \(newPos.print), minAlt: \(minAlt.toData()), height: \(item.height.toData())")
             }
            
             item.setPosition(position: newPos)//, resetTransform: false)
@@ -599,6 +598,7 @@ extension RMXSprite {
     
     private func setItem(item itemIn: RMXSprite?) {
         if let item = itemIn {
+            if item == self { self.setItem(item: nil); return } //Prevent accidentily holding oneself
             if self.isWithinReachOf(item) {
                 _itemInHand = item
                 _itemInHand?.holder = self
@@ -609,7 +609,7 @@ extension RMXSprite {
             } else {
                 let speed = item.speed
                 item.tracker.setTarget(target: self.node, speed: 500 * (item.mass + 1), doOnArrival: { (target) -> () in
-                    self.setItem(item: item)
+                    self.grab(item: item)
                     item.tracker.setTarget()
                     item.speed = speed
                 })
