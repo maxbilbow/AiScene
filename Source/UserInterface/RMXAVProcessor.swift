@@ -32,7 +32,7 @@ class RMXAVProcessor: NSObject, SCNPhysicsContactDelegate {
     var sounds: [String:AVAudioPlayer] = [
     RMXInterface.BOOM : RMXAVProcessor.getPlayer("Air Reverse Burst 2", ofType: "caf"),
     RMXInterface.JUMP : RMXAVProcessor.getPlayer("Baseball Catch", ofType: "caf"),
-    RMXInterface.THROW_ITEM : RMXAVProcessor.getPlayer("Body Hit 01", ofType: "caf"),
+    RMXInterface.THROW_ITEM : RMXAVProcessor.getPlayer("Baseball Catch", ofType: "caf"),
     "pop2" : RMXAVProcessor.getPlayer("pop2", ofType: "m4a"),
     "pop1" : RMXAVProcessor.getPlayer("pop1", ofType: "m4a")
     ]
@@ -44,7 +44,8 @@ class RMXAVProcessor: NSObject, SCNPhysicsContactDelegate {
             sound.1.prepareToPlay()
         }
         sounds["hit"]?.volume = 0.1
-        sounds["RMXInterface.JUMP"]?.volume = 0.2
+        sounds[RMXInterface.JUMP]?.volume = 0.0
+        sounds[RMXInterface.BOOM]?.volume = 0.3
         
     }
     
