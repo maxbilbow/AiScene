@@ -49,15 +49,14 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     func physicsWorld(world: SCNPhysicsWorld, didBeginContact contact: SCNPhysicsContact) {
         
-        if contact.nodeA.rmxID == self.activeSprite?.rmxID {
-            self.av.playSound("Pop", info: contact)
-        }
+//        if contact.nodeA.rmxID == self.activeSprite?.rmxID {
+//            self.av.playSound("Pop", info: contact)
+//        }
         if contact.nodeB.sprite?.type != .BACKGROUND && contact.nodeA.sprite?.type != .BACKGROUND {
             for tracker in self.trackers {
                 tracker.checkForCollision(contact)
             }
         }
-//        self.av.playAudio()
         
     }
     

@@ -52,7 +52,9 @@ class RMXTracker {
         }
     }
     
-    func setTarget(target: RMXNode? = nil, speed: RMFloatB? = nil, afterTime limit: Int = 0, doOnArrival: ((target: RMXNode?) -> ())? = nil) {
+    func setTarget(target: RMXNode? = nil, speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = true, impulse: Bool = false, doOnArrival: ((target: RMXNode?) -> ())? = nil) {
+        self.doesJump = willJump
+        self.impulse = impulse
         _limit = limit
         _count = 0
         _target = target
@@ -70,7 +72,7 @@ class RMXTracker {
     func checkForCollision(contact: SCNPhysicsContact) -> Bool {
         if let target = self.target {
             if contact.nodeA == self.sprite.node || contact.nodeB == self.sprite.node || contact.nodeB == self.sprite.item?.node || contact.nodeA == self.sprite.item?.node {
-                if contact.nodeB == target || contact.nodeA == target {
+                if target.rmxID == self.sprite.rmxID || contact.nodeB == target || contact.nodeA == target {
                     self.doOnArrival?(target: target)
                     return true
                 }
@@ -78,6 +80,8 @@ class RMXTracker {
         }
         return false
     }
+    var impulse = false
+    var doesJump = true
     
     internal func headToTarget() {
         if let target = self.target {
@@ -87,8 +91,8 @@ class RMXTracker {
             } else {
                 ++_count
                 let direction = RMXVector3Normalize(target.presentationNode().position - self.sprite.position)
-                self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.sprite.front,  impulse: false)
-                if self.isStuck {
+                self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.sprite.front,  impulse: self.impulse)
+                if self.doesJump && self.isStuck {
                     self.sprite.jump()
                 } else {
                     self.lastPosition = self.sprite.position

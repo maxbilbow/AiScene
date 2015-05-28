@@ -26,6 +26,10 @@ extension RMXNode : RMXLocatable {
         }
     }
     
+    var spriteType: RMXSpriteType {
+        return self.sprite?.type ?? RMXSpriteType.ABSTRACT
+    }
+    
     var brain: RMXBrain? {
         return self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain
     }
@@ -50,6 +54,10 @@ extension RMXNode : RMXLocatable {
     
     var rmxID: Int? {
         return self.sprite?.rmxID
+    }
+    
+    var isActiveSprite: Bool {
+        return self.sprite?.isActiveSprite ?? false
     }
 
     var boundingSphere: (center: RMXVector3, radius: RMFloatB) {

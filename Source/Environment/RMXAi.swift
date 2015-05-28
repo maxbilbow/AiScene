@@ -12,18 +12,19 @@ typealias AiBehaviour = (RMXNode!) -> Void
 class RMXAi {
     static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
-        let ai = SCNAction.runBlock({ (node: RMXNode!) -> Void in
+        let ai = { (node: RMXNode!) -> Void in
             if self.autoStabilise && sprite.world!.hasGravity {
                 sprite.physicsBody?.applyForce(sprite.world!.gravity * sprite.mass, atPosition: sprite.bottom, impulse: false)
             }
-        })
+        }
 
 //        ai.duration = 1 / 60
-        let action = SCNAction.repeatActionForever(ai)
-        action.duration = 1
-        sprite.addBehaviour { (isOn) -> () in
-            sprite.node.runAction(ai, forKey: "autoStabilise")
-        }
+//        let action = SCNAction.repeatActionForever(ai)
+//        action.duration = 1
+        sprite.addAi({ (node: RMXNode!) -> Void in
+//             sprite.node.runAction(ai, forKey: "autoStabilise")
+            ai(nil)
+            })
         
     }
 
@@ -33,7 +34,7 @@ class RMXAi {
         poppy.speed = speed
         //        poppy.world?.interface.collider.trackers.append(poppy.tracker)
         var count: Int = 0; let limit = 100
-        let action = SCNAction.runBlock { (node: SCNNode!) -> Void in
+        let ai =  { (node: SCNNode!) -> Void in
             
             if master.hasItem && !master.isHolding(poppy) {
                 poppy.releaseItem()
@@ -71,12 +72,12 @@ class RMXAi {
                 master = poppy.world!.activeSprite!
             }
         }
+//        let action = SCNAction.runBlock(ai)
         
-        poppy.addBehaviour { (isOn) -> () in
-            poppy.node.runAction(action, forKey: "Play Fetch", completionHandler: { () -> Void in
-//                NSLog("Played fetch")
-            })
-        }
+        poppy.addAi( { (node: RMXNode!) -> Void in
+//            poppy.node.runAction(action, forKey: "Play Fetch")
+            ai(nil)
+        } )
 //        poppy.node.runAction(action)//SCNAction.repeatActionForever(action))
 
     }
@@ -129,9 +130,9 @@ class RMXAi {
                     })
                 }
             }
-            sprite.addAi({ (node: RMXNode!) -> Void in
-                sprite.node.runAction(action, forKey: "Random")
-            })
+            sprite.addAi(action)//{ (node: RMXNode!) -> Void in
+//                sprite.node.runAction(action, forKey: "Random")
+//            })
         }
     }
 

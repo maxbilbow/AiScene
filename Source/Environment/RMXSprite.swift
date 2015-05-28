@@ -77,7 +77,7 @@ class RMXSprite : RMXSpriteManager {
     var world: RMSWorld?
     
     var type: RMXSpriteType!
-    var wasJustThrown:Bool = false
+//    var wasJustThrown:Bool = false
     var anchor = RMXVector3Zero
     
     var parentSprite: RMXSprite?
@@ -153,13 +153,14 @@ class RMXSprite : RMXSpriteManager {
     
     private var _reach: RMFloatB?
     
-    var reach: RMFloatB {
-        let reach = _reach ?? self.length / 2
-        if let item = self.item {
-            return reach + item.radius
-        } else {
-            return reach + 1
-        }
+    var armLength: RMFloatB {
+        return self.radius + ( self.hasItem ? item!.radius : 0 )
+//        let reach = _reach ?? self.length / 2
+//        if let item = self.item {
+//            return reach + item.radius
+//        } else {
+//            return reach + 1
+//        }
     }
     
     var length: RMFloatB {
@@ -323,7 +324,8 @@ class RMXSprite : RMXSpriteManager {
     func runActions(name: String, actions: (SCNNode!) -> Void ...) {
         var count = 0
         for action in actions {
-            self.node.runAction(SCNAction.runBlock(action), forKey: "\(name)\(++count)")//.runBlock({ (node: RMXNode!) -> Void in
+            action(nil)
+//            self.node.runAction(SCNAction.runBlock(action), forKey: "\(name)\(++count)")//.runBlock({ (node: RMXNode!) -> Void in
         }
     }
     internal func headToTarget(node: SCNNode! = nil) -> Void {
@@ -541,16 +543,24 @@ extension RMXSprite {
     func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
         
         if let itemInHand = self.item {
+            self.setItem(item: nil)
             var direction: RMXVector = self.forwardVector
+            
             if let point = point {
                 direction = (point - itemInHand.position).normalised
-            } else if targetNode != nil {
-                let target = RMXSprite.rootNode(targetNode!, rootNode: self.scene!.rootNode)
-                if target.physicsBody?.type != .Static && self.node != target && itemInHand.node != target {
-                    direction = (target.presentationNode().position - itemInHand.position).normalised
+            } else if let rootNode = targetNode?.getRootNode(inScene: self.scene!) {
+                if rootNode.rmxID != self.rmxID && rootNode.rmxID != itemInHand.rmxID {
+                    let target = RMXSprite.rootNode(targetNode!, rootNode: self.scene!.rootNode)
+                    
+                    itemInHand.tracker.setTarget(target: target, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                        RMSActionProcessor.explode(itemInHand, force: strength / 200, range: 500)
+                        itemInHand.tracker.setTarget()
+                    })
+                    return true
                 }
+            } else if let target = targetNode {
+                direction = (target.presentationNode().position - itemInHand.position).normalised
             }
-            
             
             if let cameraNode = self.activeCamera {
                 let gradient = cameraNode.eulerAngles.x
@@ -559,9 +569,17 @@ extension RMXSprite {
             }
             
             if let body = itemInHand.node.physicsBody {
-                body.type = .Dynamic
-                itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
-                let dist = self.distanceTo(point: world!.activeCamera!.presentationNode().position)
+                if let target = targetNode {
+                    if target.rmxID != self.rmxID && target.rmxID != itemInHand.rmxID && !target.isActiveSprite {
+                        itemInHand.tracker.setTarget(target: target, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                            RMSActionProcessor.explode(itemInHand, force: strength / 200, range: 500)
+                            itemInHand.tracker.setTarget()
+                        })
+                        return true
+                    }
+                } else {
+                    itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
+                }
                 if self.isActiveSprite {
                     self.world!.interface.av.playSound(RMXInterface.THROW_ITEM, info: self.position)
                 }
@@ -569,8 +587,7 @@ extension RMXSprite {
             } else {
                 RMXLog("\(itemInHand.name) had no body")
             }
-            self.item!.wasJustThrown = true
-            self.setItem(item: nil)
+            
             return true
         } else {
             return false
@@ -587,7 +604,7 @@ extension RMXSprite {
     func manipulate(node: SCNNode! = nil) -> Void {
         if let item = self.item {
             let itemRadius = item.radius // 2
-            var newPos = self.position + self.forwardVector * (self.length / 2 + itemRadius)
+            var newPos = self.position + self.forwardVector * (self.radius + itemRadius)
             if world!.hasGravity && newPos.y < itemRadius {
                 newPos.y = itemRadius
             }
@@ -599,67 +616,64 @@ extension RMXSprite {
     
     private func setItem(item itemIn: RMXSprite?) {
         if let item = itemIn {
-            if item == self { self.setItem(item: nil); return } //Prevent accidentily holding oneself
+            if item.rmxID == self.rmxID || item.isHeld || item.isActiveSprite { self.setItem(item: nil); return } //Prevent accidentily holding oneself
             if self.isWithinReachOf(item) {
                 _itemInHand = item
                 _itemInHand?.holder = self
-                self.setReach() //= self.armLength + item.radius //TODO: What if too short?
                 if let body = _itemInHand?.node.physicsBody {
                     body.type = .Kinematic
-//                    body.angularDamping = 1
-//                    body.damping = 1
                 }
             } else {
                 let speed = item.speed
-                item.tracker.setTarget(target: self.node, speed: 500 * (item.mass + 1), doOnArrival: { (target) -> () in
-                    self.grab(item: item)
-                    item.tracker.setTarget()
-                    item.speed = speed
-                })
+                if !item.tracker.hasTarget {
+                    item.tracker.setTarget(target: self.node, speed: 500 * (item.mass + 1), willJump: false, doOnArrival: { (target) -> () in
+                        self.grab(item: item)
+                        item.tracker.setTarget()
+                        item.speed = speed
+                    })
+                }
             }
-        } else if let item = self.item {
-            if let body = _itemInHand?.node.physicsBody {
-                body.type = .Dynamic
-//                body.angularDamping = 0.2
+        } else {
+            if let item = self.item {
+                if let body = _itemInHand?.node.physicsBody {
+                    body.type = .Dynamic
+                }
+                item.holder = nil
             }
-            _itemInHand?.holder = nil
             _itemInHand = nil
-            self.setReach(reach: self.reach + item.radius)
-            
         }
     }
     
     func isWithinReachOf(item: RMXSprite) -> Bool{
-        return self.distanceTo(item) <= self.reach + item.radius
+        return self.distanceTo(item) <= self.armLength * 3
     }
     
-    func grab(node: RMXNode? = nil) -> RMXSprite? {
-        return self.grab(item: node?.sprite)
+    func grab(node: RMXNode? = nil)  {
+        self.grab(item: node?.sprite)
     }
     
     
-    func grab(item: RMXSprite? = nil) -> RMXSprite? {
-        if self.hasItem { return self.item }
+    func grab(item: RMXSprite? = nil)  {
+        if self.hasItem { return }
         if let item = item {
-            if item.isHeld && ( item.type == .AI || self.canGrabPlayers ) {
-                self.setItem(item: item.holder)
+            if item.isHeld {
+                if item.type == .AI || self.canGrabPlayers {
+                    self.setItem(item: item.holder)
+                } else {
+                    return
+                }
             } else {
                 self.setItem(item: item)
             }
-            return item
         }
-        return nil
+        if self.item?.rmxID == self.rmxID {
+            self.setItem(item: nil)
+        }
     }
     
     func releaseItem() {
         if self.item != nil {
             self.setItem(item: nil)
-        }
-    }
-    
-    func extendReach(i: RMFloatB)    {
-        if self.reach + i > 1 {
-            self.setReach(reach: self.reach + i)
         }
     }
     
@@ -679,103 +693,26 @@ extension RMXSprite {
         self.node.getBoundingBoxMin(&min, max: &max)
         return (min, max)
     }
-    
 
-    
-    
-    func jumpTest() -> JumpState {
-        switch (_jumpState) {
-        case .NOT_JUMPING:
-            return _jumpState
-        case .PREPARING_TO_JUMP:
-            if self.squatLevel > _maxSquat{
-                _jumpState = .JUMPING
-            } else {
-                let increment: RMFloatB = _maxSquat / 50
-                self.squatLevel += increment
-            }
-            break
-        case .JUMPING:
-            if self.velocity.y <= 0 {//|| self.body.velocity.y <= 0 {
-                //RMXVector3PlusY(&self.node.physicsBody!.velocity, _jumpStrength) //TODO check mass is necessary below
-                self.jump()
-//                self.squatLevel += 1
-            } else {
-                _jumpState = .GOING_UP
-                self.squatLevel = 0
-            }
-            break
-        case .GOING_UP:
-            if self.velocity.y <= 0 {
-                _jumpState = .COMING_DOWN
-            } else {
-                //Anything to do?
-            }
-            break
-        case .COMING_DOWN:
-            if self.velocity.y <= 0 {
-                _jumpState = .NOT_JUMPING
-            }
-            break
-        default:
-            fatalError("Shouldn't get here")
-        }
-        return _jumpState
-    }
-    
-    func prepareToJump() -> Bool{
-        if _jumpState == .NOT_JUMPING && self.velocity.y == 0 {//&& self.isGrounded {
-            _jumpState = .PREPARING_TO_JUMP
-            _maxSquat = 1 + self.height / 4
-            return true
-        } else {
-            return false
-        }
-    }
-    
     private var _jumpStrength: RMFloatB {
         return fabs(RMFloatB(self.weight) * self.jumpStrength)// * self.squatLevel/_maxSquat)
     }
+    
     func jump() {
-//        NSLog(self.node.physicsBody!.velocity.print)
         if self.position.y < self.height * 10 {
             self.applyForce(RMXVector3Make(0, _jumpStrength, 0), impulse: true)
         }
-//            _jumpState = .GOING_UP
-//        } else {
-//            _jumpState = .NOT_JUMPING
-//        }
-//        _jumpState = .NOT_JUMPING
 
-        
         
     }
 
-    func setReach(reach r: RMFloatB? = nil) {
-        if let reach = r {
-            _reach = reach < self.reach ? self.reach : reach
-        } else {
-            _reach = nil
-        }
-    }
     
     private class func stop(sender: RMXSprite, objects: [AnyObject]?) -> AnyObject? {
         sender.completeStop()
         return nil
     }
     
-       
-//    func doIfStuck() {
-//        if RMXAi.isStuck(self, target: self.target, lastPosition: lastPosition) {
-//            poppy.jump()
-//        } else {
-//            lastPosition = poppy.position
-//            //                    lastDistToTarget = poppy.distanceTo(itemToWatch ?? observer)
-//        }
-//    }
 
-    
-   
     
     ///TODO hitCondition instead of self.hitTarget
     @availability(*,deprecated=1)
@@ -784,7 +721,7 @@ extension RMXSprite {
             let target = object.position //?? self.position * 10
             let dist = RMXVector3Distance(self.position, target)
             let reach = object.radius // ?? self.radius
-            if dist >= fabs(reach + self.reach) * 2 {
+            if dist >= fabs(self.armLength) * 2 {
                 #if OPENGL_OSX
                     speed *= 0.5
                 #endif

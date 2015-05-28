@@ -11,7 +11,7 @@ import SceneKit
 
 typealias RMXModels = RM3DModels
 
-enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, ROCK, OILDRUM, BOBBLE_MAN, LAST, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
+enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, ROCK, OILDRUM, BOBBLE_MAN, LAST,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
 
 class RM3DModels : RMXModelsProtocol {
     
@@ -19,10 +19,34 @@ class RM3DModels : RMXModelsProtocol {
     var rock: SCNGeometry?
     var oilDrum: SCNGeometry?
 //    var ausfb: SCNGeometry?
-    static let pongo = RMXScene(named:"art.scnassets/Pongo/other/The Limited 4.dae")
-    static let ausfb = RMXScene(named:"art.scnassets/AUSFB/ausfb.dae")
-    static let dog = RMXScene(named:"art.scnassets/Dog/Dog.dae")
-    static let pilot = RMXScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")
+    static let pongo: AnyObject? = RMXScene(named:"art.scnassets/Pongo/other/The Limited 4.dae")?.rootNode.clone()
+    static let ausfb: AnyObject? = RMXScene(named:"art.scnassets/AUSFB/ausfb.dae")?.rootNode.clone()
+    static let dog: AnyObject? = RMXScene(named:"art.scnassets/Dog/Dog.dae")?.rootNode.clone()
+    static let pilot: AnyObject? = RMXScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")?.rootNode.clone()
+    
+    static var ship: SCNGeometry {
+        let url = NSBundle.mainBundle().URLForResource("art.scnassets/ship", withExtension: "dae")
+        let source = SCNSceneSource(URL: url!, options: nil)
+        let block = source!.entryWithIdentifier("Scrap_MeshShape", withClass: SCNGeometry.self) as! SCNGeometry
+        return block
+    }
+    
+    static let oilDrum = SCNSceneSource(
+        URL: NSBundle.mainBundle().URLForResource(
+            "art.scnassets/oildrum/oildrum",
+            withExtension: "dae")!,options: nil
+        )!.entryWithIdentifier("Cylinder_001-mesh",
+            withClass: SCNGeometry.self) as! SCNGeometry
+    
+    static let rock = SCNSceneSource(
+        URL: NSBundle.mainBundle().URLForResource(
+            "art.scnassets/Rock1",
+            withExtension: "dae")!,options: nil
+        )!.entryWithIdentifier("Cube-mesh",
+            withClass: SCNGeometry.self) as! SCNGeometry
+    
+   
+    
     
    
     class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode {
@@ -57,10 +81,7 @@ class RM3DModels : RMXModelsProtocol {
             hasColor = true
             break
         case ShapeType.ROCK.rawValue:
-            let url = NSBundle.mainBundle().URLForResource("art.scnassets/Rock1", withExtension: "dae")
-            let source = SCNSceneSource(URL: url!, options: nil)
-            let block = source!.entryWithIdentifier("Cube-mesh", withClass: SCNGeometry.self) as! SCNGeometry
-            node = RMXNode(geometry: block)
+            node = RMXNode(geometry: rock)
             node.scale *= 1 * radius
             break
         case ShapeType.PLANE.rawValue:
@@ -75,15 +96,16 @@ class RM3DModels : RMXModelsProtocol {
             
             break
         case ShapeType.PONGO.rawValue:
-            node = pongo?.rootNode.clone() as! RMXNode
+            node = pongo as! RMXNode
             node.scale *= 0.001 * radius
             break
+        case ShapeType.SPACE_SHIP.rawValue:
+            node = RMXNode(geometry: ship)
+            node.scale *= 2
+            break
         case ShapeType.OILDRUM.rawValue:
-            let url = NSBundle.mainBundle().URLForResource("art.scnassets/oildrum/oildrum", withExtension: "dae")
-            let source = SCNSceneSource(URL: url!, options: nil)
-            let block = source!.entryWithIdentifier("Cylinder_001-mesh", withClass: SCNGeometry.self) as! SCNGeometry
-            node = RMXNode(geometry: block)
-            node.scale *= 1 * radius
+            node = RMXNode(geometry: oilDrum)
+            node.scale *= 1.5 * radius
             break
         case ShapeType.DOG.rawValue:
             node = dog!.rootNode.clone() as! RMXNode

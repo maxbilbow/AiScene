@@ -155,11 +155,11 @@ extension RMXSprite {
     }
     
     func distanceTo(point: RMXVector3 = RMXVector3Zero) -> RMFloatB{
-        return RMXVector3Distance(self.position, point)
+        return RMFloatB((self.position - point).length)
     }
     
     func distanceTo(object:RMXSprite) -> RMFloatB{
-        return RMXVector3Distance(self.position,object.position)
+        return RMFloatB((self.position - object.position).length)
     }
     
     var velocity: RMXVector {

@@ -299,7 +299,7 @@ class RMSActionProcessor {
                     self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
                 } else {
                     self.explode(force: self.boomTimer)
-                    self.interface.av.playSound(RMXInterface.BOOM, info: sprite.position)
+                    
                 }
                 self.boomTimer = 1
             } else if speed == 0 && self.boomTimer == 1 {
@@ -417,9 +417,7 @@ class RMSActionProcessor {
             }
         }
         
-        if self.extendArm != 0 {
-            self.activeSprite.extendReach(self.extendArm)
-        }
+
         self.debug(false)
     }
         
@@ -437,7 +435,7 @@ class RMSActionProcessor {
         }
     }
     
-    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> AnyObject? {
+    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> RMXNode? {
         let sprite = s ?? self.activeSprite
         if let action = action {
             switch action {
@@ -451,24 +449,16 @@ class RMSActionProcessor {
                         } else {
                             sprite.throwItem(strength: speed)
                         }
-
+                        return item.node
                     } else if let node: RMXNode = object?.node {
-                        if let body = node.physicsBody {
-                            switch (body.type){
-                            case .Static:
-                                RMXLog("Node is static")
+                        let rootNode = node.getRootNode(inScene: self.scene)
+                            switch rootNode.spriteType {
+                            case .ABSTRACT, .BACKGROUND, .KINEMATIC:
                                 return nil
-                            case .Dynamic:
-                                RMXLog("Node is Dynamic")
-                                break
-                            case .Kinematic:
-                                RMXLog("Node is Kinematic")
-                                break
                             default:
-                                fatalError("Something went wrong")
+                                break
                             }
-                        }
-                        let rootNode = node.getRootNode(inScene: self.scene)// RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
+                        // RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
                         if rootNode == sprite.node {
                             RMXLog("Node is self")
                             if let item = sprite.item{
@@ -494,6 +484,7 @@ class RMSActionProcessor {
                                 }
                             }
                         }
+                        return node
                     }
                     
                 break
@@ -507,6 +498,13 @@ class RMSActionProcessor {
     
     func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 5000) {
         let sprite = s ?? self.activeSprite
+        sprite.world!.interface.av.playSound(RMXInterface.BOOM, info: sprite.position, range: Float(range))
+        RMSActionProcessor.explode(sprite, force: force, range: range)
+        
+    }
+    
+    class func explode(sprite: RMXSprite, force: RMFloatB = 1, range: RMFloatB = 5000) {
+        
         if let world = sprite.world {
             for child in world.children {
                 let dist = sprite.distanceTo(child)

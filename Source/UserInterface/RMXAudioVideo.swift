@@ -78,7 +78,7 @@ class RMXAudioVideo {
 
             //println(" \(name) - position: \(position.print), camera: \(camera!.getPosition().print)\n \(name) - Distance from Camera: \(distance.toData())")
 //            println("VOLUME: \(sound.volume)\n cam:\n\(camera!.worldTransform.print) left: \(left.print) \n PAN: \(sound.pan.toData()) \n\n")
-//            sound.prepareToPlay()
+            sound.prepareToPlay()
             if autoPlay {
                 sound.play()
             } else {

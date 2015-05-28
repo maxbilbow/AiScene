@@ -178,28 +178,29 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
                 let result: AnyObject! = hitResults[0]
 //                NSLog(result.)
                 
-                self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000)
+                if let node = self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
                 
-                // get its material
-                let material = result.node!.geometry!.firstMaterial!
-                
-                // highlight it
-                SCNTransaction.begin()
-                SCNTransaction.setAnimationDuration(0.5)
-                
-                // on completion - unhighlight
-                SCNTransaction.setCompletionBlock {
+                    // get its material
+                    let material = result.node.geometry!.firstMaterial!
+                    
+                    // highlight it
                     SCNTransaction.begin()
                     SCNTransaction.setAnimationDuration(0.5)
                     
-                    material.emission.contents = RMColor.blackColor()
+                    // on completion - unhighlight
+                    SCNTransaction.setCompletionBlock {
+                        SCNTransaction.begin()
+                        SCNTransaction.setAnimationDuration(0.5)
+                        
+                        material.emission.contents = RMColor.blackColor()
+                        
+                        SCNTransaction.commit()
+                    }
+                    
+                    material.emission.contents = RMColor.redColor()
                     
                     SCNTransaction.commit()
                 }
-                
-                material.emission.contents = RMColor.redColor()
-                
-                SCNTransaction.commit()
             }
         }
 

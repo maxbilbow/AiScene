@@ -87,7 +87,7 @@ class AiCubo {
     class func addTrailingCamera(to sprite: RMXSprite) {
         if let followCam: RMXNode = sprite.cameras.first?.clone() as? RMXNode {
             let followSprite = RMXSprite.new(parent: sprite.world!, node: followCam, type: .PASSIVE, isUnique: true)
-            followSprite.addBehaviour({ (isOn) -> () in
+            sprite.addAi({ (node: RMXNode!) -> Void in
                 followSprite.node.position = sprite.position
             })
             sprite.world?.cameras.append(followCam)
@@ -144,9 +144,9 @@ class AiCubo {
             let worldRadius = RMSWorld.RADIUS * 10
             
             let sun: RMXSprite = RMXSprite.new(parent: world, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: worldRadius)
-            sun.addBehaviour { (isOn) -> () in
+            sun.addAi({ (node: RMXNode!) -> Void in
                 sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
-            }
+            })
             let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .ABSTRACT, radius: 100)
             lightNode.light = SCNLight()
             lightNode.light!.type = SCNLightTypeOmni
@@ -167,17 +167,12 @@ class AiCubo {
 //            earth.node.name = "Earth"
             let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
             earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
+//            earth.addAi({ (node: RMXNode!) -> Void in
+//                earth.resetTransform()
+//            })
             earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
             
-            
-            // retrieve the ship node
-            if let node = world.scene.rootNode.childNodeWithName("ship", recursively: true) {
-                let ship = RMXSprite.new(parent: world, node: node, type: .AI, isUnique: true)
-                node.physicsBody = SCNPhysicsBody.dynamicBody()
-                node.physicsBody!.mass = 0.1
-                //TODO make ship fly
-            }
-            
+    
             
             RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 200, radius: earth.radius / 2)
             
