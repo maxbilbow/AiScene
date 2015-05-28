@@ -113,8 +113,8 @@ class RMSKeys : RMXInterface {
         
     }
     
-    override func setUpGestureRecognisers() {
-//        self.dataView.
+    override func setUpViews(coder: NSCoder!) {
+        super.setUpViews(coder)
     }
     
     func set(action a: String, characters k: String ) {

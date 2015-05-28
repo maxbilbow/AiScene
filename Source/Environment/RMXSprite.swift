@@ -207,7 +207,7 @@ class RMXSprite : RMXSpriteManager {
     
     
     
-    var behaviours: [(Bool) -> ()] = Array<(Bool) -> ()>()
+    var behaviours: [(RMXNode!) -> Void] = Array<(RMXNode!) -> Void>()
 
     
     
@@ -309,45 +309,44 @@ class RMXSprite : RMXSpriteManager {
     var rotationSpeed: RMFloatB = 1
 
     var speed:RMFloatB = 1
-
+    var canGrabPlayers: Bool = false
     
 //    var acceleration: RMXVector3?// = RMXVector3Zero
     private let _zNorm = 90 * PI_OVER_180
     
-    func processAi(aiOn isOn: Bool = true) {
+    func processAi(node: SCNNode! = nil) -> Void {
         for behaviour in self.behaviours {
-            behaviour(isOn)
+            behaviour(node)
         }
     }
     
+    func runActions(name: String, actions: (SCNNode!) -> Void ...) {
+        var count = 0
+        for action in actions {
+            self.node.runAction(SCNAction.runBlock(action), forKey: "\(name)\(++count)")//.runBlock({ (node: RMXNode!) -> Void in
+        }
+    }
+    internal func headToTarget(node: SCNNode! = nil) -> Void {
+        self.tracker.headToTarget()
+    }
+    
     func animate(aiOn: Bool = false) {
-        
         if let type = self.type {
-            self.processAi(aiOn: aiOn)
+            
             switch type {
-            case .AI:
-                self.manipulate()
-                self.tracker.headToTarget()
-//                self.jumpTest()
-                break
-            case .PLAYER:
-                self.manipulate()
-//                self.jumpTest()
+            case .AI, .PLAYER, .PLAYER_OR_AI:
+                self.runActions("animate", actions: self.processAi, self.manipulate, self.headToTarget)
                 break
             case .PASSIVE:
-                self.tracker.headToTarget()
+                self.runActions("animate", actions: self.processAi, self.headToTarget)
                 break
             case .BACKGROUND:
+                self.runActions("animate", actions: self.processAi)
                break
             default:
+                self.runActions("animate", actions: self.processAi)
                 break
             }
-            
-//            if let acc = self.acceleration {
-//                self.accelerateForward(acc.z)
-//                self.accelerateLeft(acc.x)
-//                self.accelerateUp(acc.y)
-//            }
             
             for child in children {
                 child.animate()
@@ -380,8 +379,12 @@ class RMXSprite : RMXSpriteManager {
 
 }
 
-extension RMXSprite {
+extension RMXSprite : RMXLocatable {
 
+    func getPosition() -> RMXVector {
+        return self.position
+    }
+    
     func initPosition(startingPoint point: RMXVector3){
         func set(inout value: RMFloatB?, new: RMFloatB) -> RMFloatB {
             if let X = value {
@@ -560,8 +563,7 @@ extension RMXSprite {
                 itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
                 let dist = self.distanceTo(point: world!.activeCamera!.presentationNode().position)
                 if self.isActiveSprite {
-                    self.world!.interface.collider.sounds[RMXInterface.THROW_ITEM]?.volume = dist < 10 ? 1 : Float(10 / dist)
-                    self.world!.interface.collider.sounds[RMXInterface.THROW_ITEM]?.play()
+                    self.world!.interface.av.playSound(RMXInterface.THROW_ITEM, info: self.position)
                 }
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
@@ -582,15 +584,14 @@ extension RMXSprite {
         let radius = RMXVector3Length(max * self.scale)
         RMXLog("\(self.name) pos: \(self.position.print), R: \(radius.toData()), boxMin: \(min.print), boxMax: \(max.print)")
     }
-    func manipulate() {
+    func manipulate(node: SCNNode! = nil) -> Void {
         if let item = self.item {
-            let minAlt = item.height // 2
-            let fwd: RMXVector = self.forwardVector
-            var newPos = self.position + RMXVector3MultiplyScalar(fwd, self.reach + item.radius)
-            if newPos.y < minAlt {
-                newPos.y = minAlt
+            let itemRadius = item.radius // 2
+            var newPos = self.position + self.forwardVector * (self.length / 2 + itemRadius)
+            if world!.hasGravity && newPos.y < itemRadius {
+                newPos.y = itemRadius
             }
-           
+//            item.node.runAction(SCNAction.moveTo(newPos, duration: 1), forKey: "manipulate")
             item.setPosition(position: newPos)//, resetTransform: false)
            
         }
@@ -605,6 +606,8 @@ extension RMXSprite {
                 self.setReach() //= self.armLength + item.radius //TODO: What if too short?
                 if let body = _itemInHand?.node.physicsBody {
                     body.type = .Kinematic
+//                    body.angularDamping = 1
+//                    body.damping = 1
                 }
             } else {
                 let speed = item.speed
@@ -617,6 +620,7 @@ extension RMXSprite {
         } else if let item = self.item {
             if let body = _itemInHand?.node.physicsBody {
                 body.type = .Dynamic
+//                body.angularDamping = 0.2
             }
             _itemInHand?.holder = nil
             _itemInHand = nil
@@ -633,18 +637,17 @@ extension RMXSprite {
         return self.grab(item: node?.sprite)
     }
     
+    
     func grab(item: RMXSprite? = nil) -> RMXSprite? {
         if self.hasItem { return self.item }
         if let item = item {
-                self.setItem(item: item.isHeld ? item.holder : item)
-                return item
+            if item.isHeld && ( item.type == .AI || self.canGrabPlayers ) {
+                self.setItem(item: item.holder)
+            } else {
+                self.setItem(item: item)
+            }
+            return item
         }
-//        } else if let item = self.world!.closestObjectTo(self) {
-//            if self.item == nil && self.isWithinReachOf(item) {
-//                self.setItem(item: item)
-//                return item
-//            }
-//        }
         return nil
     }
     
@@ -731,7 +734,7 @@ extension RMXSprite {
     }
     
     private var _jumpStrength: RMFloatB {
-        return fabs(self.weight * self.jumpStrength)// * self.squatLevel/_maxSquat)
+        return fabs(RMFloatB(self.weight) * self.jumpStrength)// * self.squatLevel/_maxSquat)
     }
     func jump() {
 //        NSLog(self.node.physicsBody!.velocity.print)

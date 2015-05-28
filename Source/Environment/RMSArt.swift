@@ -108,6 +108,7 @@ class RMXArt {
             node.physicsBody!.damping = 1000
             node.physicsBody!.angularDamping = 1000
             let sprite = RMXSprite.new(parent: world, node: node, type: .BACKGROUND, isUnique: true)
+//            sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
             sprite.addBehaviour({ (isOn) -> () in
                 sprite.setPosition(position: position, resetTransform: true)
             })

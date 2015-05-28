@@ -8,9 +8,15 @@
 
 import Foundation
 import SceneKit
-import AVFoundation
+
 
 typealias CollisionRequest = (contact: SCNPhysicsContact) -> Bool
+
+extension SCNPhysicsContact : RMXLocatable {
+    func getPosition() -> SCNVector3 {
+        return self.contactPoint
+    }
+}
 
 class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
@@ -25,54 +31,34 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     var interface: RMXInterface
     
-    class func getPlayer(name: String, ofType ext: String) -> AVAudioPlayer {
-        return AVAudioPlayer(
-            contentsOfURL: NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(name, ofType: ext)!),
-            error: nil
-        )
+    var av: RMXAudioVideo {
+        return self.interface.av
     }
     
-    var sounds: [String:AVAudioPlayer] = [
-    RMXInterface.BOOM : RMXCollider.getPlayer("Air Reverse Burst 2", ofType: "caf"),
-    RMXInterface.JUMP : RMXCollider.getPlayer("Baseball Catch", ofType: "caf"),
-    RMXInterface.THROW_ITEM : RMXCollider.getPlayer("Baseball Catch", ofType: "caf"),
-    "pop2" : RMXCollider.getPlayer("pop2", ofType: "m4a"),
-    "pop1" : RMXCollider.getPlayer("pop1", ofType: "m4a")
-    ]
-
+    
     var trackers: Array<RMXTracker> = Array<RMXTracker>()
     
     init(interface: RMXInterface) {
         self.interface = interface
-        for sound in self.sounds {
-            sound.1.prepareToPlay()
-        }
-        sounds["hit"]?.volume = 0.1
-        sounds[RMXInterface.JUMP]?.volume = 0.0
-        sounds[RMXInterface.BOOM]?.volume = 0.3
+        
         
     }
     
     
-    // Initial setup
-    func didBeginContact(contact: SCNPhysicsContact) {
-        self.sounds["hit"]?.play()
-    }
-   
-    func didEndContact(contact: SCNPhysicsContact) {
-//        self.sounds["pop2"]?.play()
-    }
     
     
     func physicsWorld(world: SCNPhysicsWorld, didBeginContact contact: SCNPhysicsContact) {
+        
         if contact.nodeA.rmxID == self.activeSprite?.rmxID {
-            didBeginContact(contact)
+            self.av.playSound("Pop", info: contact)
         }
         if contact.nodeB.sprite?.type != .BACKGROUND && contact.nodeA.sprite?.type != .BACKGROUND {
             for tracker in self.trackers {
                 tracker.checkForCollision(contact)
             }
         }
+//        self.av.playAudio()
+        
     }
     
     func physicsWorld(world: SCNPhysicsWorld, didUpdateContact contact: SCNPhysicsContact) {
@@ -80,7 +66,7 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     }
     
     func physicsWorld(world: SCNPhysicsWorld, didEndContact contact: SCNPhysicsContact) {
-
+        
     }
 
 }

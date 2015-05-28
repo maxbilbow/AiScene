@@ -165,10 +165,9 @@ class AiCubo {
             
             earth.setName(name: "Earth")
 //            earth.node.name = "Earth"
+            let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
             earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
-            earth.addBehaviour({ (isOn) -> () in
-                earth.resetTransform()
-            })
+            earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
             
             
             // retrieve the ship node
@@ -176,9 +175,7 @@ class AiCubo {
                 let ship = RMXSprite.new(parent: world, node: node, type: .AI, isUnique: true)
                 node.physicsBody = SCNPhysicsBody.dynamicBody()
                 node.physicsBody!.mass = 0.1
-                ship.addBehaviour({ (isOn) -> () in
-                    //Fly in circles?
-                })
+                //TODO make ship fly
             }
             
             

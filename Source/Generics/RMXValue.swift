@@ -122,8 +122,12 @@ extension SCNVector3 {
         //return RMXVector3Distance(self, v)
     }
     
-    var size: RMFloatB {
-        return self.distanceTo(SCNVector3Zero)
+    var length: Float {
+        return Float(self.distanceTo(SCNVector3Zero))
+    }
+    
+    var velocity: Float {
+        return (self.sum > 0 ? 1 : -1) * self.length
     }
     
     var sum: RMFloatB {
@@ -171,7 +175,7 @@ extension SCNVector4 {
 }
 
 
-extension SCNMatrix4 {
+extension SCNMatrix4 : RMXLocatable {
     var print: String {
         let row1 = "   ROW1: \(m11.toData()) \(m12.toData()) \(m13.toData()) \(m14.toData())"
         let row2 = "   ROW2: \(m21.toData()) \(m22.toData()) \(m23.toData()) \(m24.toData())"
@@ -194,6 +198,15 @@ extension SCNMatrix4 {
     
     var position: SCNVector3 {
         return SCNVector3Make(m41, m42, m43)
+    }
+    
+    func getPosition() -> SCNVector3 {
+        return self.position
+    }
+    
+    func leftTo(position: SCNVector3) -> SCNVector3 {
+//        let mat = RMXMatrix4Make(self.left, self.up, self.forward, row4: self.position - position)
+        return self.left * (self.position - position)
     }
 }
 

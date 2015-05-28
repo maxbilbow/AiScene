@@ -201,7 +201,7 @@ class RMSActionProcessor {
         case RMXInterface.JUMP:
             if speed == 1 {
                 sprite.jump()
-                self.interface.collider.sounds[action]?.play()
+                self.interface.av.playSound(action, info: sprite, volume: 0.2)
             }
             else {
 //                sprite.prepareToJump()
@@ -299,7 +299,7 @@ class RMSActionProcessor {
                     self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
                 } else {
                     self.explode(force: self.boomTimer)
-                    self.interface.collider.sounds[RMXInterface.BOOM]?.play()
+                    self.interface.av.playSound(RMXInterface.BOOM, info: sprite.position)
                 }
                 self.boomTimer = 1
             } else if speed == 0 && self.boomTimer == 1 {

@@ -150,8 +150,8 @@ extension RMXSprite {
         self.node.scale = RMXVectorMake(s)
     }
     
-    var weight: RMFloatB {
-        return RMFloatB(self.node.physicsBody!.mass) * self.world!.gravity.size 
+    var weight: Float {
+        return Float(self.node.physicsBody!.mass) * self.world!.gravity.length
     }
     
     func distanceTo(point: RMXVector3 = RMXVector3Zero) -> RMFloatB{
@@ -382,8 +382,8 @@ extension RMXSprite {
     
 
     
-    func addBehaviour(behaviour: (isOn: Bool) -> ()) {
-        self.behaviours.append(behaviour)
+    func addAi(ai: (RMXNode!) -> Void) {
+        self.behaviours.append(ai)
         //self.behaviours.last?()
     }
     

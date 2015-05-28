@@ -65,6 +65,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let RIGHT_CLICK: String = "Mouse 2"
     
     lazy var collider: RMXCollider = RMXCollider(interface: self)
+    lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
 
     var activeCamera: RMXNode? {
         return self.world?.activeCamera
@@ -99,6 +100,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     init(gvc: GameViewController, scene: RMXScene? = nil){
         super.init()
         self.initialize(gvc)
+        self.setUpViews(nil)
         self.viewDidLoad(nil)
         RMXLog("\(__FUNCTION__)")
     }
@@ -123,23 +125,23 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     }
     
     func viewDidLoad(coder: NSCoder!){
-        if self.world == nil {
-            self.world = RMSWorld(interface: self, scene: RMXScene(coder: coder))
-        }
-        self.dataView = RMDataView(frame: self.gameView.bounds)
-        self.dataView!.hidden = true
-//        self.dataView!.backgroundColor = NSColor.blueColor()
-//        self.dataView!.enabled = true
-        self.gameView.addSubview(self.dataView!)
-//        self.dataView!.alpha = 0.5
-        self.setUpGestureRecognisers()
+        
     }
     func setUpTimers(){
 //        self.timer = NSTimer(target: self, selector: Selector("update"))
 //        self.timer!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
     }
-    func setUpGestureRecognisers() {
-        
+    func setUpViews(coder: NSCoder!) {
+        if self.world == nil {
+            self.world = RMSWorld(interface: self, scene: RMXScene(coder: coder))
+        }
+        self.dataView = RMDataView(frame: self.gameView.bounds)
+        self.dataView!.hidden = true
+        //        self.dataView!.backgroundColor = NSColor.blueColor()
+        //        self.dataView!.enabled = true
+        self.gameView.addSubview(self.dataView!)
+        //        self.dataView!.alpha = 0.5
+
     }
 
     func log(_ message: String = "", sender: String = __FUNCTION__, line: Int = __LINE__) {

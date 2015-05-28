@@ -232,7 +232,8 @@ class RMXDPad : RMXInterface {
         
     }
     
-    override func setUpGestureRecognisers(){
+    override func setUpViews(coder: NSCoder!) {
+        super.setUpViews(coder)
 //        let image = UIImage(contentsOfFile: "popNose.png")
 //        button.setImage(image, forState: UIControlState.Normal)
 //        let topBar: CGFloat = 40;

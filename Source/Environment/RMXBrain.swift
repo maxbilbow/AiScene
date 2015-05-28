@@ -8,7 +8,16 @@
 
 import Foundation
 
-extension RMXNode {
+extension RMXNode : RMXLocatable {
+    
+    func getPosition() -> RMXVector {
+//        if self.physicsBody?.type == .Dynamic {
+            return self.presentationNode().worldTransform.position// - self.pivot.position
+//        } else {
+//            return self.position - self.pivot.position
+//        }
+    }
+    
     var sprite: RMXSprite? {
         if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
             return brain.getSprite()
