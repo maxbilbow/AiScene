@@ -117,10 +117,10 @@ class RM3DModels : RMXModelsProtocol {
             break
         case ShapeType.BOBBLE_MAN.rawValue:
             node = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: mode, radius: radius, color: color)
+//            let head = RMXCameraNode(geometry: SCNSphere(radius: RMFloat(radius * 0.5)))
             let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
             head.name = "head"
-            head.camera = RMX.standardCamera()
-//            head.physicsBody = SCNPhysicsBody()
+//            head.physicsBody = SCNPhysicsBody.kinematicBody()
 //            head.physicsBody!.mass = -10
             node.addChildNode(head)
             head.position = SCNVector3Make(0, 2 * radius * 0.9, 0) //TODO check

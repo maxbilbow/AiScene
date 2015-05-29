@@ -34,7 +34,7 @@ extension RMX {
 }
 
 
-class RMSActionProcessor {
+public class RMSActionProcessor {
     
     var boomTimer: RMFloatB = 1
 
@@ -91,20 +91,18 @@ class RMSActionProcessor {
         case "look", "Look", "LOOK":
             
             if point.count == 2 {
-                if sprite.usesWorldCoordinates {
-//                    self.world.activeCamera!.transform = SCNMatrix4Rotate(self.world.activeCamera!.transform, point[0] * -PI_OVER_180, 0, 1, 0)
-//                    if let cameraNode = self.world.activeCamera {
-                        self.world.activeCamera!.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
-                    let phi = self.world.activeCamera!.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                if !sprite.isActiveCamera || self.world.activeCamera.cameraType == .FREE {
+                    self.world.activeCamera.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
+                    let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
                     if phi < 1 && phi > -1 {
-                        self.world.activeCamera!.eulerAngles.x = phi
+                        self.world.activeCamera.eulerAngles.x = phi
                     }
 //                    }
                 } else {
                     if self.world.hasGravity {
-                        let phi = self.world.activeCamera!.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                        let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
                         if phi < 1 && phi > -1 {
-                            self.world.activeCamera!.eulerAngles.x = phi
+                            self.world.activeCamera.eulerAngles.x = phi
                         }
                     }
                     self.turnSpeed(&speed, sprite: sprite)
@@ -248,24 +246,14 @@ class RMSActionProcessor {
             return true
         case "nextCamera":
             if speed == 1 {
-                let cameraNode = self.world.getNextCamera()
-                self.gameView.pointOfView = cameraNode
-                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).rmxID == sprite.rmxID {
-                    sprite.usesWorldCoordinates = false
-                } else {
-                    sprite.usesWorldCoordinates = true
-                }
+                self.gameView.pointOfView = self.world.getNextCamera()
+                sprite.updateCoordinateSystem()
             }
             return true
         case "previousCamera":
             if speed == 1 {
-                let cameraNode = self.world.getPreviousCamera()
-                self.gameView.pointOfView = cameraNode
-                if RMXSprite.rootNode(cameraNode, rootNode: self.scene.rootNode).rmxID == sprite.rmxID {
-                    sprite.usesWorldCoordinates = false
-                } else {
-                    sprite.usesWorldCoordinates = true
-                }
+                self.gameView.pointOfView = self.world.getPreviousCamera()
+                sprite.updateCoordinateSystem()
             }
             return true
         case "reset":
@@ -357,12 +345,12 @@ class RMSActionProcessor {
         return false
         
     }
-    enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES }
-    func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
+    enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES, SCORES }
+    func getData(type: TESTING = .SCORES) -> String {
         let node = self.activeSprite.node//.presentationNode()
         let sprite = self.activeSprite
         let physics = self.world.scene.physicsWorld
-        var info: String = ""
+        var info: String = "\n"
         switch type {
         case .PLAYER_INFO:
             info += "\n        vel:\(sprite.velocity.print)\n     Pos:\(sprite.position.print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
@@ -384,12 +372,18 @@ class RMSActionProcessor {
             #endif
             return angles
         case .ACTIVE_CAMERA:
-            let rootNode = self.world.activeCamera?.getRootNode(inScene: self.scene)
-            info += "\n --- RootNode: \(rootNode?.name) ---\n"
-            info += "   cam: \n\(self.world.activeCamera!.presentationNode().worldTransform.print)\n"
-            info += " world: \(self.world.leftVector.print)   rootNode: \(rootNode?.presentationNode().worldTransform.left.print)\n"
-            info += "      : \(self.world.upVector.print)           : \(rootNode?.presentationNode().worldTransform.up.print)\n"
-            info += "      : \(self.world.forwardVector.print)           : \(rootNode?.presentationNode().worldTransform.forward.print)\n\n"
+            let camera = self.world.activeCamera
+            
+
+            info += "     left: \(self.world.leftVector.print)         camera: \(camera.presentationNode().worldTransform.left.print)\n"
+            info += "       up: \(self.world.upVector.print)               : \(camera.presentationNode().worldTransform.up.print)\n"
+            info += "      fwd: \(self.world.forwardVector.print)               : \(camera.presentationNode().worldTransform.forward.print)\n\n"
+            info += "   sprite: \(self.activeSprite.position.print)\n"
+            info += "   camera: \(camera.presentationNode().worldTransform.position.print)\n"
+            info += "\n --- Camera: \(camera.name) ID: \(self.activeSprite.rmxID) : \(camera.rmxID)---\n"
+            return info
+        case .SCORES:
+            info += "\n\n   SCORE: \(self.activeSprite.attributes.points), KILLS: \(self.activeSprite.attributes.killCount)\n\n"
             return info
         default:
             return info
@@ -408,7 +402,8 @@ class RMSActionProcessor {
         }
         
         if !self.world.hasGravity {
-            if let activeCamera = self.world.activeSprite?.activeCamera {
+            let activeCamera = self.world.activeCamera
+            if activeCamera.isPOV {
                 if activeCamera.eulerAngles.x > 0.01 {
                     activeCamera.eulerAngles.x -= 0.01
                 } else if activeCamera.eulerAngles.x < -0.01 {
@@ -498,21 +493,21 @@ class RMSActionProcessor {
     
     func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 5000) {
         let sprite = s ?? self.activeSprite
-        sprite.world!.interface.av.playSound(RMXInterface.BOOM, info: sprite.position, range: Float(range))
+        sprite.world.interface.av.playSound(RMXInterface.BOOM, info: sprite.position, range: Float(range))
         RMSActionProcessor.explode(sprite, force: force, range: range)
         
     }
     
     class func explode(sprite: RMXSprite, force: RMFloatB = 1, range: RMFloatB = 5000) {
         
-        if let world = sprite.world {
-            for child in world.children {
-                let dist = sprite.distanceTo(child)
-                if  dist < range && child.physicsBody?.type != .Static && child != sprite {
-                    let direction = RMXVector3Normalize(child.position - sprite.position)
-                    child.applyForce(direction * (force * 100000 / (dist + 0.1)) , impulse: true)
-                }
+        let world = sprite.world
+        for child in world.children {
+            let dist = sprite.distanceTo(child)
+            if  dist < range && child.physicsBody?.type != .Static && child != sprite {
+                let direction = RMXVector3Normalize(child.position - sprite.position)
+                child.applyForce(direction * (force * 100000 / (dist + 0.1)) , impulse: true)
             }
         }
+        
     }
 }

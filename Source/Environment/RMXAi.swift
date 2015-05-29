@@ -10,21 +10,16 @@ import Foundation
 
 typealias AiBehaviour = (RMXNode!) -> Void
 class RMXAi {
-    static var autoStabilise: Bool = true
+//    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
         let ai = { (node: RMXNode!) -> Void in
-            if self.autoStabilise && sprite.world!.hasGravity {
-                sprite.physicsBody?.applyForce(sprite.world!.gravity * sprite.mass, atPosition: sprite.bottom, impulse: false)
+//            if sprite.world.aiOn { NSLog(sprite.name) }
+            if sprite.world.hasGravity {
+                sprite.physicsBody?.applyForce(sprite.world.gravity * sprite.mass, atPosition: sprite.bottom, impulse: false)
             }
         }
-
-//        ai.duration = 1 / 60
-//        let action = SCNAction.repeatActionForever(ai)
-//        action.duration = 1
-        sprite.addAi({ (node: RMXNode!) -> Void in
-//             sprite.node.runAction(ai, forKey: "autoStabilise")
-            ai(nil)
-            })
+        sprite.addAi(ai)
+        
         
     }
 
@@ -39,27 +34,27 @@ class RMXAi {
             if master.hasItem && !master.isHolding(poppy) {
                 poppy.releaseItem()
                 itemToWatch = master.item!.node
-                poppy.tracker.setTarget(target: itemToWatch, doOnArrival: { (target: RMXNode?) -> () in
+                poppy.tracker.setTarget(target: itemToWatch?.sprite, doOnArrival: { (target: RMXSprite?) -> () in
                     if master.isHolding(target) {
-                        poppy.world?.interface.av.playSound("pop1", info: poppy)
+                        poppy.world.interface.av.playSound("pop1", info: poppy)
                         ++count
                         if count > limit {
                             if master.isActiveSprite {
                                 do {
-                                    master = self.randomSprite(poppy.world!, type: .PLAYER_OR_AI)!
+                                    master = self.randomSprite(poppy.world, type: .PLAYER_OR_AI)!
                                 } while master == poppy
                                 //master.isActiveSprite ? self.randomSprite(poppy.world!, type: .PLAYER_OR_AI)! : poppy.world!.activeSprite!
                             } else {
-                                master = poppy.world!.activeSprite!
+                                master = poppy.world.activeSprite!
                             }
-                            poppy.tracker.setTarget(target: master.node)
+                            poppy.tracker.setTarget(target: master)
                             count = 0
                         }
                     } else {
                         count = 0
-                        poppy.grab(node: target)
-                        poppy.tracker.setTarget(target: master.node, doOnArrival: { (target: RMXNode?) -> () in
-                            poppy.world?.interface.av.playSound("pop2", info: poppy.position)
+                        poppy.grab(item: target)
+                        poppy.tracker.setTarget(target: master, doOnArrival: { (target: RMXSprite?) -> () in
+                            poppy.world.interface.av.playSound("pop2", info: poppy.position)
                             poppy.releaseItem()
                             poppy.tracker.setTarget()
                             
@@ -69,17 +64,12 @@ class RMXAi {
                 })
             }
             if poppy.isHeld {
-                master = poppy.world!.activeSprite!
+                master = poppy.world.activeSprite!
             }
         }
 //        let action = SCNAction.runBlock(ai)
         
-        poppy.addAi( { (node: RMXNode!) -> Void in
-//            poppy.node.runAction(action, forKey: "Play Fetch")
-            ai(nil)
-        } )
-//        poppy.node.runAction(action)//SCNAction.repeatActionForever(action))
-
+        poppy.addAi( ai )
     }
     
     
@@ -92,16 +82,16 @@ class RMXAi {
         switch type {
         case .AI, .PASSIVE:
             do {
-                sprite = SpriteArray.get(random() % RMXSprite.COUNT, inArray: world.children)
+                sprite =  RMX.spriteWith(ID: random() % RMXSprite.COUNT, inArray: world.children)
             } while sprite?.type != type
             return sprite
         case .PLAYER_OR_AI:
             do {
-                sprite = SpriteArray.get(random() % RMXSprite.COUNT, inArray: world.children)
+                sprite = RMX.spriteWith(ID: random() % RMXSprite.COUNT, inArray: world.children)
             } while sprite?.type != .AI && sprite?.type != .PLAYER
             return sprite
         default:
-            return SpriteArray.get(random() % RMXSprite.COUNT, inArray: world.children)
+            return RMX.spriteWith(ID: random() % RMXSprite.COUNT, inArray: world.children)
         }
     }
     
@@ -112,28 +102,29 @@ class RMXAi {
         
         let speed:RMFloatB = (RMFloatB(random() % 50) + 50) * sprite.mass
         sprite.speed = speed
-        if let world = sprite.world {
+        let world = sprite.world
 //            sprite.world?.interface.collider.trackers.append(sprite.tracker)
-            let action = { (node: SCNNode!) -> Void in
-                if !world.aiOn { return }
-                if !sprite.tracker.hasTarget && !sprite.hasItem {
-                    sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE)?.node, doOnArrival: { (target: RMXNode?) -> () in
-                        if target!.isHeld {
-                            sprite.grab(item: target!.holder)
-                        } else if !(target!.sprite!.isUnique) {
-                            sprite.grab(node: target)
-                        }
-                        sprite.tracker.setTarget(target: world.activeSprite?.node, afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
-                            sprite.throwItem(strength: 200 , atNode: target)
-                            sprite.tracker.setTarget()
-                        })
+        let action = { (node: SCNNode!) -> Void in
+            if !world.aiOn { return }
+            if !sprite.tracker.hasTarget && !sprite.hasItem {
+                sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE), doOnArrival: { (target: RMXSprite?) -> () in
+                    if target!.isHeld {
+                        sprite.grab(item: target!.holder)
+                    } else if target != nil && !target!.isUnique {
+                        sprite.grab(item: target)
+                    }
+                    sprite.tracker.setTarget(target: world.activeSprite, afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
+                        
+                        sprite.throwItem(strength: 200 , atNode: self.randomSprite(world,type: .PLAYER_OR_AI)?.node)
+                        sprite.tracker.setTarget()
                     })
-                }
+                })
             }
-            sprite.addAi(action)//{ (node: RMXNode!) -> Void in
+        }
+        sprite.addAi(action)//{ (node: RMXNode!) -> Void in
 //                sprite.node.runAction(action, forKey: "Random")
 //            })
-        }
+        
     }
 
 

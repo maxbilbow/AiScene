@@ -20,13 +20,13 @@ protocol RMXSpriteManager {
 
 
 
-class RMXSprite : RMXSpriteManager {
+class RMXSprite : RMXSpriteManager, RMXTeamMember {
     lazy var tracker: RMXTracker = RMXTracker(sprite: self)
 //    var hitTarget = false
 //    var target: RMXSprite?
 //    var doOnArrival: ((sender: RMXSprite, target: AnyObject)-> AnyObject?)?
     
-    lazy var environments: SpriteArray = SpriteArray(parent: self)
+
     var aiOn: Bool = false
     
     var holder: RMXSprite?
@@ -35,26 +35,18 @@ class RMXSprite : RMXSpriteManager {
         return self.holder != nil
     }
     
-    var children: [RMXSprite] {
-        return environments.current
-    }
+    var attributes: SpriteAttributes!
     
-    var childSpriteArray: SpriteArray{
-        return self.environments
-    }
+    var children: [RMXSprite] = []
+    
     var hasChildren: Bool {
         return self.children.isEmpty
     }
+
+    private var _useWorldCoordinates = false
     
-    var usesWorldCoordinates = false
-    
-//    var cameraNode: RMXNode {
-//        return self.cameras[self.cameraNumber]
-//    }
-    
-    var color: GLKVector4 = GLKVector4Make(0.5,0.5,0.5,1)
     var scene: RMXScene? {
-        return world!.scene
+        return self.world.scene
     }
     var radius: RMFloatB {
         
@@ -62,7 +54,7 @@ class RMXSprite : RMXSpriteManager {
         return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
     }
     static var COUNT: Int = 0
-    var rmxID: Int = RMXSprite.COUNT
+    lazy var rmxID: Int = RMXSprite.COUNT++
     var isUnique: Bool = false
     
     var hasFriction: Bool {
@@ -74,30 +66,26 @@ class RMXSprite : RMXSpriteManager {
 //    var isLight: Bool = false
     var shapeType: ShapeType = .NULL
     
-    var world: RMSWorld?
+    private var _world: RMSWorld
     
-    var type: RMXSpriteType!
+    var world: RMSWorld {
+        return _world
+    }
+    
+    var type: RMXSpriteType
 //    var wasJustThrown:Bool = false
     var anchor = RMXVector3Zero
-    
-    var parentSprite: RMXSprite?
+
     
 //    lazy var body: RMSPhysicsBody? = RMSPhysicsBody(self)
     
     var parentNode: RMXNode? {
-        #if SceneKit
         return self.node.parentNode
-        #elseif SpriteKit
-        return self.node.parent
-        #endif
-        
     }
     
     var node: RMXNode {
         return self._node
     }
-    
-    var parent: RMXSprite?
     
     private var _node: RMXNode
     
@@ -208,17 +196,12 @@ class RMXSprite : RMXSpriteManager {
     
     
     
-    var behaviours: [(RMXNode!) -> Void] = Array<(RMXNode!) -> Void>()
+    var behaviours: Array<(RMXNode!) -> Void> = Array<(RMXNode!) -> Void>()
 
     
     
-    
-    var isObserver: Bool {
-        return self == self.world!.observer!
-    }
-    
     var isActiveSprite: Bool {
-        return self == self.world!.activeSprite!
+        return self.rmxID == self.world.activeSprite?.rmxID
     }
     
     
@@ -232,7 +215,7 @@ class RMXSprite : RMXSpriteManager {
 
     
     var isInWorld: Bool {
-        return self.distanceTo() < RMFloatB(self.world!.radius)
+        return RMFloatB(self.position.length) < self.world.radius
     }
     
     
@@ -250,9 +233,11 @@ class RMXSprite : RMXSpriteManager {
     var itemPosition: RMXVector3 = RMXVector3Zero
     
 
-    init(node: RMXNode = RMXNode(), type: RMXSpriteType){
+    init(inWorld world: RMSWorld, node: RMXNode = RMXNode(), type: RMXSpriteType){
+        _world = world
         _node = node
         self.type = type
+        self.attributes = SpriteAttributes(self)
         self.spriteDidInitialize()
     }
     
@@ -269,32 +254,23 @@ class RMXSprite : RMXSpriteManager {
     
    
     
-    class func new(parent p: AnyObject, node: RMXNode? = nil, type: RMXSpriteType, isUnique: Bool) -> RMXSprite {
+    class func new(inWorld world: RMSWorld, node: RMXNode? = nil, type: RMXSpriteType, isUnique: Bool) -> RMXSprite {
         
-        let sprite = RMXSprite(node: node ?? RMXNode(), type: type)
+        let sprite = RMXSprite(inWorld: world, node: node ?? RMXNode(), type: type)
         sprite.isUnique = isUnique
-            if let world = p as? RMSWorld {
-                world.insertChild(sprite, andNode: true)
-            } else if let parent = p as? RMXSprite {
-                parent.insertChild(sprite, andNode: false)//TODO:: is this right?
-            
-            } else {
-                fatalError("Not yet compatable")
-            }
-        if type == .AI && !sprite.isUnique {
-            RMXAi.addRandomMovement(to: sprite)
-        } else {
-            sprite.addCameras()
-        }
+        world.insertChild(sprite, andNode: true)
+        sprite.addCameras()
+
         RMXBrain.giveBrainTo(sprite)
+        
+        if sprite.isUnique && sprite.isPlayer {
+//            sprite.addCameras()
+        }
+        
         return sprite
     }
     
     func spriteDidInitialize(){
-        RMXSprite.COUNT++
-        if self.parentSprite != nil {
-            self.world = self.parentSprite!.world
-        }
         self.setName()
     }
     
@@ -327,65 +303,44 @@ class RMXSprite : RMXSpriteManager {
             action(nil)
 //            self.node.runAction(SCNAction.runBlock(action), forKey: "\(name)\(++count)")//.runBlock({ (node: RMXNode!) -> Void in
         }
+        
     }
     internal func headToTarget(node: SCNNode! = nil) -> Void {
         self.tracker.headToTarget()
     }
     
-    func animate(aiOn: Bool = false) {
-        if let type = self.type {
-            
-            switch type {
-            case .AI, .PLAYER, .PLAYER_OR_AI:
-                self.runActions("animate", actions: self.processAi, self.manipulate, self.headToTarget)
-                break
-            case .PASSIVE:
-                self.runActions("animate", actions: self.processAi, self.headToTarget)
-                break
-            case .BACKGROUND:
-                self.runActions("animate", actions: self.processAi)
-               break
-            default:
-                self.runActions("animate", actions: self.processAi)
-                break
-            }
-            
-            for child in children {
-                child.animate()
-            }
-            
-            
+    func animate() {
+        switch self.type {
+        case .AI, .PLAYER, .PLAYER_OR_AI:
+            self.runActions("animate", actions: self.processAi, self.manipulate, self.headToTarget)
+            return
+        case .PASSIVE:
+            self.runActions("animate", actions: self.processAi, self.headToTarget)
+            return
+        case .BACKGROUND:
+            self.runActions("animate", actions: self.processAi)
+            return
+        default:
+            self.runActions("animate", actions: self.processAi)
+            return
         }
     }
     
-    #if SceneKit
+
     func debug(_ yes: Bool = true){
         if yes {
             let transform = self.node.transform
-            if self.isObserver { RMXLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
+            if self.isActiveSprite { RMXLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
            
         
-            if self.isObserver { RMXLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
+            if self.isActiveSprite { RMXLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
         }
     }
-    #elseif SpriteKit
-    func debug(_ yes: Bool = true){
-        if yes {
-        
-        }
-    }
-    #endif
+  
     
-    var cameras: Array<RMXNode> = Array<RMXNode>()
+    var cameras: Array<RMXCameraNode> = Array<RMXCameraNode>()
 //    var cameraNumber: Int = 0
 
-}
-
-extension RMXSprite : RMXLocatable {
-
-    func getPosition() -> RMXVector {
-        return self.position
-    }
     
     func initPosition(startingPoint point: RMXVector3){
         func set(inout value: RMFloatB?, new: RMFloatB) -> RMFloatB {
@@ -406,6 +361,9 @@ extension RMXSprite : RMXLocatable {
         
     }
     
+    var isPlayer: Bool {
+        return self.type == RMXSpriteType.PLAYER || self.type == RMXSpriteType.AI
+    }
     
     private func setShape(shapeType type: ShapeType, scale s: RMXSize?) {
             let scale = s ?? self.node.scale
@@ -428,10 +386,8 @@ extension RMXSprite : RMXLocatable {
         }
     }
     
-    func asPlayerOrAI() -> RMXSprite {
-        if self.type == nil {
-            self.type = .PLAYER
-        }
+    func asPlayer() -> RMXSprite {
+//        self.type = .PLAYER
 
         if let body = self.node.physicsBody {
 //           body.rollingFriction = 1000//0.99
@@ -447,7 +403,6 @@ extension RMXSprite : RMXLocatable {
         }
     
 
-//        self.addCamera()
         return self
     }
     
@@ -456,89 +411,39 @@ extension RMXSprite : RMXLocatable {
 //    }
 
     internal func addCameras() {
-        var pos: SCNVector3
         if self.cameras.count == 0 {
-            self.node.camera = RMX.standardCamera()
+            if self.type == .PLAYER {
+                RMXCamera.followCam(self, option: CameraOptions.FIXED).pov()
+                RMXCamera.headcam(self).pov()
+                RMXCamera.followCam(self, option: CameraOptions.FREE)
+            } else if self.isUnique {
+                RMXCamera.headcam(self)
+                RMXCamera.followCam(self, option: CameraOptions.FIXED)
+            }
             
-            let yScale: RMFloatB = self.type == .BACKGROUND ? 1 : 3
-            let zScale: RMFloatB = self.type == .BACKGROUND ? 2 : 2 * 5
-            pos = SCNVector3Make(0,self.height * yScale, self.radius * zScale)
-            
-            let followNode = RMXNode()
-//            followNode.camera?.technique
-            self.cameras.append(followNode)
-            self.node.addChildNode(followNode)
-            followNode.position.y = pos.y
-//            followNode.pivot.m41 = pos.x
-//            followNode.pivot.m42 = pos.y
-            followNode.pivot.m43 = -pos.z
-            if zScale > 1 { followNode.eulerAngles.x = -15 * PI_OVER_180 }
-            followNode.camera = RMX.standardCamera()
+
         } else {
             fatalError("cameras already set up for \(self.name)")
         }
         
     }
-    
-}
 
-
-extension RMXSprite {
-    
-    func insertChild(child: RMXSprite, andNode:Bool = true){
-        child.parentSprite = self
-        child.world = self.world
-        #if SceneKit
-            if andNode {
-                    self.node.addChildNode(child.node)
-            }
-            
-        #endif
-    }
-    
-    
-    func insertChildren(#children: [Int:RMXSprite], andNodes:Bool = true){
-        for child in children {
-            self.insertChild(child.1, andNode: andNodes)
-        }
-    }
-    
-    
-    func expellChild(id rmxID: Int){
-        if let child = self.childSpriteArray.get(rmxID) {
-            if child.parentSprite! == self {
-                //child.parent! = self.world
-                self.childSpriteArray.remove(rmxID)
-            }
-        }
-        
-    }
-    
-    func expellChild(child: RMXSprite){
-        if child.parentSprite! == self {
-            child.parentSprite!.world = self.world
-            self.childSpriteArray.remove(child.rmxID)
-        }
-    }
     
     func removeBehaviours(){
         self.behaviours.removeAll()
     }
     
-    
-    
-    
-}
-extension RMXSprite {
-    
-    var activeCamera: RMXNode? {
-        for node in self.node.childNodes {
-            if node as? NSObject == self.world?.activeCamera {
-                return node as? RMXNode
-            }
-        }
-        return nil
+    func updateCoordinateSystem() {
+        _useWorldCoordinates = self.isActiveSprite && !self.isActiveCamera
     }
+    
+
+    
+    ///Used when checkin whether or not to use local or global coordinates when controlling
+    var isActiveCamera: Bool {
+        return self.world.activeCamera.rmxID == self.rmxID
+    }
+
     
     func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
         
@@ -552,8 +457,9 @@ extension RMXSprite {
                 if rootNode.rmxID != self.rmxID && rootNode.rmxID != itemInHand.rmxID {
                     let target = RMXSprite.rootNode(targetNode!, rootNode: self.scene!.rootNode)
                     
-                    itemInHand.tracker.setTarget(target: target, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                    itemInHand.tracker.setTarget(target: target.sprite, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
                         RMSActionProcessor.explode(itemInHand, force: strength / 200, range: 500)
+                        RMXTeam.challenge(self.attributes, defender: target!.attributes)
                         itemInHand.tracker.setTarget()
                     })
                     return true
@@ -562,8 +468,8 @@ extension RMXSprite {
                 direction = (target.presentationNode().position - itemInHand.position).normalised
             }
             
-            if let cameraNode = self.activeCamera {
-                let gradient = cameraNode.eulerAngles.x
+            if self.isActiveCamera {
+                let gradient = self.world.activeCamera.eulerAngles.x
                 let mat = GLKMatrix4MakeRotation(Float(gradient), Float(1.0), 0.0, 0.0)
                 direction = SCNVector3FromGLKVector3( GLKMatrix4MultiplyVector3WithTranslation(mat, SCNVector3ToGLKVector3( direction)))
             }
@@ -571,7 +477,7 @@ extension RMXSprite {
             if let body = itemInHand.node.physicsBody {
                 if let target = targetNode {
                     if target.rmxID != self.rmxID && target.rmxID != itemInHand.rmxID && !target.isActiveSprite {
-                        itemInHand.tracker.setTarget(target: target, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                        itemInHand.tracker.setTarget(target: target.sprite, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
                             RMSActionProcessor.explode(itemInHand, force: strength / 200, range: 500)
                             itemInHand.tracker.setTarget()
                         })
@@ -581,7 +487,7 @@ extension RMXSprite {
                     itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
                 }
                 if self.isActiveSprite {
-                    self.world!.interface.av.playSound(RMXInterface.THROW_ITEM, info: self.position)
+                    self.world.interface.av.playSound(RMXInterface.THROW_ITEM, info: self.position)
                 }
                 RMXLog("\(itemInHand.name) was just thrown")
             } else {
@@ -605,7 +511,7 @@ extension RMXSprite {
         if let item = self.item {
             let itemRadius = item.radius // 2
             var newPos = self.position + self.forwardVector * (self.radius + itemRadius)
-            if world!.hasGravity && newPos.y < itemRadius {
+            if world.hasGravity && newPos.y < itemRadius {
                 newPos.y = itemRadius
             }
 //            item.node.runAction(SCNAction.moveTo(newPos, duration: 1), forKey: "manipulate")
@@ -626,7 +532,7 @@ extension RMXSprite {
             } else {
                 let speed = item.speed
                 if !item.tracker.hasTarget {
-                    item.tracker.setTarget(target: self.node, speed: 500 * (item.mass + 1), willJump: false, doOnArrival: { (target) -> () in
+                    item.tracker.setTarget(target: self, speed: 400 * (item.mass + 1), willJump: false, doOnArrival: { (target) -> () in
                         self.grab(item: item)
                         item.tracker.setTarget()
                         item.speed = speed
@@ -702,8 +608,6 @@ extension RMXSprite {
         if self.position.y < self.height * 10 {
             self.applyForce(RMXVector3Make(0, _jumpStrength, 0), impulse: true)
         }
-
-        
     }
 
     
@@ -712,53 +616,236 @@ extension RMXSprite {
         return nil
     }
     
-
     
-    ///TODO hitCondition instead of self.hitTarget
-    @availability(*,deprecated=1)
-    func headTo(object: RMXSprite?, var speed: RMFloatB = 1, doOnArrival: (sender: RMXSprite, objects: [AnyObject]?)-> AnyObject? = RMXSprite.stop, objects: AnyObject ... )-> AnyObject? {
-        if let object = object {
-            let target = object.position //?? self.position * 10
-            let dist = RMXVector3Distance(self.position, target)
-            let reach = object.radius // ?? self.radius
-            if dist >= fabs(self.armLength) * 2 {
-                #if OPENGL_OSX
-                    speed *= 0.5
-                #endif
-                let direction = RMXVector3Normalize(target - self.position)
-                self.applyForce(direction * speed, atPosition: self.front,  impulse: false)
-                
-            } else {
-                let result: AnyObject? = doOnArrival(sender: self, objects: objects)
-                return result ?? dist
-            }
-            return dist
+    func setAngle(yaw: RMFloatB? = nil, pitch: RMFloatB? = nil, roll r: RMFloatB? = nil) {
+        //        self.node.eulerAngles = self.getNode().eulerAngles
+        //        self.node.eulerAngles = self.getNode().eulerAngles
+        self.setPosition(resetTransform: false)
+        if let theta = yaw {
+            self.node.orientation.y = 0
         }
-        return nil
+        if let phi = pitch {
+            self.node.orientation.x = 0
+        }
+        if let roll = r {
+            self.node.orientation.z = 0
+        }
+        self.resetTransform()
+        
     }
     
-///TODO Theta may be -ve?
-    @availability(*,obsoleted=1.0)
-    func turnToFace(object: RMXSprite, rSpeed: RMFloatB = 1) -> RMFloatB {
-        var goto = object.centerOfView
+    func lookAround(theta t: RMFloatB? = nil, phi p: RMFloatB? = nil, roll r: RMFloatB? = nil) {
         
-        
-        let theta = -RMXGetTheta(vectorA: self.position, vectorB: goto)
-        if theta > 0.1 {
-            self.lookAround(theta: self.rotationSpeed * rSpeed)
+        if let theta = t {
+            let axis = self.transform.up
+            let speed = self.rotationSpeed * theta
+            self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
+        }
+        if let phi = p {
+            let axis = self.transform.left
+            let speed = self.rotationSpeed * phi
+            self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, speed), impulse: false)
+        }
+        if let roll = r {
+            let axis = self.transform.forward
+            let speed = self.rotationSpeed * roll
+            self.node.physicsBody!.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
+            //            self.node.transform *= RMXMatrix4MakeRotation(speed * 0.0001, RMXVector3Make(0,0,1))
         }
         
-        /*else {
-            let phi = -RMXGetPhi(vectorA: self.position, vectorB: goto) //+ PI_OVER_2
-            self.body.setPhi(upDownRadians: phi)
-        }*/
+    }
 
-        return self.distanceTo(point: goto)
+    var useWorldCoordinates: Bool {
+        return self.type == .PLAYER && !self.world.activeCamera.isPOV //_useWorldCoordinates
     }
     
-   
+    
+    func accelerateForward(v: RMFloatB) {
+        if self.useWorldCoordinates {
+            self.applyForce(self.world.forwardVector * v * self.speed, atPosition: self.front)
+        } else {
+            self.applyForce(self.forwardVector * v * self.speed)
+        }
+    }
+    
+    func accelerateUp(v: RMFloatB) {
+        if self.useWorldCoordinates {
+            self.applyForce(self.world.upVector * v * self.speed, atPosition: self.front)
+        } else {
+            self.applyForce(self.upVector * v * self.speed)
+        }
+    }
+    
+    
+    func accelerateLeft(v: RMFloatB) {
+        if self.useWorldCoordinates {
+            self.applyForce(self.world.leftVector * v * self.speed, atPosition: self.front)
+        } else {
+            self.applyForce(self.leftVector * v * self.speed)
+        }
+    }
+    
+    
+    func completeStop(){
+        self.stop()
+        self.node.physicsBody!.velocity = RMXVector3Zero
+    }
+    
+    
+    ///Stops all acceleration foces, not velocity
+    func stop(){
+        self.node.physicsBody!.clearAllForces()
+        //        self.acceleration = nil
+    }
+    
+    var scale: RMXVector3 {
+        return self.node.presentationNode().scale
+    }
+    
+    func setRadius(radius: RMFloatB){
+        let s = radius * 2
+        self.node.scale = RMXVectorMake(s)
+    }
+    
+    var weight: Float {
+        return Float(self.node.physicsBody!.mass) * self.world.gravity.length * 2
+    }
+    
+    func distanceTo(point: RMXVector3) -> RMFloatB{
+        return RMFloatB((self.position - point).length)
+    }
+    
+    func distanceTo(object:RMXSprite) -> RMFloatB{
+        return self.distanceTo(object.position)
+    }
+    
+    var velocity: RMXVector {
+        if let body = self.physicsBody {
+            return body.velocity //body.velocity
+        } else {
+            return RMXVector3Zero
+        }
+    }
+    
+    func setPosition(position: RMXVector3? = nil, resetTransform: Bool = true){
+        self.node.transform = self.transform
+        if let position = position {
+            self.node.position = position
+        }
+        //        self.node.orientation = self.getNode().orientation
+        //        self.node.scale = self.getNode().scale
+        
+        if resetTransform {
+            self.node.physicsBody?.resetTransform()
+        }
+    }
+    
+    class func rootNode(node: RMXNode, rootNode: RMXNode) -> RMXNode {
+        if node.parentNode == rootNode || node.parentNode == nil {
+            RMXLog("RootNode: \(node.name)")
+            return node
+        } else {
+            RMXLog(node.parentNode)
+            return self.rootNode(node.parentNode!, rootNode: rootNode)
+        }
+    }
+    
+
+
+
+
+
+    
+    func addAi(ai: AiBehaviour) {
+        self.behaviours.append(ai)
+        //self.behaviours.last?()
+    }
+    
+    
+    var viewPoint: RMXPoint {
+        return self.position - self.forwardVector
+    }
+    
+    
+    
+    
+    var isGrounded: Bool {
+        return self.velocity.y == 0 && self.world.hasGravity
+    }
+    
+    var upThrust: RMFloatB {
+        return self.node.physicsBody!.velocity.y
+    }
+
+    
+    var upVector: RMXVector {
+        return self.transform.up
+    }
+    
+    var leftVector: RMXVector {
+        
+        return self.transform.left
+    }
+    
+    var forwardVector: RMXVector {
+        return self.transform.forward
+    }
+
+    
+        
+    func grabNode(sprite: RMXSprite?){
+        if let sprite = sprite {
+            #if SceneKit
+                //self.insertChild(sprite)
+                sprite.setPosition(position: self.forwardVector)
+            #endif
+        }
+    }
+        
+}
+    
+extension RMXSprite {
+    
+    
+    func setColor(#color: NSColor){
+        
+        self.node.geometry?.firstMaterial!.diffuse.contents = color
+        self.node.geometry?.firstMaterial!.diffuse.intensity = 1
+        self.node.geometry?.firstMaterial!.specular.contents = color
+        self.node.geometry?.firstMaterial!.specular.intensity = 1
+        self.node.geometry?.firstMaterial!.ambient.contents = color
+        self.node.geometry?.firstMaterial!.ambient.intensity = 1
+        self.node.geometry?.firstMaterial!.transparent.intensity = 0
+        
+    }
+    
+    func makeAsSun(rDist: RMFloatB = 1000, rAxis: RMXVector3 = RMXVector3Make(1,0,0)) -> RMXSprite {
+        //        self.type = .BACKGROUND
+        
+        
+        
+        self.rotationSpeed = 1 * PI_OVER_180 / 10
+        
+        
+        
+        self.rAxis = rAxis
+        self.node.pivot.m43 = -rDist
+        
+        
+        return self
+    }
+    
     
 }
 
 
 
+
+
+
+extension RMXSprite : RMXLocatable {
+    
+    func getPosition() -> RMXVector {
+        return self.position
+    }
+}

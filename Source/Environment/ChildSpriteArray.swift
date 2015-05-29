@@ -8,9 +8,24 @@
 
 import Foundation
 
+extension RMX {
+    static func spriteWith(#ID: Int, inArray array: Array<RMXSprite>) -> RMXSprite? {
+        for sprite in array {
+            if sprite.rmxID == ID {
+                return sprite
+            }
+        }
+        return nil
+//        return array.filter({ (sprite: RMXSprite) -> Bool in
+//            return sprite.rmxID == ID
+//        }).first
+    }
+}
+
+@availability(*,deprecated=1)
 class SpriteArray {
     var parent: AnyObject
-    private var type: RMXWorldType {
+    private var type: GameType {
         return (self.parent as? RMSWorld)!.type ?? .NULL
     }
 
@@ -57,14 +72,14 @@ class SpriteArray {
     }
     
     func plusOne(){
-        if self._key + 1 > RMXWorldType.DEFAULT.rawValue {
+        if self._key + 1 > GameType.DEFAULT.rawValue {
             self._key = 0
         } else {
             self._key += 1
         }
     }
     
-    func setType(type: RMXWorldType){
+    func setType(type: GameType){
         self._key = type.rawValue
     }
     
@@ -79,8 +94,8 @@ class SpriteArray {
     init(parent p: AnyObject){
         self.parent = p
         if let parent = p as? RMSWorld {
-            self.spriteArray.reserveCapacity(RMXWorldType.DEFAULT.rawValue)
-            for (var i = 1; i <= RMXWorldType.DEFAULT.rawValue ; ++i){
+            self.spriteArray.reserveCapacity(GameType.DEFAULT.rawValue)
+            for (var i = 1; i <= GameType.DEFAULT.rawValue ; ++i){
                 let dict = Array<RMXSprite>()
                 self.spriteArray.append(dict)
             }

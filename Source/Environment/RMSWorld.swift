@@ -15,8 +15,10 @@ import SceneKit
 #endif
 
 
-enum RMXWorldType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
+enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 class RMSWorld   {
+    
+    var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
     
     #if SceneKit
     static let ZERO_GRAVITY = RMXVector3Zero
@@ -26,9 +28,9 @@ class RMSWorld   {
     static let EARTH_GRAVITY = CGVector(dx: 0, dy:-9.8)
     #endif
     
-    var cameras: Array<RMXNode> = Array<RMXNode>()
+    var cameras: Array<RMXCameraNode> = Array<RMXCameraNode>()
     
-    var activeCamera: RMXNode? {
+    var activeCamera: RMXCameraNode {
         return self.cameras[self.cameraNumber]
     }
     
@@ -48,9 +50,6 @@ class RMSWorld   {
 
     
     var aiOn = false
-    
-    @availability(*,unavailable)
-    lazy var environments: SpriteArray = SpriteArray(parent: self)
 
     var children: Array<RMXSprite> = Array<RMXSprite>()
 //    var children: [RMXSprite] {
@@ -88,7 +87,7 @@ class RMSWorld   {
     
     static var RADIUS: RMFloatB = 250
     
-    static var TYPE: RMXWorldType = .DEFAULT
+
 
     var scene: RMXScene {
         return self._scene
@@ -117,17 +116,12 @@ class RMSWorld   {
 //        self.activeSprite.name: self.activeSprite
 //    ]
     
-    var type: RMXWorldType = .DEFAULT
+    var type: GameType = .DEFAULT
     
     func worldDidInitialize() {
         
     }
   
-    @availability(*,deprecated=1)
-    func setWorldType(worldType type: RMXWorldType = .DEFAULT){
-        self.type = type
-//        self.environments.setType(type)
-    }
     
     @availability(*,deprecated=1)
     func closestObjectTo(sender: RMXSprite)->RMXSprite? {
@@ -143,10 +137,8 @@ class RMSWorld   {
                 }
             }
         }
-        if let result = SpriteArray.get(closest, inArray: self.children) {
-                return result
-            }
-        return nil
+       return RMX.spriteWith(ID: closest, inArray: self.children)
+    
     }
     @availability(*,deprecated=1)
     func furthestObjectFrom(sender: RMXSprite)->RMXSprite? {
@@ -162,22 +154,14 @@ class RMSWorld   {
                 }
             }
         }
-        if let result = SpriteArray.get(furthest, inArray: self.children){
-                return result
-        }   else { return nil }
+        return RMX.spriteWith(ID: furthest, inArray: self.children)
     }
     
     func insertChild(child: RMXSprite, andNode:Bool = true){
-        child.parentSprite = nil
-        child.world = self
-        if andNode {
-            #if SceneKit
-            self.scene.rootNode.addChildNode(child.node)
-            #endif
-        }
-        //RMXLog("sprite added to world: \(child.name) ----- Node added to Scene: \(child.node.name)")
-//        self.childSpriteArray.set(child)
         self.children.append(child)
+        if andNode {
+            self.scene.rootNode.addChildNode(child.node)
+        }
     }
     
     func insertChildren(children: [RMXSprite], insertNodes:Bool = true){
@@ -223,7 +207,7 @@ class RMSWorld   {
     
         let node = RMXSprite.rootNode(n, rootNode: self.scene.rootNode)
         if node.name == nil || node.name == "" {
-            let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE, isUnique: false)
+            let sprite = RMXSprite.new(inWorld: self, node: node, type: type ?? .PASSIVE, isUnique: false)
             return sprite
         } else {
             for sprite in self.children {
@@ -232,14 +216,14 @@ class RMSWorld   {
                 }
             }
         }
-        let sprite = RMXSprite.new(parent: self, node: node, type: type ?? .PASSIVE, isUnique: false)
+        let sprite = RMXSprite.new(inWorld: self, node: node, type: type ?? .PASSIVE, isUnique: false)
         //sprite.setNode(node)
         return sprite
     }
     
     func animate() {
         for child in self.children {
-            child.animate(aiOn: self.aiOn)
+            child.animate()
         }
         self.scene.physicsWorld.updateCollisionPairs()
     }
@@ -262,15 +246,15 @@ extension RMSWorld {
 extension RMSWorld {
 
     var forwardVector: RMXVector {
-        return self.activeCamera!.presentationNode().worldTransform.forward// ?? RMXVector3Make(0,0,-1)
+        return self.activeCamera.presentationNode().worldTransform.forward// ?? RMXVector3Make(0,0,-1)
     }
     
     var upVector: RMXVector {
-        return self.activeCamera!.presentationNode().worldTransform.up// ?? RMXVector3Make(0,1,0)
+        return self.activeCamera.presentationNode().worldTransform.up// ?? RMXVector3Make(0,1,0)
     }
     
     var leftVector: RMXVector {
-        return self.activeCamera!.presentationNode().worldTransform.left// ?? RMXVector3Make(-1,0,0)
+        return self.activeCamera.presentationNode().worldTransform.left// ?? RMXVector3Make(-1,0,0)
     }
     
 }

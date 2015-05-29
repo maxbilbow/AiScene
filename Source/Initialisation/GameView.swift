@@ -28,7 +28,7 @@ class GameView: SCNView  {
         self.interface = interface
         self.delegate = self.interface
     
-        AiCubo.setUpWorld(self.interface, type: .TEST)
+        AiCubo.setUpWorld(self.interface)
         
     }
     

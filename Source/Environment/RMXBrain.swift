@@ -18,6 +18,23 @@ extension RMXNode : RMXLocatable {
 //        }
     }
     
+    var rmxID: Int {
+        return self.getRmxID() ?? -1
+    }
+    
+    func getRmxID(scene: RMXScene? = nil) -> Int? {
+        if let sprite = self.sprite {
+            return sprite.rmxID
+        } else if let brain = self as? RMXBrain {
+            return brain.rmxID
+        } else if let scene = scene {
+            return self.getRootNode(inScene: scene).sprite?.rmxID
+        } else {
+            return nil
+        }
+    }
+    
+    
     var sprite: RMXSprite? {
         if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
             return brain.getSprite()
@@ -52,9 +69,6 @@ extension RMXNode : RMXLocatable {
         return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
     }
     
-    var rmxID: Int? {
-        return self.sprite?.rmxID
-    }
     
     var isActiveSprite: Bool {
         return self.sprite?.isActiveSprite ?? false
@@ -87,11 +101,21 @@ extension RMXNode : RMXLocatable {
     var holder: RMXSprite? {
         return self.sprite?.holder
     }
+    
+    
 
 }
 
 class RMXBrain : RMXNode {
     
+    private var _rmxID: Int = -1
+    override var rmxID: Int {
+        return _rmxID
+    }
+//        {
+//        return self.sprite?.rmxID
+//    }
+
     static let ID = "Brain"
     internal var rmxSprite: RMXSprite?
 
@@ -99,15 +123,21 @@ class RMXBrain : RMXNode {
         return self.rmxSprite
     }
     
-//    var rootNode: RMXNode? {
-//        return self.rmxSprite?.node
-//    }
+    var rootNode: RMXNode? {
+        return self.rmxSprite?.node
+    }
+    
+    
+    internal func setRmxID(ID: Int) {
+        _rmxID = ID
+    }
     
     class func giveBrainTo(sprite: RMXSprite) -> RMXBrain {
         let brain = RMXBrain()
         brain.rmxSprite = sprite
         brain.name = RMXBrain.ID
         sprite.node.addChildNode(brain)
+        brain._rmxID = sprite.rmxID
         return brain
     }
     

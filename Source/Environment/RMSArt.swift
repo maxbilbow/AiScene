@@ -107,11 +107,11 @@ class RMXArt {
             node.physicsBody!.mass *= 1000
             node.physicsBody!.damping = 1000
             node.physicsBody!.angularDamping = 1000
-            let sprite = RMXSprite.new(parent: world, node: node, type: .BACKGROUND, isUnique: true)
-//            sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
-            sprite.addAi({ (node: RMXNode!) -> Void in
-                sprite.setPosition(position: position, resetTransform: true)
-            })
+            let sprite = RMXSprite.new(inWorld: world, node: node, type: .BACKGROUND, isUnique: true)
+            sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
+//            sprite.addAi({ (node: RMXNode!) -> Void in
+//                sprite.setPosition(position: position, resetTransform: true)
+//            })
             RMXLog("axis: \(axis), scale: \(scale.print)")
             
             
@@ -164,7 +164,7 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let isBobbleMan = switcher == ShapeType.BOBBLE_MAN.rawValue || switcher == ShapeType.PONGO.rawValue
+            let isBobbleMan = switcher == ShapeType.BOBBLE_MAN.rawValue
             type = isBobbleMan ? .AI : .PASSIVE
             let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color, mode: type)
             
@@ -173,10 +173,11 @@ class RMXArt {
             
             
             
-            let sprite = RMXSprite.new(parent: world, node: node, type: type, isUnique: false)
+            let sprite = RMXSprite.new(inWorld: world, node: node, type: type, isUnique: false)
             
             if isBobbleMan {
                 RMXAi.autoStablise(sprite)
+//                RMXAi.addRandomMovement(to: sprite)
             }
                 
         }
