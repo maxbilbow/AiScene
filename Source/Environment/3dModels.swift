@@ -11,7 +11,7 @@ import SceneKit
 
 typealias RMXModels = RM3DModels
 
-enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, ROCK, OILDRUM, BOBBLE_MAN, LAST,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
+enum ShapeType: Int { case CUBE , SPHERE, CYLINDER,  OILDRUM, BOBBLE_MAN, LAST,ROCK,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
 
 class RM3DModels : RMXModelsProtocol {
     

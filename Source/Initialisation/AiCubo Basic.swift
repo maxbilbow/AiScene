@@ -176,7 +176,7 @@ class AiCubo {
             
     
             
-            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 100, radius: earth.radius / 2)
+            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 200, radius: earth.radius / 2)
             
             //camera
             RMXCamera.headcam(sun)
@@ -212,6 +212,12 @@ class AiCubo {
             let teamA = RMXTeam(gameWorld: world, captain: player)
             player?.attributes.invincible = true
             let teamB = RMXTeam(gameWorld: world)
+            
+            for player in world.players {
+                if player.type == RMXSpriteType.AI && !player.isUnique {
+                    RMXAi.addRandomMovement(to: player)
+                }
+            }
             
             var aOrB = true
             for player in world.players {

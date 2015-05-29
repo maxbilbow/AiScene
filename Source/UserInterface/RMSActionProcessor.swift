@@ -383,7 +383,8 @@ public class RMSActionProcessor {
             info += "\n --- Camera: \(camera.name) ID: \(self.activeSprite.rmxID) : \(camera.rmxID)---\n"
             return info
         case .SCORES:
-            info += "\n\n   SCORE: \(self.activeSprite.attributes.points), KILLS: \(self.activeSprite.attributes.killCount)\n\n"
+            info += "\n\n        SCORE: \(self.activeSprite.attributes.points), KILLS: \(self.activeSprite.attributes.killCount)"
+            info += "\n\n   TEAM SCORE: \(self.activeSprite.attributes.team?.printScore)"
             return info
         default:
             return info

@@ -345,4 +345,8 @@ class RMXTeam {
         return game?.winningTeam != nil
     }
     
+    func printScore() -> String {
+        return "\(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths)"
+    }
+    
 }
