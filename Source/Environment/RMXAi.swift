@@ -63,7 +63,7 @@ class RMXAi {
                     
                 })
             }
-            if poppy.isHeld {
+            if poppy.isLocked {
                 master = poppy.world.activeSprite!
             }
         }

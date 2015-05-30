@@ -285,7 +285,7 @@ public class RMSActionProcessor {
         case "explode":
             if speed == 1 {
                 if let item = sprite.item {
-                    self.throwOrGrab(nil, withForce: ( self.boomTimer  ) * item.mass)
+                    self.activeSprite.throwItem(force: ( self.boomTimer  ) * item.mass)
 //                    self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
                 } else {
                     self.explode(force: self.boomTimer)
@@ -435,10 +435,10 @@ public class RMSActionProcessor {
     
     func throwOrGrab(target: AnyObject?, withForce force: RMFloatB = 1) -> RMXNode?{
         if let item = self.activeSprite.item {
-            self.activeSprite.throwItem(atObject: target, withForce: force)
+            self.activeSprite.throwItem(atObject: target?.node, withForce: force)
             return item.tracker.target?.node
         } else {
-            self.activeSprite.grab(target)
+            self.activeSprite.grab(target?.node)
             if let item = self.activeSprite.item {
                  return item.tracker.target?.node
             }
