@@ -205,6 +205,7 @@ class RMSKeys : RMXInterface {
         
         return delta
     }
+    
     override func update() {
         for key in self.keys {
             key.update()

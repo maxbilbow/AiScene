@@ -190,7 +190,7 @@
 		5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Air Reverse Burst 2.caf"; sourceTree = "<group>"; };
 		5031F3C71B15B85100FAB551 /* Baseball Catch.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Baseball Catch.caf"; sourceTree = "<group>"; };
 		5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Body Hit 01.caf"; sourceTree = "<group>"; };
-		50AC218A1B17AABA00A9BD28 /* TeamGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TeamGame.swift; sourceTree = "<group>"; };
+		50AC218A1B17AABA00A9BD28 /* TeamGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamGame.swift; path = ../Initialisation/TeamGame.swift; sourceTree = "<group>"; };
 		50B563EC1B13A7F2008AB47D /* RMXBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXBrain.swift; path = Environment/RMXBrain.swift; sourceTree = "<group>"; };
 		50BF107D1B16030D00680768 /* RMXTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXTracker.swift; path = Ai/RMXTracker.swift; sourceTree = "<group>"; };
 		6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = MyPlayground.playground; path = ../../MyPlayground.playground; sourceTree = "<group>"; };
@@ -483,6 +483,7 @@
 				6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */,
 				6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */,
 				6C9299BB1AE544C000E71811 /* RMSWorld.swift */,
+				50AC218A1B17AABA00A9BD28 /* TeamGame.swift */,
 				6C9299BC1AE544C000E71811 /* RMXCamera.swift */,
 				6C9299BD1AE544C000E71811 /* RMXClock.swift */,
 				6C9299BE1AE544C000E71811 /* RMXNode.swift */,
@@ -520,7 +521,6 @@
 				6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */,
 				6C9299CB1AE544C000E71811 /* RMXInitialize.swift */,
 				6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */,
-				50AC218A1B17AABA00A9BD28 /* TeamGame.swift */,
 			);
 			path = Initialisation;
 			sourceTree = "<group>";

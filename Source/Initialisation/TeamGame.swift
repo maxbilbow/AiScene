@@ -18,15 +18,15 @@ protocol RMXTeamGame  {
     var teamPlayers: Array<RMXSprite> { get }
     var nonPlayers: Array<RMXSprite> { get }
     var nonTeamPlayers: Array<RMXSprite> { get }
-    func getTeam(#id: Int) -> Array<RMXTeamMember>?
-    func getTeam(#team: RMXTeam?) -> Array<RMXTeamMember>?
+    func getTeam(#id: Int) -> Array<RMXSprite>?
+    func getTeam(#team: RMXTeam?) -> Array<RMXSprite>?
     var winningTeam: RMXTeam? { get }
     func addTeam(team: RMXTeam)
     var teams: [Int:RMXTeam] { get set }
 }
 
 protocol RMXTeamMember {
-    var attributes: SpriteAttributes! { get set }
+    var attributes: SpriteAttributes! { get }
 }
 
 
@@ -36,26 +36,28 @@ extension RMSWorld : RMXTeamGame {
         self.teams[team.id] = team
     }
     
-    func getTeam(#id: Int) -> Array<RMXTeamMember>? {
+    func getTeam(#id: Int) -> Array<RMXSprite>? {
         return self.children.filter({ (child: RMXSprite) -> Bool in
             return child.attributes.teamID == id
         })
     }
     
     
-    func getTeam(#team: RMXTeam?) -> Array<RMXTeamMember>? {
+    func getTeam(#team: RMXTeam?) -> Array<RMXSprite>? {
         return team != nil ? self.getTeam(id: team!.id) : nil
     }
     
+    /// Team IDs must be > 0. I.e. payer is assigned to a team
     var teamPlayers: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.attributes.teamID >= 0 && child.isPlayer
+            return child.attributes.teamID > 0 && child.isPlayer
         })
     }
     
+    ///Players not assigend to a team (i.e. teamID == 0 )
     var nonTeamPlayers: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.attributes.teamID < 0 || !child.isPlayer
+            return child.isPlayer //&& child.attributes.teamID == 0
         })
     }
     
@@ -99,6 +101,7 @@ class SpriteAttributes {
     var teamID: Int {
         return _teamID
     }
+    
     var team: RMXTeam? {
         return self.game?.teams[self.teamID]
     }
@@ -180,7 +183,7 @@ class SpriteAttributes {
     }
 }
 
-typealias ScoreCard = (kills: Int, deaths: Int, points: Int)
+typealias ScoreCard = (kills: Int, deaths: Int, points: Int, players: Int)
 class RMXTeam {
     static var COUNT: Int = 0
     lazy var id: Int = ++COUNT //first time is 1
@@ -190,14 +193,15 @@ class RMXTeam {
     
     var startingPoints = 100
     
-    var score: (kills: Int, deaths: Int, points: Int) {
-        var score: ScoreCard = (kills: 0, deaths: 0, points: 0)
+    var score: ScoreCard {
+        var score: ScoreCard = (kills: 0, deaths: 0, points: 0, players: 0)
         if let team = game.getTeam(id: self.id) {
             for player in team {
                 score.kills  += player.attributes.killCount
                 score.deaths += player.attributes.deathCount
                 score.points += player.attributes.points
             }
+            score.players = team.count
         }
         return score
     }
@@ -345,8 +349,8 @@ class RMXTeam {
         return game?.winningTeam != nil
     }
     
-    func printScore() -> String {
-        return "\(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths)"
+    var printScore: String {
+        return "\(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.score.players)"
     }
     
 }

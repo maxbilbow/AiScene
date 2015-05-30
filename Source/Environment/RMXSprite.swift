@@ -31,6 +31,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
     
     var holder: RMXSprite?
     
+    @availability(*,deprecated=1)
     var isHeld: Bool {
         return self.holder != nil
     }
@@ -392,11 +393,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
         if let body = self.node.physicsBody {
 //           body.rollingFriction = 1000//0.99
             body.angularDamping = 0.99
-            #if SceneKit
             body.damping = 0.5
-                #elseif SpriteKit
-                body.linearDamping = 0.5
-            #endif
             body.friction = 0.1
         } else {
             fatalError("Should already have physics body")
@@ -444,7 +441,57 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
         return self.world.activeCamera.rmxID == self.rmxID
     }
 
+    func throwItem(atObject object: AnyObject?, withForce strength: RMFloatB) {
+        if let sprite = object as? RMXSprite {
+            self.throwItem(atSprite: sprite, withForce: strength)
+        } else if let node = object as? RMXNode {
+            self.throwItem(atSprite: node.sprite, withForce: strength)
+        } else if let position = object as? RMXVector {
+            self.throwItem(atPosition: position, withForce: strength)
+        }
+    }
     
+    func throwItem(atSprite sprite: RMXSprite?, withForce strength: RMFloatB) {
+        if let item = self.item {
+            if let sprite = sprite {
+                if sprite.rmxID != self.rmxID && sprite.rmxID != item.rmxID {
+                    item.tracker.setTarget(target: sprite, speed: 10 * item.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                        RMSActionProcessor.explode(item, force: strength / 200, range: 500)
+                        RMXTeam.challenge(self.attributes, defender: target!.attributes)
+                        item.tracker.setTarget()
+                    })
+                    self.releaseItem()
+                }
+            }
+        } else {
+            RMXLog("Nothing to throw")
+        }
+    }
+    
+    func throwItem(force strength: RMFloatB) {
+        if let itemInHand = self.item {
+            var direction = self.forwardVector
+            if self.isActiveCamera {
+                let gradient = self.world.activeCamera.eulerAngles.x
+                let mat = GLKMatrix4MakeRotation(Float(gradient), Float(1.0), 0.0, 0.0)
+                direction = SCNVector3FromGLKVector3( GLKMatrix4MultiplyVector3WithTranslation(mat, SCNVector3ToGLKVector3( direction)))
+            }
+            itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
+        }
+        
+    }
+    
+    func throwItem(atPosition target: RMXVector3, withForce strength: RMFloatB) {
+        if let itemInHand = self.item {
+            let direction = (target - itemInHand.position).normalised
+            self.releaseItem()
+            itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
+        } else {
+            RMXLog("Nothing to throw")
+        }
+    }
+    
+    @availability(*,deprecated=1)
     func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
         
         if let itemInHand = self.item {
@@ -520,24 +567,29 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
         }
     }
     
+    var isLocked: Bool = false
     private func setItem(item itemIn: RMXSprite?) {
+        
         if let item = itemIn {
-            if item.rmxID == self.rmxID || item.isHeld || item.isActiveSprite { self.setItem(item: nil); return } //Prevent accidentily holding oneself
+            if !item.isLocked { fatalError("item should be locked") }
+            if  item.isActiveSprite && !self.canGrabPlayers { return  } //Prevent accidentily holding oneself
             if self.isWithinReachOf(item) {
                 _itemInHand = item
                 _itemInHand?.holder = self
                 if let body = _itemInHand?.node.physicsBody {
                     body.type = .Kinematic
                 }
+                return
             } else {
                 let speed = item.speed
                 if !item.tracker.hasTarget {
                     item.tracker.setTarget(target: self, speed: 400 * (item.mass + 1), willJump: false, doOnArrival: { (target) -> () in
-                        self.grab(item: item)
+                        self.grab(item)
                         item.tracker.setTarget()
                         item.speed = speed
                     })
                 }
+                item.isLocked = false
             }
         } else {
             if let item = self.item {
@@ -545,8 +597,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
                     body.type = .Dynamic
                 }
                 item.holder = nil
+                _itemInHand = nil
+                item.isLocked = false
             }
-            _itemInHand = nil
         }
     }
     
@@ -554,31 +607,35 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
         return self.distanceTo(item) <= self.armLength * 3
     }
     
-    func grab(node: RMXNode? = nil)  {
-        self.grab(item: node?.sprite)
+    func grab(object: AnyObject?) {
+        if let node = object as? RMXNode {
+            self.grab(node.sprite)
+        } else if let sprite = object as? RMXSprite {
+            self.grab(sprite)
+        }
     }
     
-    
-    func grab(item: RMXSprite? = nil)  {
-        if self.hasItem { return }
+    ///returns true if item is now held (even if it is not a new item)
+    func grab(item: RMXSprite?) -> Bool {
+        if self.hasItem { return true }
         if let item = item {
-            if item.isHeld {
-                if item.type == .AI || self.canGrabPlayers {
-                    self.setItem(item: item.holder)
-                } else {
-                    return
-                }
+            if item.isLocked {
+                return false
             } else {
+                item.isLocked = true
+                if item.rmxID == self.rmxID {
+                    item.isLocked = false
+                    return false
+                }
                 self.setItem(item: item)
+                return self.hasItem
             }
         }
-        if self.item?.rmxID == self.rmxID {
-            self.setItem(item: nil)
-        }
+        return false
     }
     
     func releaseItem() {
-        if self.item != nil {
+        if self.hasItem {
             self.setItem(item: nil)
         }
     }

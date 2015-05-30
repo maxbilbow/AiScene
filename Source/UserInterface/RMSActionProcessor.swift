@@ -209,7 +209,8 @@ public class RMSActionProcessor {
             if speed != 0 {//depreciated perhaps
                 if sprite.hasItem {
                     RMXLog("Throw: \(sprite.item?.name) with speed: \(speed)")
-                    self.manipulate(action: "throw", sprite: sprite, object: sprite.item, speed: speed)
+//                    self.manipulate(action: "throw", sprite: sprite, object: sprite.item, speed: speed)
+                    throwOrGrab(nil, withForce: speed)
                 }
             }
             return true
@@ -284,7 +285,8 @@ public class RMSActionProcessor {
         case "explode":
             if speed == 1 {
                 if let item = sprite.item {
-                    self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
+                    self.throwOrGrab(nil, withForce: ( self.boomTimer  ) * item.mass)
+//                    self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
                 } else {
                     self.explode(force: self.boomTimer)
                     
@@ -384,7 +386,7 @@ public class RMSActionProcessor {
             return info
         case .SCORES:
             info += "\n\n        SCORE: \(self.activeSprite.attributes.points), KILLS: \(self.activeSprite.attributes.killCount)"
-            info += "\n\n   TEAM SCORE: \(self.activeSprite.attributes.team?.printScore)"
+            info += "\n\n   TEAM SCORE: \(self.activeSprite.attributes.team!.printScore)"
             return info
         default:
             return info
@@ -431,6 +433,20 @@ public class RMSActionProcessor {
         }
     }
     
+    func throwOrGrab(target: AnyObject?, withForce force: RMFloatB = 1) -> RMXNode?{
+        if let item = self.activeSprite.item {
+            self.activeSprite.throwItem(atObject: target, withForce: force)
+            return item.tracker.target?.node
+        } else {
+            self.activeSprite.grab(target)
+            if let item = self.activeSprite.item {
+                 return item.tracker.target?.node
+            }
+        }
+        return nil
+    }
+    
+    @availability(*,deprecated=1)
     func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> RMXNode? {
         let sprite = s ?? self.activeSprite
         if let action = action {
@@ -439,11 +455,11 @@ public class RMSActionProcessor {
                     if let item = sprite.item {
 //                        direction = object?.presentationNode().position
                         if let tgt:RMXNode = object?.node {
-                            sprite.throwItem(strength: speed, atNode: tgt)
+                            sprite.throwItem(atPosition: tgt.getPosition(), withForce: speed)
                         } else if let point = position {
-                            sprite.throwItem(strength: speed, atPoint: point)
+                            sprite.throwItem(atPosition: point, withForce: speed)
                         } else {
-                            sprite.throwItem(strength: speed)
+                            sprite.throwItem(force: speed)
                         }
                         return item.node
                     } else if let node: RMXNode = object?.node {
@@ -458,22 +474,22 @@ public class RMSActionProcessor {
                         if rootNode == sprite.node {
                             RMXLog("Node is self")
                             if let item = sprite.item{
-                                sprite.throwItem(strength: speed)
+                                sprite.throwItem(force: speed)
                             }
                         } else {
                             if let item = rootNode.sprite {// self.world.getSprite(node: node) {
                                 if let itemInHand = sprite.item {
                                     if item.name == itemInHand.name {
-                                        sprite.throwItem(strength: speed)
+                                        sprite.throwItem(force: speed)
                                         RMXLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
                                     } else {
                                         //                                   self.world?.observer.grabItem(item: item)
-                                        sprite.throwItem()
-                                        sprite.grab(item: item)
+                                        sprite.throwItem(force: 1)
+                                        sprite.grab(item)
                                         RMXLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
                                     }
                                 } else if item.type != RMXSpriteType.BACKGROUND {
-                                    sprite.grab(item: item)
+                                    sprite.grab(item)
                                     RMXLog("Node is grabbable: \(item.name)")
                                 } else {
                                     RMXLog("Node was NOT grabbable: \(item.name)")
@@ -499,14 +515,15 @@ public class RMSActionProcessor {
         
     }
     
-    class func explode(sprite: RMXSprite, force: RMFloatB = 1, range: RMFloatB = 5000) {
-        
-        let world = sprite.world
-        for child in world.children {
-            let dist = sprite.distanceTo(child)
-            if  dist < range && child.physicsBody?.type != .Static && child != sprite {
-                let direction = RMXVector3Normalize(child.position - sprite.position)
-                child.applyForce(direction * (force * 100000 / (dist + 0.1)) , impulse: true)
+    class func explode(sprite: RMXSprite?, force: RMFloatB = 1, range: RMFloatB = 5000) {
+        if let sprite = sprite {
+            let world = sprite.world
+            for child in world.children {
+                let dist = sprite.distanceTo(child)
+                if  dist < range && child.physicsBody?.type != .Static && child != sprite {
+                    let direction = RMXVector3Normalize(child.position - sprite.position)
+                    child.applyForce(direction * (force * 100000 / (dist + 0.1)) , impulse: true)
+                }
             }
         }
         

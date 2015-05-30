@@ -1,21 +1,15 @@
 //: Playground - noun: a place where people can play
 
-import Cocoa
-import SceneKit
-import GLKit
-var str = "Hello, playground"
+import Foundation
 
-let PI = 3.14159265358979323846
 
-let PI_OVER_180 = PI / 180
+var rand = random() % 2
+rand = random() % 2
+rand = random() % 2
 
-let q = 60 * PI_OVER_180
+rand = random() % 2
+rand = random() % 2
 
-struct RMXTeam {
-    static var COUNT: Int = 0
-    lazy var aa: Int = COUNT++
-}
+rand = random() % 2
 
-var team = RMXTeam()
-
-println("hello \(team.aa)")
+rand = random() % 2

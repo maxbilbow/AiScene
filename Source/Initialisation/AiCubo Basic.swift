@@ -79,7 +79,7 @@ class AiCubo {
     
     class func simpleSprite(world: RMSWorld, sprite: RMXSprite? = nil, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
-        let player = sprite ?? RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, radius: 5, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
+        let player = sprite ?? RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, radius: 10, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
         
         player.setPosition(position: RMXVector3Random(max: 50, min: -50))//(0, 50, 50))//, resetTransform: <#Bool#>
 
@@ -142,7 +142,8 @@ class AiCubo {
             
             
             //Set up Poppy
-            let poppy = RMX.makePoppy(world: world, master: player)
+//            let poppy = RMX.makePoppy(world: world, master: player)
+//            poppy.attributes.setTeam(ID: -1)
             //            world.players["Poppy"] =
             
             //Set up background
@@ -176,7 +177,7 @@ class AiCubo {
             
     
             
-            RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 200, radius: earth.radius / 2)
+
             
             //camera
             RMXCamera.headcam(sun)
@@ -186,7 +187,7 @@ class AiCubo {
     
 //            world.cameras += player.cameras
             world.cameras += p2.cameras
-            world.cameras += poppy.cameras
+            
             world.cameras += earth.cameras
             world.cameras += sun.cameras
             
@@ -208,22 +209,29 @@ class AiCubo {
     internal class func teamGame(interface: RMXInterface){
         if let world = interface.world {
             _testingEnvironment(interface)
-            let player = world.activeSprite
+            RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 100, radius: RMSWorld.RADIUS / 2)
+            let player = world.activeSprite!
             let teamA = RMXTeam(gameWorld: world, captain: player)
-            player?.attributes.invincible = true
+            player.attributes.invincible = true
             let teamB = RMXTeam(gameWorld: world)
             
-            for player in world.players {
-                if player.type == RMXSpriteType.AI && !player.isUnique {
-                    RMXAi.addRandomMovement(to: player)
-                }
-            }
+            
             
             var aOrB = true
-            for player in world.players {
+            for player in world.nonTeamPlayers {
                 let team = aOrB ? teamA : teamB
                 team.addPlayer(player)
                 aOrB = !aOrB
+            }
+            
+            let poppy = RMX.makePoppy(world: world, master: player)
+            poppy.attributes.setTeam(ID: -1)
+            world.cameras += poppy.cameras
+            
+            for teamMate in world.teamPlayers {
+                if teamMate.type == RMXSpriteType.AI && !teamMate.isUnique {
+                    RMXAi.offenciveBehaviour(to: teamMate)
+                }
             }
         }
     }

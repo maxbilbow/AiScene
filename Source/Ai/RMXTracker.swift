@@ -29,7 +29,10 @@ class RMXTracker {
     
     var doOnArrival, doOnLeave, doWhileTouching: ((target: RMXSprite?)->())?
     
+    var isAi: Bool = false
+    
     init(sprite: RMXSprite) {
+        self.isAi = sprite.type == .AI
         self.sprite = sprite
         self.sprite.world.interface.collider.trackers.append(self)
     }
@@ -83,7 +86,12 @@ class RMXTracker {
     var impulse = false
     var doesJump = true
     
+    var world: RMSWorld {
+        return self.sprite.world
+    }
+    
     internal func headToTarget() {
+        if !self.world.aiOn && self.isAi { return }
         if let target = self.target {
             if _limit > 0 && _count > _limit {
                 self.doOnArrival?(target: self.target)

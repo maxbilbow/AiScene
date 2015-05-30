@@ -95,7 +95,7 @@ extension RMXNode : RMXLocatable {
     }
     
     var isHeld: Bool {
-        return self.sprite?.isHeld ?? false
+        return self.sprite?.isLocked ?? false
     }
     
     var holder: RMXSprite? {

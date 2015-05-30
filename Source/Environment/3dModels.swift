@@ -124,7 +124,7 @@ class RM3DModels : RMXModelsProtocol {
 //            head.physicsBody!.mass = -10
             node.addChildNode(head)
             head.position = SCNVector3Make(0, 2 * radius * 0.9, 0) //TODO check
-//            radius = 0 ///to make mass zero
+            
             break
         case ShapeType.NULL.rawValue:
             node = RMXNode()
@@ -162,6 +162,11 @@ class RM3DModels : RMXModelsProtocol {
             }
         }
         
+        if type == ShapeType.BOBBLE_MAN.rawValue {
+            node.physicsBody!.angularDamping = 0.99
+            node.physicsBody!.damping = 0.5
+            node.physicsBody!.friction = 0.1
+        }
         if type != ShapeType.NULL.rawValue {
             node.physicsBody!.mass = 4 * CGFloat(PI * radius * radius)// * 600
         } else {

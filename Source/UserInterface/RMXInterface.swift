@@ -178,7 +178,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
                 let result: AnyObject! = hitResults[0]
 //                NSLog(result.)
                 
-                if let node = self.actionProcessor.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
+                if let node = self.actionProcessor.throwOrGrab(result, withForce: 18000) {//.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
                 
                     // get its material
                     let material = result.node.geometry!.firstMaterial!
