@@ -86,7 +86,7 @@ class RMXAi {
             return ( inTeam == -1 || player.attributes.teamID == inTeam ) && ( notInTeam == -1 || player.attributes.teamID != inTeam )
         })
         
-        NSLog("count: \(players.count)")
+//        NSLog("count: \(players.count)")
         if players.count > 0 {
             let n = random() % (players.count)
 //            NSLog("no: \(n)")

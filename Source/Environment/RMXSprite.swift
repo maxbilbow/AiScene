@@ -454,7 +454,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember {
     func throwItem(atSprite sprite: RMXSprite?, withForce strength: RMFloatB) {
         if let item = self.item {
             if let sprite = sprite {
-                if sprite.rmxID != self.rmxID && sprite.rmxID != item.rmxID {
+                if sprite.isPlayer && sprite.rmxID != self.rmxID && sprite.rmxID != item.rmxID {
                     item.tracker.setTarget(target: sprite, speed: 10 * item.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
                         RMSActionProcessor.explode(item, force: strength / 200, range: 500)
                         RMXTeam.challenge(self.attributes, defender: target!.attributes)
