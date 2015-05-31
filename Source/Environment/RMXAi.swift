@@ -26,7 +26,7 @@ class RMXAi {
     class func playFetch(poppy: RMXSprite, var master: RMXSprite) {
         var itemToWatch: RMXNode?
         let speed:RMFloatB = 150 * (poppy.mass + 1)
-        poppy.speed = speed
+        poppy.setSpeed(speed: speed)
         //        poppy.world?.interface.collider.trackers.append(poppy.tracker)
         var count: Int = 0; let limit = 100
         let ai =  { (node: SCNNode!) -> Void in
@@ -43,9 +43,9 @@ class RMXAi {
                                 do {
                                     master = self.randomSprite(poppy.world, type: .PLAYER_OR_AI)!
                                 } while master == poppy
-                                //master.isActiveSprite ? self.randomSprite(poppy.world!, type: .PLAYER_OR_AI)! : poppy.world!.activeSprite!
+                                //master.isActiveSprite ? self.randomSprite(poppy.world!, type: .PLAYER_OR_AI)! : poppy.world!.activeSprite
                             } else {
-                                master = poppy.world.activeSprite!
+                                master = poppy.world.activeSprite
                             }
                             poppy.tracker.setTarget(target: master)
                             count = 0
@@ -64,7 +64,7 @@ class RMXAi {
                 })
             }
             if poppy.isLocked {
-                master = poppy.world.activeSprite!
+                master = poppy.world.activeSprite
             }
         }
 //        let action = SCNAction.runBlock(ai)
@@ -82,7 +82,7 @@ class RMXAi {
         
         if inTeam != -1 && inTeam == notInTeam { return nil }
         
-        let players = world.teamPlayers.filter({(player)-> Bool in
+        let players = world.liveTeamPlayers.filter({(player)-> Bool in
             return ( inTeam == -1 || player.attributes.teamID == inTeam ) && ( notInTeam == -1 || player.attributes.teamID != inTeam )
         })
         
@@ -120,25 +120,24 @@ class RMXAi {
     
     
     static func addRandomMovement(to sprite: RMXSprite) {
-        
+        if sprite.attributes.teamID < 0 || sprite.type != .AI || sprite.type == .PLAYER {
+            return
+        }
         let speed:RMFloatB = (RMFloatB(random() % 50) + 50) * sprite.mass
-        sprite.speed = speed
+        sprite.setSpeed()//speed: speed)
         let world = sprite.world
 //            sprite.world?.interface.collider.trackers.append(sprite.tracker)
         let action = { (node: SCNNode!) -> Void in
             if !world.aiOn { return }
             if !sprite.tracker.hasTarget && !sprite.hasItem {
-                sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE), doOnArrival: { (target: RMXSprite?) -> () in
-                    if target!.isHeld {
-                        sprite.grab(target!.holder)
-                    } else if target != nil && !target!.isUnique {
-                        sprite.grab(target)
+                sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE), willJump: true, doOnArrival: { (target: RMXSprite?) -> () in
+                    if sprite.grab(target) {
+                        sprite.tracker.setTarget(target: self.randomSprite(world,type: .PLAYER_OR_AI), afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
+                            
+                            sprite.throwItem(atSprite: target )
+                            sprite.tracker.setTarget()
+                        })
                     }
-                    sprite.tracker.setTarget(target: world.activeSprite, afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
-                        
-                        sprite.throwItem(strength: 200 , atNode: self.randomSprite(world,type: .PLAYER_OR_AI)?.node)
-                        sprite.tracker.setTarget()
-                    })
                 })
             }
         }
@@ -153,25 +152,25 @@ class RMXAi {
         if sprite.attributes.teamID <= 0 || sprite.type == .PLAYER {
             return
         }
-        let speed:RMFloatB = RMFloatB((random() % 50) + 50) * RMFloatB(sprite.mass)
-        sprite.speed = speed
+        let speed:RMFloatB = 50 * RMFloatB(sprite.mass)
+        sprite.setSpeed(speed: speed)
         let world = sprite.world
         //            sprite.world?.interface.collider.trackers.append(sprite.tracker)
         let action = { (node: SCNNode!) -> Void in
             if !world.aiOn { return }
-            if !sprite.tracker.hasTarget && !sprite.hasItem {
-                sprite.tracker.setTarget(target: self.randomSprite(world,type: .PASSIVE), doOnArrival: { (target: RMXSprite?) -> () in
+            if !sprite.tracker.hasTarget && !sprite.hasItem { //after time to prevent grouing (ish)
+                sprite.tracker.setTarget(target: self.randomSprite(world,type: .PASSIVE), afterTime: 1800, doOnArrival: { (target: RMXSprite?) -> () in
                     if sprite.grab(target) {
                         sprite.tracker.setTarget(target: self.selectTargetPlayer(inWorld: world, notInTeam: sprite.attributes.teamID), afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
                             
-                            sprite.throwItem(atSprite: target, withForce: 100)
+                            sprite.throwItem(atSprite: target, withForce: 1)
 //                            NSLog("node thrown at \(target?.name)")
                             sprite.tracker.setTarget()
 //                            NSLog("target set to nil")
                         })
                     }
                     else {
-                        NSLog("Failed to grab \(target?.name)")
+//                        NSLog("Failed to grab \(target?.name)")
                     }
                 })
             }

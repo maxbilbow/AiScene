@@ -51,14 +51,14 @@ class RMXArt {
     
     #endif
     
-    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloatB = 1000, radius: RMFloatB = RMSWorld.RADIUS) -> RMSWorld {
+    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloatB = 1000, radius: RMFloatB = RMSWorld.RADIUS, shapes: ShapeType ...) -> RMSWorld {
         
         //RMXArt.drawPlane(world)
         if drawAxis {
             RMXArt.drawAxis(world,radius: radius)
         }
         if noOfShapes > 0 {
-            RMXArt.randomObjects(world, noOfShapes: noOfShapes, radius: radius)
+            RMXArt.randomObjects(world, noOfShapes: noOfShapes, radius: radius, ofType: shapes)
         }
         return world
     }
@@ -102,7 +102,7 @@ class RMXArt {
             default:
                 fatalError(__FUNCTION__)
             }
-            let node:SCNNode = RMXModels.getNode(shapeType: ShapeType.CUBE.rawValue, mode: .PASSIVE, radius: 1, scale: scale, color: color)
+            let node:SCNNode = RMXModels.getNode(shapeType: ShapeType.CUBE, mode: .PASSIVE, radius: 1, scale: scale, color: color)
             node.position = position
             node.physicsBody!.mass *= 1000
             node.physicsBody!.damping = 1000
@@ -123,7 +123,7 @@ class RMXArt {
         drawAxis("z2")
     }
     
-    class func randomObjects(world: RMSWorld, noOfShapes: RMFloatB = 100, radius r: RMFloatB? = nil)    {
+    class func randomObjects(world: RMSWorld, noOfShapes: RMFloatB = 100, radius r: RMFloatB? = nil, ofType types: [ShapeType])    {
     //int max =100, min = -100;
     //BOOL gravity = true;
         let radius = r ?? world.radius
@@ -156,7 +156,7 @@ class RMXArt {
             var geo: SCNGeometry
             var type: RMXSpriteType
 
-            let switcher = random() % ShapeType.LAST.rawValue
+            let switcher = types[random() % types.count]
             let colorVector = RMXRandomColor()
             #if OSX
                 let color = NSColor(calibratedRed: colorVector.x, green: colorVector.y, blue: colorVector.z, alpha: colorVector.w)
@@ -164,7 +164,7 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let isBobbleMan = switcher == ShapeType.BOBBLE_MAN.rawValue
+            let isBobbleMan = switcher == ShapeType.BOBBLE_MAN
             type = isBobbleMan ? .AI : .PASSIVE
             let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color, mode: type)
             

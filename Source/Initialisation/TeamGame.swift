@@ -54,6 +54,12 @@ extension RMSWorld : RMXTeamGame {
         })
     }
     
+    var liveTeamPlayers: Array<RMXSprite> {
+        return self.children.filter( { (child: RMXSprite) -> Bool in
+            return child.attributes.teamID > 0 && child.isPlayer && child.attributes.isAlive
+        })
+    }
+    
     ///Players not assigend to a team (i.e. teamID == 0 )
     var nonTeamPlayers: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
@@ -145,16 +151,18 @@ class SpriteAttributes {
     private var _collisionBitMask: Int?
     private var _transparency: CGFloat?
     
-    
+    var isAlive = true
     func retire() {
         if !self.invincible {
             self.sprite.node.paused = true
-            _collisionBitMask = self.sprite.physicsBody?.collisionBitMask
-            self.sprite.physicsBody?.collisionBitMask = 0
-            _transparency = self.kit?.transparency
-            self.kit?.transparency = 0
-            _deathCount++
+//            _collisionBitMask = self.sprite.physicsBody?.collisionBitMask
+//            self.sprite.physicsBody?.collisionBitMask = 0
+//            _transparency = self.kit?.transparency
+//            self.kit?.transparency = 0
+//            _deathCount++
+            self.isAlive = false
         }
+        
     }
     
     private var _deathCount: Int = 0
@@ -168,17 +176,28 @@ class SpriteAttributes {
         return _killCount
     }
     
+    internal func kill() {
+        _killCount++
+    }
+    internal func die() {
+        _deathCount++
+    }
+    
+    
     func deRetire() {
         self.sprite.node.paused = false
-        if _deathCount > 0 {
-            self.sprite.physicsBody?.collisionBitMask = _collisionBitMask ?? 0
-            self.kit?.transparency = _transparency ?? 0
-        }
+        self.isAlive = true
+//        if _deathCount > 0 {
+//            self.sprite.physicsBody?.collisionBitMask = _collisionBitMask ?? 0
+//            self.kit?.transparency = _transparency ?? 0
+//        }
     }
     
     func challenge(defender: SpriteAttributes, doOnWin didKill: Challenge){
         if defender.isTeamPlayer && didKill(self,defender) {
             _killCount++
+            defender._deathCount++
+//            defender.die()
         }
     }
 }
@@ -210,18 +229,19 @@ class RMXTeam {
     
     var isRetired: Bool = false
     
-    var players: Array<RMXTeamMember>? {
-        return self.game.getTeam(id: self.id)
+    var players: Array<RMXSprite> {
+        return self.game.getTeam(id: self.id)!
     }
     
     var captain: SpriteAttributes?
     
     init(gameWorld game: RMXTeamGame, captain: RMXTeamMember? = nil){
         self.game = game
+        game.addTeam(self)
         if let captain = captain {
             self.addPlayer(captain)
         }
-        game.addTeam(self)
+
     }
     
     ///call this if there is a new captain and/or the kit has changed
@@ -238,7 +258,7 @@ class RMXTeam {
             } else {
                 self.captain = player.attributes
                 RMXTeam.setColor(RMXTeam.color(self.id), receiver: player.attributes)
-//                self.update()
+                self.update()
             }
             if player.attributes.points < self.startingPoints {
                 player.attributes.points = self.startingPoints
@@ -278,7 +298,7 @@ class RMXTeam {
     }
     
     private class func retireIf(defender: SpriteAttributes) -> Bool {
-        return defender.isTeamCaptain
+        return defender.isTeamCaptain && defender.team!.players.count <= 1
     }
     
     
@@ -288,13 +308,7 @@ class RMXTeam {
             if willRetireIf(defender) {
                 defender.team?.retire()
             } else if let team = team {
-                if let kit = team.kit {
-                    RMXTeam.setColor(kit,  receiver: defender)
-                }
-                else {
-                    team.captain = defender
-                    RMXTeam.updateTeam(team)
-                }
+                team.addPlayer(defender.sprite)
             }
         }
     }
@@ -337,8 +351,10 @@ class RMXTeam {
         let points = defender.points
         defender.points /= 2
         attacker.points += points - defender.points
-        if points < defender.points + 5 {
+        if defender.points < 10 {
             self.convert(defender, toTeam: attacker.team)
+            defender.die()
+            attacker.kill()
             attacker.points += defender.points
             return true
         }

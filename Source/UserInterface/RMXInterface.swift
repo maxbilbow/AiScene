@@ -12,9 +12,11 @@ import QuartzCore
 #if iOS
     import UIKit
     typealias RMDataView = UITextView
+    typealias RMLabel = UILabel
     #elseif OSX
     import AppKit
     typealias RMDataView = NSTextView
+    typealias RMLabel = NSLabel
 #endif
 
 import AVFoundation
@@ -24,7 +26,7 @@ import AVFoundation
 
 
 class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
-    
+
     static let MOVE_FORWARD: String = "forward"
     static let MOVE_BACKWARD: String = "back"
     static let MOVE_LEFT: String = "left"
@@ -53,11 +55,14 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let PREV_CAMERA: String = "previousCamera"
     static let PAUSE_GAME: String = "pauseGame"
     static let KEYBOARD_LAYOUT: String = "switchKeyboard"
+    static let SHOW_SCORE: String = "Scoreboard"
     
     //Misc: generically used for testing
     static let GET_INFO: String = "information"
     static let ZOOM_IN: String = "zoomIn"
     static let ZOOM_OUT: String = "zoomOut"
+    static let INCREASE: String = "increase"
+    static let DECREASE: String = "decrease"
     
     //Non-ASCKI commands
     static let MOVE_CURSOR_PASSIVE: String = "mouseMoved"
@@ -91,6 +96,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     internal var keyboard: KeyboardType = .UK
     
     var dataView: RMDataView?
+    var scoreBoard: RMLabel?
     
 //    var activeCamera: RMXCamera? {
 //        return self.world?.activeCamera.camera
@@ -178,7 +184,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
                 let result: AnyObject! = hitResults[0]
 //                NSLog(result.)
                 
-                if let node = self.actionProcessor.throwOrGrab(result, withForce: 18000) {//.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
+                if self.actionProcessor.throwOrGrab(result, withForce: 18000) {//.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
                 
                     // get its material
                     let material = result.node.geometry!.firstMaterial!
@@ -222,6 +228,9 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     //            let view: NSTextField = dataView!
     //            self.dataView?.display()
                 self.printDataToScreen(self.actionProcessor.getData())
+            }
+            if self.scoreBoard != nil && !self.scoreBoard!.hidden {
+                self.scoreBoard!.text = self.actionProcessor.getData(type: .SCORES)
             }
         }
 
@@ -272,7 +281,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     var _switch = true
     func restartSession(sender: AnyObject?) {
         //        self.world?.deleteWorld(backup: false)
-        AiCubo.setUpWorld(self, type: _switch ? .EMPTY : .TEST)
+        AiCubo.setUpWorld(self, type: _switch ? .TEAM_GAME : .TEST)
         _switch = !_switch
         self.gameView!.scene = self.scene
         self.unPauseGame(sender)

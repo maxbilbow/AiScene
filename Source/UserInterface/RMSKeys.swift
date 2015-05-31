@@ -82,7 +82,7 @@ class RMSKeys : RMXInterface {
     
     //Interactions
     RMKey(self, action: GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: THROW_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: (0,20)),
+    RMKey(self, action: THROW_ITEM, characters: RIGHT_CLICK, isRepeating: true,  speed: (0,5)),
     RMKey(self, action: BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
     
     //Environmentals
@@ -101,7 +101,10 @@ class RMSKeys : RMXInterface {
     //Misc: generically used for testing
     RMKey(self, action: GET_INFO, characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
     RMKey(self, action: ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
-    RMKey(self, action: ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED)
+    RMKey(self, action: ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
+    RMKey(self, action: INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN)
+        
     ]
     
     override func viewDidLoad(coder: NSCoder!) {
@@ -109,8 +112,6 @@ class RMSKeys : RMXInterface {
         
         super.viewDidLoad(coder)
 //        self.gameView
-        
-        
     }
     
     override func setUpViews(coder: NSCoder!) {
@@ -173,9 +174,6 @@ class RMSKeys : RMXInterface {
         }
         return nil
     }
-//    var mousePos: NSPoint{// = NSPoint(x: NSEvent.mouseLocation().x, y: NSEvent.mouseLocation().y)
-//        return self.actionProcessor.mousePos
-//    }
     
     var origin: NSPoint{
         let size = (self.gameView?.frame.size)!//.window!.frame
@@ -403,13 +401,13 @@ extension GameView {
 
 extension GameView {
     override func rightMouseUp(theEvent: NSEvent) {
-        self.keys.get(forChar: "Mouse 2")?.release()
+        self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.release()
         super.rightMouseUp(theEvent)
     }
     
     override func rightMouseDown(theEvent: NSEvent) {
 //        self.keys.get(forChar: "Mouse 2")?.press()
-        self.interface!.actionProcessor.manipulate(action: "throw", sprite: self.interface!.activeSprite, speed: 18000)
+        self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.press()
         super.rightMouseDown(theEvent)
     }
     

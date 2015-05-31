@@ -14,14 +14,7 @@ import SceneKit
 class AiCubo {
     enum Type { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME }
     
-    class func simpleUniquePlayer(world: RMSWorld) -> RMXSprite {
-        //Set up player
-        let player = self.simpleSprite(world, sprite: world.activeSprite, type: .PLAYER, isUnique: true)
-        
-//        world.cameras += player.cameras
-        
-        return player
-    }
+    
     
     class func setUpWorld(interface: RMXInterface?, type: Type = .TEAM_GAME, backupWorld: Bool = false){
         if let interface = interface {
@@ -34,12 +27,13 @@ class AiCubo {
                     if world.hasGravity {
                         world.toggleGravity()
                     }
-                    let poppy = RMX.makePoppy(world: world, master: world.activeSprite!)
-                    RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 1, radius: world.radius / 2)
+                    let poppy = RMX.makePoppy(world: world, master: world.activeSprite)
+                    RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 5, radius: world.radius / 2, shapes: .CYLINDER)
                     
                     break
                 case .TEST:
                     _testingEnvironment(interface)
+                    RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 200, radius: RMSWorld.RADIUS * 10, shapes:  .BOBBLE_MAN, .CYLINDER, .SPHERE)
                     for player in world.players {
                         if player.type == RMXSpriteType.AI && !player.isUnique {
                             RMXAi.addRandomMovement(to: player)
@@ -77,9 +71,18 @@ class AiCubo {
         
     }
     
+    class func simpleUniquePlayer(world: RMSWorld) -> RMXSprite {
+        //Set up player
+        let player = self.simpleSprite(world, type: .PLAYER, isUnique: true)
+        
+        //        world.cameras += player.cameras
+        
+        return player
+    }
+    
     class func simpleSprite(world: RMSWorld, sprite: RMXSprite? = nil, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
-        let player = sprite ?? RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN.rawValue, radius: 6, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
+        let player = sprite ?? RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
         
         player.setPosition(position: RMXVector3Random(max: 50, min: -50))//(0, 50, 50))//, resetTransform: <#Bool#>
 
@@ -109,7 +112,7 @@ class AiCubo {
         if let world = interface.world {
             _testingEnvironment(interface)
             let earth = world.scene.rootNode.childNodeWithName("Earth", recursively: true)!
-            let globe = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 10, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
+            let globe = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
             globe.node.geometry!.firstMaterial?.doubleSided = true
             if let gNode: SCNSphere = globe.node.geometry as? SCNSphere {
                 gNode.geodesic = true
@@ -135,32 +138,32 @@ class AiCubo {
     
     internal class func _testingEnvironment(interface: RMXInterface){
         if let world = interface.world {
-            let player = self.simpleUniquePlayer(world)
-            world.activeSprite = player
+            let player = world.activeSprite
             //Set Up Player 2
             let p2 = self.simpleUniquePlayer(world)
-            
+            p2.setName(name: "Player")
             
             //Set up Poppy
-//            let poppy = RMX.makePoppy(world: world, master: player)
-//            poppy.attributes.setTeam(ID: -1)
+            let poppy = RMX.makePoppy(world: world, master: player)
+            poppy.setName(name: "Poppy")
+            poppy.attributes.setTeam(ID: -1)
             //            world.players["Poppy"] =
             
             //Set up background
             let worldRadius = RMSWorld.RADIUS * 10
             
-            let sun: RMXSprite = RMXSprite.new(inWorld: world, type: .ABSTRACT, isUnique: true).makeAsSun(rDist: worldRadius)
+            let sun: RMXSprite = RMXSprite.new(inWorld: world, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: worldRadius)
             sun.addAi({ (node: RMXNode!) -> Void in
                 sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
             })
-            let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .ABSTRACT, radius: 100)
+            let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: 100)
             lightNode.light = SCNLight()
             lightNode.light!.type = SCNLightTypeOmni
             lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
             lightNode.geometry?.firstMaterial!.emission.intensity = 1
             sun.node.addChildNode(lightNode)
             
-            let earth: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .BACKGROUND, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
+            let earth: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR, mode: .BACKGROUND, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
             
             //let earth: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR.rawValue, mode: .PASSIVE, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
             
@@ -185,9 +188,9 @@ class AiCubo {
             
             
     
-//            world.cameras += player.cameras
+            world.cameras += player.cameras
             world.cameras += p2.cameras
-            
+            world.cameras += poppy.cameras
             world.cameras += earth.cameras
             world.cameras += sun.cameras
             
@@ -209,8 +212,8 @@ class AiCubo {
     internal class func teamGame(interface: RMXInterface){
         if let world = interface.world {
             _testingEnvironment(interface)
-            RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 100, radius: RMSWorld.RADIUS / 2)
-            let player = world.activeSprite!
+            RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 100, radius: RMSWorld.RADIUS * 5, shapes: .BOBBLE_MAN, .CYLINDER, .CYLINDER, .SPHERE)
+            let player = world.activeSprite
             let teamA = RMXTeam(gameWorld: world, captain: player)
             player.attributes.invincible = true
             let teamB = RMXTeam(gameWorld: world)
@@ -220,13 +223,13 @@ class AiCubo {
             var aOrB = true
             for player in world.nonTeamPlayers {
                 let team = aOrB ? teamA : teamB
-                team.addPlayer(player)
+                if !player.isUnique {
+                    team.addPlayer(player)
+                }
                 aOrB = !aOrB
             }
             
-            let poppy = RMX.makePoppy(world: world, master: player)
-            poppy.attributes.setTeam(ID: -1)
-            world.cameras += poppy.cameras
+           
             
             for teamMate in world.teamPlayers {
                 if teamMate.type == RMXSpriteType.AI && !teamMate.isUnique {

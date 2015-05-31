@@ -13,7 +13,9 @@ typealias RMXModels = RM3DModels
 
 enum ShapeType: Int { case CUBE , SPHERE, CYLINDER,  OILDRUM, BOBBLE_MAN, LAST,ROCK,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
 
+
 class RM3DModels : RMXModelsProtocol {
+    
     
     #if SceneKit
     var rock: SCNGeometry?
@@ -49,7 +51,7 @@ class RM3DModels : RMXModelsProtocol {
     
     
    
-    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode {
+    class func getNode(shapeType type: ShapeType, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
@@ -63,7 +65,7 @@ class RM3DModels : RMXModelsProtocol {
         
         var node: RMXNode
         switch(type){
-        case ShapeType.CUBE.rawValue:
+        case .CUBE:
             node = RMXNode(geometry: SCNBox(
                 width: RMFloat(scale.x),
                 height:RMFloat(scale.y),
@@ -72,53 +74,53 @@ class RM3DModels : RMXModelsProtocol {
             )
             hasColor = true
             break
-        case ShapeType.SPHERE.rawValue:
+        case ShapeType.SPHERE:
             node = RMXNode(geometry: SCNSphere(radius: RMFloat(radius)))
             hasColor = true
             break
-        case ShapeType.CYLINDER.rawValue:
+        case ShapeType.CYLINDER:
             node = RMXNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height)))
             hasColor = true
             break
-        case ShapeType.ROCK.rawValue:
+        case ShapeType.ROCK:
             node = RMXNode(geometry: rock)
             node.scale *= 1 * radius
             break
-        case ShapeType.PLANE.rawValue:
+        case ShapeType.PLANE:
              hasColor = true
             node = RMXNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
             break
-        case ShapeType.FLOOR.rawValue:
+        case ShapeType.FLOOR:
             hasColor = true
             node = RMXNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius)))
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
             //node.geometry?.firstMaterial!.doubleSided = true
             
             break
-        case ShapeType.PONGO.rawValue:
+        case ShapeType.PONGO:
             node = pongo as! RMXNode
             node.scale *= 0.001 * radius
             break
-        case ShapeType.SPACE_SHIP.rawValue:
+        case ShapeType.SPACE_SHIP:
             node = RMXNode(geometry: ship)
             node.scale *= 2
             break
-        case ShapeType.OILDRUM.rawValue:
+        case ShapeType.OILDRUM:
             node = RMXNode(geometry: oilDrum)
             node.scale *= 1.5 * radius
             break
-        case ShapeType.DOG.rawValue:
+        case ShapeType.DOG:
             node = dog!.rootNode.clone() as! RMXNode
             node.scale *= 1 * radius
             break
-        case ShapeType.AUSFB.rawValue:
+        case ShapeType.AUSFB:
             node = ausfb!.rootNode.clone() as! RMXNode
             node.scale *= 0.01 * radius
             break
-        case ShapeType.BOBBLE_MAN.rawValue:
-            node = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: mode, radius: radius, color: color)
+        case ShapeType.BOBBLE_MAN:
+            node = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: mode, radius: radius, color: color)
 //            let head = RMXCameraNode(geometry: SCNSphere(radius: RMFloat(radius * 0.5)))
-            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE.rawValue, mode: .KINEMATIC, radius: radius * 0.5)
+            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .KINEMATIC, radius: radius * 0.5)
             head.name = "head"
 //            head.physicsBody = SCNPhysicsBody.kinematicBody()
 //            head.physicsBody!.mass = -10
@@ -126,7 +128,7 @@ class RM3DModels : RMXModelsProtocol {
             head.position = SCNVector3Make(0, 2 * radius * 0.9, 0) //TODO check
             
             break
-        case ShapeType.NULL.rawValue:
+        case ShapeType.NULL:
             node = RMXNode()
             node.scale = scale
             break
@@ -162,12 +164,13 @@ class RM3DModels : RMXModelsProtocol {
             }
         }
         
-        if type == ShapeType.BOBBLE_MAN.rawValue {
+        if type == ShapeType.BOBBLE_MAN {
             node.physicsBody!.angularDamping = 0.99
             node.physicsBody!.damping = 0.5
             node.physicsBody!.friction = 0.1
         }
-        if type != ShapeType.NULL.rawValue {
+        if type != ShapeType.NULL {
+            radius = getRadius(ofNode: node)
             node.physicsBody!.mass = 4 * CGFloat(PI * radius * radius)// * 600
         } else {
             node.physicsBody!.mass = 0
@@ -176,6 +179,11 @@ class RM3DModels : RMXModelsProtocol {
         return node
     }
     
+    class func getRadius(ofNode node: RMXNode) -> RMFloatB {
+        var center = RMXVector3Zero; var radius: RMFloat = 0
+        let bounds = node.getBoundingSphereCenter(&center, radius: &radius)
+        return RMFloatB(radius)
+    }
     
     
     

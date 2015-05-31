@@ -49,23 +49,44 @@ class RMXTracker {
 
     var isStuck: Bool {
         if self.hasTarget {
-            return self.sprite.distanceTo(self.lastPosition) < 1// && self.sprite.distanceTo(target!.position) >= self.sprite.radius * target!.radius + 5
+            return self.sprite.distanceTo(self.lastPosition) < 0.5// && self.sprite.distanceTo(target!.position) >= self.sprite.radius * target!.radius + 5
         } else {
             return false
         }
     }
-    
-    func setTarget(target: RMXSprite? = nil, speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = true, impulse: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) {
+
+    var isProjectile = false
+    func setTarget(target: RMXSprite? = nil, var speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) {
+        if target != nil && target! == self.sprite {
+            self.setTarget()
+            return
+        }
         self.doesJump = willJump
         self.impulse = impulse
         _limit = limit
         _count = 0
         _target = target
-        self.doOnArrival = doOnArrival //!= nil ? doOnArrival : { self.pauseFor(10) }
-//        self.doOnLeave = doOnLeave != nil ? doOnLeave : { self._target = lastTarget }
-//        self.hitTarget = false
-        if let speed = speed {
-            self.sprite.speed = speed
+        self.isProjectile = asProjectile
+    
+        let oldSpeed = self.sprite.speed
+        if impulse && speed == nil {
+            speed = oldSpeed / self.sprite.mass
+        } else if speed == nil {
+            speed = oldSpeed
+        } 
+        
+        func doa(target: RMXSprite?) {
+            doOnArrival?(target: target)
+            self.sprite.setSpeed(speed: oldSpeed)
+            self.sprite.isLocked = false
+        }
+        
+        self.sprite.setSpeed(speed: speed)
+        
+        self.doOnArrival = doa
+        
+        if limit > 0 && asProjectile { //if holming missile with timer, do not let interferrence
+            self.sprite.isLocked = true
         }
     }
     
@@ -99,7 +120,7 @@ class RMXTracker {
             } else {
                 ++_count
                 let direction = RMXVector3Normalize(target.position - self.sprite.position)
-                self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.sprite.front,  impulse: self.impulse)
+                self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.isProjectile ? RMXVector3Zero : self.sprite.front,  impulse: self.impulse)
                 if self.doesJump && self.isStuck {
                     self.lastPosition = self.sprite.position
                     self.sprite.jump()

@@ -43,7 +43,7 @@ public class RMSActionProcessor {
     }
     //let keys: RMXController = RMXController()
     var activeSprite: RMXSprite {
-        return self.world.activeSprite!
+        return self.world.activeSprite
     }
     var world: RMSWorld
     
@@ -62,11 +62,13 @@ public class RMSActionProcessor {
     private var _panThreshold: RMFloatB = 70
     
     func moveSpeed(inout speed: RMFloatB, sprite: RMXSprite) {
-        speed *= 1000 * sprite.mass / 10
+//        NSLog(speed.toData())
+//        speed *= sprite.speed// 1000 * sprite.mass / 10
+//        NSLog(speed.toData())
     }
     
     func turnSpeed(inout speed: RMFloatB, sprite: RMXSprite) {
-        speed *= 150 * sprite.mass / 10
+//        speed *= sprite.rotationSpeed// 150 * sprite.mass / 10
     }
     
     func action(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB], sprite: RMXSprite? = nil) -> Bool{
@@ -205,15 +207,6 @@ public class RMSActionProcessor {
 //                sprite.prepareToJump()
             }
             return true
-        case "throw":
-            if speed != 0 {//depreciated perhaps
-                if sprite.hasItem {
-                    RMXLog("Throw: \(sprite.item?.name) with speed: \(speed)")
-//                    self.manipulate(action: "throw", sprite: sprite, object: sprite.item, speed: speed)
-                    throwOrGrab(nil, withForce: speed)
-                }
-            }
-            return true
         case "enlargeItem":
             if sprite.hasItem {
                 let size = (sprite.item?.radius)! * speed
@@ -267,6 +260,7 @@ public class RMSActionProcessor {
                 self.world.aiOn = !self.world.aiOn
                 RMXLog("aiOn: \(self.world.aiOn)")
             }
+            return true
         case "information":
             if speed == 1 {
                 NSLog(self.getData())
@@ -281,27 +275,39 @@ public class RMSActionProcessor {
 //                    
                 }
 //                self.interface.dataView!.setTitle(_getInfo())
-            } 
-        case "explode":
-            if speed == 1 {
+            }
+            return true
+        case RMXInterface.SHOW_SCORE:
+            self.interface.scoreBoard!.hidden = !self.interface.scoreBoard!.hidden
+            
+            //                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
+            return true
+        case RMXInterface.BOOM, RMXInterface.THROW_ITEM:
+            if speed > 0 {
+                var result = false
                 if let item = sprite.item {
-                    self.activeSprite.throwItem(force: ( self.boomTimer  ) * item.mass)
-//                    self.manipulate(action: "throw", sprite: sprite, object: item, speed: ( self.boomTimer  ) * item.mass)
+                    result = self.activeSprite.throwItem(force: self.boomTimer * item.mass * speed)
                 } else {
-                    self.explode(force: self.boomTimer)
+                    result = self.explode(force: self.boomTimer * 180)
                     
                 }
                 self.boomTimer = 1
+                return result
             } else if speed == 0 && self.boomTimer == 1 {
                 self.boomTimer = 2
+                return true
             }
-            
+        case RMXInterface.INCREASE:
+            self.scene.physicsWorld.speed * 1.5
             return true
-        case "zoomIn":
+        case RMXInterface.DECREASE:
+            self.scene.physicsWorld.speed / 1.5
+            return true
+        case RMXInterface.ZOOM_IN:
             --self.gameView.pointOfView!.camera!.xFov
             --self.gameView.pointOfView!.camera!.yFov //= SCNTechnique.
             return true
-        case "zoomOut":
+        case RMXInterface.ZOOM_OUT:
             ++self.gameView.pointOfView!.camera!.xFov
             ++self.gameView.pointOfView!.camera!.yFov
             return true
@@ -386,7 +392,9 @@ public class RMSActionProcessor {
             return info
         case .SCORES:
             info += "\n\n        SCORE: \(self.activeSprite.attributes.points), KILLS: \(self.activeSprite.attributes.killCount)"
-            info += "\n\n   TEAM SCORE: \(self.activeSprite.attributes.team!.printScore)"
+            for team in self.world.teams {
+                info += "\n TEAM-\(team.0) SCORE: \(team.1.printScore)"
+            }
             return info
         default:
             return info
@@ -433,17 +441,16 @@ public class RMSActionProcessor {
         }
     }
     
-    func throwOrGrab(target: AnyObject?, withForce force: RMFloatB = 1) -> RMXNode?{
+    func throwOrGrab(target: AnyObject?, withForce force: RMFloatB = 1) -> Bool{
         if let item = self.activeSprite.item {
-            self.activeSprite.throwItem(atObject: target?.node, withForce: force)
-            return item.tracker.target?.node
+            return self.activeSprite.throwItem(atObject: target?.node, withForce: force)
+//            return item.tracker.target?.node
         } else {
-            self.activeSprite.grab(target?.node)
-            if let item = self.activeSprite.item {
-                 return item.tracker.target?.node
-            }
+            return self.activeSprite.grab(target?.node)
+//            if let item = self.activeSprite.item {
+//                 return item.isPlayer
+//            }
         }
-        return nil
     }
     
     @availability(*,deprecated=1)
@@ -508,24 +515,25 @@ public class RMSActionProcessor {
         return nil
     }
     
-    func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 5000) {
+    func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 500) -> Bool{
         let sprite = s ?? self.activeSprite
         sprite.world.interface.av.playSound(RMXInterface.BOOM, info: sprite.position, range: Float(range))
-        RMSActionProcessor.explode(sprite, force: force, range: range)
+        return RMSActionProcessor.explode(sprite, force: force * 10000, range: range)
         
     }
     
-    class func explode(sprite: RMXSprite?, force: RMFloatB = 1, range: RMFloatB = 5000) {
+    class func explode(sprite: RMXSprite?, force: RMFloatB = 1, range: RMFloatB = 500) -> Bool {
         if let sprite = sprite {
             let world = sprite.world
             for child in world.children {
                 let dist = sprite.distanceTo(child)
                 if  dist < range && child.physicsBody?.type != .Static && child != sprite {
                     let direction = RMXVector3Normalize(child.position - sprite.position)
-                    child.applyForce(direction * (force * 100000 / (dist + 0.1)) , impulse: true)
+                    child.applyForce(direction * (force  / (dist + 0.1)) , impulse: true)
                 }
             }
+            return true
         }
-        
+        return false        
     }
 }

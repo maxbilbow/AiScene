@@ -3,13 +3,17 @@
 import Foundation
 
 
-var rand = random() % 2
-rand = random() % 2
-rand = random() % 2
+var name: String? = "max123"
 
-rand = random() % 2
-rand = random() % 2
+var mass = 10.0
+var damping = 0.1
+var aDamping = 0.99
+var _speed = 1000 * mass * damping / 10
+var damped = _speed / damping
 
-rand = random() % 2
 
-rand = random() % 2
+var s = 1000.0 * mass / ( 1.0 - damping ) / 10
+
+damped = s * ( 1.0 - damping )
+
+print(damped)

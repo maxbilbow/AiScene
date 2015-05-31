@@ -65,7 +65,7 @@ class RMSWorld   {
         self.cameras.removeAll()
         self._gravity = RMSWorld.ZERO_GRAVITY
         self.setScene()
-        self.activeSprite = nil
+        _activeSprite = nil
         self.aiOn = false//TODO check if this is right as default
         self.cameraNumber = 0
     }
@@ -104,9 +104,17 @@ class RMSWorld   {
     private let GRAVITY: RMFloatB = 0
     
     
-    
+    private var _activeSprite: RMXSprite!
 
-    var activeSprite: RMXSprite?
+    var activeSprite: RMXSprite {
+        return _activeSprite ?? _defaultPlayer
+    }
+    
+    private var _defaultPlayer: RMXSprite  {
+        _activeSprite = AiCubo.simpleUniquePlayer(self)
+        _activeSprite.setName(name: "Player")
+        return _activeSprite
+    }
     
     var observer: RMXSprite? {
         return self.activeSprite ?? self.children.first

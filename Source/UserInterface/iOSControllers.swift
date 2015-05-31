@@ -25,6 +25,15 @@ extension RMXDPad {
         self.action(action: "information")
     }
     
+    func showScores(recogniser: UITapGestureRecognizer){
+        if self.scoreBoard == nil {
+            let bounds = self.getRect(withinRect: self.gameView.bounds, row: (2,6), col: (2, 3))
+            self.scoreBoard = UILabel(frame: bounds)
+            self.gameView!.addSubview(self.scoreBoard!)
+        }
+        self.action(action: RMXInterface.SHOW_SCORE)
+    }
+    
     func toggleAi(recogniser: UITapGestureRecognizer){
         self.world!.aiOn = !self.world!.aiOn
         RMXLog("aiOn: \(self.world!.aiOn)")

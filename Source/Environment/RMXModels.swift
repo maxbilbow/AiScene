@@ -12,7 +12,7 @@ import SpriteKit
 
 
 protocol RMXModelsProtocol {
-    static func getNode(shapeType type: Int, mode: RMXSpriteType, radius r: RMFloatB?, height h: RMFloatB?, scale s: RMXSize?, color: NSColor!) -> RMXNode
+    static func getNode(shapeType type: ShapeType, mode: RMXSpriteType, radius r: RMFloatB?, height h: RMFloatB?, scale s: RMXSize?, color: NSColor!) -> RMXNode
 }
 
 

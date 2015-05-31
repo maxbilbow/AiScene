@@ -188,7 +188,7 @@ class RMXDPad : RMXInterface {
         self.pauseMenu?.backgroundColor = UIColor.grayColor()
         
         self.makeButton(title: "||     ", selector: "unPauseGame:" , view: self.pauseMenu, row: (1,1), col: (1,self.topColumns))
-        self.makeButton(title: "Restart", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (3,6))
+        self.makeButton(title: "New Game", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (3,6))
         self.makeButton(title: "Options", selector: "optionsMenu:", view: self.pauseMenu, row: (1,1), col: (3,4))
         self.makeButton(title: "Exit to main menu", selector: "exitToMainMenu:", view: self.pauseMenu, row: (1,1), col: (4,4))
 
@@ -221,7 +221,8 @@ class RMXDPad : RMXInterface {
         
         self.makeButton(title: " DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
         
-        self.makeButton(title: " Video ", selector: "startVideo:", view: view, row: (1,rows), col: (6,self.topColumns))
+//        self.makeButton(title: " Video ", selector: "startVideo:", view: view, row: (1,rows), col: (6,self.topColumns))
+        self.makeButton(title: " SCORE ", selector: "showScores:", view: view, row: (1,rows), col: (6,self.topColumns))
         
         self.makeButton(title: "  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (last - 1,self.topColumns))
         
