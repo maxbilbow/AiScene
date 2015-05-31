@@ -17,32 +17,28 @@ extension RMXDPad {
     
     
     
+    
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
         self.action(action: "reset")
     }
     func printData(recogniser: UITapGestureRecognizer){
-        self.action(action: "information")
+        self.action(action: RMXInterface.GET_INFO)
     }
     
     func showScores(recogniser: UITapGestureRecognizer){
-        if self.scoreBoard == nil {
-            let bounds = self.getRect(withinRect: self.gameView.bounds, row: (2,6), col: (2, 3))
-            self.scoreBoard = UILabel(frame: bounds)
-            self.gameView!.addSubview(self.scoreBoard!)
-        }
-        self.action(action: RMXInterface.SHOW_SCORE)
+        self.action(action: RMXInterface.TOGGLE_SCORES, speed: -1)
     }
     
     func toggleAi(recogniser: UITapGestureRecognizer){
-        self.world!.aiOn = !self.world!.aiOn
-        RMXLog("aiOn: \(self.world!.aiOn)")
+        self.world.aiOn = !self.world.aiOn
+        RMXLog("aiOn: \(self.world.aiOn)")
         //self.world!.setBehaviours(self.world!.hasBehaviour)
     }
     
     
     func zoom(recogniser: UIPinchGestureRecognizer) {        
-        self.action(action: "zoom", speed: -RMFloatB(recogniser.velocity))//, point: <#[RMFloatB]#>)
+        self.action(action: "zoom", speed: -RMFloatB(recogniser.velocity))
     }
     
     @availability(*,deprecated=1)
@@ -113,7 +109,7 @@ extension RMXDPad {
         }
     
     func grabOrThrow(recognizer: UITapGestureRecognizer) {
-        let spriteAction = self.world!.activeSprite
+        let spriteAction = self.world.activeSprite
 
 
         // retrieve the SCNView

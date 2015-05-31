@@ -106,11 +106,18 @@ extension RMXNode : RMXLocatable {
 
 }
 
-class RMXBrain : RMXNode {
+class RMXBrain : RMXNode , RMXUniqueEntity {
     
-    private var _rmxID: Int = -1
+    private var _rmxID: Int?
+    
     override var rmxID: Int {
-        return _rmxID
+        if let id = _rmxID {
+            return id
+        } else {
+            _rmxID = self.rootNode?.rmxID
+            if _rmxID == nil { NSLog("error -1 RMXID") }
+            return _rmxID ?? -1
+        }
     }
 //        {
 //        return self.sprite?.rmxID

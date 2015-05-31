@@ -38,12 +38,16 @@ import GLKit
 typealias NSColor = UIColor
 #endif
 
-func == (lhs: RMXSprite, rhs: RMXSprite) -> Bool {
+func == (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
     return lhs.rmxID == rhs.rmxID
 }
 
 
-func != (lhs: RMXSprite, rhs: RMXSprite) -> Bool {
+func != (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
     return lhs.rmxID != rhs.rmxID
 }
 
+
+protocol RMXUniqueEntity {
+    var rmxID: Int { get }
+}

@@ -132,31 +132,29 @@ class RMXArt {
             var randPos: [RMFloatB]
             var X: RMFloatB = 0; var Y: RMFloatB = 0; var Z: RMFloatB = 0
             func thisRandom(inout x: RMFloatB, inout y: RMFloatB, inout z: RMFloatB) -> [RMFloatB] {
-                func drawCondition(x:RMFloatB, y:RMFloatB, z:RMFloatB) -> Bool{
+                func drawCondition(x:RMFloatB, inout y:RMFloatB, z:RMFloatB) -> Bool{
                     let position = RMXVector3Make(x,y,z)
                     let distance = RMXVector3Distance(position, RMXVector3Zero)
                     var test: Bool
-                    test = fabs(Float(y)) > Float(world.radius)
+                    y = RMFloatB(fabs(y))
                     
-                    return distance > radius && test
+                    return distance < radius
                 }
                 do {
                     let points = RMX.doASum(radius, count: i, noOfShapes: noOfShapes )
                     x = points.x
                     y = points.y
                     z = points.z
-                } while drawCondition(x,y,z)
+                } while drawCondition(x,&y,z)
                 return [ x, y, z ]
             }
             randPos = thisRandom(&X,&Y,&Z)
-            let chance = 1//(rand() % 6 + 1);
-            let size = RMFloatB(random() % 8 + 4)
-            var scale = RMXVector3Make(size,size,size)
-            var shape: ShapeType
-            var geo: SCNGeometry
-            var type: RMXSpriteType
 
-            let switcher = types[random() % types.count]
+            let size = RMFloatB(8) //RMFloatB(random() % 5 + 5)
+            var scale = RMXVector3Make(size,size,size)
+            var shape: ShapeType = types[random() % types.count]
+            var type: RMXSpriteType = shape == .BOBBLE_MAN ? .AI : .PASSIVE
+
             let colorVector = RMXRandomColor()
             #if OSX
                 let color = NSColor(calibratedRed: colorVector.x, green: colorVector.y, blue: colorVector.z, alpha: colorVector.w)
@@ -164,20 +162,19 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let isBobbleMan = switcher == ShapeType.BOBBLE_MAN
-            type = isBobbleMan ? .AI : .PASSIVE
-            let node = RMXModels.getNode(shapeType: switcher, scale: scale, color: color, mode: type)
+            let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color, mode: type)
             
                 
-                node.position = RMXVector3Make(randPos[0], randPos[1], randPos[2])
+            
             
             
             
             let sprite = RMXSprite.new(inWorld: world, node: node, type: type, isUnique: false)
-            
-            if isBobbleMan {
+            sprite.setPosition( position: RMXVector3Make(randPos[0], randPos[1], randPos[2]))
+            if shape == .BOBBLE_MAN {
                 RMXAi.autoStablise(sprite)
 //                RMXAi.addRandomMovement(to: sprite)
+//                NSLog("Bobble Man: \(sprite.position.print)")
             }
                 
         }

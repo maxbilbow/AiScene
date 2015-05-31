@@ -22,6 +22,7 @@ extension RMX {
     }
 }
 
+/*
 @availability(*,deprecated=1)
 class SpriteArray {
     var parent: AnyObject
@@ -102,3 +103,4 @@ class SpriteArray {
         }
     }
 }
+*/

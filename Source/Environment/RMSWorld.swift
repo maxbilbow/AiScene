@@ -15,11 +15,11 @@ import SceneKit
 #endif
 
 
-enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
-class RMSWorld   {
+//enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
+class RMSWorld : RMXUniqueEntity {
     
     var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
-    
+    lazy var rmxID: Int = RMXSprite.COUNT++
     #if SceneKit
     static let ZERO_GRAVITY = RMXVector3Zero
     static let EARTH_GRAVITY = RMXVector3Make(0, -9.8, 0)
@@ -60,24 +60,23 @@ class RMSWorld   {
         return self.children.isEmpty
     }
     
-    func deleteWorld(backup: Bool = false) {
+    internal func destroy() -> RMSWorld {
         self.children.removeAll()
         self.cameras.removeAll()
         self._gravity = RMSWorld.ZERO_GRAVITY
-        self.setScene()
         _activeSprite = nil
-        self.aiOn = false//TODO check if this is right as default
-        self.cameraNumber = 0
+        self.setScene()
+        self.aiOn = true//TODO check if this is right as default
+        return self
     }
+    
     
     var ground: RMFloatB = RMSWorld.RADIUS
     
     var interface: RMXInterface
     
-    init(interface: RMXInterface, scene: RMXScene? = nil){
+    init(interface: RMXInterface){
         self.interface = interface
-//        super.init()
-        self.setScene(scene: scene)
         self.worldDidInitialize()
     }
     
@@ -90,13 +89,24 @@ class RMSWorld   {
 
 
     var scene: RMXScene {
+        return self._scene ?? self.setScene()
+    }
+    
+    ///Note: May become public
+    private func setScene(scene: RMXScene? = nil) -> RMXScene {
+        self._scene = scene ?? RMSWorld.DefaultScene()
+        self.cameras = self.activeSprite.cameras +  self.cameras
+        self.cameraNumber = 0
+        self._scene.physicsWorld.contactDelegate = self.interface.collider
+        self.calibrate()
         return self._scene
     }
     
-    func setScene(scene: RMXScene? = nil){
-        self._scene = scene ?? RMSWorld.DefaultScene()
-        self._scene.physicsWorld.contactDelegate = self.interface.collider
-        self.interface.gameView.scene = self._scene
+    func calibrate() {
+        self.interface.gameView!.scene = self._scene
+        self.interface.gameView!.pointOfView = self.activeCamera
+        self.interface.pauseGame(self)
+        self.interface.unPauseGame(self)
     }
     
     private var _scene: RMXScene! = nil
@@ -116,18 +126,8 @@ class RMSWorld   {
         return _activeSprite
     }
     
-    var observer: RMXSprite? {
-        return self.activeSprite ?? self.children.first
-    }
-    
-//    lazy var players: [String: RMXSprite] = [
-//        self.activeSprite.name: self.activeSprite
-//    ]
-    
-    var type: GameType = .DEFAULT
-    
     func worldDidInitialize() {
-        
+        self.setScene()
     }
   
     

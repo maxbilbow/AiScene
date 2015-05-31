@@ -119,7 +119,8 @@ class SpriteAttributes {
     var rmxID: Int {
         return sprite.rmxID
     }
-    var health: Double = 1
+    var health: Int = 100
+    var points: Int = 0
     
     var kit: SCNMaterial? {
         return self.isTeamPlayer ? self.sprite.geometry?.firstMaterial : nil
@@ -146,7 +147,7 @@ class SpriteAttributes {
         return self.teamID >= 0
     }
     
-    var points: Int = 0
+    
     
     private var _collisionBitMask: Int?
     private var _transparency: CGFloat?
@@ -200,9 +201,19 @@ class SpriteAttributes {
 //            defender.die()
         }
     }
+    
+    var score: ScoreCard {
+        return (kills: _killCount, deaths: _deathCount, points: self.points, health: self.health)
+    }
+    
+    var printScore: String {
+        let score = self.score
+        return "PLAYER SCORE: \(score.points), KILLS: \(score.kills), DEATHS: \(score.deaths), HEALTH: \(score.health)"
+    }
+
 }
 
-typealias ScoreCard = (kills: Int, deaths: Int, points: Int, players: Int)
+typealias ScoreCard = (kills: Int, deaths: Int, points: Int, health: Int)
 class RMXTeam {
     static var COUNT: Int = 0
     lazy var id: Int = ++COUNT //first time is 1
@@ -213,14 +224,14 @@ class RMXTeam {
     var startingPoints = 100
     
     var score: ScoreCard {
-        var score: ScoreCard = (kills: 0, deaths: 0, points: 0, players: 0)
+        var score: ScoreCard = (kills: 0, deaths: 0, points: 0, health: 0)
         if let team = game.getTeam(id: self.id) {
             for player in team {
                 score.kills  += player.attributes.killCount
                 score.deaths += player.attributes.deathCount
                 score.points += player.attributes.points
+                score.health += player.attributes.health
             }
-            score.players = team.count
         }
         return score
     }
@@ -348,10 +359,10 @@ class RMXTeam {
     
     
     class func challengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> Bool {
-        let points = defender.points
-        defender.points /= 2
-        attacker.points += points - defender.points
-        if defender.points < 10 {
+        let health = defender.health
+        defender.health /= 2
+        attacker.points += health - defender.health
+        if defender.health < 20 {
             self.convert(defender, toTeam: attacker.team)
             defender.die()
             attacker.kill()
@@ -366,7 +377,7 @@ class RMXTeam {
     }
     
     var printScore: String {
-        return "\(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.score.players)"
+        return "TEAM-\(self.id) SCORE: \(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.players.count)"
     }
     
 }

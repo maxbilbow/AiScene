@@ -38,25 +38,27 @@ public class RMSActionProcessor {
     
     var boomTimer: RMFloatB = 1
 
-    var interface: RMXInterface {
-        return self.gameView.interface!
-    }
+    var interface: RMXInterface
+    
     //let keys: RMXController = RMXController()
     var activeSprite: RMXSprite {
         return self.world.activeSprite
     }
-    var world: RMSWorld
+    var world: RMSWorld {
+        return self.interface.world
+    }
     
     var scene: RMXScene {
         return self.world.scene
     }
-    init(world: RMSWorld, gameView: GameView){
-        self.world = world
-        self.gameView = gameView
+    init(interface: RMXInterface){
+        self.interface = interface
         RMXLog()
     }
 
-    var gameView: GameView
+    var gameView: GameView {
+        return self.interface.gameView!
+    }
     
     private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
     private var _panThreshold: RMFloatB = 70
@@ -261,27 +263,33 @@ public class RMSActionProcessor {
                 RMXLog("aiOn: \(self.world.aiOn)")
             }
             return true
-        case "information":
+        case RMXInterface.GET_INFO:
             if speed == 1 {
-                NSLog(self.getData())
-                self.interface.dataView!.hidden = !self.interface.dataView!.hidden
-//                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
-                if !self.interface.dataView!.hidden {
-                    #if iOS
-                    self.interface.dataView!.text = self.getData()
-                    #endif
-//                    let string: String = self.getData()
-//                    string.drawAtPoint(CGPoint(x: 500,y: 500), withAttributes: nil)
-//                    
-                }
-//                self.interface.dataView!.setTitle(_getInfo())
+                self.interface.dataView.hidden = !self.interface.dataView.hidden
+                self.interface.skView.hidden = self.interface.dataView.hidden
             }
             return true
-        case RMXInterface.SHOW_SCORE:
-            self.interface.scoreBoard!.hidden = !self.interface.scoreBoard!.hidden
-            
-            //                self.interface.dataView!.enabled = !self.interface.dataView!.hidden
-            return true
+        case RMXInterface.SHOW_SCORES:
+            if speed == 1 {
+                self.interface.scoreboard.hidden = false
+                self.interface.skView.hidden = false
+                return true
+            }
+            return false
+        case RMXInterface.HIDE_SCORES:
+            if speed == 1 {
+                self.interface.scoreboard.hidden = true
+                self.interface.skView.hidden = true
+                return true
+            }
+            return false
+        case RMXInterface.TOGGLE_SCORES:
+            if speed == 1 {
+                self.interface.scoreboard.hidden = !self.interface.scoreboard.hidden
+                self.interface.skView.hidden = self.interface.scoreboard.hidden
+                return true
+            }
+
         case RMXInterface.BOOM, RMXInterface.THROW_ITEM:
             if speed > 0 {
                 var result = false
@@ -344,8 +352,14 @@ public class RMSActionProcessor {
                 }
             }
             return true
+        case RMXInterface.NEW_GAME:
+            self.interface.newGame()
+            return true
+        case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10":
+            let n = action.toInt()! - 1
+            self.interface.newGame(type: self.interface.availableGames[n])
         default:
-            RMXLog("'\(action)' not recognised")
+            NSLog("'\(action)' not recognised")
         }
         
         

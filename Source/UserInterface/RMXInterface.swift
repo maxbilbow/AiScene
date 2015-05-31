@@ -12,20 +12,21 @@ import QuartzCore
 #if iOS
     import UIKit
     typealias RMDataView = UITextView
-    typealias RMLabel = UILabel
+    typealias RMLabel = UIButton
     #elseif OSX
     import AppKit
     typealias RMDataView = NSTextView
-    typealias RMLabel = NSLabel
+    typealias RMLabel = NSButton
 #endif
 
 import AVFoundation
     import SceneKit
+import SpriteKit
 
     typealias RendererDelegate = SCNSceneRendererDelegate
 
 
-class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
+class RMXInterface : NSObject, RendererDelegate {
 
     static let MOVE_FORWARD: String = "forward"
     static let MOVE_BACKWARD: String = "back"
@@ -55,7 +56,9 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let PREV_CAMERA: String = "previousCamera"
     static let PAUSE_GAME: String = "pauseGame"
     static let KEYBOARD_LAYOUT: String = "switchKeyboard"
-    static let SHOW_SCORE: String = "Scoreboard"
+    static let SHOW_SCORES: String = "ShowScoreboard"
+    static let HIDE_SCORES: String = "HideScoreboard"
+    static let TOGGLE_SCORES: String = "toggleScores"
     
     //Misc: generically used for testing
     static let GET_INFO: String = "information"
@@ -63,7 +66,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     static let ZOOM_OUT: String = "zoomOut"
     static let INCREASE: String = "increase"
     static let DECREASE: String = "decrease"
-    
+    static let NEW_GAME: String = "newGame"
     //Non-ASCKI commands
     static let MOVE_CURSOR_PASSIVE: String = "mouseMoved"
     static let LEFT_CLICK: String = "Mouse 1"
@@ -72,82 +75,131 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
 
-    var activeCamera: RMXNode? {
-        return self.world?.activeCamera
+    var activeCamera: RMXNode {
+        return self.world.activeCamera
     }
     
-    lazy var actionProcessor: RMSActionProcessor = RMSActionProcessor(world: self.world!, gameView: self.gameView)
+    lazy var actionProcessor: RMSActionProcessor = RMSActionProcessor(interface: self)
     private let _isDebugging = false
     var debugData: String = "No Data"
     
-    var gvc: GameViewController?
-    var gameView: GameView!
+    var gvc: GameViewController
+    var gameView: GameView? {
+        return self.gvc.gameView
+    }
 
    
     var timer: NSTimer? //CADisplayLink?
-    var world: RMSWorld?
+//    var world: RMSWorld?
 
     static var lookSpeed: RMFloatB = 1
     static var moveSpeed: RMFloatB = 2
     
-    var activeSprite: RMXSprite? {
-        return self.world?.activeSprite
+    var activeSprite: RMXSprite {
+        return self.world.activeSprite
     }
     internal var keyboard: KeyboardType = .UK
     
-    var dataView: RMDataView?
-    var scoreBoard: RMLabel?
+    private var _dataView: SKLabelNode! = nil
+    var dataView: SKLabelNode {
+        if _dataView != nil {
+            return _dataView
+        } else {
+            _dataView = SKLabelNode(text: "Hello, World!")
+            _dataView.position.x = self.skView.scene!.size.width / 10
+            _dataView.position.y = self.skView.scene!.size.height * 9 / 10
+            _dataView.alpha = 0.5
+            _dataView.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
+            _dataView.verticalAlignmentMode = .Top
+            _dataView.fontSize /= 2
+            _dataView.fontColor = RMColor.whiteColor()
+            _dataView.hidden = true
+            return _dataView
+        }
+
+    }
+    
+    private var _scoreboard: SKView! = nil
+    let line1 = SKLabelNode(text: "line1")
+    let line2 = SKLabelNode(text: "line2")
+    let line3 = SKLabelNode(text: "line3")
+
+    lazy var skScene: SKScene = SKScene(size: self.gameView!.bounds.size)
+    
+    var scoreboard: SKView {
+        if _scoreboard != nil {
+            return _scoreboard
+        } else {
+            _scoreboard = SKView(frame: self.gameView!.bounds)
+
+            _scoreboard.hidden = true
+
+            self.line1.verticalAlignmentMode = .Top
+            self.line1.fontSize /= 2
+            self.line1.fontColor = RMColor.whiteColor()
+            self.line1.position.x = self.skView.scene!.size.width / 2
+            self.line1.position.y = self.skView.scene!.size.height / 2 - 10
+            
+            self.line2.verticalAlignmentMode = .Center
+            self.line2.fontSize /= 2
+            self.line2.fontColor = RMColor.whiteColor()
+            self.line2.position.x = self.skView.scene!.size.width / 2
+            self.line2.position.y = self.skView.scene!.size.height / 2
+            
+            self.line3.verticalAlignmentMode = .Bottom
+            self.line3.fontSize /= 2
+            self.line3.fontColor = RMColor.whiteColor()
+            self.line3.position.x = self.skView.scene!.size.width / 2
+            self.line3.position.y = self.skView.scene!.size.height / 2 + 10
+            
+            _scoreboard.presentScene(self.skScene)
+            _scoreboard.scene!.addChild(self.line1)
+            _scoreboard.scene!.addChild(self.line2)
+            _scoreboard.scene!.addChild(self.line3)
+            return _scoreboard
+        }
+    }
+
     
 //    var activeCamera: RMXCamera? {
 //        return self.world?.activeCamera.camera
 //    }
 //    
         
-    init(gvc: GameViewController, scene: RMXScene? = nil){
+    init(gvc: GameViewController){
+        self.gvc = gvc
         super.init()
-        self.initialize(gvc)
-        self.setUpViews(nil)
-        self.viewDidLoad(nil)
+        self.setUpViews()
+        _newGame(type: RMXInterface.DEFAULT_GAME)
+        self.viewDidLoad()
         RMXLog("\(__FUNCTION__)")
     }
-    
-    func initialize(gvc: GameViewController, scene: RMXScene? = nil) -> RMXInterface {
-        self.gvc = gvc
-        self.gameView = gvc.gameView
-        
-        if self.world == nil {
-            self.world = RMSWorld(interface: self)
-        }
-//        self.world!.clock = RMXClock(world: self.world!, interface: self)
 
+    
+    func startVideo(sender: AnyObject?){}
+    
+    ///Run this last when overriding
+    func viewDidLoad(){
         self.gameView!.delegate = self
-
-        return self
     }
     
-    
-    func startVideo(sender: AnyObject?){
-    
-    }
-    
-    func viewDidLoad(coder: NSCoder!){
-        
-    }
     func setUpTimers(){
 //        self.timer = NSTimer(target: self, selector: Selector("update"))
 //        self.timer!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
     }
-    func setUpViews(coder: NSCoder!) {
-        if self.world == nil {
-            self.world = RMSWorld(interface: self, scene: RMXScene(coder: coder))
-        }
-        self.dataView = RMDataView(frame: self.gameView.bounds)
-        self.dataView!.hidden = true
-        //        self.dataView!.backgroundColor = NSColor.blueColor()
-        //        self.dataView!.enabled = true
-        self.gameView.addSubview(self.dataView!)
-        //        self.dataView!.alpha = 0.5
+    
+    lazy var skView: SKView = SKView(frame: self.gameView!.bounds)
+    
+    func setUpViews() {
+        self.gameView!.addSubview(self.skView)
+        self.skView.presentScene(self.skScene)
 
+        self.skView.allowsTransparency = true
+        
+        self.skView.addSubview(self.scoreboard)
+        self.skView.scene?.addChild(self.dataView)
+        self.skView.hidden = true
+        
     }
 
     func log(_ message: String = "", sender: String = __FUNCTION__, line: Int = __LINE__) {
@@ -165,19 +217,78 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         debugData = ""
     }
     
+    private static let DEFAULT_GAME: GameType = .TEAM_GAME
     
-
+    var availableGames: [ GameType ] = [ .TEAM_GAME, .TEST, .EMPTY ]
+    
+    var activeGames: [GameType: RMSWorld] = Dictionary<GameType,RMSWorld>()
+    
+    private var _world: RMSWorld?
+    
+    func destroyWorld() -> RMSWorld? {
+        return nil //_world?.destroy()
+    }
+    var world: RMSWorld {
+        return _world ?? _newGame()
+    }
+    
+    ///Swictches between gamemode without deleting or duplicating environments.
+    func newGame(type: GameType? = nil) {
+        self.pauseGame(nil)
+        _world = _newGame(type: type)
+        _world?.calibrate()
+        self.unPauseGame(nil)
+    }
+    
+    private func _newGame(type: GameType? = nil) -> RMSWorld! {
+        self.pauseGame(nil)
+        RMXLog("World: \(_world?.rmxID)")
+        if let type = type {
+            if let world = self.activeGames[type] {
+                _world = world
+                RMXLog("This game exists. We're done: \(type.hashValue) - \(_world?.rmxID) (done)")
+                return _world
+            } else {
+                _world = AiCubo.setUpWorld(self, type: type)
+                self.activeGames[type] = _world
+                RMXLog("Creating a new game of type: \(type.hashValue) - : \(_world!.rmxID) (done)")
+                return _world
+            }
+            
+            
+        } else {
+            let n = random() % self.availableGames.count
+            let type = self.availableGames[n]
+            if let newWorld = self.activeGames[type] {
+                if _world != nil && _world! == newWorld && self.availableGames.count > 1 {
+                    RMXLog("Game matched the current world - try again: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (fail)")
+                    return self._newGame(type: nil)
+                } else {
+                    RMXLog("SUCCESS - Game exits: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (done)")
+                    _world = newWorld
+                    return newWorld
+                }
+            } else {
+                RMXLog("SUCCESS - A new instance of this game: \(n) of \(self.availableGames.count) - \(_world?.rmxID) (done)")
+                _world = AiCubo.setUpWorld(self, type: type)
+                self.activeGames[type] = _world
+                return _world
+            }
+        }
+        
+    }
+    
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
         self.update()
     }
     
-    func printDataToScreen(data: String){
-//        RMXPrintToScreen(string: data, self.dataView)
-        NSLog(data)
+    func updateDataView(){
+//        self.dataView.text = self.actionProcessor.getData(type: .PLAYER_INFO)
+//        NSLog(self.dataView.text)
     }
     
     func processHit(point p: CGPoint) {
-        if let hitResults = self.gameView.hitTest(p, options: nil) {
+        if let hitResults = self.gameView?.hitTest(p, options: nil) {
             // check that we clicked on at least one object
             if hitResults.count > 0 {
                 // retrieved the first clicked object
@@ -212,25 +323,36 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
 
     }
     
-    var scene: RMXScene? {
-        return self.world?.scene
+    var scene: RMXScene {
+        return self.world.scene
     }
     
-    var isPaused: Bool {
-        return self.scene?.paused ?? true
+    func updateScoreboard() {
+//        NSLog(self.actionProcessor.getData(type: .SCORES))
+        if let team1 = self.world.teams[1] {
+            if let team2 = self.world.teams[2] {
+                self.line3.text = self.activeSprite.attributes.printScore
+                self.line2.text = team1.printScore
+                self.line1.text = team2.printScore
+                return
+            }
+        } else {
+            self.line3.text = "Hello!"
+            self.line2.text = "Unfortunately this isn't \"Team Mode\""
+            self.line1.text = "Try pausing and restarting (top left)"
+        }
+
     }
     
     func update(){
         if !self.isPaused {
             self.actionProcessor.animate()
-            self.world?.animate()
-            if !self.dataView!.hidden {
-    //            let view: NSTextField = dataView!
-    //            self.dataView?.display()
-                self.printDataToScreen(self.actionProcessor.getData())
+            _world?.animate()
+            if !self.dataView.hidden {
+                self.updateDataView()
             }
-            if self.scoreBoard != nil && !self.scoreBoard!.hidden {
-                self.scoreBoard!.text = self.actionProcessor.getData(type: .SCORES)
+            if !self.scoreboard.hidden {
+                self.updateScoreboard()
             }
         }
 
@@ -253,37 +375,53 @@ class RMXInterface : NSObject, RendererDelegate, RMXControllerProtocol {
         
     }
     
-    func pauseGame(sender: AnyObject?) {
-        self.scene?.paused = !self.scene!.paused
-//        self.pauseMenu?.hidden = false
-//        self.menuAccessBar?.hidden = true
-        self.hideButtons(self.scene!.paused)
-        
+    var isPaused: Bool {
+        return _world != nil && _world!.scene.paused
     }
     
-    func unPauseGame(sender: AnyObject?) {
-        self.scene?.paused = false
-//        self.pauseMenu?.hidden = true
-//        self.menuAccessBar?.hidden = false
-        self.hideButtons(false)
+    var isRunning: Bool {
+        return _world != nil && !_world!.scene.paused
+    }
+    
+    func pauseGame(sender: AnyObject?) -> Bool {
+        if _world?.scene != nil {
+            self.updateScoreboard()
+            self.updateDataView()
+            _world!.scene.paused = true
+            self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
+            self.hideButtons(true)
+            return true
+        }
+        return true
+    }
+    
+    func unPauseGame(sender: AnyObject?) -> Bool {
+        if _world?.scene != nil {
+            _world!.scene.paused = false
+            self.hideButtons(false)
+            self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
+            return true
+        }
+        return true
     }
     
     func optionsMenu(sender: AnyObject?) {
-        NSLog("Show Options")
+        RMXLog("Show Options")
         
     }
     
     func exitToMainMenu(sender: AnyObject?) {
-        NSLog("End Simulation")
+        RMXLog("End Simulation")
 
     }
     
-    var _switch = true
+
     func restartSession(sender: AnyObject?) {
-        //        self.world?.deleteWorld(backup: false)
-        AiCubo.setUpWorld(self, type: _switch ? .TEAM_GAME : .TEST)
-        _switch = !_switch
-        self.gameView!.scene = self.scene
-        self.unPauseGame(sender)
+        self.newGame()
+    }
+    
+    func getRect(withinRect bounds: CGRect? = nil, row: (CGFloat, CGFloat), col: (CGFloat, CGFloat)) -> CGRect {
+        let bounds = bounds ?? self.gameView!.bounds
+        return CGRectMake(bounds.width * (col.0 - 1) / col.1, bounds.height * (row.0 - 1) / row.1, bounds.width / col.1, bounds.height / row.1)
     }
 }

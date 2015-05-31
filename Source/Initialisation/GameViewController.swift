@@ -26,7 +26,7 @@ class GameViewController: ViewController, SCNSceneRendererDelegate {
     #endif
     
     
-    lazy var interface: RMXInterface? = RMX.Controller(self,  scene: SCNScene(named: "art.scnassets/ship.dae")!)
+    lazy var interface: RMXInterface? = RMX.Controller(self)
     
     var world: RMSWorld? {
         return self.interface!.world

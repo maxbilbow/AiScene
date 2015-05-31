@@ -55,7 +55,7 @@ class RMXAudioVideo {
         if let contact = info {
             position = contact.getPosition()
         } else {
-            position = self.interface.activeCamera!.getPosition()
+            position = self.interface.activeCamera.getPosition()
         }
         if position.length > range {
             return false
@@ -64,9 +64,9 @@ class RMXAudioVideo {
         if let sound = self.sounds[name] {// self.getPlayer(name) {
 
             let camera = self.interface.activeCamera
-            let left = camera!.worldTransform.leftTo(position)
-            let distance = (position - camera!.getPosition()).length
-            if  distance < Float(camera!.camera!.zNear) || distance == 0 {
+            let left = camera.worldTransform.leftTo(position)
+            let distance = (position - camera.getPosition()).length
+            if  distance < Float(camera.camera!.zNear) || distance == 0 {
                 sound.volume = volume
             } else if distance > range {
                 return false

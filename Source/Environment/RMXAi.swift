@@ -132,7 +132,7 @@ class RMXAi {
             if !sprite.tracker.hasTarget && !sprite.hasItem {
                 sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE), willJump: true, doOnArrival: { (target: RMXSprite?) -> () in
                     if sprite.grab(target) {
-                        sprite.tracker.setTarget(target: self.randomSprite(world,type: .PLAYER_OR_AI), afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
+                        sprite.tracker.setTarget(target: self.randomSprite(world,type: .PLAYER_OR_AI), afterTime: 100, doOnArrival: { (target) -> () in
                             
                             sprite.throwItem(atSprite: target )
                             sprite.tracker.setTarget()
@@ -159,7 +159,7 @@ class RMXAi {
         let action = { (node: SCNNode!) -> Void in
             if !world.aiOn { return }
             if !sprite.tracker.hasTarget && !sprite.hasItem { //after time to prevent grouing (ish)
-                sprite.tracker.setTarget(target: self.randomSprite(world,type: .PASSIVE), afterTime: 1800, doOnArrival: { (target: RMXSprite?) -> () in
+                sprite.tracker.setTarget(target: self.randomSprite(world,type: .PASSIVE), afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                     if sprite.grab(target) {
                         sprite.tracker.setTarget(target: self.selectTargetPlayer(inWorld: world, notInTeam: sprite.attributes.teamID), afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
                             

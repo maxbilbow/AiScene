@@ -79,17 +79,17 @@ extension RMXDPad {
     }
     
     var moveButtonCenter: CGRect {
-        let avg = (self.gameView.bounds.size * 0.13).average
+        let avg = (self.gameView!.bounds.size * 0.13).average
         let size = CGSize(width: avg, height: avg)
-        let origin = CGPoint(x: self.gameView.bounds.size.width * 0.07, y: self.gameView.bounds.size.height * 0.88 - size.height)
+        let origin = CGPoint(x: self.gameView!.bounds.size.width * 0.07, y: self.gameView!.bounds.size.height * 0.88 - size.height)
         let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
         return frame
     }
     
     var boomButtonCenter: CGRect {
-        let avg = (self.gameView.bounds.size * 0.10).average
+        let avg = (self.gameView!.bounds.size * 0.10).average
         let size = CGSize(width: avg, height: avg)
-        let origin = CGPoint(x: self.gameView.bounds.size.width * 0.82 - size.width / 2, y: self.gameView.bounds.size.height * 0.88 - size.height)
+        let origin = CGPoint(x: self.gameView!.bounds.size.width * 0.82 - size.width / 2, y: self.gameView!.bounds.size.height * 0.88 - size.height)
         let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
         return frame
     }
@@ -107,9 +107,9 @@ extension RMXDPad {
     }
     
     var jumpButtonCenter: CGRect {
-        let avg = (self.gameView.bounds.size * 0.10).average
+        let avg = (self.gameView!.bounds.size * 0.10).average
         let size = CGSize(width: avg, height: avg)
-        let origin = CGPoint(x: self.gameView.bounds.size.width * 0.82 + size.width / 2, y: self.gameView.bounds.size.height * 0.85 - size.height)
+        let origin = CGPoint(x: self.gameView!.bounds.size.width * 0.82 + size.width / 2, y: self.gameView!.bounds.size.height * 0.85 - size.height)
         let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
         return frame
     }

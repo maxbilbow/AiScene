@@ -40,7 +40,6 @@ extension RMXInterface {
 //    static let ZOOM_OUT: String = "zoomOut"
 }
 
-#if OSX
 import Foundation
 import AppKit
 import ApplicationServices
@@ -62,6 +61,7 @@ class RMSKeys : RMXInterface {
     ///Key down, Key up options
     static let ON_KEY_DOWN: (on:RMFloat,off:RMFloat) = (1,0)
     static let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
+    static let TOGGLE: (on:RMFloat,off:RMFloat) = (0,-1)
     static let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.moveSpeed, 0)
     static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.lookSpeed * -10, 0)
     
@@ -97,9 +97,11 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: PAUSE_GAME, characters: "p", isRepeating: false, speed: ON_KEY_UP),
     RMKey(self, action: KEYBOARD_LAYOUT, characters: "k", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: NEW_GAME, characters: "N", isRepeating: false, speed: ON_KEY_UP),
     
     //Misc: generically used for testing
-    RMKey(self, action: GET_INFO, characters: "i", isRepeating: false,speed: ON_KEY_DOWN), //Prints to terminal when testing
+    RMKey(self, action: GET_INFO, characters: "i", isRepeating: false, speed: ON_KEY_DOWN), //Prints to terminal when testing
+    RMKey(self, action: TOGGLE_SCORES, characters: "S", isRepeating: false, speed: ON_KEY_UP),
     RMKey(self, action: ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
     RMKey(self, action: ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
     RMKey(self, action: INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
@@ -107,15 +109,23 @@ class RMSKeys : RMXInterface {
         
     ]
     
-    override func viewDidLoad(coder: NSCoder!) {
-        RMXInterface.lookSpeed *= -1
+  
+    
+    override func updateScoreboard() {
+        super.updateScoreboard()
+//        NSLog(self.scoreboard.title)
         
-        super.viewDidLoad(coder)
-//        self.gameView
     }
     
-    override func setUpViews(coder: NSCoder!) {
-        super.setUpViews(coder)
+    override func viewDidLoad() {
+        RMXInterface.lookSpeed *= -1
+        
+        super.viewDidLoad()
+    }
+    
+    override func setUpViews() {
+        super.setUpViews()
+        self.skView.alphaValue = 0.5
     }
     
     func set(action a: String, characters k: String ) {
@@ -362,7 +372,7 @@ extension GameView {
                 
             }
         } else {
-            super.keyDown(theEvent)
+            self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: theEvent.characters!, isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
         }
         
     }
@@ -373,6 +383,8 @@ extension GameView {
                 //RMXLog(key.description)
             }
         } else {
+            
+            
             super.keyUp(theEvent)
         }
     }
@@ -425,5 +437,4 @@ extension GameView {
 
 }
 
-#endif
 

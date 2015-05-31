@@ -20,7 +20,7 @@ protocol RMXSpriteManager {
 
 
 
-class RMXSprite : RMXSpriteManager, RMXTeamMember {
+class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     lazy var tracker: RMXTracker = RMXTracker(sprite: self)
 //    var hitTarget = false
 //    var target: RMXSprite?
