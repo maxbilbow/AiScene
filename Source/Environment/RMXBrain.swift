@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import SceneKit
 
-extension RMXNode : RMXLocatable {
+extension SCNNode : RMXLocatable {
     
     func getPosition() -> RMXVector {
 //        if self.physicsBody?.type == .Dynamic {
@@ -36,11 +37,16 @@ extension RMXNode : RMXLocatable {
     
     
     var sprite: RMXSprite? {
-        if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
-            return brain.getSprite()
+        if self is RMXNode {
+            return (self as! RMXNode).spriteDirect
         } else {
-            return nil
+            return self.parentNode?.sprite
         }
+//        if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
+//            return brain.getSprite()
+//        } else {
+//            return nil
+//        }
     }
     
     var spriteType: RMXSpriteType {
@@ -51,7 +57,7 @@ extension RMXNode : RMXLocatable {
         return self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain
     }
     
-    class func rootNode(existsIn rootNode: RMXNode, var node: RMXNode) -> RMXNode {
+    class func rootNode(existsIn rootNode: SCNNode, var node: SCNNode) -> SCNNode {
         if node.parentNode == rootNode || node.parentNode == nil {
             RMXLog("RootNode: \(node.name)")
             return node
@@ -61,11 +67,11 @@ extension RMXNode : RMXLocatable {
         }
     }
     
-    func getRootNode(existsIn rootNode: RMXNode) -> RMXNode {
+    func getRootNode(existsIn rootNode: SCNNode) -> SCNNode {
         return RMXNode.rootNode(existsIn: rootNode, node: self)
     }
     
-    func getRootNode(inScene scene: RMXScene) -> RMXNode {
+    func getRootNode(inScene scene: RMXScene) -> SCNNode {
         return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
     }
     

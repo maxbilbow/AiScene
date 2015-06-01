@@ -145,7 +145,7 @@ class AiCubo {
         let worldRadius = RMSWorld.RADIUS * 10
         
         let sun: RMXSprite = RMXSprite.new(inWorld: world, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: worldRadius)
-        sun.addAi({ (node: RMXNode!) -> Void in
+        sun.addAi({ (node: SCNNode!) -> Void in
             if world.aiOn {
                 sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
             }

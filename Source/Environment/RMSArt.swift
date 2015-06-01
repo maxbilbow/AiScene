@@ -102,12 +102,12 @@ class RMXArt {
             default:
                 fatalError(__FUNCTION__)
             }
-            let node:SCNNode = RMXModels.getNode(shapeType: ShapeType.CUBE, mode: .PASSIVE, radius: 1, scale: scale, color: color)
+            let node:RMXNode = RMXModels.getNode(shapeType: ShapeType.CUBE, mode: .PASSIVE, radius: 1, scale: scale, color: color)
             node.position = position
             node.physicsBody!.mass *= 1000
             node.physicsBody!.damping = 1000
             node.physicsBody!.angularDamping = 1000
-            let sprite = RMXSprite.new(inWorld: world, node: node, type: .BACKGROUND, isUnique: true)
+            let sprite = RMXSprite(inWorld: world, node: node, type: RMXSpriteType.BACKGROUND, isUnique: true)
             sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
 //            sprite.addAi({ (node: RMXNode!) -> Void in
 //                sprite.setPosition(position: position, resetTransform: true)

@@ -8,11 +8,11 @@
 import SceneKit
 import Foundation
 
-typealias AiBehaviour = (RMXNode!) -> Void
+typealias AiBehaviour = (SCNNode!) -> Void
 class RMXAi {
 //    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
-        let ai = { (node: RMXNode!) -> Void in
+        let ai = { (node: SCNNode!) -> Void in
 //            if sprite.world.aiOn { NSLog(sprite.name) }
             if sprite.world.hasGravity {
                 sprite.physicsBody?.applyForce(sprite.world.gravity * sprite.mass, atPosition: sprite.bottom, impulse: false)
@@ -24,7 +24,7 @@ class RMXAi {
     }
 
     class func playFetch(poppy: RMXSprite, var master: RMXSprite) {
-        var itemToWatch: RMXNode?
+        var itemToWatch: SCNNode?
         let speed:RMFloatB = 150 * (poppy.mass + 1)
         poppy.setSpeed(speed: speed)
         //        poppy.world?.interface.collider.trackers.append(poppy.tracker)

@@ -469,14 +469,14 @@ public class RMSActionProcessor {
     }
     
     @availability(*,deprecated=1)
-    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> RMXNode? {
+    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> SCNNode? {
         let sprite = s ?? self.activeSprite
         if let action = action {
             switch action {
                 case "throw", "Throw","grab", "Grab":
                     if let item = sprite.item {
 //                        direction = object?.presentationNode().position
-                        if let tgt:RMXNode = object?.node {
+                        if let tgt:SCNNode = object?.node {
                             sprite.throwItem(atPosition: tgt.getPosition(), withForce: speed)
                         } else if let point = position {
                             sprite.throwItem(atPosition: point, withForce: speed)
@@ -484,7 +484,7 @@ public class RMSActionProcessor {
                             sprite.throwItem(force: speed)
                         }
                         return item.node
-                    } else if let node: RMXNode = object?.node {
+                    } else if let node: SCNNode = object?.node {
                         let rootNode = node.getRootNode(inScene: self.scene)
                             switch rootNode.spriteType {
                             case .ABSTRACT, .BACKGROUND, .KINEMATIC:

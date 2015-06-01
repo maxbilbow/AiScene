@@ -254,25 +254,6 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     }
 
     
-    @availability(*,unavailable)
-    func getSprite(node n: RMXNode, type: RMXSpriteType? = nil) -> RMXSprite? {
-    
-        let node = RMXSprite.rootNode(n, rootNode: self.scene.rootNode)
-        if node.name == nil || node.name == "" {
-            let sprite = RMXSprite.new(inWorld: self, node: node, type: type ?? .PASSIVE, isUnique: false)
-            return sprite
-        } else {
-            for sprite in self.children {
-                if sprite.node.name == node.name {
-                    return sprite
-                }
-            }
-        }
-        let sprite = RMXSprite.new(inWorld: self, node: node, type: type ?? .PASSIVE, isUnique: false)
-        //sprite.setNode(node)
-        return sprite
-    }
-    
     func animate() {
         if !self.hasGravity {
             let activeCamera = self.activeCamera

@@ -79,7 +79,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
 //    lazy var body: RMSPhysicsBody? = RMSPhysicsBody(self)
     
-    var parentNode: RMXNode? {
+    var parentNode: SCNNode? {
         return self.node.parentNode
     }
     
@@ -102,9 +102,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     private var _name: String = ""
     
     
-    private func _updateName(ofNode node: RMXNode, oldName: String) {
+    private func _updateName(ofNode node: SCNNode, oldName: String) {
         for node in node.childNodes {
-            if let node = node as? RMXNode {
+            if let node = node as? SCNNode {
                 if node.name != nil {
                     
                     node.name = node.name?.stringByReplacingOccurrencesOfString(oldName, withString: self.name, options: NSStringCompareOptions.LiteralSearch, range: nil)
@@ -147,7 +147,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         return self.item?.rmxID == item?.rmxID
     }
     
-    func isHolding(node: RMXNode?) -> Bool{
+    func isHolding(node: SCNNode?) -> Bool{
         return self.item?.rmxID == node?.rmxID
     }
     
@@ -209,7 +209,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     
     
-    var behaviours: Array<(RMXNode!) -> Void> = Array<(RMXNode!) -> Void>()
+    var behaviours: Array<(SCNNode!) -> Void> = Array<(SCNNode!) -> Void>()
 
     
     
@@ -494,7 +494,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     func throwItem(atObject object: AnyObject?, withForce strength: RMFloatB) -> Bool {
         if let sprite = object as? RMXSprite {
             return self.throwItem(atSprite: sprite, withForce: strength)
-        } else if let node = object as? RMXNode {
+        } else if let node = object as? SCNNode {
             return self.throwItem(atSprite: node.sprite, withForce: strength)
         } else if let position = object as? RMXVector {
             return self.throwItem(atPosition: position, withForce: strength)
@@ -524,7 +524,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         if let itemInHand = self.item {
             var direction = self.forwardVector
             if self.isActiveCamera {
-                let gradient = self.world.activeCamera.eulerAngles.x
+                let gradient = -self.world.activeCamera.eulerAngles.x
                 let mat = GLKMatrix4MakeRotation(Float(gradient), Float(1.0), 0.0, 0.0)
                 direction = SCNVector3FromGLKVector3( GLKMatrix4MultiplyVector3WithTranslation(mat, SCNVector3ToGLKVector3( direction)))
             }
@@ -547,7 +547,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     }
     
     @availability(*,obsoleted=1)
-    func throwItem(strength: RMFloatB = 1, var atNode targetNode: RMXNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
+    func throwItem(strength: RMFloatB = 1, var atNode targetNode: SCNNode? = nil, atPoint point: RMXVector? = nil) -> Bool { //, atTarget target: AnyObject? = nil) -> Bool {
         
         if let itemInHand = self.item {
             self.setItem(item: nil)
@@ -662,7 +662,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     func grab(object: AnyObject?) -> Bool {
         if self.item != nil { return false }
-        if let node = object as? RMXNode {
+        if let node = object as? SCNNode {
             return self.grab(node.sprite)
         } else if let sprite = object as? RMXSprite {
             return self.grab(sprite)
@@ -849,7 +849,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         }
     }
     
-    class func rootNode(node: RMXNode, rootNode: RMXNode) -> RMXNode {
+    class func rootNode(node: SCNNode, rootNode: SCNNode) -> SCNNode {
         if node.parentNode == rootNode || node.parentNode == nil {
             RMXLog("RootNode: \(node.name)")
             return node

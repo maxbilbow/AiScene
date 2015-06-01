@@ -10,7 +10,7 @@ import Foundation
 
 import SceneKit
 
-    typealias RMXNode = SCNNode
+    //typealias RMXNode = SCNNode
    
 
 protocol RMXChildNode {
@@ -19,7 +19,29 @@ protocol RMXChildNode {
     var parentSprite: RMXSprite? { get set }
 }
 
+class RMXNode : SCNNode {
+    init(geometry: SCNGeometry, sprite: RMXSprite! = nil){
+        super.init()
+        let node = SCNNode(geometry: geometry)
+        self.geometry = node.geometry
+        self.physicsBody = node.physicsBody
+        _sprite = sprite
+    }
+    
+    
+    override init(){
+        super.init()
+    }
 
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    private var _sprite: RMXSprite?
+    internal var spriteDirect: RMXSprite? {
+        return _sprite
+    }
+}
 
 extension RMXSprite {
 
@@ -33,7 +55,7 @@ extension RMXSprite {
     }
     
     
-    func presentationNode() -> RMXNode {
+    func presentationNode() -> SCNNode {
         return self.node.presentationNode()
     }
     var geometry: SCNGeometry? {
