@@ -353,10 +353,12 @@ class RMXTeam {
     }
     
     /// doOnWin returns true if defender is totally defeated
-    class func challenge(attacker: SpriteAttributes, defender: SpriteAttributes, doOnWin: Challenge = RMXTeam.challengeWon) {
-        if attacker.teamID == defender.teamID || defender.teamID <= 0 { return }
-        if doOnWin(attacker,defender) {
-            defender.retire()
+    class func challenge(attacker: SpriteAttributes, defender: SpriteAttributes?, doOnWin: Challenge = RMXTeam.challengeWon) {
+        if let defender = defender {
+            if attacker.teamID == defender.teamID || defender.teamID <= 0 { return }
+            if doOnWin(attacker,defender) {
+                defender.retire()
+            }
         }
 //        NSLog(attacker.points.toData())
     }

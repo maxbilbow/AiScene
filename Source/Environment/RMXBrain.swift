@@ -24,9 +24,7 @@ extension SCNNode : RMXLocatable {
     }
     
     func getRmxID(scene: RMXScene? = nil) -> Int? {
-        if let sprite = self.sprite {
-            return sprite.rmxID
-        } else if let brain = self as? RMXBrain {
+        if let brain = self as? RMXBrain {
             return brain.rmxID
         } else if let scene = scene {
             return self.getRootNode(inScene: scene).sprite?.rmxID
@@ -35,18 +33,19 @@ extension SCNNode : RMXLocatable {
         }
     }
     
+    var doesCollide: Bool {
+        return self.sprite?.isPlayer ?? false
+    }
+    
     
     var sprite: RMXSprite? {
-        if self is RMXNode {
-            return (self as! RMXNode).spriteDirect
+        if self.isKindOfClass(RMXNode) {
+            return (self as! RMXNode).getSprite()
+        } else if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
+            return brain.getSprite()
         } else {
-            return self.parentNode?.sprite
+            return nil
         }
-//        if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
-//            return brain.getSprite()
-//        } else {
-//            return nil
-//        }
     }
     
     var spriteType: RMXSpriteType {
@@ -114,43 +113,13 @@ extension SCNNode : RMXLocatable {
 
 class RMXBrain : RMXNode , RMXUniqueEntity {
     
-    private var _rmxID: Int?
-    
-    override var rmxID: Int {
-        if let id = _rmxID {
-            return id
-        } else {
-            _rmxID = self.rootNode?.rmxID
-            if _rmxID == nil { NSLog("error -1 RMXID") }
-            return _rmxID ?? -1
-        }
-    }
-//        {
-//        return self.sprite?.rmxID
-//    }
-
-    static let ID = "Brain"
-    internal var rmxSprite: RMXSprite?
-
-    func getSprite() -> RMXSprite? {
-        return self.rmxSprite
-    }
-    
-    var rootNode: RMXNode? {
-        return self.rmxSprite?.node
-    }
-    
-    
-    internal func setRmxID(ID: Int) {
-        _rmxID = ID
-    }
     
     class func giveBrainTo(sprite: RMXSprite) -> RMXBrain {
         let brain = RMXBrain()
         brain.rmxSprite = sprite
         brain.name = RMXBrain.ID
         sprite.node.addChildNode(brain)
-        brain._rmxID = sprite.rmxID
+        brain.setRmxID(sprite.rmxID)
         return brain
     }
     

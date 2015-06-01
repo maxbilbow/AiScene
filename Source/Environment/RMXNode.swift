@@ -20,6 +20,43 @@ protocol RMXChildNode {
 }
 
 class RMXNode : SCNNode {
+    
+    private var _rmxID: Int?
+    
+    override var rmxID: Int {
+        if let id = _rmxID {
+            return id
+        } else {
+            _rmxID = self.rootNode?.rmxID
+            if _rmxID == nil { NSLog("error -1 RMXID") }
+            return _rmxID ?? -1
+        }
+    }
+    //        {
+    //        return self.sprite?.rmxID
+    //    }
+    
+    static let ID = "Brain"
+    internal var rmxSprite: RMXSprite?
+    
+    func getSprite() -> RMXSprite? {
+        return self.rmxSprite
+    }
+    
+    var rootNode: RMXNode? {
+        return self.rmxSprite?.node
+    }
+    
+    
+    internal func setRmxID(ID: Int) {
+        _rmxID = ID
+    }
+    
+    internal func setSprite(sprite: RMXSprite) {
+        self.rmxSprite = sprite
+        _rmxID = sprite.rmxID
+    }
+    
     init(geometry: SCNGeometry, sprite: RMXSprite! = nil){
         super.init()
         let node = SCNNode(geometry: geometry)
@@ -40,6 +77,21 @@ class RMXNode : SCNNode {
     private var _sprite: RMXSprite?
     internal var spriteDirect: RMXSprite? {
         return _sprite
+    }
+    
+    func test(node: SCNNode!) {
+         NSLog("\(self.name): \"ouch! I bumped into \(node.name)\"")
+        self.collisionActions.removeValueForKey("ouch")
+    }
+    
+    lazy var collisionActions: [String:AiBehaviour] = [
+        "ouch" : self.test
+    ]
+    
+    func collisionAction(receiver: SCNNode!) {
+        for collision in self.collisionActions {
+            collision.1(receiver)
+        }
     }
 }
 

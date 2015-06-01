@@ -249,16 +249,18 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     init(inWorld world: RMSWorld, node: RMXNode = RMXNode(), type: RMXSpriteType, isUnique: Bool){
         _world = world
         _node = node
+        
         self.type = type
         self.isUnique = isUnique
         self.attributes = SpriteAttributes(self)
-        
 //        super.init()
+        _node.setSprite(self)
         self.spriteDidInitialize()
     }
     
     func setNode(node: RMXNode){
         self._node = node
+        node.setSprite(self)
         self.setName()
     }
     
@@ -520,8 +522,21 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         return self.item == nil
     }
     
+
+
+    
     func throwItem(force strength: RMFloatB) -> Bool {
+        func challenge(defender: SCNNode!) -> Void {
+            RMXTeam.challenge(self.attributes, defender: node.sprite?.attributes)
+        }
         if let itemInHand = self.item {
+            func challenge(defender: SCNNode!) -> Void {
+                RMXTeam.challenge(self.attributes, defender: defender.sprite?.attributes)
+                NSLog("Smashed up, \(defender.name)")
+                itemInHand.node.collisionActions.removeValueForKey("Attack")
+                self.world.interface.av.playSound(RMXInterface.THROW_ITEM, info: defender)
+            }
+            itemInHand.node.collisionActions["Attack"] = challenge
             var direction = self.forwardVector
             if self.isActiveCamera {
                 let gradient = -self.world.activeCamera.eulerAngles.x
@@ -662,8 +677,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     func grab(object: AnyObject?) -> Bool {
         if self.item != nil { return false }
-        if let node = object as? SCNNode {
-            return self.grab(node.sprite)
+        if object?.isKindOfClass(SCNNode) ?? false {
+            return self.grab((object as! SCNNode).sprite)
         } else if let sprite = object as? RMXSprite {
             return self.grab(sprite)
         }
