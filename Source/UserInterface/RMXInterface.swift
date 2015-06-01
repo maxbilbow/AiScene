@@ -284,8 +284,8 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func updateDataView(){
-//        self.dataView.text = self.actionProcessor.getData(type: .PLAYER_INFO)
-//        NSLog(self.dataView.text)
+        let text = self.actionProcessor.getData()
+        NSLog(text)
     }
     
     func processHit(point p: CGPoint) {

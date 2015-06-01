@@ -258,7 +258,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     }
     
     func setNode(node: RMXNode){
-        self._node = node
+        self._node.setSprite(self)
         self.setName()
     }
     
@@ -312,7 +312,6 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         if self.isPlayer {
             self.addCameras()
         }
-        RMXBrain.giveBrainTo(self)
         self.setName()
         self.setSpeed()
         world.insertChild(self, andNode: true)
@@ -555,8 +554,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
             
             if let point = point {
                 direction = (point - itemInHand.position).normalised
-            } else if let rootNode = targetNode?.getRootNode(inScene: self.scene!) {
-                if rootNode.rmxID != self.rmxID && rootNode.rmxID != itemInHand.rmxID {
+            } else if let sprite = targetNode?.sprite {
+                if sprite.rmxID != self.rmxID && sprite.rmxID != itemInHand.rmxID {
                     let target = RMXSprite.rootNode(targetNode!, rootNode: self.scene!.rootNode)
                     
                     itemInHand.tracker.setTarget(target: target.sprite, speed: 10 * itemInHand.mass, impulse: true, willJump: false, doOnArrival: { (target) -> () in
@@ -952,6 +951,52 @@ extension RMXSprite {
 
 
 
+
+extension RMXSprite {
+    
+    
+    var transform: RMXMatrix4 {
+        return self.node.presentationNode().transform
+    }
+    
+    var position: RMXVector3 {
+        return self.node.presentationNode().position
+    }
+    
+    
+    func presentationNode() -> SCNNode {
+        return self.node.presentationNode()
+    }
+    var geometry: SCNGeometry? {
+        return self.node.geometry
+    }
+    
+    var physicsBody: SCNPhysicsBody? {
+        return self.node.physicsBody
+    }
+    
+    var physicsField: SCNPhysicsField? {
+        return self.node.physicsField
+    }
+    
+    
+    func applyForce(direction: SCNVector3, atPosition: SCNVector3? = nil, impulse: Bool = false) {
+        if let atPosition = atPosition {
+            self.node.physicsBody?.applyForce(direction, atPosition: atPosition, impulse: impulse)
+        } else {
+            self.node.physicsBody?.applyForce(direction, impulse: impulse)
+        }
+    }
+    
+    var orientation: SCNQuaternion {
+        return self.presentationNode().orientation
+    }
+    
+    func resetTransform() {
+        self.node.physicsBody?.resetTransform()
+    }
+    
+}
 
 
 

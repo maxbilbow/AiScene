@@ -30,9 +30,10 @@ class RMXCamera : SCNCamera {
     
     private class func node(sprite: RMXSprite) -> RMXCameraNode {
         let cameraNode = RMXCameraNode.new(camera: RMXCamera.standardCamera())
-        cameraNode.setRmxID(sprite.rmxID)
+//        cameraNode.setRmxID(sprite.rmxID)
         cameraNode.cameraType = .FIXED
-        cameraNode.name = "\(cameraNode.cameraID)"
+        cameraNode.name = "\(sprite.name)/CAM\(cameraNode.cameraID)/"
+        cameraNode.setSprite(sprite)
         return cameraNode
     }
     
@@ -66,7 +67,7 @@ class RMXCamera : SCNCamera {
         }
         followCam.cameraType = option
         
-        followCam.name! += "/\(type)/\(option.rawValue)/\(sprite.name)"
+        followCam.name! += "/\(type)"
         
         
         
@@ -97,7 +98,7 @@ class RMXCamera : SCNCamera {
             headcam = RMXCamera.node(sprite)
         }
         headcam.cameraType = .FIXED
-        headcam.name! += "/HEADCAM/\(sprite.name)"
+        headcam.name! += "/HEADCAM"
         return headcam
     }
 
@@ -105,7 +106,7 @@ class RMXCamera : SCNCamera {
 }
 
 
-class RMXCameraNode : RMXBrain  {
+class RMXCameraNode : RMXNode  {
 
     var isPOV: Bool = false
     
@@ -114,10 +115,18 @@ class RMXCameraNode : RMXBrain  {
 //    var rmxID: Int?
     var cameraType: CameraOptions = .FIXED
     
+   
+    override init() {
+        super.init()
+    }
+    
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     class func new(#camera: RMXCamera) -> RMXCameraNode {
         let cameraNode = RMXCameraNode()
         cameraNode.camera = RMXCamera.standardCamera()
-        cameraNode.name = "Fixed: \(CameraOptions.FIXED.rawValue)/"
         return cameraNode
     }
     
