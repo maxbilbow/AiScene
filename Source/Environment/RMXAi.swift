@@ -119,65 +119,68 @@ class RMXAi {
     enum MoveState { case MOVING, TURNING, IDLE }
     
     
-    static func addRandomMovement(to sprite: RMXSprite) {
-        if sprite.attributes.teamID < 0 || sprite.type != .AI || sprite.type == .PLAYER {
-            return
-        }
-        let speed:RMFloatB = (RMFloatB(random() % 50) + 50) * sprite.mass
-        sprite.setSpeed()//speed: speed)
-        let world = sprite.world
-//            sprite.world?.interface.collider.trackers.append(sprite.tracker)
-        let action = { (node: SCNNode!) -> Void in
-            if !world.aiOn { return }
-            if !sprite.tracker.hasTarget && !sprite.hasItem {
-                sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE), willJump: true, doOnArrival: { (target: RMXSprite?) -> () in
-                    if sprite.grab(target) {
-                        sprite.tracker.setTarget(target: self.randomSprite(world,type: .PLAYER_OR_AI), afterTime: 100, doOnArrival: { (target) -> () in
-                            
-                            sprite.throwItem(atSprite: target )
-                            sprite.tracker.setTarget()
+    static func addRandomMovement(to players: [RMXSprite]) {
+        for sprite in players {
+            if sprite.attributes.teamID == 0 && sprite.type == .AI && !sprite.isUnique {
+//                let speed:RMFloatB = 100 * RMFloatB(sprite.mass) * sprite.mass
+//                sprite.setSpeed(speed: speed)
+                let world = sprite.world
+        //            sprite.world?.interface.collider.trackers.append(sprite.tracker)
+                let action = { (node: SCNNode!) -> Void in
+                    if !world.aiOn { return }
+                    if !sprite.tracker.hasTarget && !sprite.hasItem {
+                        sprite.tracker.setTarget(target: self.randomSprite(world, type: .PASSIVE), willJump: true, doOnArrival: { (target: RMXSprite?) -> () in
+                            if sprite.grab(target) {
+                                sprite.tracker.setTarget(target: self.randomSprite(world,type: .PLAYER_OR_AI), afterTime: 100, doOnArrival: { (target) -> () in
+                                    
+                                    sprite.throwItem(atSprite: target )
+                                    sprite.tracker.setTarget()
+                                })
+                            }
                         })
                     }
-                })
+                }
+                sprite.addAi(action)//{ (node: RMXNode!) -> Void in
+    //                sprite.node.runAction(action, forKey: "Random")
+    //            })
             }
         }
-        sprite.addAi(action)//{ (node: RMXNode!) -> Void in
-//                sprite.node.runAction(action, forKey: "Random")
-//            })
         
     }
 
     
-    static func offenciveBehaviour(to sprite: RMXSprite) {
-        if sprite.attributes.teamID <= 0 || sprite.type == .PLAYER {
-            return
-        }
-        let speed:RMFloatB = 50 * RMFloatB(sprite.mass)
-        sprite.setSpeed(speed: speed)
-        let world = sprite.world
-        //            sprite.world?.interface.collider.trackers.append(sprite.tracker)
-        let action = { (node: SCNNode!) -> Void in
-            if !world.aiOn { return }
-            if !sprite.tracker.hasTarget && !sprite.hasItem { //after time to prevent grouing (ish)
-                sprite.tracker.setTarget(target: self.randomSprite(world,type: .PASSIVE), afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
-                    if sprite.grab(target) {
-                        sprite.tracker.setTarget(target: self.selectTargetPlayer(inWorld: world, notInTeam: sprite.attributes.teamID), afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
-                            
-                            sprite.throwItem(atSprite: target, withForce: 1)
-//                            NSLog("node thrown at \(target?.name)")
-                            sprite.tracker.setTarget()
-//                            NSLog("target set to nil")
+    static func offenciveBehaviour(to players: [RMXSprite]) {
+        for sprite in players {
+//            NSLog("name: \(sprite.name), isAi: \( sprite.type == .AI), isUnique: \(sprite.isUnique), isOnATeam: \(sprite.attributes.teamID > 0)")
+            if sprite.type == .AI && !sprite.isUnique && sprite.attributes.teamID > 0 {
+//                let speed:RMFloatB = 50 * RMFloatB(sprite.mass)
+//                sprite.setSpeed(speed: speed)
+                let world = sprite.world
+                //            sprite.world?.interface.collider.trackers.append(sprite.tracker)
+                let action = { (node: SCNNode!) -> Void in
+                    if !world.aiOn { return }
+                    if !sprite.tracker.hasTarget && !sprite.hasItem { //after time to prevent grouing (ish)
+                        sprite.tracker.setTarget(target: self.randomSprite(world,type: .PASSIVE), afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
+                            if sprite.grab(target) {
+                                sprite.tracker.setTarget(target: self.selectTargetPlayer(inWorld: world, notInTeam: sprite.attributes.teamID), afterTime: self.randomTimeInterval, doOnArrival: { (target) -> () in
+                                    
+                                    sprite.throwItem(atSprite: target, withForce: 1)
+        //                            NSLog("node thrown at \(target?.name)")
+                                    sprite.tracker.setTarget()
+        //                            NSLog("target set to nil")
+                                })
+                            }
+                            else {
+        //                        NSLog("Failed to grab \(target?.name)")
+                            }
                         })
                     }
-                    else {
-//                        NSLog("Failed to grab \(target?.name)")
-                    }
-                })
+                }
+                sprite.addAi(action)//{ (node: RMXNode!) -> Void in
+                //                sprite.node.runAction(action, forKey: "Random")
+                //            })
             }
         }
-        sprite.addAi(action)//{ (node: RMXNode!) -> Void in
-        //                sprite.node.runAction(action, forKey: "Random")
-        //            })
         
     }
 

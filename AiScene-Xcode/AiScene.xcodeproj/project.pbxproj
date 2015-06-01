@@ -88,6 +88,15 @@
 		6C8CCAF41B0B5E3000D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
 		6C8CCAF51B0B5EF800D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
 		6C8CCAF61B0B5EF800D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
+		6C8F11C31B1C193E009F49DB /* RMGameKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F11C21B1C193E009F49DB /* RMGameKit.swift */; };
+		6C8F11C61B1C1963009F49DB /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8F11C51B1C1963009F49DB /* GameKit.framework */; };
+		6C8F11C91B1C196B009F49DB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8F11C81B1C196B009F49DB /* StoreKit.framework */; };
+		6C8F11CB1B1C199E009F49DB /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8F11CA1B1C199E009F49DB /* GameKit.framework */; };
+		6C8F11CD1B1C19A1009F49DB /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8F11CC1B1C19A1009F49DB /* StoreKit.framework */; };
+		6C8F11CE1B1C1A49009F49DB /* RMGameKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F11C21B1C193E009F49DB /* RMGameKit.swift */; };
+		6C8F11D01B1C1D8E009F49DB /* GCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F11CF1B1C1D8E009F49DB /* GCViewController.swift */; };
+		6C8F11D11B1C1D8E009F49DB /* GCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8F11CF1B1C1D8E009F49DB /* GCViewController.swift */; };
+		6C8F11D21B1C1E04009F49DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299961AE5432000E71811 /* Main.storyboard */; };
 		6C9299981AE5432000E71811 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299961AE5432000E71811 /* Main.storyboard */; };
 		6C92999D1AE5432000E71811 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C92999B1AE5432000E71811 /* LaunchScreen.xib */; };
 		6C9299A91AE5432100E71811 /* AiSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299A81AE5432100E71811 /* AiSceneTests.swift */; };
@@ -146,6 +155,8 @@
 		6C929A351AE54DCA00E71811 /* RMXQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C51AE544C000E71811 /* RMXQuestions.swift */; };
 		6C929A361AE54DCA00E71811 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C61AE544C000E71811 /* RMXValue.swift */; };
 		6C929A371AE54E3E00E71811 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299F01AE544D500E71811 /* art.scnassets */; };
+		6CAE15511B1C5E950025B208 /* RMXSpriteTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */; };
+		6CAE15521B1C5E950025B208 /* RMXSpriteTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */; };
 		6CAFB6721B170FB2006A1BA0 /* RMXAudioVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAFB6711B170FB2006A1BA0 /* RMXAudioVideo.swift */; };
 		6CAFB6731B170FB2006A1BA0 /* RMXAudioVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAFB6711B170FB2006A1BA0 /* RMXAudioVideo.swift */; };
 		6CAFB6741B170FB2006A1BA0 /* RMXAudioVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAFB6711B170FB2006A1BA0 /* RMXAudioVideo.swift */; };
@@ -214,6 +225,13 @@
 		6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXModels.swift; sourceTree = "<group>"; };
 		6C73A8E41B0A75DC00187A61 /* RMXScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXScene.swift; sourceTree = "<group>"; };
 		6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAi.swift; path = Environment/RMXAi.swift; sourceTree = "<group>"; };
+		6C8F11C21B1C193E009F49DB /* RMGameKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMGameKit.swift; path = GameKit/RMGameKit.swift; sourceTree = "<group>"; };
+		6C8F11C51B1C1963009F49DB /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/GameKit.framework; sourceTree = DEVELOPER_DIR; };
+		6C8F11C71B1C1963009F49DB /* AiScene-OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "AiScene-OSX.entitlements"; sourceTree = "<group>"; };
+		6C8F11C81B1C196B009F49DB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		6C8F11CA1B1C199E009F49DB /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		6C8F11CC1B1C19A1009F49DB /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		6C8F11CF1B1C1D8E009F49DB /* GCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCViewController.swift; path = GameKit/GCViewController.swift; sourceTree = "<group>"; };
 		6C92998B1AE5432000E71811 /* AiScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C92998F1AE5432000E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C9299971AE5432000E71811 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -256,6 +274,7 @@
 		6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AiScene-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C929A141AE5497900E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiScene_OSXTests.swift; sourceTree = "<group>"; };
+		6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXSpriteTimer.swift; path = ../Source/Environment/RMXSpriteTimer.swift; sourceTree = "<group>"; };
 		6CAFB6711B170FB2006A1BA0 /* RMXAudioVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXAudioVideo.swift; sourceTree = "<group>"; };
 		6CAFB6751B1734C2006A1BA0 /* Pop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Pop.m4a; sourceTree = "<group>"; };
 		6CB6A1A21B0D267100136DCF /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -280,6 +299,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C8F11CB1B1C199E009F49DB /* GameKit.framework in Frameworks */,
+				6C8F11CD1B1C19A1009F49DB /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -294,6 +315,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C8F11C61B1C1963009F49DB /* GameKit.framework in Frameworks */,
+				6C8F11C91B1C196B009F49DB /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,9 +420,23 @@
 			path = Environment;
 			sourceTree = "<group>";
 		};
+		6C8F11C41B1C1942009F49DB /* GameKit */ = {
+			isa = PBXGroup;
+			children = (
+				6C8F11C21B1C193E009F49DB /* RMGameKit.swift */,
+				6C8F11CF1B1C1D8E009F49DB /* GCViewController.swift */,
+			);
+			name = GameKit;
+			sourceTree = "<group>";
+		};
 		6C9299821AE5432000E71811 = {
 			isa = PBXGroup;
 			children = (
+				6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */,
+				6C8F11CC1B1C19A1009F49DB /* StoreKit.framework */,
+				6C8F11CA1B1C199E009F49DB /* GameKit.framework */,
+				6C8F11C81B1C196B009F49DB /* StoreKit.framework */,
+				6C8F11C51B1C1963009F49DB /* GameKit.framework */,
 				6C4A28821B03ACDB001C3F5B /* Media */,
 				6C9299F01AE544D500E71811 /* art.scnassets */,
 				6C9299B31AE544C000E71811 /* Source */,
@@ -473,6 +510,7 @@
 				6C9299C81AE544C000E71811 /* Initialisation */,
 				6C9299CC1AE544C000E71811 /* Protocols */,
 				6C9299CF1AE544C000E71811 /* UserInterface */,
+				6C8F11C41B1C1942009F49DB /* GameKit */,
 			);
 			name = Source;
 			path = ../Source;
@@ -554,6 +592,7 @@
 		6C9299FB1AE5497800E71811 /* AiScene-OSX */ = {
 			isa = PBXGroup;
 			children = (
+				6C8F11C71B1C1963009F49DB /* AiScene-OSX.entitlements */,
 				6C9299FE1AE5497800E71811 /* AppDelegate.swift */,
 				6C929A081AE5497900E71811 /* MainMenu.xib */,
 				6C9299FC1AE5497800E71811 /* Supporting Files */,
@@ -713,6 +752,14 @@
 					6C92998A1AE5432000E71811 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 668T39KN4E;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					6C9299A11AE5432100E71811 = {
 						CreatedOnToolsVersion = 6.3;
@@ -721,6 +768,17 @@
 					6C9299F91AE5497800E71811 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = 668T39KN4E;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					6C929A0E1AE5497900E71811 = {
 						CreatedOnToolsVersion = 6.3;
@@ -817,6 +875,7 @@
 				5031F3C51B15B77F00FAB551 /* Air Reverse Burst 2.caf in Resources */,
 				5031F3CD1B15B87C00FAB551 /* Body Hit 01.caf in Resources */,
 				6CAFB6771B1734C2006A1BA0 /* Pop.m4a in Resources */,
+				6C8F11D21B1C1E04009F49DB /* Main.storyboard in Resources */,
 				5031F3B91B15B25C00FAB551 /* Air Pressure Blast 1.caf in Resources */,
 				6CB6A1A41B0D311E00136DCF /* icons.xcassets in Resources */,
 				5031F3B51B15B0AA00FAB551 /* pop2.m4a in Resources */,
@@ -888,11 +947,13 @@
 			files = (
 				6C9299D91AE544C000E71811 /* RMSPhysicsBody.swift in Sources */,
 				6C9299EB1AE544C000E71811 /* iOSControllers.swift in Sources */,
+				6C8F11D01B1C1D8E009F49DB /* GCViewController.swift in Sources */,
 				6C9299DA1AE544C000E71811 /* RMSWorld.swift in Sources */,
 				6C9299EA1AE544C000E71811 /* Accelorometer.swift in Sources */,
 				6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */,
 				6C9299DE1AE544C000E71811 /* RMXSprite.swift in Sources */,
 				6C9299E11AE544C000E71811 /* RMX.swift in Sources */,
+				6C8F11C31B1C193E009F49DB /* RMGameKit.swift in Sources */,
 				5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
 				6C9299E51AE544C000E71811 /* GameView.swift in Sources */,
 				6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */,
@@ -920,6 +981,7 @@
 				50DE71F01B1B390C007C0851 /* UserActions.swift in Sources */,
 				6C9299EE1AE544C000E71811 /* RMXDPad.swift in Sources */,
 				6C9299E81AE544C000E71811 /* RMXController.swift in Sources */,
+				6CAE15511B1C5E950025B208 /* RMXSpriteTimer.swift in Sources */,
 				6C8CCAF41B0B5E3000D8DC99 /* RMXAi.swift in Sources */,
 				6C9299F31AE5457700E71811 /* ChildSpriteArray.swift in Sources */,
 				6C9299E01AE544C000E71811 /* RMSMaths.swift in Sources */,
@@ -953,6 +1015,8 @@
 				6C929A231AE5499D00E71811 /* RMSPhysicsBody.swift in Sources */,
 				6C929A211AE5499D00E71811 /* 3dModels.swift in Sources */,
 				6C929A271AE5499D00E71811 /* RMXNode.swift in Sources */,
+				6CAE15521B1C5E950025B208 /* RMXSpriteTimer.swift in Sources */,
+				6C8F11D11B1C1D8E009F49DB /* GCViewController.swift in Sources */,
 				6C929A1E1AE5499900E71811 /* GameViewController.swift in Sources */,
 				6C929A361AE54DCA00E71811 /* RMXValue.swift in Sources */,
 				50B563EE1B13A7F2008AB47D /* RMXBrain.swift in Sources */,
@@ -962,6 +1026,7 @@
 				6C929A331AE54DCA00E71811 /* RMX.swift in Sources */,
 				6C73A8E01B0A6EAB00187A61 /* RMXModels.swift in Sources */,
 				6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */,
+				6C8F11CE1B1C1A49009F49DB /* RMGameKit.swift in Sources */,
 				6C929A321AE54DCA00E71811 /* RMSMaths.swift in Sources */,
 				6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */,
 				6C929A281AE5499D00E71811 /* RMXSprite.swift in Sources */,
@@ -1198,10 +1263,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = AiScene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1210,10 +1277,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = AiScene/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -1255,6 +1324,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_ENTITLEMENTS = "AiScene-OSX/AiScene-OSX.entitlements";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1266,6 +1338,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DOSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1274,12 +1347,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
+				CODE_SIGN_ENTITLEMENTS = "AiScene-OSX/AiScene-OSX.entitlements";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = "AiScene-OSX/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DOSX";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 			};
 			name = Release;

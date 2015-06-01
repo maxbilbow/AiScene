@@ -181,6 +181,7 @@ class RMXInterface : NSObject, RendererDelegate {
     ///Run this last when overriding
     func viewDidLoad(){
         self.gameView!.delegate = self
+        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "updateScoreboard", userInfo: nil, repeats: true)
     }
     
     func setUpTimers(){
@@ -323,18 +324,23 @@ class RMXInterface : NSObject, RendererDelegate {
 
     }
     
-    var scene: RMXScene {
-        return self.world.scene
-    }
+//    var scene: RMXScene? {
+//        return self.gameView?.scene
+//    }
     
     func updateScoreboard() {
 //        NSLog(self.actionProcessor.getData(type: .SCORES))
-        if let team1 = self.world.teams[1] {
-            if let team2 = self.world.teams[2] {
-                self.line3.text = self.activeSprite.attributes.printScore
-                self.line2.text = team1.printScore
-                self.line1.text = team2.printScore
-                return
+        if self.scoreboard.hidden || self.skView.hidden {
+            return
+        }
+        if let world = _world {
+            if let team1 = self.world.teams[1] {
+                if let team2 = self.world.teams[2] {
+                    self.line3.text = self.activeSprite.attributes.printScore
+                    self.line2.text = team1.printScore
+                    self.line1.text = team2.printScore
+                    return
+                }
             }
         } else {
             self.line3.text = "Hello!"
@@ -345,14 +351,11 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func update(){
-        if !self.isPaused {
+        if _world != nil && !_world!.scene.paused {
             self.actionProcessor.animate()
             _world?.animate()
             if !self.dataView.hidden {
                 self.updateDataView()
-            }
-            if !self.scoreboard.hidden {
-                self.updateScoreboard()
             }
         }
 
@@ -366,8 +369,8 @@ class RMXInterface : NSObject, RendererDelegate {
     ///@virtual
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }
 
-    func action(action: String = "reset",speed: RMFloatB = 1, point: [RMFloatB] = []) {
-        self.actionProcessor.action( action,speed: speed, point: point)
+    func action(action: String = "reset",speed: RMFloatB = 1, point: [RMFloatB] = []) -> Bool {
+        return self.actionProcessor.action( action,speed: speed, point: point)
     }
     
     
@@ -384,10 +387,9 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func pauseGame(sender: AnyObject?) -> Bool {
-        if _world?.scene != nil {
+        if _world?.pause() != nil {
             self.updateScoreboard()
             self.updateDataView()
-            _world!.scene.paused = true
             self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
             self.hideButtons(true)
             return true
@@ -396,8 +398,7 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func unPauseGame(sender: AnyObject?) -> Bool {
-        if _world?.scene != nil {
-            _world!.scene.paused = false
+        if _world?.unPause() != nil {
             self.hideButtons(false)
             self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
             return true

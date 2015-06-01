@@ -221,7 +221,7 @@ class RMXTeam {
         return self.captain?.kit
     }
     
-    var startingPoints = 100
+    var startingHealth = 100
     
     var score: ScoreCard {
         var score: ScoreCard = (kills: 0, deaths: 0, points: 0, health: 0)
@@ -246,7 +246,7 @@ class RMXTeam {
     
     var captain: SpriteAttributes?
     
-    init(gameWorld game: RMXTeamGame, captain: RMXTeamMember? = nil){
+    init(gameWorld game: RMXTeamGame, captain: RMXSprite? = nil){
         self.game = game
         game.addTeam(self)
         if let captain = captain {
@@ -260,21 +260,29 @@ class RMXTeam {
         RMXTeam.updateTeam(self)
     }
     
-    func addPlayer(player: RMXTeamMember) {
+    func addPlayer(player: RMXSprite) -> Bool{
+//    NSLog("name: \(player.name), team: \(player.attributes.teamID)")
+        var players = self.players.count
+        if player.attributes.teamID < 0 {
+            return false
+        }
+        
         if player.attributes.teamID != self.id {
             player.attributes.setTeam(ID: self.id)
-        } else {
-            if let captain = self.captain {
-                RMXTeam.setColor(self.kit, receiver: player.attributes)
-            } else {
-                self.captain = player.attributes
-                RMXTeam.setColor(RMXTeam.color(self.id), receiver: player.attributes)
-                self.update()
-            }
-            if player.attributes.points < self.startingPoints {
-                player.attributes.points = self.startingPoints
-            }
+            return players < self.players.count//come back with the right id
         }
+        
+        if let captain = self.captain {
+            RMXTeam.setColor(self.kit, receiver: player.attributes)
+        } else {
+            self.captain = player.attributes
+            RMXTeam.setColor(RMXTeam.color(self.id), receiver: player.attributes)
+            self.update()
+        }
+        if player.attributes.health < self.startingHealth {
+            player.attributes.health = self.startingHealth
+        }
+        return players < self.players.count
         
     }
     

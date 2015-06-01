@@ -16,34 +16,14 @@ class GameView: SCNView  {
     }
     
     var activeSprite: RMXSprite? {
-        return self.world!.activeSprite
+        return self.world?.activeSprite
     }
     
     
-    var interface: RMXInterface?
-    var gvc: GameViewController?
-    
-    func initialize(gvc: GameViewController, interface: RMXInterface){
-        self.gvc = gvc
-        self.interface = interface
-        self.delegate = self.interface
-    
-        AiCubo.setUpWorld(self.interface)
-        
+    var interface: RMXInterface? {
+        return self.gvc.interface
     }
     
-    
-        
-//      
-//    func setWorld(type: RMXWorldType){
-//        if self.world!.type != type {
-//            self.world!.setWorldType(worldType: type)
-//        }
-//    }
-    
-    
-    
-    
-
+    var gvc: GameViewController!
     
 }

@@ -16,7 +16,7 @@ import SceneKit
 
 
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
-class RMSWorld : RMXUniqueEntity {
+class RMSWorld : NSObject, RMXUniqueEntity {
     
     var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
     lazy var rmxID: Int = RMXSprite.COUNT++
@@ -48,8 +48,10 @@ class RMSWorld : RMXUniqueEntity {
     
     var cameraNumber: Int = 0
 
-    
-    var aiOn = false
+    private var _aiOn = false
+    var aiOn: Bool {
+        return _aiOn
+    }
 
     var children: Array<RMXSprite> = Array<RMXSprite>()
 //    var children: [RMXSprite] {
@@ -60,28 +62,30 @@ class RMSWorld : RMXUniqueEntity {
         return self.children.isEmpty
     }
     
-    internal func destroy() -> RMSWorld {
+    private func destroy() -> RMSWorld {
         self.children.removeAll()
         self.cameras.removeAll()
         self._gravity = RMSWorld.ZERO_GRAVITY
         _activeSprite = nil
         self.setScene()
-        self.aiOn = true//TODO check if this is right as default
+        _aiOn = false//TODO check if this is right as default
         return self
     }
     
-    
-    var ground: RMFloatB = RMSWorld.RADIUS
+
     
     var interface: RMXInterface
     
     init(interface: RMXInterface){
         self.interface = interface
+        super.init()
+        self.setScene()
         self.worldDidInitialize()
     }
     
+    private var _radius: RMFloatB?
     var radius: RMFloatB {
-        return RMSWorld.RADIUS
+        return _radius ?? RMSWorld.RADIUS
     }
     
     static var RADIUS: RMFloatB = 250
@@ -95,18 +99,58 @@ class RMSWorld : RMXUniqueEntity {
     ///Note: May become public
     private func setScene(scene: RMXScene? = nil) -> RMXScene {
         self._scene = scene ?? RMSWorld.DefaultScene()
-        self.cameras = self.activeSprite.cameras +  self.cameras
-        self.cameraNumber = 0
+        self.cameras += self.activeSprite.cameras// + self.cameras
         self._scene.physicsWorld.contactDelegate = self.interface.collider
         self.calibrate()
         return self._scene
     }
-    
-    func calibrate() {
+    var ground: RMFloatB = 0
+    func calibrate() -> RMXScene {
+        _aiOn = false
         self.interface.gameView!.scene = self._scene
+        self.cameraNumber = 0
         self.interface.gameView!.pointOfView = self.activeCamera
-        self.interface.pauseGame(self)
-        self.interface.unPauseGame(self)
+        
+        NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+        return _scene
+    }
+    
+    func pause() {
+        if !self.scene.paused {
+            self.scene.paused = true
+            self.switchOffAi()
+        }
+    }
+    
+    func unPause() {
+        if self.scene.paused {
+            self.scene.paused = false
+            NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+            
+        }
+    }
+    
+    var isLive: Bool {
+        return self.interface.world.rmxID == self.rmxID
+    }
+    
+    
+    func switchOnAi() {
+        if self.isLive {
+            _aiOn = true
+        }
+    }
+    
+    func switchOffAi() {
+        if self.isLive {
+            _aiOn = false
+        }
+    }
+    
+    func toggleAi() {
+        if self.isLive {
+            _aiOn = !_aiOn
+        }
     }
     
     private var _scene: RMXScene! = nil
@@ -121,13 +165,13 @@ class RMSWorld : RMXUniqueEntity {
     }
     
     private var _defaultPlayer: RMXSprite  {
-        _activeSprite = AiCubo.simpleUniquePlayer(self)
+        _activeSprite = AiCubo.simplePlayer(self, asAi: false, unique: true)
         _activeSprite.setName(name: "Player")
         return _activeSprite
     }
     
     func worldDidInitialize() {
-        self.setScene()
+        
     }
   
     
@@ -230,25 +274,45 @@ class RMSWorld : RMXUniqueEntity {
     }
     
     func animate() {
-        for child in self.children {
-            child.animate()
+        if !self.hasGravity {
+            let activeCamera = self.activeCamera
+            if activeCamera.isPOV {
+                if activeCamera.eulerAngles.x > 0.01 {
+                    activeCamera.eulerAngles.x -= 0.01
+                } else if activeCamera.eulerAngles.x < -0.01 {
+                    activeCamera.eulerAngles.x += 0.01
+                }
+            }
         }
-        self.scene.physicsWorld.updateCollisionPairs()
+        
+        if !self.scene.paused {
+            for child in self.children {
+                child.animate()
+            }
+            self.scene.physicsWorld.updateCollisionPairs()
+        }
     }
-
     
-}
-
-
-extension RMSWorld {
-   @availability(*,unavailable)
-    func setBehaviours(areOn: Bool){
-        self.aiOn = areOn
-        for child in children{
-            child.aiOn = areOn
+    private var _ground: RMFloatB?
+    func validate(sprite: RMXSprite) -> Bool {
+        var valid = true
+        if let radius = _radius {
+            var position = sprite.position
+            position.y = 0
+            if radius > 0 && position.distanceTo(RMXVector3Zero) > radius {
+                return false
+            }
+        } else if let earth = self._scene.rootNode.childNodeWithName("Earth", recursively: true) {
+            _radius = earth.radius
+            _ground = earth.sprite?.top.y
+            self.validate(sprite)
         }
-        RMXLog("aiOn: \(self.aiOn)")
+        if let ground = _ground {
+            valid = sprite.position.y < ground
+        }
+        return valid
     }
+    
 }
 
 extension RMSWorld {

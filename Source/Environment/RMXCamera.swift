@@ -37,7 +37,7 @@ class RMXCamera : SCNCamera {
     }
     
     class func free(inWorld world: RMSWorld) -> RMXCameraNode {
-        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT)
+        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT, isUnique: false)
         let cameraNode = self.node(sprite)
         sprite.setName(name: "\(cameraNode.name!)/FREECAM/\(sprite.name)")
         world.cameras.append(cameraNode)

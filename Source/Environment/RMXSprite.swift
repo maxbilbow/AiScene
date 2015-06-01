@@ -25,7 +25,6 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
 //    var hitTarget = false
 //    var target: RMXSprite?
 //    var doOnArrival: ((sender: RMXSprite, target: AnyObject)-> AnyObject?)?
-    
 
     var aiOn: Bool = false
     
@@ -56,7 +55,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     }
     static var COUNT: Int = 0
     lazy var rmxID: Int = RMXSprite.COUNT++
-    var isUnique: Bool = false
+    var isUnique: Bool
     
     var hasFriction: Bool {
         return self.node.physicsBody?.friction != 0
@@ -90,6 +89,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     private var _node: RMXNode
     
+    lazy var timer: RMXSpriteTimer = RMXSpriteTimer(sprite: self)
     
     var name: String {
         return "\(_name)-\(self.rmxID)"
@@ -112,6 +112,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
                     _updateName(ofNode: node, oldName: oldName)
                 } else {
                     node.name = self.name
+                    
                 }
             }
         }
@@ -121,8 +122,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     func setName(name: String? = nil) {
         let oldName = self.name
         self._name = name != nil && !name!.isEmpty ? name! : "Ent"
-        
+        self.node.name = self._name
         _updateName(ofNode: self.node, oldName: oldName)
+//        NSLog("\(self.name) -- \(self.node.name!)")
         
     }
 
@@ -244,11 +246,14 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     var itemPosition: RMXVector3 = RMXVector3Zero
     
 
-    init(inWorld world: RMSWorld, node: RMXNode = RMXNode(), type: RMXSpriteType){
+    init(inWorld world: RMSWorld, node: RMXNode = RMXNode(), type: RMXSpriteType, isUnique: Bool){
         _world = world
         _node = node
         self.type = type
+        self.isUnique = isUnique
         self.attributes = SpriteAttributes(self)
+        
+//        super.init()
         self.spriteDidInitialize()
     }
     
@@ -299,24 +304,20 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     }
     
     class func new(inWorld world: RMSWorld, node: RMXNode? = nil, type: RMXSpriteType, isUnique: Bool) -> RMXSprite {
-        
-        let sprite = RMXSprite(inWorld: world, node: node ?? RMXNode(), type: type)
-        sprite.isUnique = isUnique
-        world.insertChild(sprite, andNode: true)
-        sprite.addCameras()
-        
-        
-        RMXBrain.giveBrainTo(sprite)
-        
-        if sprite.isUnique && sprite.isPlayer {
-//            sprite.addCameras()
-        }
-        sprite.setSpeed()
+        let sprite = RMXSprite(inWorld: world, node: node ?? RMXNode(), type: type, isUnique: isUnique)
         return sprite
     }
     
     func spriteDidInitialize(){
+        if self.isPlayer {
+            self.addCameras()
+        }
+        RMXBrain.giveBrainTo(self)
         self.setName()
+        self.setSpeed()
+        world.insertChild(self, andNode: true)
+        
+
     }
     
     func toggleGravity() {
@@ -363,11 +364,14 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     
     func animate() {
+        
         switch self.type {
         case .AI, .PLAYER, .PLAYER_OR_AI:
+            self.timer.activate()
             self.runActions("animate", actions: self.processAi, self.manipulate, self.headToTarget)
             return
         case .PASSIVE:
+            self.timer.activate()
             self.runActions("animate", actions: self.processAi, self.headToTarget)
             return
         case .BACKGROUND:
@@ -460,14 +464,14 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
                 RMXCamera.followCam(self, option: CameraOptions.FIXED).pov()
                 RMXCamera.headcam(self).pov()
                 RMXCamera.followCam(self, option: CameraOptions.FREE)
-            } else if self.isUnique {
+            } else {
                 RMXCamera.headcam(self)
                 RMXCamera.followCam(self, option: CameraOptions.FIXED)
             }
             
 
         } else {
-            fatalError("cameras already set up for \(self.name)")
+            NSLog("cameras already set up for \(self.name)")
         }
         
     }
@@ -907,6 +911,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
             #endif
         }
     }
+    
+    
+
         
 }
     

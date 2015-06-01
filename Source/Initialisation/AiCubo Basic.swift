@@ -20,7 +20,6 @@ class AiCubo {
         if let interface = interface {
 
             let world = RMSWorld(interface: interface) //interface.world//
-        
             //SetUpEnvironment
             switch type {
             case .EMPTY:
@@ -30,28 +29,31 @@ class AiCubo {
                 }
 //                let poppy = RMX.makePoppy(world: world, master: world.activeSprite)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 10, radius: RMSWorld.RADIUS , shapes: .CYLINDER, .ROCK)
+                AiCubo.addPlayers(world, n: 3, teams: 0)
                 
                 break
             case .TEST:
-                _testingEnvironment(interface, world: world)
-                RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 100, radius: RMSWorld.RADIUS * 5, shapes: .BOBBLE_MAN, .CYLINDER, .CYLINDER, .CUBE, .SPHERE, .ROCK)
-                for player in world.players {
-                    if player.type == RMXSpriteType.AI && !player.isUnique {
-                        RMXAi.addRandomMovement(to: player)
-                    }
-                }
+                AiCubo.testingEnvironment(interface, world: world)
+                RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 50, radius: RMSWorld.RADIUS * 2, shapes: .CYLINDER, .CUBE, .SPHERE, .ROCK)
+                AiCubo.addPlayers(world, n: 20, teams: 0)
+                RMXAi.addRandomMovement(to: world.children)
+
                 break
             case .DOMED:
-                _domedEnvironment(interface, world: world)
+                AiCubo.domedEnvironment(interface, world: world)
                 break
             case .IN_GLOBE:
-                _insideGlobe(interface, world: world)
+                AiCubo.insideGlobe(interface, world: world)
                 break
             case .TEAM_GAME:
-                _teamGame(interface, world: world)
+                AiCubo.testingEnvironment(interface, world: world)
+                RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 50, radius: RMSWorld.RADIUS * 5, shapes: .CYLINDER, .SPHERE)
+                
+                AiCubo.addPlayers(world, n: 20, teams: 2)
+               
                 break
             default:
-                _testingEnvironment(interface, world: world)
+                AiCubo.testingEnvironment(interface, world: world)
                 break
             }
             let ambientLightNode = SCNNode()
@@ -61,6 +63,7 @@ class AiCubo {
             world.scene.rootNode.addChildNode(ambientLightNode)
 //            interface.gameView!.scene = world.scene
 //            interface.gameView.pointOfView = world.activeCamera
+            
             return world
         } else {
             fatalError("inteface not initialised")
@@ -69,20 +72,22 @@ class AiCubo {
         
     }
     
-    class func simpleUniquePlayer(world: RMSWorld) -> RMXSprite {
+    class func simplePlayer(world: RMSWorld, asAi: Bool = false, unique: Bool? = nil) -> RMXSprite {
         //Set up player
-        let player = self.simpleSprite(world, type: .PLAYER, isUnique: true)
+        let unique = unique != nil ? unique! : !asAi //if unique not stated, players are unique, ais are not
+        let player = self.simpleSprite(world, type: asAi ? .AI : .PLAYER, isUnique: unique)
         
         //        world.cameras += player.cameras
         
         return player
     }
     
-    class func simpleSprite(world: RMSWorld, sprite: RMXSprite? = nil, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
+    class func simpleSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
-        let player = sprite ?? RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
+        let player = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
         
-        player.setPosition(position: RMXVector3Random(max: 50, min: -50))//(0, 50, 50))//, resetTransform: <#Bool#>
+        let lim = Int(RMSWorld.RADIUS)
+        player.setPosition(position: RMXVector3Random(lim, -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
 
         
         
@@ -93,19 +98,13 @@ class AiCubo {
         return player
     }
     
-    class func addTrailingCamera(to sprite: RMXSprite, world: RMSWorld) {
-        if sprite.type == .PLAYER {
-//            let followCam = RMXCamera.followCam(sprite.node, option: .FREE)
-//            sprite.cameras.append(followCam)
-        }
-    }
     
-    internal class func _soccerGame(interface: RMXInterface, world: RMSWorld) {
+    class func soccerGame(interface: RMXInterface, world: RMSWorld) {
   
     }
     
-    internal class func _insideGlobe(interface: RMXInterface, world: RMSWorld) {
-        _testingEnvironment(interface, world: world)
+    class func insideGlobe(interface: RMXInterface, world: RMSWorld) {
+        AiCubo.testingEnvironment(interface, world: world)
         let earth = world.scene.rootNode.childNodeWithName("Earth", recursively: true)!
         let globe = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
         globe.node.geometry!.firstMaterial?.doubleSided = true
@@ -125,15 +124,15 @@ class AiCubo {
         
     }
     
-    internal class func _domedEnvironment(interface: RMXInterface, world: RMSWorld) {
-        _testingEnvironment(interface, world: world)
+    class func domedEnvironment(interface: RMXInterface, world: RMSWorld) {
+        AiCubo.testingEnvironment(interface, world: world)
         
     }
     
-    internal class func _testingEnvironment(interface: RMXInterface, world: RMSWorld){
+    class func testingEnvironment(interface: RMXInterface, world: RMSWorld){
         let player = world.activeSprite
         //Set Up Player 2
-        let p2 = self.simpleUniquePlayer(world)
+        let p2 = self.simplePlayer(world, asAi: true)
         p2.setName(name: "Player")
         
         //Set up Poppy
@@ -147,13 +146,16 @@ class AiCubo {
         
         let sun: RMXSprite = RMXSprite.new(inWorld: world, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: worldRadius)
         sun.addAi({ (node: RMXNode!) -> Void in
-            sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
+            if world.aiOn {
+                sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
+            }
         })
         let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: 100)
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
         lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
         lightNode.geometry?.firstMaterial!.emission.intensity = 1
+        sun.setPosition(position: RMXVector3Make(RMSWorld.RADIUS , RMSWorld.RADIUS * 5, 0))
         sun.node.addChildNode(lightNode)
         
         let earth: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR, mode: .BACKGROUND, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
@@ -162,6 +164,7 @@ class AiCubo {
       
         
         earth.setName(name: "Earth")
+        
         let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
         earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
         earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
@@ -171,60 +174,71 @@ class AiCubo {
 
         
         //camera
-        RMXCamera.headcam(sun)
+        
         
         
         
 
 //        world.cameras += player.cameras
-        world.cameras += p2.cameras
+        p2.addCameras()
+        poppy.addCameras()
+        earth.addCameras()
+        RMXCamera.headcam(sun)
         world.cameras += poppy.cameras
+        world.cameras += p2.cameras
+        let farCam = RMXCamera.free(inWorld: world)
+        let topCam = RMXCamera.free(inWorld: world)
+        
         world.cameras += earth.cameras
         world.cameras += sun.cameras
         
-        let topCam = RMXCamera.free(inWorld: world)
+        farCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
         topCam.pivot.m43 = RMSWorld.RADIUS * -5
         topCam.eulerAngles.x = -70 * PI_OVER_180
-//            world.cameras.append(topCam)
-        
-        let farCam = RMXCamera.free(inWorld: world)
-        farCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
-//            world.cameras.append(farCam)
-        
-        world.aiOn = true
+
 
         
         
     }
     
-    internal class func _teamGame(interface: RMXInterface, world: RMSWorld){
+    class func addPlayers(world: RMSWorld, n: Int, teams: Int = 0){
+        for ( var i = 0; i < n ; ++i) {
+            self.simpleSprite(world, type: .AI, isUnique: false)
+        }
+        
+        if teams > 0 {
+            let player = world.activeSprite
+            let teamA = RMXTeam(gameWorld: world, captain: player)
+            player.attributes.invincible = true
+//            NSLog(teamA.id.toData())
+            for ( var i = 1; i < teams; i++) {
+                let team = RMXTeam(gameWorld: world)
+            }
+            
+            let max: Int = n / teams
+            var count = 0
+            var teamID = 1 //team 0 is not a team
+            for player in world.children {
+                if player.isPlayer && player.attributes.teamID == 0 {
+                    if let team = world.teams[teamID] {
+                        if team.addPlayer(player) {
+                            count++
+                            if team.players.count == max {
+                                teamID++
+                                count = 0
+                            }
 
-        _testingEnvironment(interface, world: world)
-        RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 100, radius: RMSWorld.RADIUS * 5, shapes: .BOBBLE_MAN, .CYLINDER, .CYLINDER, .SPHERE)
-        let player = world.activeSprite
-        let teamA = RMXTeam(gameWorld: world, captain: player)
-        player.attributes.invincible = true
-        let teamB = RMXTeam(gameWorld: world)
-        
-        
-        
-        var aOrB = true
-        for player in world.nonTeamPlayers {
-            let team = aOrB ? teamA : teamB
-            if !player.isUnique {
-                team.addPlayer(player)
+                        }
+                    }
+                }
             }
-            aOrB = !aOrB
+            
+//            NSLog("\(world.children.count), \(world.teamPlayers.count)")
+
+             RMXAi.offenciveBehaviour(to: world.children)
+
         }
-        
-       
-        
-        for teamMate in world.teamPlayers {
-            if teamMate.type == RMXSpriteType.AI && !teamMate.isUnique {
-                RMXAi.offenciveBehaviour(to: teamMate)
-            }
-        }
-        
     }
+
 
 }

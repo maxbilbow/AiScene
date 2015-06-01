@@ -15,6 +15,7 @@ public struct RMX {
     static let isFullscreen: Bool = false
     static let usingDepreciated: Bool = true
     static let usingSceneKit: Bool = false
+    
 }
 
 import GLKit
@@ -42,6 +43,14 @@ func == (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
     return lhs.rmxID == rhs.rmxID
 }
 
+func == (lhs: RMSWorld, rhs: RMSWorld) -> Bool {
+    return lhs.rmxID == rhs.rmxID
+}
+
+func != (lhs: RMSWorld, rhs: RMSWorld) -> Bool {
+    return lhs.rmxID != rhs.rmxID
+}
+
 
 func != (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
     return lhs.rmxID != rhs.rmxID
@@ -51,3 +60,4 @@ func != (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
 protocol RMXUniqueEntity {
     var rmxID: Int { get }
 }
+

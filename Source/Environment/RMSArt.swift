@@ -70,7 +70,7 @@ class RMXArt {
         
         
         func drawAxis(axis: String) {
-            var point =  -world.radius
+            var point =  -radius
             var color: NSColor
             var scale: RMXVector3 = RMXVectorMake(10)
             var position = RMXVector3Make(0, scale.y / 2, 0)
@@ -205,10 +205,11 @@ class RMXArt {
     }
    
 }
-func RMXVector3Random(max: Int = 100, div: Int = 1, min: Int = 0) -> RMXVector3 {
+func RMXVector3Random(max: Int, min: Int, div: Int = 1) -> RMXVector3 {
+    
     return RMXVector3Make(
         RMFloatB((random() % max + min)/div),
-        RMFloatB((random() % max + min)/div),
+        RMFloatB(abs((random() % max + min)/div)),
         RMFloatB((random() % max + min)/div)
     )
 

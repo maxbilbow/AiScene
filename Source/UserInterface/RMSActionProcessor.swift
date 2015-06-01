@@ -259,7 +259,7 @@ public class RMSActionProcessor {
             return true
         case "toggleAI":
             if speed == 1 {
-                self.world.aiOn = !self.world.aiOn
+                self.world.toggleAi()
                 RMXLog("aiOn: \(self.world.aiOn)")
             }
             return true
@@ -334,8 +334,13 @@ public class RMSActionProcessor {
             return false
         case RMXInterface.PAUSE_GAME:
             if speed == 1 {
-                self.interface.pauseGame(speed)
-            } 
+                if self.interface.isRunning {
+                    return self.interface.pauseGame(speed)
+                } else if self.interface.isPaused {
+                    return self.interface.unPauseGame(speed)
+                }
+                return false
+            }
             return true
         case RMXInterface.KEYBOARD_LAYOUT:
             if speed == 1 {
@@ -357,7 +362,12 @@ public class RMSActionProcessor {
             return true
         case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10":
             let n = action.toInt()! - 1
-            self.interface.newGame(type: self.interface.availableGames[n])
+            if n < self.interface.availableGames.count  {
+                self.interface.newGame(type: self.interface.availableGames[n])
+                return true
+            } else {
+                return false
+            }
         default:
             NSLog("'\(action)' not recognised")
         }
@@ -426,16 +436,7 @@ public class RMSActionProcessor {
             RMXLog(self.boomTimer)
         }
         
-        if !self.world.hasGravity {
-            let activeCamera = self.world.activeCamera
-            if activeCamera.isPOV {
-                if activeCamera.eulerAngles.x > 0.01 {
-                    activeCamera.eulerAngles.x -= 0.01
-                } else if activeCamera.eulerAngles.x < -0.01 {
-                    activeCamera.eulerAngles.x += 0.01
-                }
-            }
-        }
+        
         
 
         self.debug(false)

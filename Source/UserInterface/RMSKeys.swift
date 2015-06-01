@@ -299,15 +299,15 @@ class RMKey {
     func press() -> Bool{
         if self.isRepeating {
             if self.isPressed {
-                return false
+                return true //false
             } else {
                 self.isPressed = true
                 return true
             }
         } else  {
             self.isPressed = true
-            self.keys.action(action: self.action, speed: self.speed.on, point: self.values)
-            return true
+            
+            return self.keys.action(action: self.action, speed: self.speed.on, point: self.values)
         }
     }
     
@@ -319,10 +319,9 @@ class RMKey {
     func release() -> Bool{
         if self.isPressed {
             self.isPressed = false
-            self.keys.action(action: self.action, speed: self.speed.off, point: self.values)
-            return true
+            return self.keys.action(action: self.action, speed: self.speed.off, point: self.values)
         } else {
-            return false
+            return true //false
         }
     }
     
@@ -367,20 +366,21 @@ extension GameView {
     
     override func keyDown(theEvent: NSEvent) {
         if let key = self.keys.get(forChar: theEvent.characters) {
-            if key.press() {
-                //RMXLog(key.description)
-                
+            if !key.press() {
+                super.keyDown(theEvent)
             }
         } else {
             self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: theEvent.characters!, isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
+            NSLog("new key added: \(theEvent.characters)")
+            self.keyDown(theEvent)
         }
         
     }
     
     override func keyUp(theEvent: NSEvent) {
         if let key = self.keys.get(forChar: theEvent.characters) {
-            if key.release() {
-                //RMXLog(key.description)
+            if !key.release() {
+               super.keyUp(theEvent)
             }
         } else {
             
@@ -429,7 +429,7 @@ extension GameView {
         
         // check what nodes are clicked
         let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-        self.interface!.processHit(point: p)
+        self.interface?.processHit(point: p)
                 
         super.mouseDown(theEvent)
     }
