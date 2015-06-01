@@ -316,8 +316,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         self.setName()
         self.setSpeed()
         world.insertChild(self, andNode: true)
-        
-
+        self.timer.activate()
     }
     
     func toggleGravity() {

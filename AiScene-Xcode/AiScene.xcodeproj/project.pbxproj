@@ -274,7 +274,7 @@
 		6C929A0F1AE5497900E71811 /* AiScene-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AiScene-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C929A141AE5497900E71811 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C929A151AE5497900E71811 /* AiScene_OSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiScene_OSXTests.swift; sourceTree = "<group>"; };
-		6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXSpriteTimer.swift; path = ../Source/Environment/RMXSpriteTimer.swift; sourceTree = "<group>"; };
+		6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSpriteTimer.swift; sourceTree = "<group>"; };
 		6CAFB6711B170FB2006A1BA0 /* RMXAudioVideo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXAudioVideo.swift; sourceTree = "<group>"; };
 		6CAFB6751B1734C2006A1BA0 /* Pop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Pop.m4a; sourceTree = "<group>"; };
 		6CB6A1A21B0D267100136DCF /* Buttons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -432,7 +432,6 @@
 		6C9299821AE5432000E71811 = {
 			isa = PBXGroup;
 			children = (
-				6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */,
 				6C8F11CC1B1C19A1009F49DB /* StoreKit.framework */,
 				6C8F11CA1B1C199E009F49DB /* GameKit.framework */,
 				6C8F11C81B1C196B009F49DB /* StoreKit.framework */,
@@ -519,6 +518,7 @@
 		6C9299B71AE544C000E71811 /* Environment */ = {
 			isa = PBXGroup;
 			children = (
+				6CAE15501B1C5E950025B208 /* RMXSpriteTimer.swift */,
 				6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */,
 				6C9299BA1AE544C000E71811 /* RMSPhysicsBody.swift */,
 				6C9299BB1AE544C000E71811 /* RMSWorld.swift */,
