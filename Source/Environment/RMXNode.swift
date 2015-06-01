@@ -20,7 +20,7 @@ protocol RMXChildNode {
 }
 
 class RMXNode : SCNNode {
-    init(geometry: SCNGeometry){
+    init(geometry: SCNGeometry, sprite: RMXSprite! = nil){
         super.init()
         let node = SCNNode(geometry: geometry)
         self.geometry = node.geometry
@@ -28,12 +28,8 @@ class RMXNode : SCNNode {
         _sprite = sprite
     }
     
-    ///this doens not add the node to the sprite. However the reverse is true
-    func setSprite(sprite: RMXSprite) {
-        _sprite = sprite
-    }
-  
-    override init() {
+    
+    override init(){
         super.init()
     }
 
@@ -42,25 +38,56 @@ class RMXNode : SCNNode {
     }
     
     private var _sprite: RMXSprite?
-    
-    func getSprite() -> RMXSprite? {
+    internal var spriteDirect: RMXSprite? {
         return _sprite
     }
-    
-    override func addChildNode(child: SCNNode) {
-        if let child = child as? RMXNode {
-            child._sprite = self._sprite
-        }
-        super.addChildNode(child)
-    }
-    
-    override func removeFromParentNode() {
-        _sprite = nil
-        super.removeFromParentNode()
-    }
-
 }
 
+extension RMXSprite {
+
+    
+    var transform: RMXMatrix4 {
+        return self.node.presentationNode().transform
+    }
+    
+    var position: RMXVector3 {
+        return self.node.presentationNode().position
+    }
+    
+    
+    func presentationNode() -> SCNNode {
+        return self.node.presentationNode()
+    }
+    var geometry: SCNGeometry? {
+        return self.node.geometry
+    }
+    
+    var physicsBody: SCNPhysicsBody? {
+        return self.node.physicsBody
+    }
+    
+    var physicsField: SCNPhysicsField? {
+        return self.node.physicsField
+    }
+    
+    
+    func applyForce(direction: SCNVector3, atPosition: SCNVector3? = nil, impulse: Bool = false) {
+        if let atPosition = atPosition {
+            self.node.physicsBody?.applyForce(direction, atPosition: atPosition, impulse: impulse)
+        } else {
+            self.node.physicsBody?.applyForce(direction, impulse: impulse)
+        }
+    }
+    
+    var orientation: SCNQuaternion {
+        return self.presentationNode().orientation
+    }
+    
+    func resetTransform() {
+        self.node.physicsBody?.resetTransform()
+    }
+   
+}
 
 
 

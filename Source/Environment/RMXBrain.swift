@@ -19,40 +19,61 @@ extension SCNNode : RMXLocatable {
 //        }
     }
     
-    var rmxID: Int? {
-        return self.sprite?.rmxID
+    var rmxID: Int {
+        return self.getRmxID() ?? -1
     }
+    
+    func getRmxID(scene: RMXScene? = nil) -> Int? {
+        if let sprite = self.sprite {
+            return sprite.rmxID
+        } else if let brain = self as? RMXBrain {
+            return brain.rmxID
+        } else if let scene = scene {
+            return self.getRootNode(inScene: scene).sprite?.rmxID
+        } else {
+            return nil
+        }
+    }
+    
     
     var sprite: RMXSprite? {
         if self is RMXNode {
-            return (self as! RMXNode).getSprite()
+            return (self as! RMXNode).spriteDirect
         } else {
             return self.parentNode?.sprite
         }
+//        if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
+//            return brain.getSprite()
+//        } else {
+//            return nil
+//        }
     }
     
     var spriteType: RMXSpriteType {
         return self.sprite?.type ?? RMXSpriteType.ABSTRACT
     }
     
-
-//    class func rootNode(existsIn rootNode: SCNNode, var node: SCNNode) -> SCNNode {
-//        if node.parentNode == rootNode || node.parentNode == nil {
-//            RMXLog("RootNode: \(node.name)")
-//            return node
-//        } else {
-//            RMXLog(node.parentNode)
-//            return self.rootNode(existsIn: rootNode, node: node.parentNode!)
-//        }
-//    }
+    var brain: RMXBrain? {
+        return self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain
+    }
     
-//    func getRootNode(existsIn rootNode: SCNNode) -> SCNNode {
-//        return RMXNode.rootNode(existsIn: rootNode, node: self)
-//    }
-//    
-//    func getRootNode(inScene scene: RMXScene) -> SCNNode {
-//        return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
-//    }
+    class func rootNode(existsIn rootNode: SCNNode, var node: SCNNode) -> SCNNode {
+        if node.parentNode == rootNode || node.parentNode == nil {
+            RMXLog("RootNode: \(node.name)")
+            return node
+        } else {
+            RMXLog(node.parentNode)
+            return self.rootNode(existsIn: rootNode, node: node.parentNode!)
+        }
+    }
+    
+    func getRootNode(existsIn rootNode: SCNNode) -> SCNNode {
+        return RMXNode.rootNode(existsIn: rootNode, node: self)
+    }
+    
+    func getRootNode(inScene scene: RMXScene) -> SCNNode {
+        return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
+    }
     
     
     var isActiveSprite: Bool {
@@ -87,13 +108,10 @@ extension SCNNode : RMXLocatable {
         return self.sprite?.holder
     }
     
-    var rootNode: RMXNode? {
-        return self.sprite?.node
-    }
     
 
 }
-/*
+
 class RMXBrain : RMXNode , RMXUniqueEntity {
     
     private var _rmxID: Int?
@@ -114,8 +132,26 @@ class RMXBrain : RMXNode , RMXUniqueEntity {
     static let ID = "Brain"
     internal var rmxSprite: RMXSprite?
 
-
+    func getSprite() -> RMXSprite? {
+        return self.rmxSprite
+    }
     
-
+    var rootNode: RMXNode? {
+        return self.rmxSprite?.node
+    }
     
-} */
+    
+    internal func setRmxID(ID: Int) {
+        _rmxID = ID
+    }
+    
+    class func giveBrainTo(sprite: RMXSprite) -> RMXBrain {
+        let brain = RMXBrain()
+        brain.rmxSprite = sprite
+        brain.name = RMXBrain.ID
+        sprite.node.addChildNode(brain)
+        brain._rmxID = sprite.rmxID
+        return brain
+    }
+    
+}

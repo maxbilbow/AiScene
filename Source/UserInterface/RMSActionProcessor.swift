@@ -378,7 +378,7 @@ public class RMSActionProcessor {
         
     }
     enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES, SCORES }
-    func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
+    func getData(type: TESTING = .SCORES) -> String {
         let node = self.activeSprite.node//.presentationNode()
         let sprite = self.activeSprite
         let physics = self.world.scene.physicsWorld
@@ -467,68 +467,68 @@ public class RMSActionProcessor {
 //            }
         }
     }
-//    
-//    @availability(*,deprecated=1)
-//    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> SCNNode? {
-//        let sprite = s ?? self.activeSprite
-//        if let action = action {
-//            switch action {
-//                case "throw", "Throw","grab", "Grab":
-//                    if let item = sprite.item {
-////                        direction = object?.presentationNode().position
-//                        if let tgt:SCNNode = object?.node {
-//                            sprite.throwItem(atPosition: tgt.getPosition(), withForce: speed)
-//                        } else if let point = position {
-//                            sprite.throwItem(atPosition: point, withForce: speed)
-//                        } else {
-//                            sprite.throwItem(force: speed)
-//                        }
-//                        return item.node
-//                    } else if let node: SCNNode = object?.node {
-//                        let rootNode = node.getRootNode(inScene: self.scene)
-//                            switch rootNode.spriteType {
-//                            case .ABSTRACT, .BACKGROUND, .KINEMATIC:
-//                                return nil
-//                            default:
-//                                break
-//                            }
-//                        // RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
-//                        if rootNode == sprite.node {
-//                            RMXLog("Node is self")
-//                            if let item = sprite.item{
-//                                sprite.throwItem(force: speed)
-//                            }
-//                        } else {
-//                            if let item = rootNode.sprite {// self.world.getSprite(node: node) {
-//                                if let itemInHand = sprite.item {
-//                                    if item.name == itemInHand.name {
-//                                        sprite.throwItem(force: speed)
-//                                        RMXLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
-//                                    } else {
-//                                        //                                   self.world?.observer.grabItem(item: item)
-//                                        sprite.throwItem(force: 1)
-//                                        sprite.grab(item)
-//                                        RMXLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
-//                                    }
-//                                } else if item.type != RMXSpriteType.BACKGROUND {
-//                                    sprite.grab(item)
-//                                    RMXLog("Node is grabbable: \(item.name)")
-//                                } else {
-//                                    RMXLog("Node was NOT grabbable: \(item.name)")
-//                                }
-//                            }
-//                        }
-//                        return node
-//                    }
-//                    
-//                break
-//            default:
-//                NSLog("Action '\(action)' not recognised")
-//            }
-//            
-//        }
-//        return nil
-//    }
+    
+    @availability(*,deprecated=1)
+    func manipulate(action: String? = nil, sprite s: RMXSprite? = nil, object: AnyObject? = nil, speed: RMFloatB = 1,  point: [RMFloatB]? = nil, targetSprite: RMXSprite? = nil, var position: RMXVector? = nil) -> SCNNode? {
+        let sprite = s ?? self.activeSprite
+        if let action = action {
+            switch action {
+                case "throw", "Throw","grab", "Grab":
+                    if let item = sprite.item {
+//                        direction = object?.presentationNode().position
+                        if let tgt:SCNNode = object?.node {
+                            sprite.throwItem(atPosition: tgt.getPosition(), withForce: speed)
+                        } else if let point = position {
+                            sprite.throwItem(atPosition: point, withForce: speed)
+                        } else {
+                            sprite.throwItem(force: speed)
+                        }
+                        return item.node
+                    } else if let node: SCNNode = object?.node {
+                        let rootNode = node.getRootNode(inScene: self.scene)
+                            switch rootNode.spriteType {
+                            case .ABSTRACT, .BACKGROUND, .KINEMATIC:
+                                return nil
+                            default:
+                                break
+                            }
+                        // RMXSprite.rootNode(node, rootNode: sprite.scene!.rootNode)
+                        if rootNode == sprite.node {
+                            RMXLog("Node is self")
+                            if let item = sprite.item{
+                                sprite.throwItem(force: speed)
+                            }
+                        } else {
+                            if let item = rootNode.sprite {// self.world.getSprite(node: node) {
+                                if let itemInHand = sprite.item {
+                                    if item.name == itemInHand.name {
+                                        sprite.throwItem(force: speed)
+                                        RMXLog("Node \(item.name) was thrown with force: \(speed) x \(item.mass)")
+                                    } else {
+                                        //                                   self.world?.observer.grabItem(item: item)
+                                        sprite.throwItem(force: 1)
+                                        sprite.grab(item)
+                                        RMXLog("Node is grabbable: \(item.name) but holding node: \(itemInHand.name)")
+                                    }
+                                } else if item.type != RMXSpriteType.BACKGROUND {
+                                    sprite.grab(item)
+                                    RMXLog("Node is grabbable: \(item.name)")
+                                } else {
+                                    RMXLog("Node was NOT grabbable: \(item.name)")
+                                }
+                            }
+                        }
+                        return node
+                    }
+                    
+                break
+            default:
+                NSLog("Action '\(action)' not recognised")
+            }
+            
+        }
+        return nil
+    }
     
     func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 500) -> Bool{
         let sprite = s ?? self.activeSprite
