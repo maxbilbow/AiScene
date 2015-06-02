@@ -102,17 +102,13 @@ class RMXArt {
             default:
                 fatalError(__FUNCTION__)
             }
-            let node:RMXNode = RMXModels.getNode(shapeType: ShapeType.CUBE, mode: .BACKGROUND, radius: 1, scale: scale, color: color)
-            node.position = position
-            node.physicsBody!.mass *= 1000
-            node.physicsBody!.damping = 1000
-            node.physicsBody!.angularDamping = 1000
-            let sprite = RMXSprite(inWorld: world, node: node, type: RMXSpriteType.BACKGROUND, isUnique: true)
+            let node = RMXModels.getNode(shapeType: ShapeType.CUBE, radius: 1, scale: scale, color: color)
+            
+            let sprite = RMXSprite(inWorld: world, geometry: node, type: RMXSpriteType.BACKGROUND, shape: .CUBE, unique: true)
             sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
-//            sprite.addAi({ (node: RMXNode!) -> Void in
-//                sprite.setPosition(position: position, resetTransform: true)
-//            })
-            RMXLog("axis: \(axis), scale: \(scale.print)")
+            sprite.physicsBody?.mass *= 1000
+            sprite.physicsBody?.damping = 1000
+            sprite.physicsBody?.angularDamping = 1000
             
             
         }
@@ -162,14 +158,14 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color, mode: .PASSIVE)
+            let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color)
             
                 
             
             
             
             
-            let sprite = RMXSprite.new(inWorld: world, node: node, type: .PASSIVE, isUnique: false)
+            let sprite = RMXSprite(inWorld: world, geometry: node, type: .PASSIVE, shape: .CUBE, unique: false)
             sprite.setPosition( position: RMXVector3Make(randPos[0], randPos[1], randPos[2]))
 
                 

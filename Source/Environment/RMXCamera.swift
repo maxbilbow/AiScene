@@ -12,7 +12,7 @@ import GLKit
 import SceneKit
 
 //typealias RMXCamera = SCNCamera
-enum CameraOptions: Int16 { case FIXED, FREE }
+enum CameraOptions: Int16 { case FIXED, FREE, SLOW_FOLLOW }
 class RMXCamera : SCNCamera {
     
     class func standardCamera() -> RMXCamera {
@@ -28,47 +28,57 @@ class RMXCamera : SCNCamera {
         return camera
     }
     
-    private class func node(sprite: RMXSprite) -> RMXCameraNode {
-        let cameraNode = RMXCameraNode.new(camera: RMXCamera.standardCamera())
-        cameraNode.setRmxID(sprite.rmxID)
-        cameraNode.cameraType = .FIXED
-        cameraNode._isPOV = sprite.type == .PLAYER
-        
-        return cameraNode
-    }
+    
     
     class func free(inWorld world: RMSWorld) -> RMXCameraNode {
 //        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT, isUnique: false)
-        let cameraNode = RMXCameraNode.new(camera: nil)
-        cameraNode.name = "\(cameraNode.name!)/FREECAM"//\(sprite.name)"
+        let cameraNode = RMXCameraNode(world: world)
+        cameraNode.name = "\(cameraNode.name!)/FREE/\(world.rmxID)"
+        cameraNode.cameraType = .FREE
         world.cameras.append(cameraNode)
         return cameraNode
     }
     
     class func followCam(sprite: RMXSprite, option: CameraOptions) -> RMXCameraNode {
-        let followCam = self.node(sprite)
-        var type = ""
-        switch option {
-        case .FIXED:
-            type = "FIXED"
-            sprite.node.addChildNode(followCam)
-            break
-        case .FREE:
-            sprite.addAi({ AiBehaviour in
-                if sprite.world.activeCamera.rmxID == followCam.rmxID {
-                    followCam.position = sprite.position
-                }
-            } )
-            type = "FREE"
-            followCam._isPOV = false
-            break
-        default:
-            type = "UNKNOWN"
-            break
+        let followCam = RMXCameraNode(sprite: sprite)
+        var type = "FREE"
+        followCam.cameraType = .FREE
+        if sprite.type == .PLAYER {
+            switch option {
+            case .FIXED:
+                type = "FIXED"
+                followCam.cameraType = .FIXED
+                sprite.node.addChildNode(followCam)
+                break
+            case .FREE:
+//                followCam.node
+                sprite.addAi({ AiBehaviour in
+                    if sprite.world.activeCamera.rmxID == followCam.rmxID {
+                        followCam.position = sprite.position
+                    }
+                } )
+                type = "FREE"
+                followCam.cameraType = .FREE
+                break
+            case .SLOW_FOLLOW:
+                type = "SLOW-FOLLOW"
+                followCam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
+                let slowFollow = SCNAction.moveTo(followCam.position, duration: 1)
+                sprite.addAi({ AiBehaviour in
+                    if sprite.world.activeCamera.rmxID == followCam.rmxID {
+                            //followCam.runAction(slowFollow)
+                    }
+                } )
+
+            
+                break
+            default:
+                type = "UNKNOWN"
+                fatalError(__FUNCTION__)
+                break
+            }
         }
-        followCam.cameraType = option
-        
-        followCam.name! += "/\(type)/\(option.rawValue)/\(sprite.name)"
+        followCam.name! += "/\(type)/\(sprite.name)"
         
         
         
@@ -89,43 +99,52 @@ class RMXCamera : SCNCamera {
     }
     
     class func headcam(sprite: RMXSprite) -> RMXCameraNode {
-        var headcam: RMXCameraNode
+        var headcam: RMXCameraNode = RMXCameraNode(sprite: sprite)
+        headcam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
+        let type: String = headcam.cameraType == .FIXED ? "FIXED" : "FREE"
+        headcam.name! += "\(type)/HEADCAM/\(sprite.name)"
+        
+        sprite.cameras.append(headcam)
         if let head = sprite.node.childNodeWithName("head", recursively: true) {
-            headcam = RMXCamera.node(sprite)
             head.addChildNode(headcam)
-            sprite.cameras.append(headcam)
+            
         } else {
-            sprite.node.camera = RMXCamera.standardCamera()
-            headcam = RMXCamera.node(sprite)
+            sprite.node.addChildNode(headcam)
         }
-        headcam.cameraType = .FIXED
-        headcam._isPOV = sprite.type == .PLAYER
-        headcam.name! += "/HEADCAM/\(sprite.name)"
+       
         return headcam
     }
 
-
+    
 }
 
 
-class RMXCameraNode : SCNNode  {
-    var rmxSprite: RMXSprite!
-    private var _isPOV: Bool = false
+class RMXCameraNode : SCNNode {
+    var rmxSprite: RMXSprite?
+    var world: RMSWorld
+    
     internal var _rmxID: Int?
     static var COUNT: Int = 0
-    lazy var cameraID: Int = RMXCameraNode.COUNT++
+    lazy var cameraID: Int = RMXSprite.COUNT++
 //    var rmxID: Int?
     var cameraType: CameraOptions = .FIXED
     
-    class func new(#camera: RMXCamera?) -> RMXCameraNode {
-        let cameraNode = RMXCameraNode()
-        cameraNode.camera = RMXCamera.standardCamera()
-        cameraNode.name = "CAM\(cameraNode.cameraID)"
-        return cameraNode
+    init(sprite: RMXSprite? = nil, world: RMSWorld! = nil) {
+        self.rmxSprite = sprite ?? world.activeSprite
+        self._rmxID = sprite?.rmxID ?? world.activeSprite.rmxID ?? world.rmxID
+        self.world = sprite?.world ?? world
+        super.init()
+        self.camera = RMXCamera.standardCamera()
+        self.name = "CAM\(self.cameraID)"
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    internal func pov() -> Bool {
-        return self.cameraType == .FIXED && self.sprite?.isActiveSprite ?? false
+    
+    var isFixedPointOfView: Bool {
+        return cameraType == .FIXED// && self.rmxID == world.activeSprite.rmxID
     }
 
     

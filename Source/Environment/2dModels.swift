@@ -11,9 +11,6 @@ import SpriteKit
 
 typealias RMXModels = RM2DModels
 
-enum ShapeType: Int { case NULL = 0, CUBE = 1 , PLANE = 2, SPHERE = 3, CYLINDER = 4, FLOOR, ROCK, OILDRUM , AUSFB, PONGO, LAST, PILOT, DOG}
-
-
 class RM2DModels : RMXModelsProtocol {
     
     

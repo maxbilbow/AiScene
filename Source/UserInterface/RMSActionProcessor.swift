@@ -95,7 +95,7 @@ public class RMSActionProcessor {
         case "look", "Look", "LOOK":
             
             if point.count == 2 {
-                if !self.world.activeCamera.isPOV {
+                if !self.activeSprite.isPOV {
                     self.world.activeCamera.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
                     let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
                     if phi < 1 && phi > -1 {
@@ -213,8 +213,8 @@ public class RMSActionProcessor {
             if sprite.hasItem {
                 let size = (sprite.item?.radius)! * speed
                 if size > 0.5 && size < 15 {
-                    sprite.item?.setRadius(size)
-                    sprite.item?.node.physicsBody!.mass *= RMFloat(size)
+//                    sprite.item?.setRadius(size)
+                    sprite.item?.physicsBody!.mass *= RMFloat(size)
                 }
             }
             return true

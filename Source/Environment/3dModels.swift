@@ -11,10 +11,10 @@ import SceneKit
 
 typealias RMXModels = RM3DModels
 
-enum ShapeType: Int { case CUBE , SPHERE, CYLINDER,  OILDRUM, BOBBLE_MAN, LAST,ROCK,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL }
 
 
-class RM3DModels : RMXModelsProtocol {
+
+class RM3DModels  {
     
     
     #if SceneKit
@@ -51,7 +51,7 @@ class RM3DModels : RMXModelsProtocol {
     
     
    
-    class func getNode(shapeType type: ShapeType, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode {
+    class func getNode(shapeType type: ShapeType, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> SCNNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
@@ -63,36 +63,36 @@ class RM3DModels : RMXModelsProtocol {
             height = scale.y
         }
         
-        var node: RMXNode
+        var node: SCNNode
         switch(type){
         case .CUBE:
-            node = RMXNode(geometry: SCNNode(geometry: SCNBox(
+            node = SCNNode(geometry: SCNBox(
                 width: RMFloat(scale.x),
                 height:RMFloat(scale.y),
                 length:RMFloat(scale.z),
-                chamferRadius:0.0))
+                chamferRadius:0.0)
             )
             hasColor = true
             break
-        case ShapeType.SPHERE:
-            node = RMXNode(geometry: SCNNode(geometry: SCNSphere(radius: RMFloat(radius))))
+        case ShapeType.SPHERE, .SUN:
+            node = SCNNode(geometry: SCNSphere(radius: RMFloat(radius)))
             hasColor = true
             break
         case ShapeType.CYLINDER:
-            node = RMXNode(geometry: SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height))))
+            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height)))
             hasColor = true
             break
         case ShapeType.ROCK:
-            node = RMXNode(geometry: SCNNode(geometry: rock))
+            node = SCNNode(geometry: rock)
             node.scale *= 1 * radius
             break
         case ShapeType.PLANE:
              hasColor = true
-            node = RMXNode(geometry: SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y))))
+            node = SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
             break
         case ShapeType.FLOOR:
             hasColor = true
-            node = RMXNode(geometry: SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius))))
+            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius)))
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
             //node.geometry?.firstMaterial!.doubleSided = true
             
@@ -102,25 +102,25 @@ class RM3DModels : RMXModelsProtocol {
             node.scale *= 0.001 * radius
             break
         case ShapeType.SPACE_SHIP:
-            node = RMXNode(geometry: SCNNode(geometry: ship))
+            node = SCNNode(geometry: ship)
             node.scale *= 2
             break
         case ShapeType.OILDRUM:
-            node = RMXNode(geometry: SCNNode(geometry: oilDrum))
+            node = SCNNode(geometry: oilDrum)
             node.scale *= 1.5 * radius
             break
         case ShapeType.DOG:
-            node = dog!.rootNode.clone() as! RMXNode
+            node = dog!.rootNode.clone() as! SCNNode
             node.scale *= 1 * radius
             break
         case ShapeType.AUSFB:
-            node = ausfb!.rootNode.clone() as! RMXNode
+            node = ausfb!.rootNode.clone() as! SCNNode
             node.scale *= 0.01 * radius
             break
         case ShapeType.BOBBLE_MAN:
-            node = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: mode, radius: radius, color: color)
+            node = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: radius, color: color)
 //            let head = RMXCameraNode(geometry: SCNSphere(radius: RMFloat(radius * 0.5)))
-            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .KINEMATIC, radius: radius * 0.5)
+            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: radius * 0.5)
             head.name = "head"
 //            head.physicsBody = SCNPhysicsBody.kinematicBody()
 //            head.physicsBody!.mass = -10
@@ -129,59 +129,61 @@ class RM3DModels : RMXModelsProtocol {
             
             break
         case ShapeType.NULL:
-            node = RMXNode()
+            node = SCNNode()
             node.scale = scale
             break
         default:
-            node = RMXNode(geometry: SCNNode(geometry: SCNSphere(radius: RMFloat(radius))))
+            node = SCNNode(geometry: SCNSphere(radius: RMFloat(radius)))
             hasColor = true
         }
         
         
         if hasColor && color != nil {
-            node.geometryNode!.geometry!.firstMaterial!.diffuse.contents = color
-            node.geometryNode!.geometry!.firstMaterial!.specular.contents = color
+            node.geometry!.firstMaterial!.diffuse.contents = color
+            node.geometry!.firstMaterial!.specular.contents = color
             
         }
         
-        switch (mode){
-        case .AI, .PLAYER, .PASSIVE:
-            node.physicsBody = SCNPhysicsBody.dynamicBody()
-            node.physicsBody!.restitution = 0.1
-            break
-        case .BACKGROUND:
-            node.physicsBody = SCNPhysicsBody.staticBody()
-            node.physicsBody!.restitution = 0.1
-            node.physicsBody!.damping = 1000
-            node.physicsBody!.angularDamping = 1000
-        case .KINEMATIC:
-            node.physicsBody = SCNPhysicsBody.kinematicBody()
-            node.physicsBody!.restitution = 0.1
-        default:
-            if node.physicsBody == nil {
-                node.physicsBody = SCNPhysicsBody()//.staticBody()
-                node.physicsBody!.restitution = 0.0
-            }
-        }
-        
-        if type == ShapeType.BOBBLE_MAN {
-            node.physicsBody!.angularDamping = 0.99
-            node.physicsBody!.damping = 0.5
-            node.physicsBody!.friction = 0.1
-        }
-        if type != ShapeType.NULL {
-            radius = getRadius(ofNode: node)
-            node.physicsBody!.mass = 4 * CGFloat(PI * radius * radius)// * 600
-        } else {
-            node.physicsBody!.mass = 0
-        }
+//        switch (mode){
+//        case .AI, .PLAYER, .PASSIVE:
+//            node.physicsBody = SCNPhysicsBody.dynamicBody()
+//            node.physicsBody!.restitution = 0.1
+//            break
+//        case .BACKGROUND:
+//            node.physicsBody = SCNPhysicsBody.staticBody()
+//            node.physicsBody!.restitution = 0.1
+//            node.physicsBody!.damping = 1000
+//            node.physicsBody!.angularDamping = 1000
+//            break
+//        case .KINEMATIC:
+//            node.physicsBody = SCNPhysicsBody.kinematicBody()
+//            node.physicsBody!.restitution = 0.1
+//            break
+//        default:
+//            if node.physicsBody == nil {
+//                node.physicsBody = SCNPhysicsBody()//.staticBody()
+//                node.physicsBody!.restitution = 0.0
+//            }
+//        }
+//        
+//        if type == ShapeType.BOBBLE_MAN {
+//            node.physicsBody!.angularDamping = 0.99
+//            node.physicsBody!.damping = 0.5
+//            node.physicsBody!.friction = 0.1
+//        }
+//        if type != ShapeType.NULL {
+//            radius = getRadius(ofNode: node)
+//            node.physicsBody!.mass = 4 * CGFloat(PI * radius * radius)// * 600
+//        } else {
+//            node.physicsBody!.mass = 0
+//        }
         
         return node
     }
     
     class func getRadius(ofNode node: SCNNode) -> RMFloatB {
         var center = RMXVector3Zero; var radius: RMFloat = 0
-        let bounds = node.geometryNode!.getBoundingSphereCenter(&center, radius: &radius)
+        let bounds = node.getBoundingSphereCenter(&center, radius: &radius)
         return RMFloatB(radius)
     }
     

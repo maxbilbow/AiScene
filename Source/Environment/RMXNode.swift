@@ -11,13 +11,7 @@ import Foundation
 import SceneKit
 
     //typealias RMXNode = SCNNode
-   
 
-protocol RMXChildNode {
-    var node: RMXNode { get set }
-    var parentNode: RMXNode? { get }
-    var parentSprite: RMXSprite? { get set }
-}
 
 class RMXNode : SCNNode {
     
@@ -42,9 +36,10 @@ class RMXNode : SCNNode {
         return self.rmxSprite
     }
     
-    var rootNode: RMXNode? {
-        return self.rmxSprite?.node
-    }
+//    var rootNode: RMXNode? {
+//        return self.rmxSprite?.rmxNode
+//    }
+    
     
     func removeCollisionAction(name: String) {
         if self.rmxSprite?.tracker.isStuck ?? true {
@@ -66,25 +61,63 @@ class RMXNode : SCNNode {
     internal func setRmxID(ID: Int) {
         _rmxID = ID
     }
-    
-    internal func setSprite(sprite: RMXSprite) {
+   
+    init(sprite: RMXSprite){
         self.rmxSprite = sprite
-        _rmxID = sprite.rmxID
-    }
-    
-    init(geometry node: SCNNode, sprite: RMXSprite! = nil){
         super.init()
-//        let node = SCNNode(geometry: geometry)
-//        self.geometry = node.geometry
-        self.physicsBody = node.physicsBody
-        self._geometryNode = node
-        _sprite = sprite
-        self.addChildNode(node)
-    }
-    
-    
-    override init(){
-        super.init()
+        self._rmxID = sprite.rmxID
+        self._geometryNode = sprite.geometryNode// ?? RMXModels.getNode(shapeType: .CUBE, mode: .PASSIVE, radius: 5)
+        self._geometryNode.name = "\(sprite.name)/geometry"
+        sprite.setNode(self)
+        self.addChildNode(self._geometryNode)
+
+        switch sprite.type {
+        case .AI, .PLAYER, .PASSIVE, .PLAYER_OR_AI:
+            self.physicsBody = SCNPhysicsBody.dynamicBody()
+            self.physicsBody!.restitution = 0.1
+            self.physicsBody!.angularDamping = 0.5
+            self.physicsBody!.damping = 0.5
+            self.physicsBody!.friction = 0.1
+            break
+        case .BACKGROUND:
+            self.physicsBody = SCNPhysicsBody.staticBody()
+            self.physicsBody!.restitution = 0.1
+            self.physicsBody!.damping = 1000
+            self.physicsBody!.angularDamping = 1000
+            self.physicsBody!.friction = 0.1
+            break
+        case .KINEMATIC:
+            self.physicsBody = SCNPhysicsBody.kinematicBody()
+            self.physicsBody!.restitution = 0.1
+            self.physicsBody!.friction = 0.1
+            break
+        case .ABSTRACT:
+            break
+        default:
+            if self.physicsBody == nil {
+                self.physicsBody = SCNPhysicsBody()//.staticBody()
+                self.physicsBody!.restitution = 0.0
+            }
+        }
+        
+        self.physicsBody?.mass = 4 * PI * self.radius * self.radius
+        
+        switch sprite.shapeType {
+        case .BOBBLE_MAN:
+            self.physicsBody!.angularDamping = 0.99
+            break
+        case .NULL:
+            self.physicsBody?.mass = 0
+            break
+        default:
+            break
+        }
+
+        
+        
+        //self.geometryNode?.physicsBody
+
+        
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -92,9 +125,6 @@ class RMXNode : SCNNode {
     }
     
     private var _sprite: RMXSprite?
-    internal var spriteDirect: RMXSprite? {
-        return _sprite
-    }
     
     func test(node: SCNPhysicsContact) {
 //         NSLog("\(self.name): \"ouch! I bumped into \(node.name)\"")
@@ -119,24 +149,6 @@ class RMXNode : SCNNode {
         return self.sprite?.isActiveSprite ?? false
     }
     
-    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
-        var center: RMXVector3 = RMXVector3Zero
-        var radius: RMFloat = 0
-        self._geometryNode.getBoundingSphereCenter(&center, radius: &radius)
-        return (center, RMFloatB(radius))
-    }
-    
-    var boundingBox: (min: RMXVector, max: RMXVector) {
-        var min: RMXVector3 = RMXVector3Zero
-        var max: RMXVector3 = RMXVector3Zero
-        self._geometryNode.getBoundingBoxMin(&min, max: &max)
-        return (min, max)
-    }
-    
-    var radius: RMFloatB {
-        // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
-        return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
-    }
     
     var isHeld: Bool {
         return self.sprite?.isLocked ?? false
@@ -153,11 +165,11 @@ extension RMXSprite {
 
     
     var transform: RMXMatrix4 {
-        return self.node.presentationNode().transform
+        return self.presentationNode().transform
     }
     
     var position: RMXVector3 {
-        return self.node.presentationNode().position
+        return self.presentationNode().position
     }
     
     
@@ -165,23 +177,23 @@ extension RMXSprite {
         return self.node.presentationNode()
     }
     var geometry: SCNGeometry? {
-        return self.geometryNode?.geometry
+        return self.geometryNode?.geometry ?? self.geometryNode?.geometry
     }
     
     var physicsBody: SCNPhysicsBody? {
-        return self.node.physicsBody
+        return self.node.physicsBody ?? self.geometryNode?.physicsBody
     }
     
     var physicsField: SCNPhysicsField? {
-        return self.node.physicsField
+        return self.node.physicsField ?? self.geometryNode?.physicsField
     }
     
     
     func applyForce(direction: SCNVector3, atPosition: SCNVector3? = nil, impulse: Bool = false) {
         if let atPosition = atPosition {
-            self.node.physicsBody?.applyForce(direction, atPosition: atPosition, impulse: impulse)
+            self.physicsBody?.applyForce(direction, atPosition: atPosition, impulse: impulse)
         } else {
-            self.node.physicsBody?.applyForce(direction, impulse: impulse)
+            self.physicsBody?.applyForce(direction, impulse: impulse)
         }
     }
     
@@ -190,7 +202,7 @@ extension RMXSprite {
     }
     
     func resetTransform() {
-        self.node.physicsBody?.resetTransform()
+        self.physicsBody?.resetTransform()
     }
    
 }

@@ -16,7 +16,7 @@ extension RMX {
     
     
     static func makePoppy(#world: RMSWorld, master: RMXSprite) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, mode: .AI, radius: 10, color: RMColor.darkGrayColor()), type: .AI, isUnique: true).asPlayer()
+        let poppy: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 10, color: RMColor.darkGrayColor()), type: .AI, shape: .BOBBLE_MAN, unique: true)//.asPlayer()
         
         poppy.setPosition(position: RMXVector3Make(100,10,-50))
         poppy.attributes.setTeam(ID: -1)

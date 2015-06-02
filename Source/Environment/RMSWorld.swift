@@ -259,7 +259,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     func animate() {
         if !self.hasGravity {
             let activeCamera = self.activeCamera
-            if activeCamera.isPOV {
+            if self.activeSprite.isPOV {
                 if activeCamera.eulerAngles.x > 0.01 {
                     activeCamera.eulerAngles.x -= 0.01
                 } else if activeCamera.eulerAngles.x < -0.01 {

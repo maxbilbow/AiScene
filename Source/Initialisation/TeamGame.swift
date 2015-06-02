@@ -159,7 +159,7 @@ class SpriteAttributes : NSObject {
 //            self.sprite.node.paused = true
 //            _collisionBitMask = self.sprite.physicsBody?.collisionBitMask
 //            self.sprite.physicsBody?.collisionBitMask = 0
-            self.sprite.geometryNode?.opacity = 0.5
+            self.sprite.node.opacity = 0.5
 //            self.kit?.transparency = 0
 //            _deathCount++
             self.isAlive = false
@@ -188,9 +188,9 @@ class SpriteAttributes : NSObject {
     
     
     func deRetire() {
-        self.sprite.node.paused = false
+//        self.sprite.node.paused = false
         self.isAlive = true
-        self.sprite.geometryNode?.opacity = 1
+        self.sprite.node.opacity = 1
 
     }
     
@@ -407,7 +407,7 @@ class RMXTeam {
             }
         }
         projectile.node.collisionActions["Attack"] = _challenge
-        NSTimer.scheduledTimerWithTimeInterval(5, target:projectile.node, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(5, target: projectile.node, selector: "removeCollisionActions", userInfo: nil, repeats: false)
     }
     
 }

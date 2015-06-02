@@ -7,12 +7,16 @@
 //
 
 import Foundation
-import SpriteKit
+import SceneKit
 //import AppKit
 
 
+
+enum ShapeType: Int { case CUBE , SPHERE, CYLINDER,  OILDRUM, BOBBLE_MAN, LAST,ROCK,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL, SUN, CAMERA }
+
+
 protocol RMXModelsProtocol {
-    static func getNode(shapeType type: ShapeType, mode: RMXSpriteType, radius r: RMFloatB?, height h: RMFloatB?, scale s: RMXSize?, color: NSColor!) -> RMXNode
+    static func getNode(shapeType type: ShapeType, mode: RMXSpriteType, radius r: RMFloatB?, height h: RMFloatB?, scale s: RMXSize?, color: NSColor!) -> SCNNode
 }
 
 

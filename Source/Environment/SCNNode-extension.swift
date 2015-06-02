@@ -12,11 +12,7 @@ import SceneKit
 extension SCNNode : RMXLocatable {
     
     func getPosition() -> RMXVector {
-//        if self.physicsBody?.type == .Dynamic {
-            return self.rmxNode?.presentationNode().worldTransform.position ?? self.presentationNode().worldTransform.position// - self.pivot.position
-//        } else {
-//            return self.position - self.pivot.position
-//        }
+        return self.rmxNode?.presentationNode().worldTransform.position ?? self.presentationNode().worldTransform.position
     }
     
     var rmxID: Int? {
@@ -34,8 +30,8 @@ extension SCNNode : RMXLocatable {
 //        }
     }
     
-    var isPOV: Bool {
-        return (self as? RMXCameraNode)?.pov() ?? false
+    var isPointOfView: Bool {
+        return (self as? RMXCameraNode)?.isFixedPointOfView ?? false
     }
     
     var doesCollide: Bool {
@@ -62,29 +58,7 @@ extension SCNNode : RMXLocatable {
     }
     
     
-    @availability(*,deprecated=1)
-    class func rootNode(existsIn rootNode: SCNNode, var node: SCNNode) -> SCNNode {
-        if node.parentNode == rootNode || node.parentNode == nil {
-            RMXLog("RootNode: \(node.name)")
-            return node
-        } else {
-            RMXLog(node.parentNode)
-            return self.rootNode(existsIn: rootNode, node: node.parentNode!)
-        }
-    }
-    
-    @availability(*,deprecated=1)
-    func getRootNode(existsIn rootNode: SCNNode) -> SCNNode {
-        return RMXNode.rootNode(existsIn: rootNode, node: self)
-    }
-    
-    @availability(*,deprecated=1)
-    func getRootNode(inScene scene: RMXScene) -> SCNNode {
-        return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
-    }
-    
-    
-        var rmxNode: RMXNode? {
+    var rmxNode: RMXNode? {
         return self as? RMXNode ?? (self.parentNode as? RMXNode)?.rmxNode ?? nil
     }
     
@@ -97,19 +71,22 @@ extension SCNNode : RMXLocatable {
     var geometryNode: SCNNode? {
         return self.rmxNode?._geometryNode
     }
-}
-
-class RMXBrain : SCNNode, RMXUniqueEntity {
-//    static let ID = "BRAIN21341"
-//    
-//    
-//    class func giveBrainTo(sprite: RMXSprite) -> RMXBrain {
-//        let brain = RMXBrain()
-//        brain.rmxSprite = sprite
-//        brain.name = RMXBrain.ID
-//        sprite.node.addChildNode(brain)
-//        brain.setRmxID(sprite.rmxID)
-//        return brain
-//    }
+    
+    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
+        var center: RMXVector3 = RMXVector3Zero; var radius: RMFloat = 0
+        self.getBoundingSphereCenter(&center, radius: &radius)
+        return (center, RMFloatB(radius))
+    }
+    
+    var boundingBox: (min: RMXVector, max: RMXVector) {
+        var min: RMXVector3 = RMXVector3Zero
+        var max: RMXVector3 = RMXVector3Zero
+        self.getBoundingBoxMin(&min, max: &max)
+        return (min, max)
+    }
+    
+    var radius: RMFloatB {
+        return self.boundingSphere.radius * RMFloatB(self.scale.average)
+    }
     
 }

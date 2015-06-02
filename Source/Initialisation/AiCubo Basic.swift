@@ -84,7 +84,7 @@ class AiCubo {
     
     class func simpleSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
-        let player = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor(), mode: type), type: type, isUnique: isUnique).asPlayer()
+        let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique).asPlayer()
         
         let lim = Int(RMSWorld.RADIUS)
         player.setPosition(position: RMXVector3Random(lim, -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
@@ -106,9 +106,9 @@ class AiCubo {
     class func insideGlobe(interface: RMXInterface, world: RMSWorld) {
         AiCubo.testingEnvironment(interface, world: world)
         let earth = world.scene.rootNode.childNodeWithName("Earth", recursively: true)!
-        let globe = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
-        globe.geometryNode?.geometry?.firstMaterial?.doubleSided = true
-        if let gNode: SCNSphere = globe.node.geometry as? SCNSphere {
+        let globe = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, shape: .SPHERE, unique: true)
+        globe.geometry?.firstMaterial?.doubleSided = true
+        if let gNode: SCNSphere = globe.geometry as? SCNSphere {
             gNode.geodesic = true
             
         }
@@ -144,21 +144,26 @@ class AiCubo {
         //Set up background
         let worldRadius = RMSWorld.RADIUS * 10
         
-        let sun: RMXSprite = RMXSprite.new(inWorld: world, type: .BACKGROUND, isUnique: true).makeAsSun(rDist: worldRadius)
-        sun.addAi({ (node: SCNNode!) -> Void in
-            if world.aiOn {
-                sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
-            }
-        })
-        let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: 100)
+        //.makeAsSun(rDist: worldRadius)
+        
+        let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
         lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
         lightNode.geometry?.firstMaterial!.emission.intensity = 1
-        sun.setPosition(position: RMXVector3Make(RMSWorld.RADIUS , RMSWorld.RADIUS * 5, 0))
-        sun.node.addChildNode(lightNode)
         
-        let earth: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR, mode: .BACKGROUND, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
+        let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
+        sun.setPosition(position: RMXVector3Make(RMSWorld.RADIUS , RMSWorld.RADIUS * 5, 0))
+        sun.node.pivot.m43 = -worldRadius
+        sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(1 * PI_OVER_180, aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+       
+//        sun.addAi({ (node: SCNNode!) -> Void in
+//            if world.aiOn {
+//                sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
+//            }
+//        })
+        
+        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, unique: true)
     
         world.scene.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
         

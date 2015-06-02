@@ -37,9 +37,9 @@
 		50AC218B1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218C1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218D1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
-		50B563ED1B13A7F2008AB47D /* RMXBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* RMXBrain.swift */; };
-		50B563EE1B13A7F2008AB47D /* RMXBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* RMXBrain.swift */; };
-		50B563EF1B13A7F2008AB47D /* RMXBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* RMXBrain.swift */; };
+		50B563ED1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
+		50B563EE1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
+		50B563EF1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
 		50BF107E1B16030D00680768 /* RMXTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BF107D1B16030D00680768 /* RMXTracker.swift */; };
 		50BF107F1B16030D00680768 /* RMXTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BF107D1B16030D00680768 /* RMXTracker.swift */; };
 		50BF10801B16030D00680768 /* RMXTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BF107D1B16030D00680768 /* RMXTracker.swift */; };
@@ -200,7 +200,7 @@
 		5031F3C71B15B85100FAB551 /* Baseball Catch.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Baseball Catch.caf"; sourceTree = "<group>"; };
 		5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Body Hit 01.caf"; sourceTree = "<group>"; };
 		50AC218A1B17AABA00A9BD28 /* TeamGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamGame.swift; path = ../Initialisation/TeamGame.swift; sourceTree = "<group>"; };
-		50B563EC1B13A7F2008AB47D /* RMXBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXBrain.swift; path = Environment/RMXBrain.swift; sourceTree = "<group>"; };
+		50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode-extension.swift"; sourceTree = "<group>"; };
 		50BF107D1B16030D00680768 /* RMXTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXTracker.swift; path = Ai/RMXTracker.swift; sourceTree = "<group>"; };
 		50DE71EF1B1B390C007C0851 /* UserActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserActions.swift; sourceTree = "<group>"; };
 		6C16D1571B0CBF1800DE2E61 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = MyPlayground.playground; path = ../../MyPlayground.playground; sourceTree = "<group>"; };
@@ -329,7 +329,6 @@
 			children = (
 				6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */,
 				6C9299C51AE544C000E71811 /* RMXQuestions.swift */,
-				50B563EC1B13A7F2008AB47D /* RMXBrain.swift */,
 				5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */,
 				50BF107D1B16030D00680768 /* RMXTracker.swift */,
 			);
@@ -518,6 +517,7 @@
 				6C9299BC1AE544C000E71811 /* RMXCamera.swift */,
 				6C9299BD1AE544C000E71811 /* RMXClock.swift */,
 				6C9299BE1AE544C000E71811 /* RMXNode.swift */,
+				50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */,
 				6C73A8E41B0A75DC00187A61 /* RMXScene.swift */,
 				6C9299BF1AE544C000E71811 /* RMXSprite.swift */,
 				6C4A28831B049FF9001C3F5B /* Observers.swift */,
@@ -889,7 +889,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50B563EF1B13A7F2008AB47D /* RMXBrain.swift in Sources */,
+				50B563EF1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */,
 				6C73A8A71B0A66E300187A61 /* GameScene.swift in Sources */,
 				6C73A8CF1B0A6C8C00187A61 /* RMXNode.swift in Sources */,
 				6C73A8E71B0A75DF00187A61 /* RMXScene.swift in Sources */,
@@ -953,7 +953,7 @@
 				6C9299DD1AE544C000E71811 /* RMXNode.swift in Sources */,
 				6C9299E61AE544C000E71811 /* GameViewController.swift in Sources */,
 				6C4A28841B049FF9001C3F5B /* Observers.swift in Sources */,
-				50B563ED1B13A7F2008AB47D /* RMXBrain.swift in Sources */,
+				50B563ED1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */,
 				6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */,
 				6C9299DC1AE544C000E71811 /* RMXClock.swift in Sources */,
 				50BF107E1B16030D00680768 /* RMXTracker.swift in Sources */,
@@ -1010,7 +1010,7 @@
 				6C8F11D11B1C1D8E009F49DB /* GCViewController.swift in Sources */,
 				6C929A1E1AE5499900E71811 /* GameViewController.swift in Sources */,
 				6C929A361AE54DCA00E71811 /* RMXValue.swift in Sources */,
-				50B563EE1B13A7F2008AB47D /* RMXBrain.swift in Sources */,
+				50B563EE1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */,
 				6C929A241AE5499D00E71811 /* RMSWorld.swift in Sources */,
 				6C929A2A1AE549A300E71811 /* RMXViewController.swift in Sources */,
 				50AC218C1B17AABA00A9BD28 /* TeamGame.swift in Sources */,
