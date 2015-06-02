@@ -21,6 +21,8 @@ protocol RMXChildNode {
 
 class RMXNode : SCNNode {
     
+    
+    
     private var _rmxID: Int?
     
     override var rmxID: Int {
@@ -92,6 +94,10 @@ class RMXNode : SCNNode {
         for collision in self.collisionActions {
             collision.1(receiver)
         }
+    }
+    
+    override func runAction(action: SCNAction, forKey key: String?, completionHandler block: (() -> Void)?) {
+        super.runAction(action, forKey: key, completionHandler: block)
     }
 }
 

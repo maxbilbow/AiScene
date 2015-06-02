@@ -20,7 +20,8 @@ extension RMX {
         
         poppy.setPosition(position: RMXVector3Make(100,10,-50))
         poppy.attributes.setTeam(ID: -1)
-        RMXAi.playFetch(poppy, master: master)
+//        RMXAi.playFetch(poppy, master: master)
+        poppy.aiDelegate = AiPoppy(poppy: poppy, master: master)
         RMXAi.autoStablise(poppy)
        
         return poppy

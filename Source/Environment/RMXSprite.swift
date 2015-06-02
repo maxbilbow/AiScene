@@ -35,6 +35,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         return self.holder != nil
     }
     
+    var aiDelegate: RMXAiDelegate?
+    
     var attributes: SpriteAttributes!
     
     var children: [RMXSprite] = []
@@ -365,7 +367,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     
     func animate() {
-        
+        self.aiDelegate?.run(nil)
         switch self.type {
         case .AI, .PLAYER, .PLAYER_OR_AI:
             self.timer.activate()
