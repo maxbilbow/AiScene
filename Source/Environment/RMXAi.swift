@@ -9,19 +9,24 @@ import SceneKit
 import Foundation
 
 typealias AiBehaviour = (SCNNode!) -> Void
+typealias InWhichTeams = (inc: [Int]?, exc: [Int]?)
 
 protocol RMXAiDelegate {
     var state: String? { get set }
+    var args: [Any]? { get }
     var behaviours: [String:() -> String?]? { get set }
     var sprite: RMXSprite { get }
     init(sprite: RMXSprite)
     func run(node: SCNNode!) -> Void
-    func selectTarget() -> RMXSprite?
+    func getTarget(args: Any? ...) -> RMXSprite?
 }
 
 
 class AiPoppy : RMXAiDelegate {
     var state: String?
+    var args: [Any]? {
+        return nil
+    }
     var behaviours: [String:() -> String?]?
     var sprite: RMXSprite
     var itemToWatch: SCNNode?
@@ -44,7 +49,7 @@ class AiPoppy : RMXAiDelegate {
         self.master = sprite.world.activeSprite
     }
     
-    func selectTarget() -> RMXSprite? {
+    func getTarget(args: Any? ...) -> RMXSprite? {
         return RMXAi.randomSprite(self.sprite.world, type: .PLAYER_OR_AI)
     }
     
@@ -59,7 +64,7 @@ class AiPoppy : RMXAiDelegate {
                     if self._count > self._limit {
                         if self.master.isActiveSprite {
                             do {
-                                self.master = self.selectTarget()
+                                self.master = self.getTarget()
                             } while self.master == self.sprite
                         } else {
                             self.master = self.sprite.world.activeSprite
@@ -89,6 +94,9 @@ class AiPoppy : RMXAiDelegate {
 
 class AiRandom: RMXAiDelegate {
     var state: String?
+    var args: [Any]? {
+        return [ RMXSpriteType.PLAYER_OR_AI ]
+    }
     var behaviours: [String:() -> String?]?
     var sprite: RMXSprite
     var world: RMSWorld {
@@ -100,9 +108,9 @@ class AiRandom: RMXAiDelegate {
     func run(node: SCNNode!) -> Void {
         if !self.world.aiOn { return }
         if !self.sprite.tracker.hasTarget && !self.sprite.hasItem { //after time to prevent grouing (ish)
-            self.sprite.tracker.setTarget(target: RMXAi.randomSprite(self.world,type: .PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
+            self.sprite.tracker.setTarget(target: self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.sprite.grab(target) {
-                    self.sprite.tracker.setTarget(target: self.selectTarget(), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
+                    self.sprite.tracker.setTarget(target: self.getTarget(self.args), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
                         
                         self.sprite.throwItem(atSprite: target, withForce: 1)
                         //                            NSLog("node thrown at \(target?.name)")
@@ -118,15 +126,45 @@ class AiRandom: RMXAiDelegate {
         }
         
     }
-    func selectTarget() -> RMXSprite? {
+    func getTarget(args: Any? ...) -> RMXSprite? {
+        for arg in args {
+            if let condition = arg as? InWhichTeams {
+                let players = self.world.liveTeamPlayers.filter({(player)-> Bool in
+                    if let teams = condition.inc {
+                        for teamID in teams {
+                            if teamID == player.attributes.teamID {
+                                return true
+                            }
+                        }
+                    }
+                    if let teams = condition.exc {
+                        for teamID in teams {
+                            if teamID == player.attributes.teamID {
+                                return false
+                            }
+                        }
+                    }
+                    return true
+                })
+                if players.count > 0 {
+                    let n = random() % (players.count)
+                    return players[n]
+                } else {
+                    return self.getTarget(RMXSpriteType.BACKGROUND)
+                }
+            } else if let condition = arg as? RMXSpriteType {
+                return RMXAi.randomSprite(self.world,type: condition)
+            }
+        }
+        
         return RMXAi.randomSprite(world,type: .PLAYER_OR_AI)
     }
 }
 
 class AiTeamPlayer : AiRandom {
-    
-    override func selectTarget() -> RMXSprite? {
-        return RMXAi.selectTargetPlayer(inWorld: self.world, notInTeam: self.sprite.attributes.teamID)
+    lazy var inWhichTeams: InWhichTeams = ([], [self.sprite.attributes.teamID])
+    override var args: [Any]? {
+        return [ self.inWhichTeams ]
     }
     
 }
