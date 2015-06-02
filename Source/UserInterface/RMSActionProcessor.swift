@@ -95,7 +95,7 @@ public class RMSActionProcessor {
         case "look", "Look", "LOOK":
             
             if point.count == 2 {
-                if !sprite.isActiveCamera || self.world.activeCamera.cameraType == .FREE {
+                if !self.world.activeCamera.isPOV {
                     self.world.activeCamera.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
                     let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
                     if phi < 1 && phi > -1 {
@@ -243,13 +243,11 @@ public class RMSActionProcessor {
         case "nextCamera":
             if speed == 1 {
                 self.gameView.pointOfView = self.world.getNextCamera()
-                sprite.updateCoordinateSystem()
             }
             return true
         case "previousCamera":
             if speed == 1 {
                 self.gameView.pointOfView = self.world.getPreviousCamera()
-                sprite.updateCoordinateSystem()
             }
             return true
         case "reset":
@@ -378,7 +376,7 @@ public class RMSActionProcessor {
         
     }
     enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES, SCORES }
-    func getData(type: TESTING = .SCORES) -> String {
+    func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
         let node = self.activeSprite.node//.presentationNode()
         let sprite = self.activeSprite
         let physics = self.world.scene.physicsWorld

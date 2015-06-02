@@ -10,9 +10,9 @@ import Foundation
 import SceneKit
 
 
-class RMXTracker {
+class RMXTracker : NSObject {
     
-    var rmxID: Int {
+    var rmxID: Int? {
         return self.sprite.rmxID
     }
     
@@ -27,13 +27,15 @@ class RMXTracker {
         return _target != nil
     }
     
-    var doOnArrival, doOnLeave, doWhileTouching: ((target: RMXSprite?)->())?
+    var doOnArrival:((target: RMXSprite?)->())?
     
-    var isAi: Bool = false
+    var isAi: Bool {
+        return self.sprite.type == .AI
+    }
     
     init(sprite: RMXSprite) {
-        self.isAi = sprite.type == .AI
         self.sprite = sprite
+        super.init()
         self.sprite.world.interface.collider.trackers.append(self)
     }
     
@@ -55,38 +57,72 @@ class RMXTracker {
         }
     }
 
-    var isProjectile = false
-    func setTarget(target: RMXSprite? = nil, var speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) {
-        if target != nil && target! == self.sprite {
-            self.setTarget()
-            return
-        }
-        self.doesJump = willJump
-        self.impulse = impulse
-        _limit = limit
-        _count = 0
-        _target = target
-        self.isProjectile = asProjectile
-    
-        let oldSpeed = self.sprite.speed
-        if impulse && speed == nil {
-            speed = oldSpeed / self.sprite.mass
-        } else if speed == nil {
-            speed = oldSpeed
-        } 
-        
-        func doa(target: RMXSprite?) {
-            doOnArrival?(target: target)
-            self.sprite.setSpeed(speed: oldSpeed)
+    func removeTarget() {
+        if self.isProjectile {
             self.sprite.isLocked = false
         }
+        self.sprite.stopFollowing(self.target)
+        self.setTarget(nil)
+    }
+    
+    var isProjectile = false
+
+    var speed: RMFloatB = 0
+
+    
+    func setTarget(target: RMXSprite?, speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) {
+       
+        if target != nil && target! == self.sprite {
+//            self.setTarget(nil)
+            return
+        }
         
-        self.sprite.setSpeed(speed: speed)
+        if !self.sprite.isActiveSprite {
+            if target != nil && !ignoreClaims && target!.hasFollowers {
+                if  !asProjectile {
+                    return
+                }
+            }
+        }
+        
+        self.sprite.follow(target)
+        
+        self.doesJump = willJump
+        self._limit = limit
+        self._count = 0
+        self._target = target
+        self.isProjectile = asProjectile
+        self.impulse = impulse
+        
+    
+        self.speed = (speed ?? 1 ) * self.sprite.speed // / self.sprite.mass + 1)
+        
+        
+        if self.impulse {
+            self.speed *= 100 / (self.sprite.mass + 1)
+            if self.sprite.isActiveSprite {
+                NSLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+            }
+        } else if self.sprite.isActiveSprite {
+                NSLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+            }
+        
+        
+//        NSLog("speed \(self.speed) mass: \(self.sprite.mass)")
+        func doa(target: RMXSprite?) {
+            if limit > 0 && asProjectile { //if holming missile with timer, do not let interferrence
+                self.sprite.isLocked = false
+            }
+            doOnArrival?(target: target)
+        }
         
         self.doOnArrival = doa
-        
-        if limit > 0 && asProjectile { //if holming missile with timer, do not let interferrence
+
+        if asProjectile { //if holming missile with timer, do not let interferrence
             self.sprite.isLocked = true
+            if limit <= 0 {
+                self._limit = 100
+            }
         }
     }
     
@@ -95,11 +131,10 @@ class RMXTracker {
     
     func checkForCollision(contact: SCNPhysicsContact) -> Bool {
         if let target = self.target {
-            if contact.nodeA == self.sprite.node || contact.nodeB == self.sprite.node || contact.nodeB == self.sprite.item?.node || contact.nodeA == self.sprite.item?.node {
-                if target.rmxID == self.sprite.rmxID || contact.nodeB == target.node || contact.nodeA == target.node {
-                    self.doOnArrival?(target: target)
-                    return true
-                }
+            if contact.getDefender(forChallenger: self.sprite).rmxID == target.rmxID {
+                self.doOnArrival?(target: target)
+                self.removeTarget()
+                return true
             }
         }
         return false
@@ -112,7 +147,17 @@ class RMXTracker {
     }
     
     internal func headToTarget() {
-        if !self.world.aiOn && self.isAi { return }
+       
+        if !self.world.aiOn {
+            if self.isAi {
+                return
+            } else if self.sprite.holder?.type != .PLAYER {
+//                self.sprite.isLocked = false
+                self.sprite.holder?.releaseItem()
+            }
+        }
+        let isStuck = self.isStuck
+        self.lastPosition = self.sprite.position
         if let target = self.target {
             if _limit > 0 && _count > _limit {
                 self.doOnArrival?(target: self.target)
@@ -120,13 +165,10 @@ class RMXTracker {
             } else {
                 ++_count
                 let direction = RMXVector3Normalize(target.position - self.sprite.position)
-                self.sprite.applyForce(direction * self.sprite.speed, atPosition: self.isProjectile ? RMXVector3Zero : self.sprite.front,  impulse: self.impulse)
-                if self.doesJump && self.isStuck {
-                    self.lastPosition = self.sprite.position
+               
+                self.sprite.applyForce(direction * self.speed, atPosition: self.isProjectile ? RMXVector3Zero : self.sprite.front,  impulse: self.impulse)
+                if self.doesJump && isStuck {
                     self.sprite.jump()
-                    
-                } else {
-                    self.lastPosition = self.sprite.position
                 }
                 
             }

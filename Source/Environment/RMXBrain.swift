@@ -13,49 +13,56 @@ extension SCNNode : RMXLocatable {
     
     func getPosition() -> RMXVector {
 //        if self.physicsBody?.type == .Dynamic {
-            return self.presentationNode().worldTransform.position// - self.pivot.position
+            return self.rmxNode?.presentationNode().worldTransform.position ?? self.presentationNode().worldTransform.position// - self.pivot.position
 //        } else {
 //            return self.position - self.pivot.position
 //        }
     }
     
-    var rmxID: Int {
-        return self.getRmxID() ?? -1
+    var rmxID: Int? {
+        return self.rmxNode?.sprite?.rmxID//.getRmxID() ?? -1
     }
     
     func getRmxID(scene: RMXScene? = nil) -> Int? {
-        if let brain = self as? RMXBrain {
-            return brain.rmxID
-        } else if let scene = scene {
-            return self.getRootNode(inScene: scene).sprite?.rmxID
-        } else {
-            return nil
-        }
+        return self.rmxNode?.rmxID
+//        if self.name == RMXBrain.ID {
+//            return (self as? RMXBrain)?._rmxID
+//        } else if let scene = scene {
+//            return self.getRootNode(inScene: scene).sprite?.rmxID
+//        } else {
+//            return nil
+//        }
+    }
+    
+    var isPOV: Bool {
+        return (self as? RMXCameraNode)?.pov() ?? false
     }
     
     var doesCollide: Bool {
         return self.sprite?.isPlayer ?? false
     }
     
+    var collisionNode: RMXNode? {
+        return self.rmxNode //self.parentNode as? RMXNode
+    }
     
     var sprite: RMXSprite? {
-        if self.isKindOfClass(RMXNode) {
-            return (self as! RMXNode).getSprite()
-        } else if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain {
-            return brain.getSprite()
-        } else {
-            return nil
-        }
+        return self.rmxNode?.rmxSprite
+//        if self.isKindOfClass(RMXNode) {
+//            return (self as! RMXNode).getSprite()
+//        } else if let brain = self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXNode {
+//            return brain.getSprite()
+//        } else {
+//            return nil
+//        }
     }
     
     var spriteType: RMXSpriteType {
         return self.sprite?.type ?? RMXSpriteType.ABSTRACT
     }
     
-    var brain: RMXBrain? {
-        return self.childNodeWithName(RMXBrain.ID, recursively: false) as? RMXBrain
-    }
     
+    @availability(*,deprecated=1)
     class func rootNode(existsIn rootNode: SCNNode, var node: SCNNode) -> SCNNode {
         if node.parentNode == rootNode || node.parentNode == nil {
             RMXLog("RootNode: \(node.name)")
@@ -66,61 +73,43 @@ extension SCNNode : RMXLocatable {
         }
     }
     
+    @availability(*,deprecated=1)
     func getRootNode(existsIn rootNode: SCNNode) -> SCNNode {
         return RMXNode.rootNode(existsIn: rootNode, node: self)
     }
     
+    @availability(*,deprecated=1)
     func getRootNode(inScene scene: RMXScene) -> SCNNode {
         return RMXNode.rootNode(existsIn: scene.rootNode, node: self)
     }
     
     
-    var isActiveSprite: Bool {
-        return self.sprite?.isActiveSprite ?? false
+        var rmxNode: RMXNode? {
+        return self as? RMXNode ?? (self.parentNode as? RMXNode)?.rmxNode ?? nil
+    }
+    
+    
+    
+    func setRmxID(rmxID: Int?) {
+        (self as? RMXCameraNode)?._rmxID = rmxID
     }
 
-    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
-        var center: RMXVector3 = RMXVector3Zero
-        var radius: RMFloat = 0
-        self.getBoundingSphereCenter(&center, radius: &radius)
-        return (center, RMFloatB(radius))
+    var geometryNode: SCNNode? {
+        return self.rmxNode?._geometryNode
     }
-    
-    var boundingBox: (min: RMXVector, max: RMXVector) {
-        var min: RMXVector3 = RMXVector3Zero
-        var max: RMXVector3 = RMXVector3Zero
-        self.getBoundingBoxMin(&min, max: &max)
-        return (min, max)
-    }
-    
-    var radius: RMFloatB {
-        
-        // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
-        return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
-    }
-    
-    var isHeld: Bool {
-        return self.sprite?.isLocked ?? false
-    }
-    
-    var holder: RMXSprite? {
-        return self.sprite?.holder
-    }
-    
-    
-
 }
 
-class RMXBrain : RMXNode , RMXUniqueEntity {
-    
-    
-    class func giveBrainTo(sprite: RMXSprite) -> RMXBrain {
-        let brain = RMXBrain()
-        brain.rmxSprite = sprite
-        brain.name = RMXBrain.ID
-        sprite.node.addChildNode(brain)
-        brain.setRmxID(sprite.rmxID)
-        return brain
-    }
+class RMXBrain : SCNNode, RMXUniqueEntity {
+//    static let ID = "BRAIN21341"
+//    
+//    
+//    class func giveBrainTo(sprite: RMXSprite) -> RMXBrain {
+//        let brain = RMXBrain()
+//        brain.rmxSprite = sprite
+//        brain.name = RMXBrain.ID
+//        sprite.node.addChildNode(brain)
+//        brain.setRmxID(sprite.rmxID)
+//        return brain
+//    }
     
 }

@@ -58,6 +58,6 @@ func != (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
 
 
 protocol RMXUniqueEntity {
-    var rmxID: Int { get }
+    var rmxID: Int? { get }
 }
 

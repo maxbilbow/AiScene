@@ -75,7 +75,7 @@ class RMXInterface : NSObject, RendererDelegate {
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
 
-    var activeCamera: RMXNode {
+    var activeCamera: SCNNode {
         return self.world.activeCamera
     }
     
@@ -170,7 +170,7 @@ class RMXInterface : NSObject, RendererDelegate {
         self.gvc = gvc
         super.init()
         self.setUpViews()
-        _newGame(type: RMXInterface.DEFAULT_GAME)
+        self.newGame(type: RMXInterface.DEFAULT_GAME)
         self.viewDidLoad()
         RMXLog("\(__FUNCTION__)")
     }
@@ -242,7 +242,7 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     private func _newGame(type: GameType? = nil) -> RMSWorld! {
-        self.pauseGame(nil)
+
         RMXLog("World: \(_world?.rmxID)")
         if let type = type {
             if let world = self.activeGames[type] {
@@ -284,8 +284,8 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func updateDataView(){
-//        self.dataView.text = self.actionProcessor.getData(type: .PLAYER_INFO)
-//        NSLog(self.dataView.text)
+//        let text = self.actionProcessor.getData()
+//        NSLog(text)
     }
     
     func processHit(point p: CGPoint) {
@@ -296,28 +296,29 @@ class RMXInterface : NSObject, RendererDelegate {
                 let result: AnyObject! = hitResults[0]
 //                NSLog(result.)
                 
-                if self.actionProcessor.throwOrGrab(result, withForce: 18000) {//.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
+                if self.actionProcessor.throwOrGrab(result) {//.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
                 
                     // get its material
-                    let material = result.node.geometry!.firstMaterial!
-                    
-                    // highlight it
-                    SCNTransaction.begin()
-                    SCNTransaction.setAnimationDuration(0.5)
-                    
-                    // on completion - unhighlight
-                    SCNTransaction.setCompletionBlock {
+                    if let material = result.node.geometryNode?.geometry?.firstMaterial {
+                        
+                        // highlight it
                         SCNTransaction.begin()
                         SCNTransaction.setAnimationDuration(0.5)
                         
-                        material.emission.contents = RMColor.blackColor()
+                        // on completion - unhighlight
+                        SCNTransaction.setCompletionBlock {
+                            SCNTransaction.begin()
+                            SCNTransaction.setAnimationDuration(0.5)
+                            
+                            material.emission.contents = RMColor.blackColor()
+                            
+                            SCNTransaction.commit()
+                        }
+                        
+                        material.emission.contents = RMColor.redColor()
                         
                         SCNTransaction.commit()
                     }
-                    
-                    material.emission.contents = RMColor.redColor()
-                    
-                    SCNTransaction.commit()
                 }
             }
         }
@@ -399,8 +400,8 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func unPauseGame(sender: AnyObject?) -> Bool {
         if _world?.unPause() != nil {
-            self.hideButtons(false)
             self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
+            self.hideButtons(false)
             return true
         }
         return true

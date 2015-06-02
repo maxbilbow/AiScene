@@ -32,14 +32,15 @@ class RMXCamera : SCNCamera {
         let cameraNode = RMXCameraNode.new(camera: RMXCamera.standardCamera())
         cameraNode.setRmxID(sprite.rmxID)
         cameraNode.cameraType = .FIXED
-        cameraNode.name = "\(cameraNode.cameraID)"
+        cameraNode._isPOV = sprite.type == .PLAYER
+        
         return cameraNode
     }
     
     class func free(inWorld world: RMSWorld) -> RMXCameraNode {
-        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT, isUnique: false)
-        let cameraNode = self.node(sprite)
-        sprite.setName(name: "\(cameraNode.name!)/FREECAM/\(sprite.name)")
+//        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT, isUnique: false)
+        let cameraNode = RMXCameraNode.new(camera: nil)
+        cameraNode.name = "\(cameraNode.name!)/FREECAM"//\(sprite.name)"
         world.cameras.append(cameraNode)
         return cameraNode
     }
@@ -59,6 +60,7 @@ class RMXCamera : SCNCamera {
                 }
             } )
             type = "FREE"
+            followCam._isPOV = false
             break
         default:
             type = "UNKNOWN"
@@ -97,6 +99,7 @@ class RMXCamera : SCNCamera {
             headcam = RMXCamera.node(sprite)
         }
         headcam.cameraType = .FIXED
+        headcam._isPOV = sprite.type == .PLAYER
         headcam.name! += "/HEADCAM/\(sprite.name)"
         return headcam
     }
@@ -105,28 +108,26 @@ class RMXCamera : SCNCamera {
 }
 
 
-class RMXCameraNode : RMXBrain  {
-
-    var isPOV: Bool = false
-    
+class RMXCameraNode : SCNNode  {
+    var rmxSprite: RMXSprite!
+    private var _isPOV: Bool = false
+    internal var _rmxID: Int?
     static var COUNT: Int = 0
     lazy var cameraID: Int = RMXCameraNode.COUNT++
 //    var rmxID: Int?
     var cameraType: CameraOptions = .FIXED
     
-    class func new(#camera: RMXCamera) -> RMXCameraNode {
+    class func new(#camera: RMXCamera?) -> RMXCameraNode {
         let cameraNode = RMXCameraNode()
         cameraNode.camera = RMXCamera.standardCamera()
-        cameraNode.name = "Fixed: \(CameraOptions.FIXED.rawValue)/"
+        cameraNode.name = "CAM\(cameraNode.cameraID)"
         return cameraNode
     }
     
-    func pov() -> RMXCameraNode {
-        self.isPOV = true
-        return self
+    internal func pov() -> Bool {
+        return self.cameraType == .FIXED && self.sprite?.isActiveSprite ?? false
     }
-    
-    
+
     
 
     

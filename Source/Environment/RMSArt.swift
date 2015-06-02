@@ -102,7 +102,7 @@ class RMXArt {
             default:
                 fatalError(__FUNCTION__)
             }
-            let node:RMXNode = RMXModels.getNode(shapeType: ShapeType.CUBE, mode: .PASSIVE, radius: 1, scale: scale, color: color)
+            let node:RMXNode = RMXModels.getNode(shapeType: ShapeType.CUBE, mode: .BACKGROUND, radius: 1, scale: scale, color: color)
             node.position = position
             node.physicsBody!.mass *= 1000
             node.physicsBody!.damping = 1000
@@ -153,7 +153,7 @@ class RMXArt {
             let size = RMFloatB(8) //RMFloatB(random() % 5 + 5)
             var scale = RMXVector3Make(size,size,size)
             var shape: ShapeType = types[random() % types.count]
-            var type: RMXSpriteType = shape == .BOBBLE_MAN ? .AI : .PASSIVE
+
 
             let colorVector = RMXRandomColor()
             #if OSX
@@ -162,20 +162,16 @@ class RMXArt {
                 let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
             #endif
         
-            let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color, mode: type)
+            let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color, mode: .PASSIVE)
             
                 
             
             
             
             
-            let sprite = RMXSprite.new(inWorld: world, node: node, type: type, isUnique: false)
+            let sprite = RMXSprite.new(inWorld: world, node: node, type: .PASSIVE, isUnique: false)
             sprite.setPosition( position: RMXVector3Make(randPos[0], randPos[1], randPos[2]))
-            if shape == .BOBBLE_MAN {
-                RMXAi.autoStablise(sprite)
-//                RMXAi.addRandomMovement(to: sprite)
-//                NSLog("Bobble Man: \(sprite.position.print)")
-            }
+
                 
         }
     }

@@ -21,24 +21,21 @@ protocol RMXChildNode {
 
 class RMXNode : SCNNode {
     
-    
+    internal var _geometryNode: SCNNode!
     
     private var _rmxID: Int?
     
-    override var rmxID: Int {
-        if let id = _rmxID {
-            return id
-        } else {
-            _rmxID = self.rootNode?.rmxID
-            if _rmxID == nil { NSLog("error -1 RMXID") }
-            return _rmxID ?? -1
-        }
-    }
-    //        {
-    //        return self.sprite?.rmxID
-    //    }
-    
-    static let ID = "Brain"
+//    override var rmxID: Int {
+//        return self.rmxSprite.rmxID
+//        if let id = _rmxID {
+//            return id
+//        } else {
+//            _rmxID = self.rootNode?.rmxID
+//            if _rmxID == nil { NSLog("error -1 RMXID") }
+//            return _rmxID ?? -1
+//        }
+//    }
+
     internal var rmxSprite: RMXSprite?
     
     func getSprite() -> RMXSprite? {
@@ -49,7 +46,23 @@ class RMXNode : SCNNode {
         return self.rmxSprite?.node
     }
     
+    func removeCollisionAction(name: String) {
+        if self.rmxSprite?.tracker.isStuck ?? true {
+            self.collisionActions.removeValueForKey(name)
+        } else {
+            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+        }
+    }
+    func removeCollisionActions() {
+        if self.rmxSprite?.tracker.isStuck ?? true {
+            NSLog(__FUNCTION__)
+            self.collisionActions.removeAll()
+        } else {
+            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+        }
+    }
     
+        
     internal func setRmxID(ID: Int) {
         _rmxID = ID
     }
@@ -59,12 +72,14 @@ class RMXNode : SCNNode {
         _rmxID = sprite.rmxID
     }
     
-    init(geometry: SCNGeometry, sprite: RMXSprite! = nil){
+    init(geometry node: SCNNode, sprite: RMXSprite! = nil){
         super.init()
-        let node = SCNNode(geometry: geometry)
-        self.geometry = node.geometry
+//        let node = SCNNode(geometry: geometry)
+//        self.geometry = node.geometry
         self.physicsBody = node.physicsBody
+        self._geometryNode = node
         _sprite = sprite
+        self.addChildNode(node)
     }
     
     
@@ -81,24 +96,57 @@ class RMXNode : SCNNode {
         return _sprite
     }
     
-    func test(node: SCNNode!) {
-         NSLog("\(self.name): \"ouch! I bumped into \(node.name)\"")
+    func test(node: SCNPhysicsContact) {
+//         NSLog("\(self.name): \"ouch! I bumped into \(node.name)\"")
         self.collisionActions.removeValueForKey("ouch")
     }
     
-    lazy var collisionActions: [String:AiBehaviour] = [
+    lazy var collisionActions: [String:AiCollisionBehaviour] = [
         "ouch" : self.test
     ]
     
-    func collisionAction(receiver: SCNNode!) {
+    func collisionAction(contact: SCNPhysicsContact) {
         for collision in self.collisionActions {
-            collision.1(receiver)
+            collision.1(contact)
         }
     }
     
     override func runAction(action: SCNAction, forKey key: String?, completionHandler block: (() -> Void)?) {
         super.runAction(action, forKey: key, completionHandler: block)
     }
+    
+    var isActiveSprite: Bool {
+        return self.sprite?.isActiveSprite ?? false
+    }
+    
+    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
+        var center: RMXVector3 = RMXVector3Zero
+        var radius: RMFloat = 0
+        self._geometryNode.getBoundingSphereCenter(&center, radius: &radius)
+        return (center, RMFloatB(radius))
+    }
+    
+    var boundingBox: (min: RMXVector, max: RMXVector) {
+        var min: RMXVector3 = RMXVector3Zero
+        var max: RMXVector3 = RMXVector3Zero
+        self._geometryNode.getBoundingBoxMin(&min, max: &max)
+        return (min, max)
+    }
+    
+    var radius: RMFloatB {
+        // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
+        return self.boundingSphere.radius * RMFloatB(self.scale.average)//radius
+    }
+    
+    var isHeld: Bool {
+        return self.sprite?.isLocked ?? false
+    }
+    
+    var holder: RMXSprite? {
+        return self.sprite?.holder
+    }
+    
+    
 }
 
 extension RMXSprite {
@@ -117,7 +165,7 @@ extension RMXSprite {
         return self.node.presentationNode()
     }
     var geometry: SCNGeometry? {
-        return self.node.geometry
+        return self.geometryNode?.geometry
     }
     
     var physicsBody: SCNPhysicsBody? {

@@ -29,13 +29,13 @@ class AiCubo {
                 }
 //                let poppy = RMX.makePoppy(world: world, master: world.activeSprite)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 10, radius: RMSWorld.RADIUS , shapes: .CYLINDER, .ROCK)
-                AiCubo.addPlayers(world, n: 3, teams: 0)
+                AiCubo.addPlayers(world, noOfPlayers: 3, teams: 0)
                 
                 break
             case .TEST:
                 AiCubo.testingEnvironment(interface, world: world)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 50, radius: RMSWorld.RADIUS * 2, shapes: .CYLINDER, .CUBE, .SPHERE, .ROCK)
-                AiCubo.addPlayers(world, n: 20, teams: 0)
+                AiCubo.addPlayers(world, noOfPlayers: 20, teams: 0)
                 RMXAi.addRandomMovement(to: world.children)
 
                 break
@@ -49,7 +49,7 @@ class AiCubo {
                 AiCubo.testingEnvironment(interface, world: world)
                 RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 50, radius: RMSWorld.RADIUS * 5, shapes: .CYLINDER, .SPHERE)
                 
-                AiCubo.addPlayers(world, n: 20, teams: 2)
+                AiCubo.addPlayers(world, noOfPlayers: 20, teams: 2)
                
                 break
             default:
@@ -107,7 +107,7 @@ class AiCubo {
         AiCubo.testingEnvironment(interface, world: world)
         let earth = world.scene.rootNode.childNodeWithName("Earth", recursively: true)!
         let globe = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.SPHERE, mode: .BACKGROUND, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
-        globe.node.geometry!.firstMaterial?.doubleSided = true
+        globe.geometryNode?.geometry?.firstMaterial?.doubleSided = true
         if let gNode: SCNSphere = globe.node.geometry as? SCNSphere {
             gNode.geodesic = true
             
@@ -161,7 +161,7 @@ class AiCubo {
         let earth: RMXSprite = RMXSprite.new(inWorld: world, node: RMXModels.getNode(shapeType: ShapeType.FLOOR, mode: .BACKGROUND, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, isUnique: true)
     
         world.scene.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
-      
+        
         
         earth.setName(name: "Earth")
         
@@ -201,7 +201,7 @@ class AiCubo {
         
     }
     
-    class func addPlayers(world: RMSWorld, n: Int, teams: Int = 0){
+    class func addPlayers(world: RMSWorld, noOfPlayers n: Int, teams: Int = 0){
         for ( var i = 0; i < n ; ++i) {
             self.simpleSprite(world, type: .AI, isUnique: false)
         }
@@ -224,6 +224,7 @@ class AiCubo {
                         if team.addPlayer(player) {
                             count++
                             if team.players.count == max {
+//                                NSLog("Team: \(team.id), players: \(count)")
                                 teamID++
                                 count = 0
                             }

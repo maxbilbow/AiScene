@@ -19,7 +19,7 @@ import SceneKit
 class RMSWorld : NSObject, RMXUniqueEntity {
     
     var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
-    lazy var rmxID: Int = RMXSprite.COUNT++
+    lazy var rmxID: Int? = RMXSprite.COUNT++
     #if SceneKit
     static let ZERO_GRAVITY = RMXVector3Zero
     static let EARTH_GRAVITY = RMXVector3Make(0, -9.8, 0)
@@ -28,19 +28,19 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     static let EARTH_GRAVITY = CGVector(dx: 0, dy:-9.8)
     #endif
     
-    var cameras: Array<RMXCameraNode> = Array<RMXCameraNode>()
+    var cameras: Array<SCNNode> = Array<SCNNode>()
     
-    var activeCamera: RMXCameraNode {
+    var activeCamera: SCNNode {
         return self.cameras[self.cameraNumber]
     }
     
-    func getNextCamera() -> RMXNode {
+    func getNextCamera() -> SCNNode {
         self.cameraNumber = self.cameraNumber + 1 >= self.cameras.count ? 0 : self.cameraNumber + 1
         let cameraNode = self.cameras[self.cameraNumber]
         return cameraNode
     }
     
-    func getPreviousCamera() -> RMXNode {
+    func getPreviousCamera() -> SCNNode {
         self.cameraNumber = self.cameraNumber - 1 < 0 ? self.cameras.count - 1 : self.cameraNumber - 1
         let cameraNode = self.cameras[self.cameraNumber]
         return cameraNode
@@ -115,19 +115,21 @@ class RMSWorld : NSObject, RMXUniqueEntity {
         return _scene
     }
     
-    func pause() {
+    func pause() -> Bool {
         if !self.scene.paused {
             self.scene.paused = true
             self.switchOffAi()
         }
+        return true
     }
     
-    func unPause() {
+    func unPause() -> Bool {
         if self.scene.paused {
             self.scene.paused = false
             NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
             
         }
+        return true
     }
     
     var isLive: Bool {
@@ -184,7 +186,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
             if child != sender {
                 let distb: RMFloatB = sender.distanceTo(child)
                 if distb < dista {
-                    closest = child.rmxID
+                    closest = child.rmxID!
                     dista = distb
                 }
             }
@@ -201,7 +203,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
             if child != sender {
                 let distb: RMFloatB = sender.distanceTo(child)
                 if distb > dista {
-                    furthest = child.rmxID
+                    furthest = child.rmxID!
                     dista = distb
                 }
             }
@@ -283,7 +285,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
             if radius > 0 && position.distanceTo(RMXVector3Zero) > radius {
                 return false
             }
-        } else if let earth = self._scene.rootNode.childNodeWithName("Earth", recursively: true) {
+        } else if let earth = self._scene.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
             _radius = earth.radius
             _ground = earth.sprite?.top.y
             self.validate(sprite)

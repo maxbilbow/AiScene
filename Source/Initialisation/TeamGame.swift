@@ -116,7 +116,7 @@ class SpriteAttributes {
         return self.sprite.world
     }
     
-    var rmxID: Int {
+    var rmxID: Int? {
         return sprite.rmxID
     }
     var health: Int = 100
@@ -262,11 +262,11 @@ class RMXTeam {
     
     func addPlayer(player: RMXSprite) -> Bool{
 //    NSLog("name: \(player.name), team: \(player.attributes.teamID)")
-        var players = self.players.count
+        
         if player.attributes.teamID < 0 {
             return false
         }
-        
+        var players = self.players.count
         if player.attributes.teamID != self.id {
             player.attributes.setTeam(ID: self.id)
             return players < self.players.count//come back with the right id
@@ -388,6 +388,24 @@ class RMXTeam {
     
     var printScore: String {
         return "TEAM-\(self.id) SCORE: \(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.players.count)"
+    }
+    
+
+    class func throwChallenge(challenger: RMXSprite, projectile: RMXSprite)  {
+        func _challenge(contact: SCNPhysicsContact) -> Void {
+            if let defender = contact.getDefender(forChallenger: challenger).sprite {
+                if defender.willCollide ?? false && defender.attributes.teamID != challenger.attributes.teamID {
+                    RMXTeam.challenge(challenger.attributes, defender: defender.attributes)
+                    RMXTeam.challenge(challenger.attributes, defender: projectile.attributes)
+//                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
+                    projectile.node.removeCollisionAction("Attack")
+                    challenger.world.interface.av.playSound(RMXInterface.THROW_ITEM, info: defender)
+                    projectile.tracker.removeTarget()
+                }
+            }
+        }
+        projectile.node.collisionActions["Attack"] = _challenge
+        NSTimer.scheduledTimerWithTimeInterval(5, target:projectile.node, selector: "removeCollisionActions", userInfo: nil, repeats: false)
     }
     
 }

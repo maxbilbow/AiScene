@@ -66,33 +66,33 @@ class RM3DModels : RMXModelsProtocol {
         var node: RMXNode
         switch(type){
         case .CUBE:
-            node = RMXNode(geometry: SCNBox(
+            node = RMXNode(geometry: SCNNode(geometry: SCNBox(
                 width: RMFloat(scale.x),
                 height:RMFloat(scale.y),
                 length:RMFloat(scale.z),
-                chamferRadius:0.0)
+                chamferRadius:0.0))
             )
             hasColor = true
             break
         case ShapeType.SPHERE:
-            node = RMXNode(geometry: SCNSphere(radius: RMFloat(radius)))
+            node = RMXNode(geometry: SCNNode(geometry: SCNSphere(radius: RMFloat(radius))))
             hasColor = true
             break
         case ShapeType.CYLINDER:
-            node = RMXNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height)))
+            node = RMXNode(geometry: SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height))))
             hasColor = true
             break
         case ShapeType.ROCK:
-            node = RMXNode(geometry: rock)
+            node = RMXNode(geometry: SCNNode(geometry: rock))
             node.scale *= 1 * radius
             break
         case ShapeType.PLANE:
              hasColor = true
-            node = RMXNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
+            node = RMXNode(geometry: SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y))))
             break
         case ShapeType.FLOOR:
             hasColor = true
-            node = RMXNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius)))
+            node = RMXNode(geometry: SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(radius))))
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
             //node.geometry?.firstMaterial!.doubleSided = true
             
@@ -102,11 +102,11 @@ class RM3DModels : RMXModelsProtocol {
             node.scale *= 0.001 * radius
             break
         case ShapeType.SPACE_SHIP:
-            node = RMXNode(geometry: ship)
+            node = RMXNode(geometry: SCNNode(geometry: ship))
             node.scale *= 2
             break
         case ShapeType.OILDRUM:
-            node = RMXNode(geometry: oilDrum)
+            node = RMXNode(geometry: SCNNode(geometry: oilDrum))
             node.scale *= 1.5 * radius
             break
         case ShapeType.DOG:
@@ -133,14 +133,14 @@ class RM3DModels : RMXModelsProtocol {
             node.scale = scale
             break
         default:
-            node = RMXNode(geometry: SCNSphere(radius: RMFloat(radius)))
+            node = RMXNode(geometry: SCNNode(geometry: SCNSphere(radius: RMFloat(radius))))
             hasColor = true
         }
         
         
         if hasColor && color != nil {
-            node.geometry!.firstMaterial!.diffuse.contents = color
-            node.geometry!.firstMaterial!.specular.contents = color
+            node.geometryNode!.geometry!.firstMaterial!.diffuse.contents = color
+            node.geometryNode!.geometry!.firstMaterial!.specular.contents = color
             
         }
         
@@ -179,9 +179,9 @@ class RM3DModels : RMXModelsProtocol {
         return node
     }
     
-    class func getRadius(ofNode node: RMXNode) -> RMFloatB {
+    class func getRadius(ofNode node: SCNNode) -> RMFloatB {
         var center = RMXVector3Zero; var radius: RMFloat = 0
-        let bounds = node.getBoundingSphereCenter(&center, radius: &radius)
+        let bounds = node.geometryNode!.getBoundingSphereCenter(&center, radius: &radius)
         return RMFloatB(radius)
     }
     

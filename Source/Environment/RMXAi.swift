@@ -9,9 +9,24 @@ import SceneKit
 import Foundation
 
 typealias AiBehaviour = (SCNNode!) -> Void
-typealias InWhichTeams = (inc: [Int]?, exc: [Int]?)
+typealias AiCollisionBehaviour = (SCNPhysicsContact) -> Void
+struct InWhichTeams {
+    var inc, exc: [Int]
+    init(inc: Int? = nil, exc: Int? = nil){
+        if let i = inc {
+            self.inc = [ i ]
+        } else {
+            self.inc = []
+        }
+        if let e = exc {
+            self.exc = [ e ]
+        } else {
+            self.exc = []
+        }
+    }
+}
 
-protocol RMXAiDelegate {
+protocol RMXAiDelegate : NSObjectProtocol {
     var state: String? { get set }
     var args: [Any]? { get }
     var behaviours: [String:() -> String?]? { get set }
@@ -22,7 +37,7 @@ protocol RMXAiDelegate {
 }
 
 
-class AiPoppy : RMXAiDelegate {
+class AiPoppy : NSObject, RMXAiDelegate {
     var state: String?
     var args: [Any]? {
         return nil
@@ -47,6 +62,7 @@ class AiPoppy : RMXAiDelegate {
 //        self.speed = sprite.speed// 150 * (sprite.mass + 1)
 //        sprite.setSpeed(speed: speed)
         self.master = sprite.world.activeSprite
+        super.init()
     }
     
     func getTarget(args: Any? ...) -> RMXSprite? {
@@ -56,8 +72,8 @@ class AiPoppy : RMXAiDelegate {
     func run(node: SCNNode!) -> Void {
         if self.master.hasItem && !self.master.isHolding(self.sprite) {
             self.sprite.releaseItem()
-            itemToWatch = self.master.item!.node
-            self.sprite.tracker.setTarget(target: itemToWatch?.sprite, doOnArrival: { (target: RMXSprite?) -> () in
+            self.itemToWatch = self.master.item?.node
+            self.sprite.tracker.setTarget(itemToWatch?.sprite, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.master.isHolding(target) {
                     self.sprite.world.interface.av.playSound("pop1", info: self.sprite)
                     ++self._count
@@ -69,16 +85,16 @@ class AiPoppy : RMXAiDelegate {
                         } else {
                             self.master = self.sprite.world.activeSprite
                         }
-                        self.sprite.tracker.setTarget(target: self.master)
+                        self.sprite.tracker.setTarget(self.master)
                         self._count = 0
                     }
                 } else {
                     self._count = 0
                     self.sprite.grab(target)
-                    self.sprite.tracker.setTarget(target: self.master, doOnArrival: { (target: RMXSprite?) -> () in
+                    self.sprite.tracker.setTarget(self.master, doOnArrival: { (target: RMXSprite?) -> () in
                         self.sprite.world.interface.av.playSound("pop2", info: self.sprite.position)
                         self.sprite.releaseItem()
-                        self.sprite.tracker.setTarget()
+                        self.sprite.tracker.removeTarget()
                         
                     })
                 }
@@ -92,29 +108,32 @@ class AiPoppy : RMXAiDelegate {
     }
 }
 
-class AiRandom: RMXAiDelegate {
+class AiRandom: NSObject, RMXAiDelegate {
     var state: String?
     var args: [Any]? {
         return [ RMXSpriteType.PLAYER_OR_AI ]
     }
+    
     var behaviours: [String:() -> String?]?
     var sprite: RMXSprite
     var world: RMSWorld {
         return self.sprite.world
     }
+    
     required init(sprite: RMXSprite) {
         self.sprite = sprite
     }
+    
     func run(node: SCNNode!) -> Void {
         if !self.world.aiOn { return }
-        if !self.sprite.tracker.hasTarget && !self.sprite.hasItem { //after time to prevent grouing (ish)
-            self.sprite.tracker.setTarget(target: self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
+        if !self.sprite.tracker.hasTarget && !self.sprite.hasItem { //after time to prevent grabbing (ish)
+            self.sprite.tracker.setTarget(self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.sprite.grab(target) {
-                    self.sprite.tracker.setTarget(target: self.getTarget(self.args), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
+                    self.sprite.tracker.setTarget(self.getTarget(self.args), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
                         
                         self.sprite.throwItem(atSprite: target, withForce: 1)
                         //                            NSLog("node thrown at \(target?.name)")
-                        self.sprite.tracker.setTarget()
+                        self.sprite.tracker.removeTarget()
                         //                            NSLog("target set to nil")
                     })
                 }
@@ -126,22 +145,19 @@ class AiRandom: RMXAiDelegate {
         }
         
     }
+    
     func getTarget(args: Any? ...) -> RMXSprite? {
         for arg in args {
             if let condition = arg as? InWhichTeams {
                 let players = self.world.liveTeamPlayers.filter({(player)-> Bool in
-                    if let teams = condition.inc {
-                        for teamID in teams {
-                            if teamID == player.attributes.teamID {
-                                return true
-                            }
+                    for teamID in condition.inc {
+                        if teamID == player.attributes.teamID {
+                            return true
                         }
                     }
-                    if let teams = condition.exc {
-                        for teamID in teams {
-                            if teamID == player.attributes.teamID {
-                                return false
-                            }
+                    for teamID in condition.exc {
+                        if teamID == player.attributes.teamID {
+                            return false
                         }
                     }
                     return true
@@ -162,7 +178,19 @@ class AiRandom: RMXAiDelegate {
 }
 
 class AiTeamPlayer : AiRandom {
-    lazy var inWhichTeams: InWhichTeams = ([], [self.sprite.attributes.teamID])
+    var inWhichTeams: InWhichTeams!
+    required init(sprite: RMXSprite) {
+        super.init(sprite: sprite)
+        self.inWhichTeams = InWhichTeams(exc: self.sprite.attributes.teamID)
+        self.sprite.timer.timers.append(NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "checkTeam", userInfo: nil, repeats: true))
+    }
+    
+    func checkTeam(){
+        self.inWhichTeams.exc[0] = self.sprite.attributes.teamID
+        if self.sprite.attributes.isTeamCaptain {
+//            NSLog("I am \(self.sprite.name) on team \(self.sprite.attributes.teamID)")
+        }
+    }
     override var args: [Any]? {
         return [ self.inWhichTeams ]
     }
