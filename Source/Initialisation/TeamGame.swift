@@ -155,17 +155,15 @@ class SpriteAttributes : NSObject {
     
     var isAlive = true
     func retire() {
-        if !self.invincible {
-            self.sprite.node.paused = true
+        if !self.invincible && self.isAlive{
+//            self.sprite.node.paused = true
 //            _collisionBitMask = self.sprite.physicsBody?.collisionBitMask
 //            self.sprite.physicsBody?.collisionBitMask = 0
-            _transparency = self.kit?.transparency
-            self.kit?.transparency = 0.5
             self.sprite.geometryNode?.opacity = 0.5
 //            self.kit?.transparency = 0
 //            _deathCount++
             self.isAlive = false
-             NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "deRetire", userInfo: nil, repeats: false)
+             NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "deRetire", userInfo: nil, repeats: false)
         }
         
     }
@@ -192,12 +190,8 @@ class SpriteAttributes : NSObject {
     func deRetire() {
         self.sprite.node.paused = false
         self.isAlive = true
-        self.kit?.transparency = _transparency!
         self.sprite.geometryNode?.opacity = 1
-//        if _deathCount > 0 {
-//            self.sprite.physicsBody?.collisionBitMask = _collisionBitMask ?? 0
-//            self.kit?.transparency = _transparency ?? 0
-//        }
+
     }
     
     func challenge(defender: SpriteAttributes, doOnWin didKill: Challenge){
@@ -310,8 +304,9 @@ class RMXTeam {
     }
     
     func retire() {
-        RMXTeam.isGameWon(self.game)
-        self.isRetired = true
+        if RMXTeam.isGameWon(self.game) {
+            self.isRetired = true
+        }
     }
     
     class func updateTeam(team: RMXTeam?) {
@@ -362,7 +357,7 @@ class RMXTeam {
     class func challenge(attacker: SpriteAttributes, defender: SpriteAttributes?, doOnWin: Challenge = RMXTeam.challengeWon) {
         if let defender = defender {
             if attacker.teamID == defender.teamID || defender.teamID <= 0 { return }
-            if doOnWin(attacker,defender) {
+            if defender.isAlive && doOnWin(attacker,defender) {
                 defender.retire()
             }
         }
@@ -375,6 +370,7 @@ class RMXTeam {
     
     
     class func challengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> Bool {
+        if !defender.isAlive { return false }
         let health = defender.health
         defender.health /= 2
         attacker.points += health - defender.health

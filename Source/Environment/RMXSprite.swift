@@ -399,7 +399,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     
     func animate() {
-        self.aiDelegate?.run(nil)
+        if self.attributes.isAlive {
+            self.aiDelegate?.run(nil)
+        }
         switch self.type {
         case .AI, .PLAYER, .PLAYER_OR_AI:
             self.timer.activate()
