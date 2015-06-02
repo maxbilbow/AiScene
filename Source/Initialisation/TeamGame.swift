@@ -98,7 +98,7 @@ extension RMSWorld : RMXTeamGame {
 
 
 
-class SpriteAttributes {
+class SpriteAttributes : NSObject {
     var invincible = false
     var sprite: RMXSprite
     
@@ -132,6 +132,7 @@ class SpriteAttributes {
     
     init(_ sprite: RMXSprite){
         self.sprite = sprite
+        super.init()
     }
     
     func setTeam(#ID: Int){
@@ -158,10 +159,13 @@ class SpriteAttributes {
             self.sprite.node.paused = true
 //            _collisionBitMask = self.sprite.physicsBody?.collisionBitMask
 //            self.sprite.physicsBody?.collisionBitMask = 0
-//            _transparency = self.kit?.transparency
+            _transparency = self.kit?.transparency
+            self.kit?.transparency = 0.5
+            self.sprite.geometryNode?.opacity = 0.5
 //            self.kit?.transparency = 0
 //            _deathCount++
             self.isAlive = false
+             NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "deRetire", userInfo: nil, repeats: false)
         }
         
     }
@@ -188,6 +192,8 @@ class SpriteAttributes {
     func deRetire() {
         self.sprite.node.paused = false
         self.isAlive = true
+        self.kit?.transparency = _transparency!
+        self.sprite.geometryNode?.opacity = 1
 //        if _deathCount > 0 {
 //            self.sprite.physicsBody?.collisionBitMask = _collisionBitMask ?? 0
 //            self.kit?.transparency = _transparency ?? 0
