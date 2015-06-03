@@ -105,7 +105,7 @@ class RMXArt {
             let node = RMXModels.getNode(shapeType: ShapeType.CUBE, radius: 1, scale: scale, color: color)
             
             let sprite = RMXSprite(inWorld: world, geometry: node, type: RMXSpriteType.BACKGROUND, shape: .CUBE, unique: true)
-            sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
+            //sprite.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(position, duration: 10000)))
             sprite.physicsBody?.mass *= 1000
             sprite.physicsBody?.damping = 1000
             sprite.physicsBody?.angularDamping = 1000

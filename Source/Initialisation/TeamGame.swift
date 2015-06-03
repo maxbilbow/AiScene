@@ -163,7 +163,7 @@ class SpriteAttributes : NSObject {
 //            self.kit?.transparency = 0
 //            _deathCount++
             self.isAlive = false
-             NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "deRetire", userInfo: nil, repeats: false)
+            self.sprite.timer.timers.append(NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "deRetire", userInfo: nil, repeats: false))
         }
         
     }

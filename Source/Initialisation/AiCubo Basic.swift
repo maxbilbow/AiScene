@@ -155,7 +155,7 @@ class AiCubo {
         let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
         sun.setPosition(position: RMXVector3Make(RMSWorld.RADIUS , RMSWorld.RADIUS * 5, 0))
         sun.node.pivot.m43 = -worldRadius
-        sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(1 * PI_OVER_180, aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+        sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(RMFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
        
 //        sun.addAi({ (node: SCNNode!) -> Void in
 //            if world.aiOn {
@@ -172,7 +172,7 @@ class AiCubo {
         
         let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
         earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
-        earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
+        //earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
         
 
         

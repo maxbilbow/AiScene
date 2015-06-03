@@ -100,7 +100,7 @@ class RMXNode : SCNNode {
             }
         }
         
-        self.physicsBody?.mass = 4 * PI * self.radius * self.radius
+        self.physicsBody?.mass = RMFloat(4 * PI * self.radius * self.radius)
         
         switch sprite.shapeType {
         case .BOBBLE_MAN:

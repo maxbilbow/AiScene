@@ -116,19 +116,14 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     }
     
     func pause() -> Bool {
-        if !self.scene.paused {
             self.scene.paused = true
-            self.switchOffAi()
-        }
+//            self.switchOffAi()
         return true
     }
     
     func unPause() -> Bool {
-        if self.scene.paused {
-            self.scene.paused = false
-            NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
-            
-        }
+        self.scene.paused = false
+        
         return true
     }
     
