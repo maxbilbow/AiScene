@@ -57,13 +57,13 @@ class RMXTracker : NSObject {
         }
     }
 
-    func removeTarget() {
-        if self.isProjectile {
-            self.sprite.isLocked = false
-        }
-        self.sprite.stopFollowing(self.target)
-        self.setTarget(nil)
-    }
+//    func removeTarget() {
+//        if self.isProjectile {
+//            self.sprite.isLocked = false
+//        }
+//        self.sprite.stopFollowing(self.target)
+//        self.setTarget(nil)
+//    }
     
     var isProjectile = false
 
@@ -85,7 +85,7 @@ class RMXTracker : NSObject {
                 self.sprite.stopFollowing(target)
                 return false
             }
-            
+        
             
             self.doesJump = willJump
             self._limit = limit
@@ -151,6 +151,10 @@ class RMXTracker : NSObject {
         return self.sprite.world
     }
     
+    func abort() {
+        self.doOnArrival = nil
+        self.didReachTarget(self.target)
+    }
     internal func headToTarget() {
        
         if !self.world.aiOn {
@@ -164,6 +168,9 @@ class RMXTracker : NSObject {
         let isStuck = self.isStuck
         self.lastPosition = self.sprite.position
         if let target = self.target {
+            if !target.attributes.isAlive && !self.isProjectile {
+                self.abort()
+            }
             if _limit > 0 && _count > _limit {
                 self.didReachTarget(self.target)
                 _count = 0

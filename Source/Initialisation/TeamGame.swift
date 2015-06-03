@@ -163,7 +163,10 @@ class SpriteAttributes : NSObject {
 //            self.kit?.transparency = 0
 //            _deathCount++
             self.isAlive = false
-            self.sprite.timer.timers.append(NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "deRetire", userInfo: nil, repeats: false))
+            self.sprite.releaseItem()
+            self.sprite.followers.removeAll()
+//            self.sprite.timer.timers.append(
+                NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "deRetire", userInfo: nil, repeats: false)
         }
         
     }
@@ -402,7 +405,7 @@ class RMXTeam {
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
                     projectile.node.removeCollisionAction("Attack")
                     challenger.world.interface.av.playSound(RMXInterface.THROW_ITEM, info: defender)
-                    projectile.tracker.removeTarget()
+                    projectile.tracker.abort()
                 }
             }
         }

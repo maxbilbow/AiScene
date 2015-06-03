@@ -94,7 +94,6 @@ class AiPoppy : NSObject, RMXAiDelegate {
                     self.sprite.tracker.setTarget(self.master, ignoreClaims: true, doOnArrival: { (target: RMXSprite?) -> () in
                         self.sprite.world.interface.av.playSound("pop2", info: self.sprite.position)
                         self.sprite.releaseItem()
-                        self.sprite.tracker.removeTarget()
                         
                     })
                 }

@@ -679,9 +679,13 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
                     return false
                 }
                 if self.hasItem { self.releaseItem() } // return false }
+                item.isLocked = true
                 if setItem(item: item) {
                     item.node.collisionActions.removeAll(keepCapacity: true)
                     return true
+                } else {
+                    item.isLocked = false
+                    return false
                 }
             }
         }

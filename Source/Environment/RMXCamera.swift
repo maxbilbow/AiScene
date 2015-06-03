@@ -21,10 +21,11 @@ class RMXCamera : SCNCamera {
         camera.zFar = 10000
         camera.yFov = 65
         camera.xFov = 65// * 16 / 9
-        camera.focalBlurRadius = 0.05
+//        camera.focalBlurRadius = 0.05
         //        camera.focalSize
         camera.aperture = 0.005
-        camera.focalDistance = 0.001
+        camera.focalDistance = 155
+        camera.focalBlurRadius = 10
         return camera
     }
     
