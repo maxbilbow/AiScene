@@ -36,7 +36,7 @@ extension RMXDPad {
     
     
     func zoom(recogniser: UIPinchGestureRecognizer) {        
-        self.action(action: "zoom", speed: -RMFloatB(recogniser.velocity))
+        self.action(action: "zoom", speed: RMFloatB(recogniser.velocity))
     }
     
     @availability(*,deprecated=1)

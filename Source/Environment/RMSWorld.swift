@@ -238,6 +238,7 @@ class RMXScene : SCNScene, RMXUniqueEntity {
                 let gravity = (self).physicsWorld.gravity
                 _gravity = gravity == RMSWorld.ZERO_GRAVITY ? RMSWorld.EARTH_GRAVITY : gravity
                 (self).physicsWorld.gravity = RMSWorld.ZERO_GRAVITY
+                (self.activeCamera as? RMXCameraNode)?.orientationNeedsReset()
                 RMXLog("Gravity off: \((self).physicsWorld.gravity.print)")
             } else {
                 if _gravity == RMSWorld.ZERO_GRAVITY {
@@ -250,9 +251,11 @@ class RMXScene : SCNScene, RMXUniqueEntity {
 
     
     func animate() {
-        if !self.hasGravity {
-            (self.activeCamera as? RMXCameraNode)?.calibrate(z: true)
-        }
+        (self.activeCamera as? RMXCameraNode)?.resetOrientation()
+        (self.activeCamera as? RMXCameraNode)?.resetPosition()
+        
+        
+        
         
         if !(self).paused {
             for child in self.children {

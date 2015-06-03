@@ -90,6 +90,7 @@ class RMSKeys : RMXInterface {
     //RMKey(self, action: "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
     RMKey(self, action: TOGGLE_AI, characters: "A", isRepeating: false,speed: ON_KEY_UP),
     RMKey(self, action: RESET, characters: "R", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: RESET_CAMERA, characters: "r", isRepeating: false,speed: ON_KEY_UP),
     
     //Interface options
     RMKey(self, action: LOCK_CURSOR, characters: "m", isRepeating: false, speed: ON_KEY_UP),

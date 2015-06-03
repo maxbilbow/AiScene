@@ -49,6 +49,7 @@ class RMXInterface : NSObject, RendererDelegate {
     //static let XXX: String = "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
     static let TOGGLE_AI: String = "toggleAI"
     static let RESET: String = "reset"
+    static let RESET_CAMERA: String = "resetCamera"
     
     //Interface options
     static let LOCK_CURSOR: String = "lockMouse"

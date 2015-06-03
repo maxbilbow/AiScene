@@ -160,28 +160,61 @@ class RMXCameraNode : SCNNode {
         return self == self.world.activeCamera
     }
     
-    func resetPosition() {
-        self.calibrate(pos: true, force: true, speed: 1)
-        var i: NSValue
+    func resetPosition() -> Bool {
+        if self._resetZoom {
+            self.calibrate(pos: true, force: true, speed: 1)
+            self._resetZoom = !(self.pivot.position.z == self.restingPivotPoint.z && self.fov == self.camera!.xFov)
+        }
+        return self._resetZoom
+        
     }
     
-    func resetOrientation() {
-        self.calibrate(x: true, y: true, z: true, force: true, speed: 1)
+    func resetOrientation() -> Bool {
+        if self._resetOrientation {
+            self.calibrate(x: true, y: true, z: true, force: true, speed: 1)
+            self._resetOrientation = !(self.eulerAngles.x == self.restingEulerAngles.x)
+        }
+        return self._resetOrientation
+        
     }
     
-    private func _calibrate(value: RMXNumber,_ target: RMXNumber,_ i: RMXNumber) -> Double {
-        return value.ns.doubleValue + value.ns.compare(target.ns).rawValue.ns.doubleValue * i.ns.doubleValue
+    private var _resetZoom: Bool = false
+    func zoomNeedsReset() {
+        self._resetZoom = true
     }
     
-    func calibrate(x: Bool = true, y: Bool = false, z: Bool = false, pos: Bool = false, force: Bool = false, speed: Double = 1) -> Bool {
+    private var _resetOrientation: Bool = false
+    func orientationNeedsReset() {
+        self._resetOrientation = true
+    }
+    
+    private func _calibrate(var value: RMFloatB,_ target: RMFloatB,_ i: RMFloatB) -> RMFloatB {
+        if value == target {
+            return value
+        } else if value < target {
+            value += i
+            if value > target {
+                value = target
+            }
+        } else if value > target {
+            value -= i
+            if value < target {
+                value = target
+            }
+        }
+        return value
+    
+    }
+    
+    func calibrate(x: Bool = true, y: Bool = false, z: Bool = false, pos: Bool = false, force: Bool = false, speed: RMFloatB = 1) -> Bool {
         if self.shouldAutoCalibrate || force {
-            if x { self.eulerAngles.x = RMFloatB(_calibrate(self.eulerAngles.x, self.restingEulerAngles.x, speed * 0.01)) }
-            if y { self.eulerAngles.y = RMFloatB(_calibrate(self.eulerAngles.y, self.restingEulerAngles.y, speed * 0.01)) }
-            if z { self.eulerAngles.z = RMFloatB(_calibrate(self.eulerAngles.z, self.restingEulerAngles.z, speed * 0.01)) }
+            if x { self.eulerAngles.x = _calibrate(self.eulerAngles.x, self.restingEulerAngles.x, speed * 0.01) }
+            if y { self.eulerAngles.y = _calibrate(self.eulerAngles.y, self.restingEulerAngles.y, speed * 0.01) }
+            if z { self.eulerAngles.z = _calibrate(self.eulerAngles.z, self.restingEulerAngles.z, speed * 0.01) }
         
             if pos {
-                self.camera?.xFov = _calibrate(self.camera!.xFov, 65, speed)
-                self.camera?.yFov = _calibrate(self.camera!.yFov, 65, speed)
+                self.camera?.xFov = Double(_calibrate(RMFloatB(self.camera!.xFov), 65, RMFloatB(speed)))
+                self.camera?.yFov = self.camera!.xFov //_calibrate(self.camera!.yFov, 65, speed)
                 self.pivot.m41 = RMFloatB(_calibrate(self.pivot.m41, self.restingPivotPoint.x, speed))
                 self.pivot.m42 = RMFloatB(_calibrate(self.pivot.m42, self.restingPivotPoint.y, speed))
                 self.pivot.m43 = RMFloatB(_calibrate(self.pivot.m43, self.restingPivotPoint.z, speed))
@@ -255,7 +288,7 @@ class RMXCameraNode : SCNNode {
             if fov < self.restingFOV {
                 self.camera?.xFov += zoomSpeed * Double(speed)
                 self.camera?.yFov += zoomSpeed * Double(speed)
-                self.camera?.focalSize
+//                self.camera?.focalSize
             } else if fov > self.restingFOV {
                 self.camera?.xFov = self.restingFOV
                 self.camera?.yFov = self.restingFOV

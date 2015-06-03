@@ -60,6 +60,10 @@ public class RMSActionProcessor {
         return self.interface.gameView!
     }
     
+    var activeCamera: RMXCameraNode? {
+        return self.world.activeCamera as? RMXCameraNode
+    }
+    
     private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
     private var _panThreshold: RMFloatB = 70
     
@@ -323,16 +327,19 @@ public class RMSActionProcessor {
             assert((self.world.activeCamera as? RMXCameraNode)?.moveOut(speed: 1) != nil, "not an RMXCamera")
             return true
         case "zoom":
-            if let cameraNode = self.gameView.pointOfView {
-                if cameraNode.camera!.xFov + Double(speed) > 100 || cameraNode.camera!.xFov + Double(speed) < 5 {
-//                    cameraNode.transform.m43 += speed
-                    return false
-                } else {
-                    cameraNode.camera!.xFov += Double(speed)
-                    cameraNode.camera!.yFov += Double(speed)
-//                    NSLog(self.gameView.pointOfView!.camera!.yFov.toData())
-                    return true
+            if let cameraNode = self.activeCamera {
+                if speed > 0 {
+                    cameraNode.moveIn(speed: speed)
+                } else if speed < 0 {
+                    cameraNode.moveOut(speed: -speed)
                 }
+            }
+            return false
+        case RMXInterface.RESET_CAMERA:
+            if speed == 1 {
+                self.activeCamera?.zoomNeedsReset()
+                self.activeCamera?.orientationNeedsReset()
+                return true
             }
             return false
         case RMXInterface.PAUSE_GAME:
