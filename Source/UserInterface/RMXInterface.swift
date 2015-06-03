@@ -352,7 +352,7 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func update(){
-        if _world != nil && !_world!.scene.paused {
+        if _world != nil && !_world!.paused {//.scene.paused {
             self.actionProcessor.animate()
             _world?.animate()
             if !self.dataView.hidden {
@@ -380,11 +380,11 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     var isPaused: Bool {
-        return _world != nil && _world!.scene.paused
+        return _world != nil && _world!.paused//.scene.paused
     }
     
     var isRunning: Bool {
-        return _world != nil && !_world!.scene.paused
+        return _world != nil && !_world!.paused//scene.paused
     }
     
     func pauseGame(sender: AnyObject?) -> Bool {

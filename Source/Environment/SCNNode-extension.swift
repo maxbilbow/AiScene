@@ -18,18 +18,7 @@ extension SCNNode : RMXLocatable {
     var rmxID: Int? {
         return self.rmxNode?.sprite?.rmxID//.getRmxID() ?? -1
     }
-    
-    func getRmxID(scene: RMXScene? = nil) -> Int? {
-        return self.rmxNode?.rmxID
-//        if self.name == RMXBrain.ID {
-//            return (self as? RMXBrain)?._rmxID
-//        } else if let scene = scene {
-//            return self.getRootNode(inScene: scene).sprite?.rmxID
-//        } else {
-//            return nil
-//        }
-    }
-    
+
     var isPointOfView: Bool {
         return (self as? RMXCameraNode)?.isFixedPointOfView ?? false
     }

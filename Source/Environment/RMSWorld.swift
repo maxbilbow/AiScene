@@ -14,9 +14,9 @@ import SceneKit
     import SpriteKit
 #endif
 
-
+typealias RMSWorld = RMXScene
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
-class RMSWorld : NSObject, RMXUniqueEntity {
+class RMXScene : SCNScene, RMXUniqueEntity {
     
     var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
     lazy var rmxID: Int? = RMXSprite.COUNT++
@@ -82,6 +82,10 @@ class RMSWorld : NSObject, RMXUniqueEntity {
         self.setScene()
         self.worldDidInitialize()
     }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private var _radius: RMFloatB?
     var radius: RMFloatB {
@@ -90,39 +94,34 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     
     static var RADIUS: RMFloatB = 250
     
-
-
-    var scene: RMXScene {
-        return self._scene ?? self.setScene()
-    }
     
     ///Note: May become public
-    private func setScene(scene: RMXScene? = nil) -> RMXScene {
-        self._scene = scene ?? RMSWorld.DefaultScene()
+    private func setScene(scene: SCNScene? = nil) -> SCNScene {
+//        self._scene = scene ?? RMSWorld.DefaultScene()
         self.cameras += self.activeSprite.cameras// + self.cameras
-        self._scene.physicsWorld.contactDelegate = self.interface.collider
+        self.physicsWorld.contactDelegate = self.interface.collider
         self.calibrate()
-        return self._scene
+        return self
     }
     var ground: RMFloatB = 0
-    func calibrate() -> RMXScene {
+    func calibrate() -> SCNScene {
         _aiOn = false
-        self.interface.gameView!.scene = self._scene
+        self.interface.gameView!.scene = self//._scene
         self.cameraNumber = 0
         self.interface.gameView!.pointOfView = self.activeCamera
         
         NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
-        return _scene
+        return self
     }
     
     func pause() -> Bool {
-            self.scene.paused = true
+            (self).paused = true
 //            self.switchOffAi()
         return true
     }
     
     func unPause() -> Bool {
-        self.scene.paused = false
+        (self).paused = false
         
         return true
     }
@@ -149,8 +148,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
             _aiOn = !_aiOn
         }
     }
-    
-    private var _scene: RMXScene! = nil
+
     
     private let GRAVITY: RMFloatB = 0
     
@@ -209,7 +207,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     func insertChild(child: RMXSprite, andNode:Bool = true){
         self.children.append(child)
         if andNode {
-            self.scene.rootNode.addChildNode(child.node)
+            (self).rootNode.addChildNode(child.node)
         }
     }
     
@@ -226,48 +224,41 @@ class RMSWorld : NSObject, RMXUniqueEntity {
     }
   
     var hasGravity: Bool {
-        return self.scene.physicsWorld.gravity != RMSWorld.ZERO_GRAVITY
+        return (self).physicsWorld.gravity != RMSWorld.ZERO_GRAVITY
     }
     
     private var _gravity = ZERO_GRAVITY
     
     var gravity: RMXVector3 {
-        return self.scene.physicsWorld.gravity
+        return (self).physicsWorld.gravity
     }
     
     func toggleGravity() {
             if self.hasGravity {
-                let gravity = self.scene.physicsWorld.gravity
+                let gravity = (self).physicsWorld.gravity
                 _gravity = gravity == RMSWorld.ZERO_GRAVITY ? RMSWorld.EARTH_GRAVITY : gravity
-                self.scene.physicsWorld.gravity = RMSWorld.ZERO_GRAVITY
-                RMXLog("Gravity off: \(self.scene.physicsWorld.gravity.print)")
+                (self).physicsWorld.gravity = RMSWorld.ZERO_GRAVITY
+                RMXLog("Gravity off: \((self).physicsWorld.gravity.print)")
             } else {
                 if _gravity == RMSWorld.ZERO_GRAVITY {
                      _gravity = RMSWorld.EARTH_GRAVITY
                 }
-                self.scene.physicsWorld.gravity = _gravity
-                RMXLog("Gravity on: \(self.scene.physicsWorld.gravity.print)")
+                (self).physicsWorld.gravity = _gravity
+                RMXLog("Gravity on: \((self).physicsWorld.gravity.print)")
             }
     }
 
     
     func animate() {
         if !self.hasGravity {
-            let activeCamera = self.activeCamera
-            if self.activeSprite.isPOV {
-                if activeCamera.eulerAngles.x > 0.01 {
-                    activeCamera.eulerAngles.x -= 0.01
-                } else if activeCamera.eulerAngles.x < -0.01 {
-                    activeCamera.eulerAngles.x += 0.01
-                }
-            }
+            (self.activeCamera as? RMXCameraNode)?.calibrate(z: true)
         }
         
-        if !self.scene.paused {
+        if !(self).paused {
             for child in self.children {
                 child.animate()
             }
-            self.scene.physicsWorld.updateCollisionPairs()
+            (self).physicsWorld.updateCollisionPairs()
         }
     }
     
@@ -280,7 +271,7 @@ class RMSWorld : NSObject, RMXUniqueEntity {
             if radius > 0 && position.distanceTo(RMXVector3Zero) > radius {
                 return false
             }
-        } else if let earth = self._scene.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
+        } else if let earth = self.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
             _radius = earth.radius
             _ground = earth.sprite?.top.y
             self.validate(sprite)

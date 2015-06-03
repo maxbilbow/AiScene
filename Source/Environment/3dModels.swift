@@ -17,14 +17,14 @@ typealias RMXModels = RM3DModels
 class RM3DModels  {
     
     
-    #if SceneKit
+
     var rock: SCNGeometry?
     var oilDrum: SCNGeometry?
 //    var ausfb: SCNGeometry?
-    static let pongo: AnyObject? = RMXScene(named:"art.scnassets/Pongo/other/The Limited 4.dae")?.rootNode.clone()
-    static let ausfb: AnyObject? = RMXScene(named:"art.scnassets/AUSFB/ausfb.dae")?.rootNode.clone()
-    static let dog: AnyObject? = RMXScene(named:"art.scnassets/Dog/Dog.dae")?.rootNode.clone()
-    static let pilot: AnyObject? = RMXScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")?.rootNode.clone()
+    static let pongo: AnyObject? = SCNScene(named:"art.scnassets/Pongo/other/The Limited 4.dae")?.rootNode.clone()
+    static let ausfb: AnyObject? = SCNScene(named:"art.scnassets/AUSFB/ausfb.dae")?.rootNode.clone()
+    static let dog: AnyObject? = SCNScene(named:"art.scnassets/Dog/Dog.dae")?.rootNode.clone()
+    static let pilot: AnyObject? = SCNScene(named:"art.scnassets/ArmyPilot/ArmyPilot.dae")?.rootNode.clone()
     
     static var ship: SCNGeometry {
         let url = NSBundle.mainBundle().URLForResource("art.scnassets/ship", withExtension: "dae")
@@ -118,14 +118,12 @@ class RM3DModels  {
             node.scale *= 0.01 * radius
             break
         case ShapeType.BOBBLE_MAN:
-            node = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: radius, color: color)
-//            let head = RMXCameraNode(geometry: SCNSphere(radius: RMFloat(radius * 0.5)))
-            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: radius * 0.5)
+            let r: RMFloatB = 8
+            node = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: r, color: color)
+            let head = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: r / 2)
             head.name = "head"
-//            head.physicsBody = SCNPhysicsBody.kinematicBody()
-//            head.physicsBody!.mass = -10
             node.addChildNode(head)
-            head.position = SCNVector3Make(0, 2 * radius * 0.9, 0) //TODO check
+            head.position = SCNVector3Make(0, 2 * r * 0.9, 0) //TODO check
             
             break
         case ShapeType.NULL:
@@ -143,54 +141,12 @@ class RM3DModels  {
             node.geometry!.firstMaterial!.specular.contents = color
             
         }
-        
-//        switch (mode){
-//        case .AI, .PLAYER, .PASSIVE:
-//            node.physicsBody = SCNPhysicsBody.dynamicBody()
-//            node.physicsBody!.restitution = 0.1
-//            break
-//        case .BACKGROUND:
-//            node.physicsBody = SCNPhysicsBody.staticBody()
-//            node.physicsBody!.restitution = 0.1
-//            node.physicsBody!.damping = 1000
-//            node.physicsBody!.angularDamping = 1000
-//            break
-//        case .KINEMATIC:
-//            node.physicsBody = SCNPhysicsBody.kinematicBody()
-//            node.physicsBody!.restitution = 0.1
-//            break
-//        default:
-//            if node.physicsBody == nil {
-//                node.physicsBody = SCNPhysicsBody()//.staticBody()
-//                node.physicsBody!.restitution = 0.0
-//            }
-//        }
-//        
-//        if type == ShapeType.BOBBLE_MAN {
-//            node.physicsBody!.angularDamping = 0.99
-//            node.physicsBody!.damping = 0.5
-//            node.physicsBody!.friction = 0.1
-//        }
-//        if type != ShapeType.NULL {
-//            radius = getRadius(ofNode: node)
-//            node.physicsBody!.mass = 4 * CGFloat(PI * radius * radius)// * 600
-//        } else {
-//            node.physicsBody!.mass = 0
-//        }
+
         
         return node
     }
+
     
-    class func getRadius(ofNode node: SCNNode) -> RMFloatB {
-        var center = RMXVector3Zero; var radius: RMFloat = 0
-        let bounds = node.getBoundingSphereCenter(&center, radius: &radius)
-        return RMFloatB(radius)
-    }
-    
-    
-    
-    #elseif SpriteKit
-    
-    #endif
+
     
 }

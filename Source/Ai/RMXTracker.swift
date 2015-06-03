@@ -70,75 +70,80 @@ class RMXTracker : NSObject {
     var speed: RMFloatB = 0
 
     
-    func setTarget(target: RMXSprite?, speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) {
-       
-        if target != nil && target! == self.sprite {
-//            self.setTarget(nil)
-            return
-        }
+    func setTarget(target: RMXSprite?, speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
+        let oldTarget = self.target ; let newTarget = target
+
+        if let target = target {
+            if target == self.sprite {
+                self._target = nil
+                self.sprite.stopFollowing(self.sprite)
+                return false
+            }
         
-        if !self.sprite.isActiveSprite {
-            if target != nil && !ignoreClaims && target!.hasFollowers {
-                if  !asProjectile {
-                    return
+            if !asProjectile && !(self.sprite.isActiveSprite || ignoreClaims) && target.hasFollowers {
+                self._target = nil
+                self.sprite.stopFollowing(target)
+                return false
+            }
+            
+            
+            self.doesJump = willJump
+            self._limit = limit
+            self._count = 0
+            self._target = target
+            self.isProjectile = asProjectile
+            self.impulse = impulse
+            
+        
+            self.speed = (speed ?? 1 ) * self.sprite.speed // / self.sprite.mass + 1)
+            
+            
+            if self.impulse {
+                self.speed *= 100 / (self.sprite.mass + 1)
+                if self.sprite.isActiveSprite {
+                    NSLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+                }
+            } else if self.sprite.isActiveSprite {
+                    NSLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+            }
+            
+            
+            
+            self.doOnArrival = doOnArrival
+
+            if asProjectile { //if holming missile with timer, do not let interferrence
+                self.sprite.isLocked = true
+                if limit <= 0 {
+                    self._limit = 100
                 }
             }
         }
-        
-        self.sprite.follow(target)
-        
-        self.doesJump = willJump
-        self._limit = limit
-        self._count = 0
-        self._target = target
-        self.isProjectile = asProjectile
-        self.impulse = impulse
-        
-    
-        self.speed = (speed ?? 1 ) * self.sprite.speed // / self.sprite.mass + 1)
-        
-        
-        if self.impulse {
-            self.speed *= 100 / (self.sprite.mass + 1)
-            if self.sprite.isActiveSprite {
-                NSLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
-            }
-        } else if self.sprite.isActiveSprite {
-                NSLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
-            }
-        
-        
-//        NSLog("speed \(self.speed) mass: \(self.sprite.mass)")
-        func doa(target: RMXSprite?) {
-            if limit > 0 && asProjectile { //if holming missile with timer, do not let interferrence
-                self.sprite.isLocked = false
-            }
-            doOnArrival?(target: target)
-        }
-        
-        self.doOnArrival = doa
-
-        if asProjectile { //if holming missile with timer, do not let interferrence
-            self.sprite.isLocked = true
-            if limit <= 0 {
-                self._limit = 100
-            }
-        }
+//        if oldTarget?.rmxID != newTarget?.rmxID || self.target == nil {
+            self.sprite.stopFollowing(oldTarget)
+            self.sprite.follow(self.target)
+//        }
+        return self.hasTarget
     }
     
+    internal func didReachTarget(target: RMXSprite?) -> Bool {
+        if self.isProjectile { //if holming missile with timer, do not let interferrence
+            self.sprite.isLocked = false
+        }
+        self._target = nil
+        self.sprite.stopFollowing(target)
+        self.doOnArrival?(target: target)
+        return true
+    }
     private var _count: Int = 0 ; private var _limit: Int = 0
    
     
     func checkForCollision(contact: SCNPhysicsContact) -> Bool {
         if let target = self.target {
-            if contact.getDefender(forChallenger: self.sprite).rmxID == target.rmxID {
-                self.doOnArrival?(target: target)
-                self.removeTarget()
-                return true
-            }
+            return contact.getDefender(forChallenger: self.sprite).rmxID == target.rmxID && self.didReachTarget(target)
         }
         return false
     }
+    
     var impulse = false
     var doesJump = true
     
@@ -160,7 +165,7 @@ class RMXTracker : NSObject {
         self.lastPosition = self.sprite.position
         if let target = self.target {
             if _limit > 0 && _count > _limit {
-                self.doOnArrival?(target: self.target)
+                self.didReachTarget(self.target)
                 _count = 0
             } else {
                 ++_count

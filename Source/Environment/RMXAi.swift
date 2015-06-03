@@ -85,13 +85,13 @@ class AiPoppy : NSObject, RMXAiDelegate {
                         } else {
                             self.master = self.sprite.world.activeSprite
                         }
-                        self.sprite.tracker.setTarget(self.master)
+                        self.sprite.tracker.setTarget(self.master, ignoreClaims: true)
                         self._count = 0
                     }
                 } else {
                     self._count = 0
                     self.sprite.grab(target)
-                    self.sprite.tracker.setTarget(self.master, doOnArrival: { (target: RMXSprite?) -> () in
+                    self.sprite.tracker.setTarget(self.master, ignoreClaims: true, doOnArrival: { (target: RMXSprite?) -> () in
                         self.sprite.world.interface.av.playSound("pop2", info: self.sprite.position)
                         self.sprite.releaseItem()
                         self.sprite.tracker.removeTarget()
@@ -129,12 +129,8 @@ class AiRandom: NSObject, RMXAiDelegate {
         if !self.sprite.tracker.hasTarget && !self.sprite.hasItem { //after time to prevent grabbing (ish)
             self.sprite.tracker.setTarget(self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.sprite.grab(target) {
-                    self.sprite.tracker.setTarget(self.getTarget(self.args), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                        
+                    self.sprite.tracker.setTarget(self.getTarget(self.args), ignoreClaims: true, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
                         self.sprite.throwItem(atSprite: target, withForce: 1)
-                        //                            NSLog("node thrown at \(target?.name)")
-                        self.sprite.tracker.removeTarget()
-                        //                            NSLog("target set to nil")
                     })
                 }
                 else {

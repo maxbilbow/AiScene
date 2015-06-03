@@ -492,11 +492,11 @@
 		6C9299B31AE544C000E71811 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				6CDF866E1B1EF266001F270B /* 3DGaming */,
 				5031F3A91B15ABFF00FAB551 /* Ai */,
 				6C73A8D91B0A6D7900187A61 /* Art */,
 				6C9299B71AE544C000E71811 /* Environment */,
 				6C9299C01AE544C000E71811 /* Generics */,
-				6C9299C71AE544C000E71811 /* Geometry */,
 				6C9299C81AE544C000E71811 /* Initialisation */,
 				6C9299CC1AE544C000E71811 /* Protocols */,
 				6C9299CF1AE544C000E71811 /* UserInterface */,
@@ -535,13 +535,6 @@
 				6C9299C61AE544C000E71811 /* RMXValue.swift */,
 			);
 			path = Generics;
-			sourceTree = "<group>";
-		};
-		6C9299C71AE544C000E71811 /* Geometry */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Geometry;
 			sourceTree = "<group>";
 		};
 		6C9299C81AE544C000E71811 /* Initialisation */ = {
@@ -615,6 +608,13 @@
 				6C929A141AE5497900E71811 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6CDF866E1B1EF266001F270B /* 3DGaming */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = 3DGaming;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

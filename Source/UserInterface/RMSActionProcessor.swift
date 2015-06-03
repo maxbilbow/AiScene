@@ -49,7 +49,7 @@ public class RMSActionProcessor {
     }
     
     var scene: RMXScene {
-        return self.world.scene
+        return self.world//.scene
     }
     init(interface: RMXInterface){
         self.interface = interface
@@ -95,23 +95,26 @@ public class RMSActionProcessor {
         case "look", "Look", "LOOK":
             
             if point.count == 2 {
-                if !self.activeSprite.isPOV {
-                    self.world.activeCamera.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
-                    let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
-                    if phi < 1 && phi > -1 {
-                        self.world.activeCamera.eulerAngles.x = phi
-                    }
-//                    }
-                } else {
-                    if self.world.hasGravity {
+                if let camera = self.world.activeCamera as? RMXCameraNode {
+                    speed *= camera.zoomFactor
+                    if !self.activeSprite.isPOV {
+                        self.world.activeCamera.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
                         let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
                         if phi < 1 && phi > -1 {
                             self.world.activeCamera.eulerAngles.x = phi
                         }
-                    }
-                    self.turnSpeed(&speed, sprite: sprite)
-                    sprite.lookAround(theta: point[0] * -speed,phi: point[1] * speed)
+    //                    }
+                    } else {
+                        if self.world.hasGravity {
+                            let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                            if phi < 1 && phi > -1 {
+                                self.world.activeCamera.eulerAngles.x = phi
+                            }
+                        }
+                        self.turnSpeed(&speed, sprite: sprite)
+                        sprite.lookAround(theta: point[0] * -speed,phi: point[1] * speed)
 
+                    }
                 }
             }
             return true
@@ -310,12 +313,14 @@ public class RMSActionProcessor {
             self.scene.physicsWorld.speed / 1.5
             return true
         case RMXInterface.ZOOM_IN:
-            --self.gameView.pointOfView!.camera!.xFov
-            --self.gameView.pointOfView!.camera!.yFov //= SCNTechnique.
+//            --self.gameView.pointOfView!.camera!.xFov
+//            --self.gameView.pointOfView!.camera!.yFov //= SCNTechnique.
+            assert((self.world.activeCamera as? RMXCameraNode)?.moveIn(speed: 1) != nil, "not an RMXCamera")
             return true
         case RMXInterface.ZOOM_OUT:
-            ++self.gameView.pointOfView!.camera!.xFov
-            ++self.gameView.pointOfView!.camera!.yFov
+//            ++self.gameView.pointOfView!.camera!.xFov
+//            ++self.gameView.pointOfView!.camera!.yFov
+            assert((self.world.activeCamera as? RMXCameraNode)?.moveOut(speed: 1) != nil, "not an RMXCamera")
             return true
         case "zoom":
             if let cameraNode = self.gameView.pointOfView {
@@ -379,7 +384,7 @@ public class RMSActionProcessor {
     func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
         let node = self.activeSprite.node//.presentationNode()
         let sprite = self.activeSprite
-        let physics = self.world.scene.physicsWorld
+        let physics = self.world.physicsWorld
         var info: String = "\n"
         switch type {
         case .PLAYER_INFO:

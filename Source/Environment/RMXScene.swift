@@ -9,30 +9,8 @@
 import Foundation
 
 
-#if SceneKit
+
     import SceneKit
-    typealias RMXScene = SCNScene
-#elseif SpriteKit
-    import SpriteKit
-    typealias RMXScene = SKScene
-    
-    extension SKScene {
-        var rootNode: SKScene {
-            return self
-        }
-    }
-#endif
 
 
-extension RMSWorld {
-    
-    class func DefaultScene() -> RMXScene {
-        #if SceneKit
-        return RMXScene()//named: "art.scnassets/SnowTerrain/SnowTerrain.dae")!//ship.dae")!
-        #elseif SpriteKit
-        return RMXScene(fileNamed:"Spaceship")
-        #endif
-    }
-    
-    
-}
+

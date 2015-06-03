@@ -2,3 +2,4 @@
 
 import Foundation
 
+print( NSNumber(double: 1.0).compare(-1.0).rawValue)

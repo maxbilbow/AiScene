@@ -72,26 +72,32 @@ class RMXNode : SCNNode {
         self.addChildNode(self._geometryNode)
 
         switch sprite.type {
+        
         case .AI, .PLAYER, .PASSIVE, .PLAYER_OR_AI:
             self.physicsBody = SCNPhysicsBody.dynamicBody()
-            self.physicsBody!.restitution = 0.1
-            self.physicsBody!.angularDamping = 0.5
-            self.physicsBody!.damping = 0.5
-            self.physicsBody!.friction = 0.1
+            self.physicsBody?.friction = 0.1
+            self.physicsBody?.mass = RMFloat(4 * PI * self.radius * self.radius)
+            break
+        case .PASSIVE:
+            self.physicsBody?.damping = 0.3
+            self.physicsBody?.angularDamping = 0.2
+//            self.physicsBody?.restitution = 0.1
+        case .AI, .PLAYER:
+            self.physicsBody?.damping = 0.5
+            self.physicsBody?.angularDamping = 0.5
+            break
+        case .PLAYER:
+            self.physicsBody?.angularDamping = 0.99
             break
         case .BACKGROUND:
             self.physicsBody = SCNPhysicsBody.staticBody()
-            self.physicsBody!.restitution = 0.1
-            self.physicsBody!.damping = 1000
-            self.physicsBody!.angularDamping = 1000
             self.physicsBody!.friction = 0.1
             break
         case .KINEMATIC:
             self.physicsBody = SCNPhysicsBody.kinematicBody()
-            self.physicsBody!.restitution = 0.1
-            self.physicsBody!.friction = 0.1
             break
         case .ABSTRACT:
+            self.physicsBody?.mass = 0
             break
         default:
             if self.physicsBody == nil {
@@ -100,14 +106,14 @@ class RMXNode : SCNNode {
             }
         }
         
-        self.physicsBody?.mass = RMFloat(4 * PI * self.radius * self.radius)
+        
         
         switch sprite.shapeType {
         case .BOBBLE_MAN:
-            self.physicsBody!.angularDamping = 0.99
+            
             break
         case .NULL:
-            self.physicsBody?.mass = 0
+            
             break
         default:
             break

@@ -60,7 +60,7 @@ class AiCubo {
             ambientLightNode.light = SCNLight()
             ambientLightNode.light!.type = SCNLightTypeAmbient
             ambientLightNode.light!.color = NSColor.darkGrayColor()
-            world.scene.rootNode.addChildNode(ambientLightNode)
+            world.rootNode.addChildNode(ambientLightNode)
 //            interface.gameView!.scene = world.scene
 //            interface.gameView.pointOfView = world.activeCamera
             
@@ -105,14 +105,14 @@ class AiCubo {
     
     class func insideGlobe(interface: RMXInterface, world: RMSWorld) {
         AiCubo.testingEnvironment(interface, world: world)
-        let earth = world.scene.rootNode.childNodeWithName("Earth", recursively: true)!
+        let earth = world.rootNode.childNodeWithName("Earth", recursively: true)!
         let globe = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, shape: .SPHERE, unique: true)
         globe.geometry?.firstMaterial?.doubleSided = true
         if let gNode: SCNSphere = globe.geometry as? SCNSphere {
             gNode.geodesic = true
             
         }
-        world.scene.rootNode.replaceChildNode(earth, with: globe.node)
+        world.rootNode.replaceChildNode(earth, with: globe.node)
         for child in world.children {
             if child.rmxID != globe.rmxID {
                 child.node.removeFromParentNode()
@@ -165,7 +165,7 @@ class AiCubo {
         
         let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, unique: true)
     
-        world.scene.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
+        world.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
         
         
         earth.setName(name: "Earth")

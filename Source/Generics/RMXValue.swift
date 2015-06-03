@@ -9,6 +9,48 @@
 import Foundation
 import SceneKit
 
+func +=(inout lhs: RMXNumber, rhs: RMXNumber) {
+    lhs = (lhs.ns.doubleValue + rhs.ns.doubleValue)
+}
+
+func -=(inout lhs: RMXNumber, rhs: RMXNumber) {
+    lhs = (lhs.ns.doubleValue - rhs.ns.doubleValue)
+}
+
+func *=(inout lhs: RMXNumber, rhs: RMXNumber) {
+    lhs = (lhs.ns.doubleValue * rhs.ns.doubleValue)
+}
+
+func /=(inout lhs: RMXNumber, rhs: RMXNumber) {
+    lhs = (lhs.ns.doubleValue / rhs.ns.doubleValue)
+}
+
+
+func + (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
+    return (lhs.ns.doubleValue + rhs.ns.doubleValue)
+}
+
+func - (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
+    return(lhs.ns.doubleValue - rhs.ns.doubleValue)
+}
+
+func * (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
+    return (lhs.ns.doubleValue * rhs.ns.doubleValue)
+}
+
+func / (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber{
+    return (lhs.ns.doubleValue / rhs.ns.doubleValue)
+}
+
+
+
+
+protocol RMXNumber  {
+    var ns: NSNumber { get }
+
+    
+}
+
 class RMXValue<T: Comparable> {
    // var n: NSValue = 0
     class func isNegative(n:Int) -> Bool {
@@ -55,30 +97,68 @@ class RMXValue<T: Comparable> {
 
 }
 
-extension Int {
+
+
+extension Int : RMXNumber {
     func toData(dp:String="05") -> String {
         return RMXValue.toData(self, dp: dp)///NSString(format: "%.\(dp)f", self)
     }
+    
+    var print: String {
+        return self.toData()
+    }
+    
+    var ns: NSNumber {
+        return NSNumber(integer: self)
+    }
+    
+    
+    
+    
 }
 
-extension Float {
+extension Float: RMXNumber {
     func toData(dp:String="05.2") -> String {
         return RMXValue.toData(self, dp: dp)///NSString(format: "%.\(dp)f", self)
+    }
+    
+    var print: String {
+        return self.toData()
     }
     
     var size: Float {
         return fabs(self)
     }
+    
+    var ns: NSNumber {
+        return NSNumber(float: self)
+    }
 }
-extension Double {
+extension Double: RMXNumber {
     func toData(dp:String="05.2") -> String {
         return RMXValue.toData(self, dp: dp)
     }
+    
+    var print: String {
+        return self.toData()
+    }
+    
+    var ns: NSNumber {
+        return NSNumber(double: self)
+    }
 }
 
-extension CGFloat {
+extension CGFloat: RMXNumber {
     func toData(dp:String="05.2") -> String {
         return RMXValue.toData(self, dp: dp)
+    }
+    
+    var print: String {
+        return self.toData()
+    }
+    
+    var ns: NSNumber {
+        return NSNumber(double: Double(self))
     }
 }
 

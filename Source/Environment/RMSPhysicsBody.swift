@@ -11,19 +11,3 @@ import GLKit
 import SceneKit
 import SpriteKit
 
-extension RMXSprite {
-    
-    
-    
-
-}
-
-extension RMXSprite {
-    
-}
-
-extension SKPhysicsBody {
-    func clearAllForces() {
-        RMXLog("unimplemented")
-    }
-}

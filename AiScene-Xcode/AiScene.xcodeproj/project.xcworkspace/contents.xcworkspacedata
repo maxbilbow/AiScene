@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../../AiSpritee/AiSpritee.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "self:AiScene.xcodeproj">
    </FileRef>
 </Workspace>
