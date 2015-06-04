@@ -33,4 +33,10 @@ enum UserAction {
     case LEFT_CLICK
     case RIGHT_CLICK
     
+    
 }
+
+extension UserAction {
+   
+}
+

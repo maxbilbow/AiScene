@@ -97,6 +97,7 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: NEXT_CAMERA, characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: PAUSE_GAME, characters: "p", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: PAUSE_GAME, characters: KEY_ESCAPE, isRepeating: false, speed: ON_KEY_UP),
     RMKey(self, action: KEYBOARD_LAYOUT, characters: "k", isRepeating: false, speed: ON_KEY_UP),
     RMKey(self, action: NEW_GAME, characters: "N", isRepeating: false, speed: ON_KEY_UP),
     
@@ -106,8 +107,14 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
     RMKey(self, action: ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
     RMKey(self, action: INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN)
+    RMKey(self, action: DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN),
         
+    //Unassigned
+    RMKey(self, action: "key up", characters: KEY_UP, isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: "key down", characters: KEY_DOWN, isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: "key left", characters: KEY_LEFT, isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: "key right", characters: KEY_RIGHT, isRepeating: false, speed: ON_KEY_DOWN)
+    
     ]
     
   
@@ -127,6 +134,15 @@ class RMSKeys : RMXInterface {
     override func setUpViews() {
         super.setUpViews()
         self.skView.alphaValue = 0.5
+    }
+    
+    override func pauseGame(sender: AnyObject?) -> Bool {
+        if super.pauseGame(sender) {
+            self.actionProcessor.isMouseLocked = false
+            return true
+        } else {
+            return false
+        }
     }
     
     func set(action a: String, characters k: String ) {
@@ -153,10 +169,29 @@ class RMSKeys : RMXInterface {
         return nil
     }
     
+    func forEvent(theEvent: NSEvent) -> RMKey? {
+        if theEvent.characters != "" {
+            return self.get(forChar: theEvent.characters)
+        } else {
+            return self.get(forCode: theEvent.keyCode)
+        }
+    }
+    
     func get(forChar char: String?) -> RMKey? {
         for key in keys {
             if key.characters == char {
                 return key
+            }
+        }
+        return nil
+    }
+    
+    func get(forCode code: UInt16?) -> RMKey? {
+        if let code = code {
+            for key in keys {
+                if key.characters == "\(code)" {
+                    return key
+                }
             }
         }
         return nil
@@ -366,25 +401,28 @@ extension GameView {
     }
     
     override func keyDown(theEvent: NSEvent) {
-        if let key = self.keys.get(forChar: theEvent.characters) {
+        if let key = self.keys.forEvent(theEvent) {
             if !key.press() {
                 super.keyDown(theEvent)
             }
         } else {
-            self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: theEvent.characters!, isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
-            NSLog("new key added: \(theEvent.characters)")
-            self.keyDown(theEvent)
+            //self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: theEvent.characters!, isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
+            // \(theEvent.description)")
+            super.keyDown(theEvent)
         }
         
     }
     
     override func keyUp(theEvent: NSEvent) {
-        if let key = self.keys.get(forChar: theEvent.characters) {
+        
+        if let key = self.keys.forEvent(theEvent) {
+//            NSLog(key.description)
             if !key.release() {
                super.keyUp(theEvent)
             }
         } else {
-            
+//            NSLog("new key added:\n\n \(theEvent.description)")
+            RMLog("Unrecognised \(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters?.unicodeScalars.description)",id: "keys")
             
             super.keyUp(theEvent)
         }

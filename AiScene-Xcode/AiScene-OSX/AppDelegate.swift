@@ -16,5 +16,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
     }
+    
+    func applicationWillHide(notification: NSNotification) {
+        
+    }
 
+    func applicationDidChangeOcclusionState(notification: NSNotification) {
+//        NSLog(notification.description)
+        
+    }
 }

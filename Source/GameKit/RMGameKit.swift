@@ -25,6 +25,8 @@ class RMXGameManager {
     }
     
     func gameWon(player: RMXSprite) {
+        let foo = GKPlayer()
+        foo.playerID
         
     }
     

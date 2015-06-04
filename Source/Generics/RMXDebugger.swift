@@ -9,10 +9,11 @@
 import Foundation
 import SceneKit
 
-public class RMXDebugger  {
-    
+extension RMXLog {
+    static let isDebugging: Bool = false
 
 }
+
 extension RMX {
     
     
@@ -90,7 +91,7 @@ class RMXLog {// : NSObject {
     static let DEBUG = "DEBUG"//classForCoder().description()
     
 //    #if DEBUG
-    static let isDebugging: Bool = true
+    
     
     static let nul = ""
     

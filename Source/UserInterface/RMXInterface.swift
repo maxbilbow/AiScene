@@ -72,6 +72,12 @@ class RMXInterface : NSObject, RendererDelegate {
     static let MOVE_CURSOR_PASSIVE: String = "mouseMoved"
     static let LEFT_CLICK: String = "Mouse 1"
     static let RIGHT_CLICK: String = "Mouse 2"
+    static let KEY_LEFT: String = "123"
+    static let KEY_RIGHT: String = "124"
+    static let KEY_DOWN: String = "125"
+    static let KEY_UP: String = "126"
+    static let KEY_BACKSPACE: String = "\u{7F}"
+    static let KEY_ESCAPE: String = "\u{1B}"
     
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
