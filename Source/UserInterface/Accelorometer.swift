@@ -96,7 +96,7 @@ extension RMXDPad {
             }
         }
         else {
-            RMXLog("No motion?!")
+//            RMLog("No motion?!")
         }
         // println()
     }

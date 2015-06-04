@@ -17,7 +17,10 @@ import GameKit
     #endif
 
 
-class GameViewController: ViewController , SCNSceneRendererDelegate {
+class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
+    
+    var rmxID: Int?; var uniqueID, name: String? ; var print: String = classForCoder().description()
+    
     #if iOS
     weak var gameView: GameView! {
         return self.view as? GameView
@@ -79,8 +82,8 @@ class GameViewController: ViewController , SCNSceneRendererDelegate {
 
     }
     
-    func somethingHappened(thing: AnyObject){
-        RMXLog(thing)
+    func somethingHappened(thing: AnyObject?){
+      
     }
     
 }

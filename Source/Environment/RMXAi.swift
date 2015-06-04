@@ -235,19 +235,20 @@ class RMXAi {
     
     static func randomSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE) -> RMXSprite? {
         var sprite: RMXSprite?
+        let count = world.children.count
         switch type {
         case .AI, .PASSIVE:
             do {
-                sprite =  RMX.spriteWith(ID: random() % RMXSprite.COUNT, inArray: world.children)
+                sprite =  RMX.spriteWith(ID: random() % count, inArray: world.children)
             } while sprite?.type != type
             return sprite
         case .PLAYER_OR_AI:
             do {
-                sprite = RMX.spriteWith(ID: random() % RMXSprite.COUNT, inArray: world.children)
+                sprite = RMX.spriteWith(ID: random() % count, inArray: world.children)
             } while sprite?.type != .AI && sprite?.type != .PLAYER
             return sprite
         default:
-            return nil//RMX.spriteWith(ID: random() % RMXSprite.COUNT, inArray: world.children)
+            return nil//RMX.spriteWith(ID: random() % count, inArray: world.children)
         }
     }
     

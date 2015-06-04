@@ -23,9 +23,10 @@ class RMXCamera : SCNCamera {
         camera.xFov = 65// * 16 / 9
 //        camera.focalBlurRadius = 0.05
         //        camera.focalSize
-        camera.aperture = 0.005
-        camera.focalDistance = 155
-        camera.focalBlurRadius = 10
+        camera.aperture = 0.75
+        camera.focalDistance = 240
+        camera.focalBlurRadius = 3
+        camera.focalSize = 1000
         return camera
     }
     
@@ -134,7 +135,7 @@ class RMXCameraNode : SCNNode {
     var restingFOV: Double = 65
     internal var _rmxID: Int?
     static var COUNT: Int = 0
-    lazy var cameraID: Int = RMXSprite.COUNT++
+    lazy var cameraID: Int = RMX.COUNT++
 //    var rmxID: Int?
     var cameraType: CameraOptions = .FIXED
     

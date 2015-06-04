@@ -15,7 +15,8 @@ public struct RMX {
     static let isFullscreen: Bool = false
     static let usingDepreciated: Bool = true
     static let usingSceneKit: Bool = false
-    
+
+static var COUNT: Int = 0
 }
 
 import GLKit

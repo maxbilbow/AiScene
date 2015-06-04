@@ -31,25 +31,7 @@ class RMXArt {
     static let yellowVector: GLKVector4 = GLKVector4Make(1.0, 1.0, 0.0, 1.0)
     static let blueVector: GLKVector4 = GLKVector4Make(0.0, 0.0, 1.0, 1.0)
     static let redVector: GLKVector4 = GLKVector4Make(1.0, 0.0, 0.0, 1.0)
-    #if SceneKit
-    static let CUBE = SCNBox(
-        width: 1.0,
-        height:1.0,
-        length:1.0,
-        chamferRadius:0.0)
-    static let PLANE = SCNPlane(
-        width: 1.0,
-        height:1.0
-    )
-    
-    static let SPHERE = SCNSphere(radius:0.5)
-    static let CYLINDER = SCNCylinder(radius:0.5, height:1.0)
-    
-    static let greenMat: SCNMaterial = SPHERE.firstMaterial!.copy() as! SCNMaterial
-    static let redMat: SCNMaterial = SPHERE.firstMaterial!.copy() as! SCNMaterial
-    static let blueMat: SCNMaterial = SPHERE.firstMaterial!.copy() as! SCNMaterial
-    
-    #endif
+
     
     class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloatB = 1000, radius: RMFloatB = RMSWorld.RADIUS, shapes: ShapeType ...) -> RMSWorld {
         
@@ -72,7 +54,7 @@ class RMXArt {
         func drawAxis(axis: String) {
             var point =  -radius
             var color: NSColor
-            var scale: RMXVector3 = RMXVectorMake(10)
+            var scale: RMXVector3 = RMXVector3Make(10)
             var position = RMXVector3Make(0, scale.y / 2, 0)
             switch axis {
             case "x":

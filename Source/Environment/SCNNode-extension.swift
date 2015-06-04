@@ -9,7 +9,16 @@
 import Foundation
 import SceneKit
 
-extension SCNNode : RMXLocatable {
+extension SCNNode : RMXLocatable, RMXObject {
+    
+    var uniqueID: String? {
+        let parentID = self.parentNode?.uniqueID ?? ""
+        return "\(parentID)/\(self.name ?? self.description)"
+    }
+    
+    var print: String {
+        return self.uniqueID!
+    }
     
     func getPosition() -> RMXVector {
         return self.rmxNode?.presentationNode().worldTransform.position ?? self.presentationNode().worldTransform.position

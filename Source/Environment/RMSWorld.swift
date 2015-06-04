@@ -8,25 +8,20 @@
 
 import Foundation
 import GLKit
-#if SceneKit
 import SceneKit
-    #elseif SpriteKit
-    import SpriteKit
-#endif
+
 
 typealias RMSWorld = RMXScene
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
-class RMXScene : SCNScene, RMXUniqueEntity {
+class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
+    
+    lazy var uniqueID: String? = "\(self.name!)/\(self.rmxID)"; var name: String? = classForCoder().description() ; lazy var rmxID: Int? = RMX.COUNT++ ; lazy var print: String = self.uniqueID!
     
     var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
-    lazy var rmxID: Int? = RMXSprite.COUNT++
-    #if SceneKit
+    
+
     static let ZERO_GRAVITY = RMXVector3Zero
     static let EARTH_GRAVITY = RMXVector3Make(0, -9.8, 0)
-    #elseif SpriteKit
-    static let ZERO_GRAVITY = CGVectorZero
-    static let EARTH_GRAVITY = CGVector(dx: 0, dy:-9.8)
-    #endif
     
     var cameras: Array<SCNNode> = Array<SCNNode>()
     
@@ -239,13 +234,13 @@ class RMXScene : SCNScene, RMXUniqueEntity {
                 _gravity = gravity == RMSWorld.ZERO_GRAVITY ? RMSWorld.EARTH_GRAVITY : gravity
                 (self).physicsWorld.gravity = RMSWorld.ZERO_GRAVITY
                 (self.activeCamera as? RMXCameraNode)?.orientationNeedsReset()
-                RMXLog("Gravity off: \((self).physicsWorld.gravity.print)")
+                RMLog("Gravity off: \((self).physicsWorld.gravity.print)")
             } else {
                 if _gravity == RMSWorld.ZERO_GRAVITY {
                      _gravity = RMSWorld.EARTH_GRAVITY
                 }
                 (self).physicsWorld.gravity = _gravity
-                RMXLog("Gravity on: \((self).physicsWorld.gravity.print)")
+                RMLog("Gravity on: \((self).physicsWorld.gravity.print)")
             }
     }
 

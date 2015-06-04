@@ -165,7 +165,7 @@ class RMSKeys : RMXInterface {
     func match(chr: String) -> NSMutableArray {
         let keys: NSMutableArray = NSMutableArray(capacity: chr.pathComponents.count)
         for key in self.keys {
-            //RMXLog(key.description)
+            RMLog(key.description)
             for str in chr.pathComponents {
                 if key.characters == str {
                     keys.addObject(key)
@@ -178,7 +178,7 @@ class RMSKeys : RMXInterface {
     
     func match(value: UInt16) -> RMKey? {
         for key in keys {
-            //RMXLog(key.description)
+            RMLog(key.description)
             if key.charToInt == Int(value) {
                 return key
             }
@@ -197,7 +197,7 @@ class RMSKeys : RMXInterface {
     var mouseDelta: NSPoint {
         let newPos = NSEvent.mouseLocation()
         let lastPos = self.lastPos
-//        RMXLog("  OLD: \(lastPos.x), \(lastPos.y)\n  New: \(newPos.x), \(newPos.y)")
+//        RMLog("  OLD: \(lastPos.x), \(lastPos.y)\n  New: \(newPos.x), \(newPos.y)")
         let delta = NSPoint(
             x: newPos.x - lastPos.x,// - self.mousePos.x,
             y: newPos.y - lastPos.y//self.mousePos.y
@@ -225,10 +225,10 @@ class RMSKeys : RMXInterface {
         if self.actionProcessor.isMouseLocked {
             let delta = self.mouseDelta
             self.action(action: "look", speed: RMXInterface.lookSpeed, point: [RMFloat(delta.x), RMFloat(delta.y)])
-//            RMXLog("MOUSE: \(delta.x), \(delta.y)")
+//            RMLog("MOUSE: \(delta.x), \(delta.y)")
             
         }
-//        RMXLog("\(self.mouseDelta.x), \(self.mouseDelta.y)")
+//        RMLog("\(self.mouseDelta.x), \(self.mouseDelta.y)")
     }
     
     ///Adapt the keyboard for different layouts
@@ -391,25 +391,6 @@ extension GameView {
     }
     
     
-    
-    /*
-    override func mouseMoved(theEvent: NSEvent) {
-        keys.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(theEvent.deltaX), RMFloat(theEvent.deltaY)])
-        RMXLog("\(theEvent.deltaX), \(theEvent.deltaY)")
-    }
-    
-    override func cursorUpdate(event: NSEvent) {
-        RMXLog("\(event.deltaX), \(event.deltaY)")
-        keys.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(event.deltaX), RMFloat(event.deltaY)])
-        super.cursorUpdate(event)
-    }
-    
-    override func mouseDragged(theEvent: NSEvent) {
-       // keys.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(theEvent.deltaX), RMFloat(theEvent.deltaY)])
-        //RMXLog("\(theEvent.deltaX), \(theEvent.deltaY)")
-        super.mouseDragged(theEvent)
-    }
-*/
 }
 
 extension GameView {

@@ -27,7 +27,7 @@ extension RMXDPad {
     }
     
     func showScores(recogniser: UITapGestureRecognizer){
-        self.action(action: RMXInterface.TOGGLE_SCORES, speed: -1)
+        self.action(action: RMXInterface.TOGGLE_SCORES, speed: 1)
     }
     
     func toggleAi(recogniser: UITapGestureRecognizer){

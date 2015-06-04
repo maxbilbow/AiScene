@@ -173,7 +173,7 @@ class RMXInterface : NSObject, RendererDelegate {
         self.setUpViews()
         self.newGame(type: RMXInterface.DEFAULT_GAME)
         self.viewDidLoad()
-        RMXLog("\(__FUNCTION__)")
+        RMXLog()
     }
 
     
@@ -212,7 +212,7 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func debug() {
         if debugData != ""{
-            RMXLog("\(debugData)")
+            RMLog("\(debugData)")
 //            self.log("\n x\(leftPanData.x.toData()), y\(leftPanData.y)",sender: "LEFT")
 //            self.log("x\(rightPanData.x.toData()), y\(rightPanData.y.toData())",sender: "RIGHT")
         }
@@ -244,16 +244,16 @@ class RMXInterface : NSObject, RendererDelegate {
     
     private func _newGame(type: GameType? = nil) -> RMSWorld! {
 
-        RMXLog("World: \(_world?.rmxID)")
+        RMLog("World: \(_world?.rmxID)")
         if let type = type {
             if let world = self.activeGames[type] {
                 _world = world
-                RMXLog("This game exists. We're done: \(type.hashValue) - \(_world?.rmxID) (done)")
+                RMLog("This game exists. We're done: \(type.hashValue) - \(_world?.rmxID) (done)")
                 return _world
             } else {
                 _world = AiCubo.setUpWorld(self, type: type)
                 self.activeGames[type] = _world
-                RMXLog("Creating a new game of type: \(type.hashValue) - : \(_world!.rmxID) (done)")
+                RMLog("Creating a new game of type: \(type.hashValue) - : \(_world!.rmxID) (done)")
                 return _world
             }
             
@@ -263,15 +263,15 @@ class RMXInterface : NSObject, RendererDelegate {
             let type = self.availableGames[n]
             if let newWorld = self.activeGames[type] {
                 if _world != nil && _world! == newWorld && self.availableGames.count > 1 {
-                    RMXLog("Game matched the current world - try again: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (fail)")
+                    RMLog("Game matched the current world - try again: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (fail)")
                     return self._newGame(type: nil)
                 } else {
-                    RMXLog("SUCCESS - Game exits: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (done)")
+                    RMLog("SUCCESS - Game exits: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (done)")
                     _world = newWorld
                     return newWorld
                 }
             } else {
-                RMXLog("SUCCESS - A new instance of this game: \(n) of \(self.availableGames.count) - \(_world?.rmxID) (done)")
+                RMLog("SUCCESS - A new instance of this game: \(n) of \(self.availableGames.count) - \(_world?.rmxID) (done)")
                 _world = AiCubo.setUpWorld(self, type: type)
                 self.activeGames[type] = _world
                 return _world
@@ -282,6 +282,7 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
         self.update()
+        RMXLog.printAndFlush()
     }
     
     func updateDataView(){
@@ -409,12 +410,12 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func optionsMenu(sender: AnyObject?) {
-        RMXLog("Show Options")
+        RMLog("Show Options")
         
     }
     
     func exitToMainMenu(sender: AnyObject?) {
-        RMXLog("End Simulation")
+        RMLog("End Simulation")
 
     }
     

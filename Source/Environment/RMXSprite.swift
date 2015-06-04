@@ -25,7 +25,7 @@ extension SCNPhysicsContact {
 }
 
 
-class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
+class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     lazy var tracker: RMXTracker = RMXTracker(sprite: self)
 //    var hitTarget = false
 //    var target: RMXSprite?
@@ -33,6 +33,14 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
 
     var node: RMXNode {
         return _rmxNode
+    }
+    
+    var uniqueID: String? {
+        return "\(self._name)/\(self.rmxID)"
+    }
+    
+    var print: String {
+        return self.uniqueID!
     }
     
     var holder: RMXSprite?
@@ -62,8 +70,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
        // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
         return self.boundingSphere.radius //* RMFloatB(self.scale.average)//radius
     }
-    static var COUNT: Int = 0
-    lazy var rmxID: Int? = RMXSprite.COUNT++
+
+    lazy var rmxID: Int? = RMX.COUNT++
     var isUnique: Bool
     
     var hasFriction: Bool {
@@ -102,8 +110,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     lazy var timer: RMXSpriteTimer = RMXSpriteTimer(sprite: self)
     
-    var name: String {
-        return "\(_name)-\(self.rmxID!)"
+    var name: String? {
+        return self.uniqueID
     }
     
 //    var centerOfView: RMXPoint {
@@ -113,16 +121,16 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     private var _name: String = ""
     
     
-    private func _updateName(ofNode node: SCNNode, oldName: String) {
+    private func _updateName(ofNode node: SCNNode, oldName: String?) {
         for node in node.childNodes {
             if let node = node as? SCNNode {
-                if node.name != nil {
+                if node.name != nil && oldName != nil {
                     
-                    node.name = node.name?.stringByReplacingOccurrencesOfString(oldName, withString: self.name, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                    node.name = node.name?.stringByReplacingOccurrencesOfString(oldName!, withString: self.uniqueID!, options: NSStringCompareOptions.LiteralSearch, range: nil)
                     
                     _updateName(ofNode: node, oldName: oldName)
                 } else {
-                    node.name = self.name
+                    node.name = self.uniqueID
                     
                 }
             }
@@ -366,7 +374,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     func toggleGravity() {
        /// self.hasGravity = !self.hasGravity
-        RMXLog("Unimplemented")
+        RMLog("Unimplemented")
     }
     
     var theta: RMFloatB = 0
@@ -433,10 +441,10 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     func debug(_ yes: Bool = true){
         if yes {
             let transform = self.transform
-            if self.isActiveSprite { RMXLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
+            if self.isActiveSprite { RMLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
            
         
-            if self.isActiveSprite { RMXLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
+            if self.isActiveSprite { RMLog("\n\n   LFT: \(self.leftVector.print),\n    UP: \(self.upVector.print)\n   FWD: \(self.forwardVector.print)\n\n") }
         }
     }
   
@@ -557,7 +565,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
 //                }
             }
         } else {
-            RMXLog("Nothing to throw")
+            RMLog("Nothing to throw",sender: sprite)
         }
         return self.item == nil
     }
@@ -589,7 +597,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
             RMXTeam.throwChallenge(self, projectile: itemInHand)
             itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
         } else {
-            RMXLog("Nothing to throw")
+            RMLog("Nothing to throw")
         }
         return self.item == nil
     }
@@ -600,7 +608,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
         var max = min
         self.node.getBoundingBoxMin(&min, max: &max)
         let radius = RMXVector3Length(max)
-        RMXLog("\(self.name) pos: \(self.position.print), R: \(radius.toData()), boxMin: \(min.print), boxMax: \(max.print)")
+        RMLog("\(self.name) pos: \(self.position.print), R: \(radius.toData()), boxMin: \(min.print), boxMax: \(max.print)")
     }
     
     func manipulate(node: SCNNode! = nil) -> Void {
@@ -855,10 +863,10 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity {
     
     class func rootNode(node: SCNNode, rootNode: SCNNode) -> SCNNode {
         if node.parentNode == rootNode || node.parentNode == nil {
-            RMXLog("RootNode: \(node.name)")
+            RMLog("RootNode: \(node.name)")
             return node
         } else {
-            RMXLog(node.parentNode)
+            RMLog(sender: node.parentNode)
             return self.rootNode(node.parentNode!, rootNode: rootNode)
         }
     }

@@ -25,7 +25,6 @@ import SceneKit
     typealias RMXMatrix4 = SCNMatrix4
 
 
-#if SceneKit
     typealias RMXVector = SCNVector3
     typealias RMXPoint = SCNVector3
     typealias RMXSize = SCNVector3
@@ -33,16 +32,7 @@ import SceneKit
     typealias RMXTransform = SCNMatrix4
     typealias RMXPhysicsBody = SCNPhysicsBody
     let RMXVectorZero = RMXVector3Zero
-    #elseif SpriteKit
-    import SpriteKit
-    typealias RMXVector = CGVector
-    typealias RMXPoint = CGPoint
-    typealias RMXSize = CGSize
-    typealias RMXQuaternion = CGFloat
-    typealias RMXTransform = SCNVector4
-    typealias RMXPhysicsBody = SKPhysicsBody
-    let RMXVectorZero = CGVectorZero
-#endif
+
     typealias RMFloat = CGFloat
     #if OSX
         typealias RMFloatB = CGFloat
@@ -75,13 +65,14 @@ func RMXVector3Make(x:RMFloatB, y:RMFloatB, z:RMFloatB) -> RMXVector3 {
     #endif
 }
 
-func RMXVectorMake(n: RMFloatB) -> RMXVector {
-    #if SceneKit
+func RMXVector3Make(n: RMFloatB) -> SCNVector3 {
     return RMXVector3Make(n,n,n)
-    #elseif SpriteKit
-    return CGVector(dx: n, dy: n)
-    #endif
 }
+
+func RMXVector2Make(n: CGFloat) -> CGVector {
+    return CGVector(dx: n, dy: n)
+}
+
 func RMXVector4Make(x:RMFloatB, y:RMFloatB, z:RMFloatB, w: RMFloatB) -> RMXVector4 {
     #if true
         return SCNVector4Make(x,y,z,w)
@@ -368,11 +359,7 @@ func + (lhs: CGVector, rhs: CGVector) -> CGVector {
 }
 
 func RMXVector3Normalize(vector: RMXVector) -> RMXVector {
-    #if SceneKit
     return SCNVector3FromGLKVector3(GLKVector3Normalize(SCNVector3ToGLKVector3(vector)))
-    #elseif SpriteKit
-    return vector
-    #endif
 }
 
 func RMXVector3Distance(a:RMXVector3,b:RMXVector3)->RMFloatB {
@@ -502,7 +489,7 @@ func RMXGetPhi(vectorA A: GLKVector2, vectorB B: GLKVector2) -> RMFloatB{
     let beta: Float = acosf(delta.y/r)
     //    let theta: Float = GLKMathRadiansToDegrees(atanf(delta.x/delta.y))
     let result = alpha //alpha * beta >= 0 ? beta : TWO_PI - beta
-    RMXLog("PHI: \(GLKMathRadiansToDegrees(alpha))")
+    RMLog("PHI: \(GLKMathRadiansToDegrees(alpha))")
     return RMFloatB(alpha.isNaN ? 0 : result)
 }
 

@@ -53,7 +53,7 @@ public class RMSActionProcessor {
     }
     init(interface: RMXInterface){
         self.interface = interface
-        RMXLog()
+        RMLog()
     }
 
     var gameView: GameView {
@@ -81,7 +81,7 @@ public class RMSActionProcessor {
         let sprite = sprite ?? self.activeSprite
         switch action {
         case nil:
-            RMXLog("ACTION IS NIL")
+            RMLog("ACTION IS NIL")
             return true
         case "move", "Move", "MOVE":
             if point.count == 3 {
@@ -259,13 +259,16 @@ public class RMSActionProcessor {
             return true
         case "reset":
             if speed == 1 {
-                sprite.setPosition(position: RMXVector3Make(0, 50, 50))
+//                sprite.setPosition(position: RMXVector3Make(0, 50, 50))
+                for player in self.world.players {
+                    player.attributes.deRetire()
+                }
             }
             return true
         case "toggleAI":
             if speed == 1 {
                 self.world.toggleAi()
-                RMXLog("aiOn: \(self.world.aiOn)")
+                RMLog("aiOn: \(self.world.aiOn)")
             }
             return true
         case RMXInterface.GET_INFO:
@@ -436,14 +439,14 @@ public class RMSActionProcessor {
     }
     func debug(_ yes: Bool = true){
         if yes {
-            NSLog(self.getData() as String)
+            NSLog(self.getData())
         }
     }
 
     func animate(){
         if self.boomTimer > 1 {
             self.boomTimer++
-            RMXLog(self.boomTimer)
+            RMLog(self.boomTimer.print, id: __FILE__.lastPathComponent)
         }
         
         
@@ -452,7 +455,7 @@ public class RMSActionProcessor {
         self.debug(false)
     }
         
-        
+    
     var extendArm: RMFloatB = 0
 //    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
     var isMouseLocked = false
@@ -460,7 +463,7 @@ public class RMSActionProcessor {
     func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloatB? = nil, yaw y: RMFloatB? = nil, roll z: RMFloatB? = nil) {
         let sprite = s ?? self.activeSprite
         if let orientation = orientation {
-            RMXLog("not implemented")
+            RMLog("not implemented")
         } else {
             sprite.setAngle(yaw: y, pitch: x, roll: z)
         }
