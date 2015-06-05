@@ -16,8 +16,6 @@ import UIKit
 extension RMXDPad {
     
     
-    
-    
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
         self.action(action: "reset")
@@ -81,7 +79,7 @@ extension RMXDPad {
             if recognizer.numberOfTouches() == 1 {
                 let point = recognizer.velocityInView(self.gameView)
                 
-                self.action(action: "look", speed: RMXInterface.lookSpeed, point: [-Float(point.x), Float(point.y)])
+                self.action(action: "look", speed: RMXInterface.lookSpeed, point: point])
             }
 //            _handleRelease(recognizer.state)
         }

@@ -81,8 +81,8 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: ROTATE, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
     
     //Interactions
-    RMKey(self, action: GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: THROW_ITEM, characters: RIGHT_CLICK, isRepeating: true,  speed: (0,5)),
+    RMKey(self, action: THROW_ITEM + GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: THROW_ITEM + GRAB_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
     RMKey(self, action: BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
     
     //Environmentals
@@ -108,6 +108,8 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
     RMKey(self, action: INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: DEBUG_NEXT, characters: KEY_TAB, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: DEBUG_PREVIOUS, characters: KEY_SHIFT_TAB, isRepeating: false, speed: ON_KEY_UP),
         
     //Unassigned
     RMKey(self, action: "key up", characters: KEY_UP, isRepeating: false, speed: ON_KEY_DOWN),
@@ -160,7 +162,7 @@ class RMSKeys : RMXInterface {
         }
     }
     
-    func get(action: String?) -> RMKey? {
+    func get(forAction action: String?) -> RMKey? {
         for key in keys {
             if key.action == action {
                 return key
@@ -170,10 +172,14 @@ class RMSKeys : RMXInterface {
     }
     
     func forEvent(theEvent: NSEvent) -> RMKey? {
-        if theEvent.characters != "" {
-            return self.get(forChar: theEvent.characters)
+        if let key = self.get(forChar: theEvent.characters) {
+            return key
+        } else if let key = self.get(forCode: theEvent.keyCode) {
+            return key
+        } else if let key = self.get(forHash: theEvent.hash) {
+            return key
         } else {
-            return self.get(forCode: theEvent.keyCode)
+            return nil
         }
     }
     
@@ -187,6 +193,17 @@ class RMSKeys : RMXInterface {
     }
     
     func get(forCode code: UInt16?) -> RMKey? {
+        if let code = code {
+            for key in keys {
+                if key.characters == "\(code)" {
+                    return key
+                }
+            }
+        }
+        return nil
+    }
+    
+    func get(forHash code: Int?) -> RMKey? {
         if let code = code {
             for key in keys {
                 if key.characters == "\(code)" {
@@ -259,7 +276,7 @@ class RMSKeys : RMXInterface {
         //self.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(self.mouseDelta.x), RMFloat(self.mouseDelta.y)])
         if self.actionProcessor.isMouseLocked {
             let delta = self.mouseDelta
-            self.action(action: "look", speed: RMXInterface.lookSpeed, point: [RMFloat(delta.x), RMFloat(delta.y)])
+            self.action(action: RMXInterface.ROTATE, speed: RMXInterface.lookSpeed, args: delta)
 //            RMLog("MOUSE: \(delta.x), \(delta.y)")
             
         }
@@ -312,10 +329,10 @@ class RMKey {
     var isSpecial = false
     var speed:(on:RMFloat,off:RMFloat)
     var isRepeating: Bool = true
-    var values: [RMFloat] = []
+    var values: AnyObject?
     private var keys: RMSKeys
     
-    init(_ keys: RMSKeys, action: String, characters: String, isRepeating: Bool = true, speed: (on:RMFloat,off:RMFloat) = (1,0), values: [RMFloat]? = nil) {
+    init(_ keys: RMSKeys, action: String, characters: String, isRepeating: Bool = true, speed: (on:RMFloat,off:RMFloat) = (1,0), values: AnyObject? = nil) {
         self.keys = keys
         self.action = action
         self.isSpecial = true
@@ -332,7 +349,7 @@ class RMKey {
     }
     
     ///Returns true if key was not already pressed, and sets isPressed = true
-    func press() -> Bool{
+    func press(object: Any? = nil) -> Bool{
         if self.isRepeating {
             if self.isPressed {
                 return true //false
@@ -343,19 +360,19 @@ class RMKey {
         } else  {
             self.isPressed = true
             
-            return self.keys.action(action: self.action, speed: self.speed.on, point: self.values)
+            return self.keys.action(action: self.action, speed: self.speed.on, args: object ?? self.values)
         }
     }
     
     func actionWithValues(values: [RMFloat]){
-        self.keys.action(action: self.action, speed: self.speed.on, point: values)
+        self.keys.action(action: self.action, speed: self.speed.on, args: values)
     }
     
     ///Returns true if key was already pressed, and sets isPressed = false
-    func release() -> Bool{
+    func release(object: Any? = nil) -> Bool{
         if self.isPressed {
             self.isPressed = false
-            return self.keys.action(action: self.action, speed: self.speed.off, point: self.values)
+            return self.keys.action(action: self.action, speed: self.speed.off, args: self.values)
         } else {
             return true //false
         }
@@ -374,10 +391,13 @@ class RMKey {
     
     func update(){
         if self.isRepeating && self.isPressed {
-            self.keys.action(action: self.action, speed: self.speed.on, point: self.values)
+            self.keys.action(action: self.action, speed: self.speed.on, args: self.values)
         }
     }
     
+    var print: String {
+        return "Action: \(self.action), key: \(self.characters), speed: \(self.speed.on), \(self.speed.off)"
+    }
     
 }
 
@@ -403,12 +423,14 @@ extension GameView {
     override func keyDown(theEvent: NSEvent) {
         if let key = self.keys.forEvent(theEvent) {
             if !key.press() {
-                super.keyDown(theEvent)
+                RMLog("ERROR on Key Down for \(key.print)")
             }
         } else {
-            //self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: theEvent.characters!, isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
-            // \(theEvent.description)")
-            super.keyDown(theEvent)
+            if let n = theEvent.characters?.toInt() {
+                self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: "\(n)", isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
+            } else {
+                super.keyDown(theEvent)
+            }
         }
         
     }
@@ -416,13 +438,13 @@ extension GameView {
     override func keyUp(theEvent: NSEvent) {
         
         if let key = self.keys.forEvent(theEvent) {
-//            NSLog(key.description)
+            RMLog("Key recognised: \(key.print) \n\(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
             if !key.release() {
-               super.keyUp(theEvent)
+                RMLog("ERROR on Key Up for \(key.print)")
             }
         } else {
-//            NSLog("new key added:\n\n \(theEvent.description)")
-            RMLog("Unrecognised \(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters?.unicodeScalars.description)",id: "keys")
+//            RM("new key added:\n\n \(theEvent.description)")
+            RMLog("Key unrecognised \(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
             
             super.keyUp(theEvent)
         }
@@ -433,25 +455,58 @@ extension GameView {
 
 extension GameView {
     override func rightMouseUp(theEvent: NSEvent) {
-        self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.release()
-        super.rightMouseUp(theEvent)
+        
+
+        if self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.release() ?? false {
+            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+            self.interface?.processHit(point: p, type: RMXInterface.RIGHT_CLICK)
+            RMLog("UP hit successful: \(p)", id: "keys")
+        } else {
+//            RMLog("UP hit unSuccessful: \(p)", id: "keys")
+            super.rightMouseUp(theEvent)
+        }
+        
+       
     }
     
     override func rightMouseDown(theEvent: NSEvent) {
-//        self.keys.get(forChar: "Mouse 2")?.press()
-        self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.press()
-        super.rightMouseDown(theEvent)
+        
+        if self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.press() ?? false {
+            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+            self.interface?.processHit(point: p, type: RMXInterface.RIGHT_CLICK)
+            RMLog("UP hit successful: \(p)", id: "keys")
+        } else {
+            //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
+            super.rightMouseDown(theEvent)
+        }
+ 
+        
     }
     
+    override func mouseUp(theEvent: NSEvent) {
+        if self.keys.get(forChar: RMXInterface.LEFT_CLICK)?.release() ?? false {
+            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+            self.interface?.processHit(point: p, type: RMXInterface.LEFT_CLICK)
+            RMLog("UP hit successful: \(p)", id: "keys")
+        } else {
+            //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
+            super.mouseUp(theEvent)
+        }
+    }
     
     override func mouseDown(theEvent: NSEvent) {
         /* Called when a mouse click occurs */
         
         // check what nodes are clicked
-        let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-        self.interface?.processHit(point: p)
-                
-        super.mouseDown(theEvent)
+        if self.keys.get(forChar: RMXInterface.LEFT_CLICK)?.press() ?? false {
+            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+            self.interface?.processHit(point: p, type: RMXInterface.LEFT_CLICK)
+            RMLog("UP hit successful: \(p)", id: "keys")
+        } else {
+            //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
+           super.mouseDown(theEvent)
+        }
+        
     }
     
 

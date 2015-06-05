@@ -10,57 +10,132 @@ import Foundation
 import SceneKit
 
 
- enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME }
+ enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, WEAPONS }
 class AiCubo {
    
+   
+    class func createEarth(inWorld world: RMSWorld, radius: RMFloatB? = nil, addCameras: Bool = true) {
+        let worldRadius = radius ?? world.radius
+        
+        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, unique: true)
+        
+        world.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
+        
+        
+        earth.setName(name: "Earth")
+        
+        let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
+        earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
+        //earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
+        if addCameras {
+            earth.addCameras()
+            world.cameras += earth.cameras
+        }
+
+        
+    }
+ 
+    class func createLight(inWorld world: RMSWorld, fixed: Bool = true, radius: RMFloatB? = nil, addCameras: Bool = true){
+        let worldRadius = radius ?? world.radius
+        
+        let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
+        lightNode.light = SCNLight()
+        lightNode.light!.type = SCNLightTypeOmni
+        lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
+        lightNode.geometry?.firstMaterial!.emission.intensity = 1
+        
+        let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
+        sun.setName(name: "Sun")
+        sun.node.pivot.m43 = -worldRadius
+        sun.node.eulerAngles.x = -45 * PI_OVER_180
+        if !fixed {
+            sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(RMFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+        }
+        if addCameras {
+            RMXCamera.headcam(sun)
+            world.cameras += sun.cameras
+        }
+        
+        let ambientLightNode = SCNNode()
+        ambientLightNode.light = SCNLight()
+        ambientLightNode.light!.type = SCNLightTypeAmbient
+        ambientLightNode.light!.color = NSColor.darkGrayColor()
+        
+        if fixed {
+            sun.node.addChildNode(ambientLightNode)
+        } else {
+            let moon = RMXSprite(inWorld: world, type: .ABSTRACT, shape: .SUN, color: RMColor.lightGrayColor(), unique: true)
+            moon.setName(name: "Moon")
+            moon.node.pivot.m43 = sun.node.pivot.m43
+            moon.node.eulerAngles.x = 4 * sun.node.eulerAngles.x
+            if !fixed {
+                moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(RMFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+            }
+            if addCameras {
+                RMXCamera.headcam(moon)
+                world.cameras += moon.cameras
+            }
+
+        }
+    }
     
+  
     
     
     class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMSWorld {
         if let interface = interface {
 
             let world = RMSWorld(interface: interface) //interface.world//
+            
             //SetUpEnvironment
             switch type {
             case .EMPTY:
-//                self.simpleUniquePlayer(world)
-                if world.hasGravity {
-                    world.toggleGravity()
-                }
-//                let poppy = RMX.makePoppy(world: world, master: world.activeSprite)
-                RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 10, radius: RMSWorld.RADIUS , shapes: .CYLINDER, .ROCK)
-                AiCubo.addPlayers(world, noOfPlayers: 3, teams: 0)
+                AiCubo.initialWorldSetup(world)
+                world.gravityOff()
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 10, shapes: .CYLINDER, .ROCK)
+                AiCubo.addPlayers(world, noOfPlayers: 3, teams: 3)
                 
                 break
             case .TEST:
-                AiCubo.testingEnvironment(interface, world: world)
-                RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 50, radius: RMSWorld.RADIUS * 2, shapes: .CYLINDER, .CUBE, .SPHERE, .ROCK)
+                AiCubo.initialWorldSetup(world, radius: world.radius * 2)
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 50, shapes: .CYLINDER, .CUBE, .SPHERE)
                 AiCubo.addPlayers(world, noOfPlayers: 20, teams: 0)
                 RMXAi.addRandomMovement(to: world.children)
-
+                break
+            case .WEAPONS:
+                AiCubo.initialWorldSetup(world)
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
                 break
             case .DOMED:
-                AiCubo.domedEnvironment(interface, world: world)
+                AiCubo.initialWorldSetup(world)
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                AiCubo.domedEnvironment(world)
                 break
             case .IN_GLOBE:
-                AiCubo.insideGlobe(interface, world: world)
+                AiCubo.initialWorldSetup(world)
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                AiCubo.insideGlobe(world)
                 break
             case .TEAM_GAME:
-                AiCubo.testingEnvironment(interface, world: world)
-                RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 50, radius: RMSWorld.RADIUS * 5, shapes: .CYLINDER, .SPHERE)
-                
+                AiCubo.initialWorldSetup(world)
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 50, shapes: .CYLINDER, .SPHERE)
                 AiCubo.addPlayers(world, noOfPlayers: 20, teams: 2)
-               
+                RMXAi.offenciveBehaviour(to: world.children)
                 break
             default:
-                AiCubo.testingEnvironment(interface, world: world)
+                AiCubo.initialWorldSetup(world)
                 break
             }
-            let ambientLightNode = SCNNode()
-            ambientLightNode.light = SCNLight()
-            ambientLightNode.light!.type = SCNLightTypeAmbient
-            ambientLightNode.light!.color = NSColor.darkGrayColor()
-            world.rootNode.addChildNode(ambientLightNode)
+            
 //            interface.gameView!.scene = world.scene
 //            interface.gameView.pointOfView = world.activeCamera
             
@@ -86,7 +161,7 @@ class AiCubo {
         
         let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique).asPlayer()
         
-        let lim = Int(RMSWorld.RADIUS)
+        let lim = Int(world.radius)
         player.setPosition(position: RMXVector3Random(lim, -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
 
         
@@ -99,111 +174,49 @@ class AiCubo {
     }
     
     
-    class func soccerGame(interface: RMXInterface, world: RMSWorld) {
+    class func soccerGame(world: RMSWorld) {
   
     }
     
-    class func insideGlobe(interface: RMXInterface, world: RMSWorld) {
-        AiCubo.testingEnvironment(interface, world: world)
-        let earth = world.rootNode.childNodeWithName("Earth", recursively: true)!
-        let globe = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: RMSWorld.RADIUS * 20, color: NSColor.yellowColor()), type: .BACKGROUND, shape: .SPHERE, unique: true)
-        globe.geometry?.firstMaterial?.doubleSided = true
-        if let gNode: SCNSphere = globe.geometry as? SCNSphere {
-            gNode.geodesic = true
-            
-        }
-        world.rootNode.replaceChildNode(earth, with: globe.node)
-        for child in world.children {
-            if child.rmxID != globe.rmxID {
-                child.node.removeFromParentNode()
-                globe.node.addChildNode(child.node)//TODO: fix it
-            }
-        }
-        
-        world.toggleGravity()
+    class func insideGlobe(world: RMSWorld) {
+    
+    }
+    
+    class func domedEnvironment(world: RMSWorld) {
+//        AiCubo.initialWorldSetup(world)
         
     }
     
-    class func domedEnvironment(interface: RMXInterface, world: RMSWorld) {
-        AiCubo.testingEnvironment(interface, world: world)
+    class func initialWorldSetup(world: RMSWorld, radius: RMFloatB? = nil, poppy: Bool = true, player2: Bool = true, additionalCameras: Bool = true){
         
-    }
-    
-    class func testingEnvironment(interface: RMXInterface, world: RMSWorld){
+        if let r = radius {
+            world.setRadius(r)
+        }
+        //Set up Main Player
         let player = world.activeSprite
-        //Set Up Player 2
-        let p2 = self.simplePlayer(world, asAi: true)
-        p2.setName(name: "Player")
         
         //Set up Poppy
-        let poppy = RMX.makePoppy(world: world, master: player)
-        poppy.setName(name: "Poppy")
-        poppy.attributes.setTeam(ID: -1)
-        //            world.players["Poppy"] =
+        if poppy {
+            let poppy = RMX.makePoppy(world: world, master: player)
+        }
         
-        //Set up background
-        let worldRadius = RMSWorld.RADIUS * 10
-        
-        //.makeAsSun(rDist: worldRadius)
-        
-        let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
-        lightNode.light = SCNLight()
-        lightNode.light!.type = SCNLightTypeOmni
-        lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
-        lightNode.geometry?.firstMaterial!.emission.intensity = 1
-        
-        let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
-        sun.setPosition(position: RMXVector3Make(RMSWorld.RADIUS , RMSWorld.RADIUS * 5, 0))
-        sun.node.pivot.m43 = -worldRadius
-        sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(RMFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
-       
-//        sun.addAi({ (node: SCNNode!) -> Void in
-//            if world.aiOn {
-//                sun.node.transform *= RMXMatrix4MakeRotation( -sun.rotationSpeed,  sun.rAxis)
-//            }
-//        })
-        
-        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, unique: true)
-    
-        world.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
-        
-        
-        earth.setName(name: "Earth")
-        
-        let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
-        earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
-        //earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
-        
+        //Set Up Player 2
+        if player2 {
+            let p2 = self.simplePlayer(world, asAi: true)
+            p2.setName(name: "Player")
+            p2.addCameras()
+            world.cameras += p2.cameras
+        }
 
-        
-
-        
-        //camera
-        
-        
-        
-        
-
-//        world.cameras += player.cameras
-        p2.addCameras()
-        poppy.addCameras()
-        earth.addCameras()
-        RMXCamera.headcam(sun)
-        world.cameras += poppy.cameras
-        world.cameras += p2.cameras
-        let farCam = RMXCamera.free(inWorld: world)
-        let topCam = RMXCamera.free(inWorld: world)
-        
-        world.cameras += earth.cameras
-        world.cameras += sun.cameras
-        
-        farCam.position = RMXVector3Make(0 , 100, RMSWorld.RADIUS)
-        topCam.pivot.m43 = RMSWorld.RADIUS * -5
-        topCam.eulerAngles.x = -70 * PI_OVER_180
-
-
-        
-        
+        //additional cameras
+        if additionalCameras {
+            let farCam = RMXCamera.free(inWorld: world)
+            let topCam = RMXCamera.free(inWorld: world)
+            farCam.position = RMXVector3Make(0 , 100, world.radius)
+            topCam.pivot.m43 = world.radius * -2
+            topCam.eulerAngles.x = -70 * PI_OVER_180
+        }
+   
     }
     
     class func addPlayers(world: RMSWorld, noOfPlayers n: Int, teams: Int = 0){
@@ -224,11 +237,11 @@ class AiCubo {
             var count = 0
             var teamID = 1 //team 0 is not a team
             for player in world.children {
-                if player.isPlayer && player.attributes.teamID == 0 {
-                    if let team = world.teams[teamID] {
+                if player.isPlayer && player.attributes.teamID == "0" {
+                    if let team = world.teams["\(teamID)"] {
                         if team.addPlayer(player) {
                             count++
-                            if team.players.count == max {
+                            if team.players!.count == max {
 //                                NSLog("Team: \(team.id), players: \(count)")
                                 teamID++
                                 count = 0
@@ -239,9 +252,6 @@ class AiCubo {
                 }
             }
             
-//            NSLog("\(world.children.count), \(world.teamPlayers.count)")
-
-             RMXAi.offenciveBehaviour(to: world.children)
 
         }
     }

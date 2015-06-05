@@ -12,7 +12,7 @@ import SceneKit
 import GLKit
     
 enum JumpState { case PREPARING_TO_JUMP, JUMPING, GOING_UP, COMING_DOWN, NOT_JUMPING }
-enum RMXSpriteType { case  AI, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC, PLAYER_OR_AI, CAMERA }
+enum RMXSpriteType: Int { case  AI = 0, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC, CAMERA }
 
 protocol RMXSpriteManager {
 //    
@@ -111,7 +111,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     lazy var timer: RMXSpriteTimer = RMXSpriteTimer(sprite: self)
     
     var name: String? {
-        return self.uniqueID
+        return self.uniqueID!
     }
     
 //    var centerOfView: RMXPoint {
@@ -311,7 +311,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
                 self.physicsBody?.angularDamping = 1000
                 break
             case .PASSIVE, .BACKGROUND, .ABSTRACT:
-                self.attributes.setTeam(ID: -1)
+                self.attributes.setTeamID("\(-1)")
                 break
             default:
                 break
@@ -333,7 +333,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     var willCollide: Bool {
-        return self.attributes.teamID != -2
+        return self.attributes.teamID != "-2"
     }
     var hasFollowers: Bool {
         return followers.count > 0
@@ -354,7 +354,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         sprite?.followers.removeValueForKey(self.rmxID!)
     }
     
-    static let NO_COLLISIONS: Int = -2
+    static let NO_COLLISIONS: String = "-2"
 
     
     func spriteDidInitialize(){
@@ -368,7 +368,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.world.insertChild(self, andNode: true)
         self.timer.activate()
         if type != .PLAYER && type != .AI {
-            self.attributes.setTeam(ID: RMXSprite.NO_COLLISIONS)
+            self.attributes.setTeamID(RMXSprite.NO_COLLISIONS)
         }
     }
     
@@ -420,7 +420,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
             self.aiDelegate?.run(nil)
         }
         switch self.type {
-        case .AI, .PLAYER, .PLAYER_OR_AI:
+        case .AI, .PLAYER:
             self.timer.activate()
             self.runActions("animate", actions: self.processAi, self.manipulate, self.headToTarget)
             return
@@ -540,18 +540,26 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.world.activeCamera.rmxID == self.rmxID
     }
 
+    ///object as Node: thrown in direction of node
+    ///object as Sprite: thrown and tracked to sprite
+    ///object as position: thown in direction
     func throwItem(atObject object: AnyObject?, withForce strength: RMFloatB) -> Bool {
         if let sprite = object as? RMXSprite {
+            RMLog(sprite.position.print, sender: self, id: "THROW")//, sender: self)
             return self.throwItem(atSprite: sprite, withForce: strength)
         } else if let node = object as? SCNNode {
-            return self.throwItem(atSprite: node.rmxNode?.sprite, withForce: strength)
-        } else if let position = object as? RMXVector {
+            RMLog(node.getPosition().print, sender: self, id: "THROW")//, sender: self)
+            return self.throwItem(atPosition: node.getPosition() ?? self.forwardVector, withForce: strength)
+        } else if let position = object as? SCNVector3 {
+            RMLog(position.print, sender: self, id: "THROW")
             return self.throwItem(atPosition: position, withForce: strength)
+        } else {
+            RMLog(object?.description, sender: self, id: "THROW")//, sender: self)
+            return self.throwItem(force: strength)
         }
-        return false
     }
     
-    func throwItem(atSprite sprite: RMXSprite?, withForce strength: RMFloatB = 1) -> Bool{
+    private func throwItem(atSprite sprite: RMXSprite?, withForce strength: RMFloatB = 1) -> Bool{
         if let item = self.item {
             if let sprite = sprite {
 //                if sprite.isPlayer && sprite.rmxID != self.rmxID && sprite.rmxID != item.rmxID {
@@ -565,15 +573,19 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
 //                }
             }
         } else {
-            RMLog("Nothing to throw",sender: sprite)
+            RMLog("Nothing to throw",sender: sprite, id: SPRITE_TYPE)
         }
         return self.item == nil
     }
     
-
+    private lazy var SPRITE_ACTIONS: String = self.uniqueID!
+    private  var SPRITE_TYPE: String {
+        return "Sprites: \(self.type.rawValue)"
+    }
     
     
-    func throwItem(force strength: RMFloatB) -> Bool {
+    
+    private func throwItem(force strength: RMFloatB) -> Bool {
         if let itemInHand = self.item {
             
             var direction = self.forwardVector
@@ -590,14 +602,15 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         
     }
     
-    func throwItem(atPosition target: RMXVector3, withForce strength: RMFloatB) -> Bool {
+    private func throwItem(atPosition target: SCNVector3, withForce strength: RMFloatB) -> Bool {
         if let itemInHand = self.item {
             let direction = (target - itemInHand.position).normalised
             self.releaseItem()
             RMXTeam.throwChallenge(self, projectile: itemInHand)
-            itemInHand.applyForce(self.velocity + direction * strength * itemInHand.mass, impulse: false)
+            itemInHand.applyForce(self.velocity + direction * strength * (itemInHand.mass + 1), impulse: false)
+            RMLog("Item thrown in direction: \(direction.print)", sender: self, id: "THROW")
         } else {
-            RMLog("Nothing to throw")
+            RMLog("Nothing to throw", sender: self)
         }
         return self.item == nil
     }
@@ -969,7 +982,7 @@ extension RMXSprite {
 
 extension RMXSprite : RMXLocatable {
     
-    func getPosition() -> RMXVector {
+    func getPosition() -> SCNVector3 {
         return self.position
     }
 }

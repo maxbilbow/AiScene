@@ -17,7 +17,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     lazy var uniqueID: String? = "\(self.name!)/\(self.rmxID)"; var name: String? = classForCoder().description() ; lazy var rmxID: Int? = RMX.COUNT++ ; lazy var print: String = self.uniqueID!
     
-    var teams: [Int : RMXTeam] = Dictionary<Int,RMXTeam>()
+    var teams: [String : RMXTeam] = Dictionary<String ,RMXTeam>()
     
 
     static let ZERO_GRAVITY = RMXVector3Zero
@@ -68,6 +68,9 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
 
+    func setRadius(radius: RMFloatB) {
+        self._radius = radius
+    }
     
     var interface: RMXInterface
     
@@ -87,7 +90,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         return _radius ?? RMSWorld.RADIUS
     }
     
-    static var RADIUS: RMFloatB = 250
+    private static var RADIUS: RMFloatB = 1250
     
     
     ///Note: May become public
@@ -122,7 +125,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
     var isLive: Bool {
-        return self.interface.world.rmxID == self.rmxID
+        return self.interface.world.rmxID == self.rmxID && self.paused == false
     }
     
     
@@ -226,6 +229,19 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     var gravity: RMXVector3 {
         return (self).physicsWorld.gravity
+    }
+    
+    
+    func gravityOff() {
+        if self.hasGravity {
+            self.toggleGravity()
+        }
+    }
+    
+    func gravityOn() {
+        if !self.hasGravity {
+            self.toggleGravity()
+        }
     }
     
     func toggleGravity() {

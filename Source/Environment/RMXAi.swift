@@ -11,8 +11,8 @@ import Foundation
 typealias AiBehaviour = (SCNNode!) -> Void
 typealias AiCollisionBehaviour = (SCNPhysicsContact) -> Void
 struct InWhichTeams {
-    var inc, exc: [Int]
-    init(inc: Int? = nil, exc: Int? = nil){
+    var inc, exc: [String]
+    init(inc: String? = nil, exc: String? = nil){
         if let i = inc {
             self.inc = [ i ]
         } else {
@@ -66,7 +66,7 @@ class AiPoppy : NSObject, RMXAiDelegate {
     }
     
     func getTarget(args: Any? ...) -> RMXSprite? {
-        return RMXAi.randomSprite(self.sprite.world, type: .PLAYER_OR_AI)
+        return RMXAi.randomSprite(self.sprite.world, type: .PLAYER, .AI)
     }
     
     func run(node: SCNNode!) -> Void {
@@ -110,7 +110,7 @@ class AiPoppy : NSObject, RMXAiDelegate {
 class AiRandom: NSObject, RMXAiDelegate {
     var state: String?
     var args: [Any]? {
-        return [ RMXSpriteType.PLAYER_OR_AI ]
+        return [ RMXSpriteType.PLAYER, RMXSpriteType.AI ]
     }
     
     var behaviours: [String:() -> String?]?
@@ -129,7 +129,7 @@ class AiRandom: NSObject, RMXAiDelegate {
             self.sprite.tracker.setTarget(self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.sprite.grab(target) {
                     self.sprite.tracker.setTarget(self.getTarget(self.args), ignoreClaims: true, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                        self.sprite.throwItem(atSprite: target, withForce: 1)
+                        self.sprite.throwItem(atObject: target, withForce: 1)
                     })
                 }
                 else {
@@ -168,7 +168,7 @@ class AiRandom: NSObject, RMXAiDelegate {
             }
         }
         
-        return RMXAi.randomSprite(world,type: .PLAYER_OR_AI)
+        return RMXAi.randomSprite(world,type: .PLAYER, .AI)
     }
 }
 
@@ -177,11 +177,32 @@ class AiTeamPlayer : AiRandom {
     required init(sprite: RMXSprite) {
         super.init(sprite: sprite)
         self.inWhichTeams = InWhichTeams(exc: self.sprite.attributes.teamID)
-        self.sprite.timer.timers.append(NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "checkTeam", userInfo: nil, repeats: true))
+        sprite.attributes.addObserver(self, forKeyPath: "teamID", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
+        sprite.attributes.addObserver(self, forKeyPath: "isAlive", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
+//        self.sprite.timer.addTimer(interval: 1, target: self, selector: "checkTeam", repeats: true)
     }
     
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        switch keyPath {
+        case "teamID":
+            RMLog("\(self.sprite.name!)'s team did change from \(self.inWhichTeams.exc[0]) to \((object as! SpriteAttributes).teamID)", id: "Observers")
+            self.inWhichTeams.exc[0] = self.sprite.attributes.teamID
+            break
+        case "isAlive":
+            if (object as? SpriteAttributes)!.isAlive ?? false {
+                RMLog("\(self.sprite.name!) was revived!", id: "Observers")
+            } else {
+                self.sprite.timer.addTimer(interval: 5, target: self.sprite.attributes, selector: "deRetire", repeats: false)
+                RMLog("\(self.sprite.name!) died!", id: "Observers")
+            }
+            break
+        default:
+            RMLog("KeyPath: \(self.sprite.attributes.teamID) not recognised")
+            break
+        }
+    }
     func checkTeam(){
-        self.inWhichTeams.exc[0] = self.sprite.attributes.teamID
+        
         if self.sprite.attributes.isTeamCaptain {
 //            NSLog("I am \(self.sprite.name) on team \(self.sprite.attributes.teamID)")
         }
@@ -213,12 +234,12 @@ class RMXAi {
     }
     
 
-    static func selectTargetPlayer(inWorld world: RMSWorld, inTeam: Int = -1, notInTeam: Int = -1) -> RMXSprite? {
+    static func selectTargetPlayer(inWorld world: RMSWorld, inTeam: String = "-1", notInTeam: String = "-1") -> RMXSprite? {
         
-        if inTeam != -1 && inTeam == notInTeam { return nil }
+        if inTeam != "-1" && inTeam == notInTeam { return nil }
         
         let players = world.liveTeamPlayers.filter({(player)-> Bool in
-            return ( inTeam == -1 || player.attributes.teamID == inTeam ) && ( notInTeam == -1 || player.attributes.teamID != inTeam )
+            return ( inTeam == "-1" || player.attributes.teamID == inTeam ) && ( notInTeam == "-1" || player.attributes.teamID != inTeam )
         })
         
 //        NSLog("count: \(players.count)")
@@ -233,23 +254,18 @@ class RMXAi {
         
     }
     
-    static func randomSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE) -> RMXSprite? {
+    static func randomSprite(world: RMSWorld, type: RMXSpriteType ...) -> RMXSprite? {
         var sprite: RMXSprite?
-        let count = world.children.count
-        switch type {
-        case .AI, .PASSIVE:
-            do {
-                sprite =  RMX.spriteWith(ID: random() % count, inArray: world.children)
-            } while sprite?.type != type
-            return sprite
-        case .PLAYER_OR_AI:
-            do {
-                sprite = RMX.spriteWith(ID: random() % count, inArray: world.children)
-            } while sprite?.type != .AI && sprite?.type != .PLAYER
-            return sprite
-        default:
-            return nil//RMX.spriteWith(ID: random() % count, inArray: world.children)
+        let array = world.children.filter { (child) -> Bool in
+            for t in type {
+                if child.type == t {
+                    return true
+                }
+            }
+            return false
         }
+        
+        return array[random() % array.count]
     }
     
     enum MoveState { case MOVING, TURNING, IDLE }
@@ -257,7 +273,7 @@ class RMXAi {
     
     static func addRandomMovement(to players: [RMXSprite]) {
         for sprite in players {
-            if sprite.attributes.teamID == 0 && sprite.type == .AI && !sprite.isUnique {
+            if sprite.attributes.teamID.toInt() ?? 1 >= 0 && sprite.type == .AI && !sprite.isUnique {
                 sprite.aiDelegate = AiRandom(sprite: sprite)
             }
         }
@@ -269,7 +285,7 @@ class RMXAi {
     
     static func offenciveBehaviour(to players: [RMXSprite]) {
         for sprite in players {
-            if sprite.type == .AI && !sprite.isUnique && sprite.attributes.teamID > 0 {
+            if sprite.type == .AI && !sprite.isUnique && sprite.attributes.teamID.toInt() ?? 1 > 0 {
                 sprite.aiDelegate = AiTeamPlayer(sprite: sprite)
             }
         }

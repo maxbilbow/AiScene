@@ -20,8 +20,12 @@ extension SCNNode : RMXLocatable, RMXObject {
         return self.uniqueID!
     }
     
-    func getPosition() -> RMXVector {
-        return self.rmxNode?.presentationNode().worldTransform.position ?? self.presentationNode().worldTransform.position
+    func getPosition() -> SCNVector3 {
+        if self.physicsBody?.type == SCNPhysicsBodyType.Dynamic {
+            return self.presentationNode().worldTransform.position
+        } else {
+            return self.worldTransform.position
+        }
     }
     
     var rmxID: Int? {

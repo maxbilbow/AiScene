@@ -1,4 +1,4 @@
-//
+                //
 //  RMXNode.swift
 //  RattleGL3-0
 //
@@ -73,7 +73,7 @@ class RMXNode : SCNNode {
 
         switch sprite.type {
         
-        case .AI, .PLAYER, .PASSIVE, .PLAYER_OR_AI:
+        case .AI, .PLAYER, .PASSIVE:
             self.physicsBody = SCNPhysicsBody.dynamicBody()
             self.physicsBody?.friction = 0.1
             self.physicsBody?.mass = RMFloat(4 * PI * self.radius * self.radius)
@@ -174,7 +174,7 @@ extension RMXSprite {
         return self.presentationNode().transform
     }
     
-    var position: RMXVector3 {
+    var position: SCNVector3 {
         return self.presentationNode().position
     }
     

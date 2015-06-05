@@ -67,29 +67,21 @@ public class RMSActionProcessor {
     private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
     private var _panThreshold: RMFloatB = 70
     
-    func moveSpeed(inout speed: RMFloatB, sprite: RMXSprite) {
-//        NSLog(speed.toData())
-//        speed *= sprite.speed// 1000 * sprite.mass / 10
-//        NSLog(speed.toData())
-    }
     
-    func turnSpeed(inout speed: RMFloatB, sprite: RMXSprite) {
-//        speed *= sprite.rotationSpeed// 150 * sprite.mass / 10
-    }
-    
-    func action(action: String!, var speed: RMFloatB = 1,  point: [RMFloatB], sprite: RMXSprite? = nil) -> Bool{
-        let sprite = sprite ?? self.activeSprite
+    func action(action: String!, var speed: RMFloatB = 1,  args: Any?) -> Bool {
+        let sprite = self.activeSprite
         switch action {
         case nil:
             RMLog("ACTION IS NIL")
             return true
         case "move", "Move", "MOVE":
-            if point.count == 3 {
-                self.moveSpeed(&speed, sprite: sprite)
-                sprite.accelerateForward(point[2] * speed)
-                sprite.accelerateLeft(point[0] * speed)
-                sprite.accelerateUp(point[1] * speed)
-//                sprite.acceleration = RMXVector3Make(point[0] * speed, point[1] * speed, point[2] * speed)
+            if let point = args as? [RMFloatB] {
+                if point.count == 3 {
+                    sprite.accelerateForward(point[2] * speed)
+                    sprite.accelerateLeft(point[0] * speed)
+                    sprite.accelerateUp(point[1] * speed)
+                    return true
+                }
             }
             return true
         case "Stop", "stop", "STOP":
@@ -98,44 +90,40 @@ public class RMSActionProcessor {
             return true
         case "look", "Look", "LOOK":
             
-            if point.count == 2 {
+            if let point = args as? CGPoint {
                 if let camera = self.world.activeCamera as? RMXCameraNode {
                     speed *= camera.zoomFactor
                     if !self.activeSprite.isPOV {
-                        self.world.activeCamera.eulerAngles.y += point[0] * 0.1 * speed * PI_OVER_180
-                        let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                        self.world.activeCamera.eulerAngles.y += point.x * 0.1 * speed * PI_OVER_180
+                        let phi = self.world.activeCamera.eulerAngles.x - point.y * 0.1  * speed * PI_OVER_180
                         if phi < 1 && phi > -1 {
                             self.world.activeCamera.eulerAngles.x = phi
                         }
     //                    }
                     } else {
                         if self.world.hasGravity {
-                            let phi = self.world.activeCamera.eulerAngles.x - point[1] * 0.1  * speed * PI_OVER_180
+                            let phi = self.world.activeCamera.eulerAngles.x - point.y * 0.1  * speed * PI_OVER_180
                             if phi < 1 && phi > -1 {
                                 self.world.activeCamera.eulerAngles.x = phi
                             }
                         }
-                        self.turnSpeed(&speed, sprite: sprite)
-                        sprite.lookAround(theta: point[0] * -speed,phi: point[1] * speed)
+                        
+                        sprite.lookAround(theta: point.x * -speed,phi: point.y * speed)
 
                     }
                 }
             }
             return true
         case "roll", "Roll", "ROLL", "rollLeft":
-            self.turnSpeed(&speed,sprite: sprite)
             sprite.lookAround(roll: speed)
             return true
         case "rollRight":
-            self.turnSpeed(&speed, sprite: sprite)
             sprite.lookAround(roll: -speed)
             return true
         case "pitch", "Pitch", "PITCH":
-            self.turnSpeed(&speed, sprite: sprite)
             sprite.lookAround(phi: speed)
             return true
         case "yaw", "Yaw", "YAW":
-            self.turnSpeed(&speed, sprite: sprite)
             sprite.lookAround(theta: speed)
             return true
         case "setRoll":
@@ -158,7 +146,6 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateForward(speed)
             }
             return true
@@ -167,7 +154,6 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateForward(-speed)
             }
             return true
@@ -176,7 +162,6 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateLeft(speed)
             }
             return true
@@ -185,7 +170,6 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateLeft(-speed)
             }
             return true
@@ -194,7 +178,6 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateUp(speed)
             }
             return true
@@ -203,7 +186,6 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                self.moveSpeed(&speed, sprite: sprite)
                 sprite.accelerateUp(-speed)
             }
             return true
@@ -257,7 +239,7 @@ public class RMSActionProcessor {
                 self.gameView.pointOfView = self.world.getPreviousCamera()
             }
             return true
-        case "reset":
+        case RMXInterface.RESET:
             if speed == 1 {
 //                sprite.setPosition(position: RMXVector3Make(0, 50, 50))
                 for player in self.world.players {
@@ -265,7 +247,25 @@ public class RMSActionProcessor {
                 }
             }
             return true
-        case "toggleAI":
+        case RMXInterface.DEBUG_NEXT:
+            if speed == 1 {
+                RMXLog.next()
+                return true
+            } else if speed == -1 {
+                RMXLog.previous()
+                return true
+            }
+            return false
+        case RMXInterface.DEBUG_PREVIOUS:
+            if speed == 1 {
+                RMXLog.previous()
+                return true
+            } else if speed == -1 {
+                RMXLog.next()
+                return true
+            }
+            return false
+        case RMXInterface.TOGGLE_AI:
             if speed == 1 {
                 self.world.toggleAi()
                 RMLog("aiOn: \(self.world.aiOn)")
@@ -298,21 +298,36 @@ public class RMSActionProcessor {
                 return true
             }
 
-        case RMXInterface.BOOM, RMXInterface.THROW_ITEM:
-            if speed > 0 {
+        case RMXInterface.BOOM:
+            if speed > 0 && sprite.hasItem {
+                return self.action(RMXInterface.THROW_ITEM, speed: speed, args: args)
+            } else {
+                if speed == 0 && self.boomTimer == 1 {
+                    self.boomTimer = 2
+                    return true
+                } else if speed == 1 && self.explode(force: self.boomTimer * 180) {
+                    self.boomTimer = 1
+                    return true
+                }
+            }
+            return false
+        case RMXInterface.THROW_ITEM + RMXInterface.GRAB_ITEM:
+            if speed == 0 && self.boomTimer == 1 {
+                if sprite.hasItem {
+                    self.boomTimer = 2
+                    return false
+                } else {
+                    return true
+                }
+            } else if speed > 0 {
                 var result = false
                 if let item = sprite.item {
-                    result = self.activeSprite.throwItem(force: self.boomTimer * item.mass * speed)
-                } else {
-                    result = self.explode(force: self.boomTimer * 180)
-                    
+                    return true //self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
                 }
                 self.boomTimer = 1
-                return result
-            } else if speed == 0 && self.boomTimer == 1 {
-                self.boomTimer = 2
-                return true
+                return false
             }
+            return false
         case RMXInterface.INCREASE:
             self.scene.physicsWorld.speed * 1.5
             return true
@@ -342,9 +357,9 @@ public class RMSActionProcessor {
             if speed == 1 {
                 self.activeCamera?.zoomNeedsReset()
                 self.activeCamera?.orientationNeedsReset()
-                return true
+                
             }
-            return false
+            return true
         case RMXInterface.PAUSE_GAME:
             if speed == 1 {
                 if self.interface.isRunning {
@@ -469,12 +484,12 @@ public class RMSActionProcessor {
         }
     }
     
-    func throwOrGrab(target: AnyObject?, withForce force: RMFloatB = 1) -> Bool{
+    func throwOrGrab(target: Any?, withForce force: RMFloatB = 1) -> Bool{
         if let item = self.activeSprite.item {
-            return self.activeSprite.throwItem(atObject: target?.node, withForce: force)
+            return self.activeSprite.throwItem(atObject: target as? AnyObject, withForce: force)
 //            return item.tracker.target?.node
         } else {
-            return self.activeSprite.grab(target?.node)
+            return self.activeSprite.grab(target as? AnyObject)
 //            if let item = self.activeSprite.item {
 //                 return item.isPlayer
 //            }

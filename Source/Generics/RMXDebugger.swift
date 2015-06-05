@@ -10,14 +10,14 @@ import Foundation
 import SceneKit
 
 extension RMXLog {
-    static let isDebugging: Bool = false
+    static let isDebugging: Bool = true
 
 }
 
 extension RMX {
     
     
-    static var log: [String:RMXLogEntry] = [ RMXLog.DEBUG : RMXLogEntry(sender: nil, function: __FUNCTION__, filename: (__FILE__ as String).lastPathComponent, line: "\(__LINE__)") ]
+    static var log: [RMXLogEntry] = [ RMXLogEntry(sender: nil, function: __FUNCTION__, filename: (__FILE__ as String).lastPathComponent, line: "\(__LINE__)", id: RMXLog.DEBUG) ]
 }
 
 protocol RMXObject {
@@ -32,15 +32,17 @@ class RMXLogEntry {
     var senderID, message: String?
     var function, filename: String
     var line: String
+    var logID: String
     var heading: String {
         return "BEGIN >> RMXLogEntry::\(self.filename) >> ln\(self.line) >> \(self.function)"
     }
     
-    init(sender: RMXObject?, function: String, filename: String, line: String) {
+    init(sender: RMXObject?, function: String, filename: String, line: String, id: String) {
         self.senderID = sender?.uniqueID
         self.filename = filename
         self.function = function
         self.line = line
+        self.logID = id
     }
     
     func append(msg: AnyObject?) {
@@ -69,14 +71,14 @@ class RMXLogEntry {
             if message.isEmpty {
                 return false
             } else {
-                var msg = ""
-                msg += "\n\(file.lastPathComponent)/\(function)/ on line \(line):: "
-               
-                msg += "***\(message)"
+                var title: NSString = "\n\(file.lastPathComponent)/\(function)/ on line \(line):: "
+                let spacer = String(count: title.length - 1, repeatedValue: (" " as Character))
+                var msg = "***\(message)"
+                msg = msg.stringByReplacingOccurrencesOfString("\n", withString: "\n***\(spacer)", options: NSStringCompareOptions.LiteralSearch)
                 if let id = sender?.uniqueID {
-                    msg += "*** ::ID: \(id)"
+                    msg += "\n***\(spacer)::ID: \(id)"
                 }
-                self.append(msg)
+                self.append("\(title)\(msg)")
             }
         }
         return true
@@ -122,7 +124,7 @@ class RMXLog {// : NSObject {
     
     static func flush(){
         for l in RMX.log {
-            l.1.message = nil
+            l.message = nil
         }
     }
     
@@ -135,7 +137,7 @@ class RMXLog {// : NSObject {
     
     static var data: String? {
         #if DEBUG
-            return Array(RMX.log.values)[current].print
+            return RMX.log[current].print//Array(RMX.log.values)[current].print
         #else
             
         return nil
@@ -145,17 +147,25 @@ class RMXLog {// : NSObject {
     
     
     static func next() {
-        self.current++
-        if self.current == RMX.log.count {
+        #if DEBUG
+        if self.current == RMX.log.count - 1 {
             self.current = 0
+        } else {
+            self.current++
         }
+        NSLog(" >>>>>>> Switching to RMLog: \(RMX.log[current].logID) <<<<<<<<")
+        #endif
     }
     
     static func previous() {
-        self.current--
-        if self.current < 0 {
+        #if DEBUG
+        if self.current == 0 {
             self.current = RMX.log.count - 1
+        } else {
+            self.current--
         }
+        NSLog(" >>>>>>> Switching to RMLog: \(RMX.log[current].logID) <<<<<<<<")
+        #endif
     }
     
 }
@@ -163,19 +173,21 @@ class RMXLog {// : NSObject {
 
 func RMLog(_ message: AnyObject? = "", sender: RMXObject? = nil, id: String = RMXLog.DEBUG, function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__) -> Bool? {
     #if DEBUG
-        if RMXLog.isDebugging && id == Array(RMX.log.keys)[RMXLog.current] {
-            if let entry = RMX.log[id] {
-                entry.add(message, sender: sender, function: "\(function)", file: "\(file)", line: "\(line)")
-            } else {
-                let entry = RMXLogEntry(sender: sender, function: "\(function)", filename: "\(file)".lastPathComponent, line: "\(line)")
-                let key = sender?.uniqueID ?? RMXLog.DEBUG
-                entry.append(message)
-                RMX.log[key] = entry
-                
-            }
-            return true
+    if RMXLog.isDebugging {
+        if id == RMX.log[RMXLog.current].logID { //Array(RMX.log.keys)[RMXLog.current] {
+            RMX.log[RMXLog.current].add(message, sender: sender, function: "\(function)", file: "\(file)", line: "\(line)")
+        } else if let entry = RMX.log.filter({ (l: RMXLogEntry) -> Bool in
+            return l.logID == id
+        }).first {
+            entry.add(message, sender: sender, function: "\(function)", file: "\(file)", line: "\(line)")
+        } else {
+            let entry = RMXLogEntry(sender: sender, function: "\(function)", filename: "\(file)".lastPathComponent, line: "\(line)", id: id)
+            let key = sender?.uniqueID ?? RMXLog.DEBUG
+            entry.append(message)
+            RMX.log.append(entry)
         }
+        return true
+    }
     #endif
-    
     return nil
 }

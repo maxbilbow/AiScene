@@ -16,8 +16,16 @@ class RMXSpriteTimer : NSObject {
         self.sprite = sprite
         super.init()
     }
-    lazy var timers: [ NSTimer ] = [ NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "validate", userInfo: nil, repeats: true) ]
-
+    
+    func addTimer(interval: NSTimeInterval = 5, target: AnyObject, selector: Selector, userInfo: AnyObject? = nil, repeats: Bool) {
+        let timer = NSTimer.scheduledTimerWithTimeInterval(interval, target: target, selector: selector, userInfo: userInfo, repeats: repeats)
+        if repeats {
+            self.timers.append(timer)
+        }
+    }
+    
+    private lazy var timers: [ NSTimer ] = [ NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "validate", userInfo: nil, repeats: true) ]
+    
     func validate() {
         if self.sprite.world.isLive {
             if !self.sprite.world.validate(self.sprite) {
@@ -31,16 +39,21 @@ class RMXSpriteTimer : NSObject {
             for timer in self.timers {
                 timer.invalidate()
             }
+            self.shouldActivate = true
         }
         
     }
     
+    var shouldActivate: Bool = true
     func activate() {
-        for timer in self.timers {
-            if !timer.valid {
-                timer.fire()// = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "validate", userInfo: nil, repeats: true)
+        if shouldActivate {
+            for timer in self.timers {
+                if !timer.valid {
+                    timer.fire()// = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "validate", userInfo: nil, repeats: true)
+                }
             }
         }
+        self.shouldActivate = false
         
     }
 }

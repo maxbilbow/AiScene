@@ -11,7 +11,7 @@ import AVFoundation
 import SceneKit
 
 protocol RMXLocatable {
-    func getPosition() -> RMXVector
+    func getPosition() -> SCNVector3
 }
 
 

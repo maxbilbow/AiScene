@@ -541,8 +541,8 @@ extension GLKMatrix4 {
     */
 }
 
-extension RMXVector : RMXLocatable {
-    func getPosition() -> RMXVector {
+extension SCNVector3 : RMXLocatable {
+    func getPosition() -> SCNVector3 {
         return self
     }
 }

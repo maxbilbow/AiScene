@@ -68,6 +68,9 @@ class RMXInterface : NSObject, RendererDelegate {
     static let INCREASE: String = "increase"
     static let DECREASE: String = "decrease"
     static let NEW_GAME: String = "newGame"
+    static let DEBUG_NEXT: String = "debugNext"
+    static let DEBUG_PREVIOUS: String = "debugPrevious"
+    
     //Non-ASCKI commands
     static let MOVE_CURSOR_PASSIVE: String = "mouseMoved"
     static let LEFT_CLICK: String = "Mouse 1"
@@ -78,6 +81,8 @@ class RMXInterface : NSObject, RendererDelegate {
     static let KEY_UP: String = "126"
     static let KEY_BACKSPACE: String = "\u{7F}"
     static let KEY_ESCAPE: String = "\u{1B}"
+    static let KEY_TAB: String = "\t"
+    static let KEY_SHIFT_TAB: String = "\t"
     
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
@@ -296,40 +301,48 @@ class RMXInterface : NSObject, RendererDelegate {
 //        NSLog(text)
     }
     
-    func processHit(point p: CGPoint) {
+    func processHit(point p: CGPoint, type: String) -> Bool {
         if let hitResults = self.gameView?.hitTest(p, options: nil) {
             // check that we clicked on at least one object
             if hitResults.count > 0 {
                 // retrieved the first clicked object
-                let result: AnyObject! = hitResults[0]
+                if let node: SCNNode = hitResults[0].node {
 //                NSLog(result.)
                 
-                if self.actionProcessor.throwOrGrab(result) {//.manipulate(action: "throw", sprite: self.activeSprite, object: result, speed: 18000) {
-                
-                    // get its material
-                    if let material = result.node.geometryNode?.geometry?.firstMaterial {
-                        
-                        // highlight it
-                        SCNTransaction.begin()
-                        SCNTransaction.setAnimationDuration(0.5)
-                        
-                        // on completion - unhighlight
-                        SCNTransaction.setCompletionBlock {
+                    var animate: Bool = false
+                    if type == RMXInterface.RIGHT_CLICK {
+                        animate = self.actionProcessor.throwOrGrab(node.sprite)
+                    } else {
+                        animate = self.actionProcessor.throwOrGrab(node)
+                    }
+                        // get its material
+                    if animate {
+                        if let material = node.geometryNode?.geometry?.firstMaterial {
+                            
+                            // highlight it
                             SCNTransaction.begin()
                             SCNTransaction.setAnimationDuration(0.5)
                             
-                            material.emission.contents = RMColor.blackColor()
+                            // on completion - unhighlight
+                            SCNTransaction.setCompletionBlock {
+                                SCNTransaction.begin()
+                                SCNTransaction.setAnimationDuration(0.5)
+                                
+                                material.emission.contents = RMColor.blackColor()
+                                
+                                SCNTransaction.commit()
+                            }
+                            
+                            material.emission.contents = RMColor.redColor()
                             
                             SCNTransaction.commit()
+                            return true
                         }
-                        
-                        material.emission.contents = RMColor.redColor()
-                        
-                        SCNTransaction.commit()
                     }
                 }
             }
         }
+        return false
 
     }
     
@@ -343,8 +356,8 @@ class RMXInterface : NSObject, RendererDelegate {
             return
         }
         if let world = _world {
-            if let team1 = self.world.teams[1] {
-                if let team2 = self.world.teams[2] {
+            if let team1 = self.world.teams["1"] {
+                if let team2 = self.world.teams["2"] {
                     self.line3.text = self.activeSprite.attributes.printScore
                     self.line2.text = team1.printScore
                     self.line1.text = team2.printScore
@@ -378,8 +391,8 @@ class RMXInterface : NSObject, RendererDelegate {
     ///@virtual
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }
 
-    func action(action: String = "reset",speed: RMFloatB = 1, point: [RMFloatB] = []) -> Bool {
-        return self.actionProcessor.action( action,speed: speed, point: point)
+    func action(action: String = "reset",speed: RMFloatB = 1, args: Any? = nil) -> Bool {
+        return self.actionProcessor.action( action,speed: speed, args: args)
     }
     
     
