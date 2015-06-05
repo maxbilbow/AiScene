@@ -24,8 +24,8 @@ class AiCubo {
         
         earth.setName(name: "Earth")
         
-        let earthPosition = RMXVector3Make(0,-worldRadius / 2, 0)
-        earth.setPosition(position: RMXVector3Make(0,-worldRadius / 2, 0))
+        let earthPosition = RMXVector3Make(0,-earth.height / 2, 0)
+        earth.setPosition(position: earthPosition)
         //earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
         if addCameras {
             earth.addCameras()
@@ -92,7 +92,7 @@ class AiCubo {
             case .EMPTY:
                 AiCubo.initialWorldSetup(world)
                 world.gravityOff()
-                AiCubo.createEarth(inWorld: world, addCameras: true)
+//                AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 10, shapes: .CYLINDER, .ROCK)
                 AiCubo.addPlayers(world, noOfPlayers: 3, teams: 3)
@@ -110,6 +110,7 @@ class AiCubo {
                 AiCubo.initialWorldSetup(world)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                AiCubo.particles(inWorld: world)
                 break
             case .DOMED:
                 AiCubo.initialWorldSetup(world)
@@ -145,6 +146,16 @@ class AiCubo {
         }
         
         
+    }
+    
+    class func particles(inWorld world: RMSWorld){
+        let player = world.activeSprite
+        let head = player.node.childNodeWithName("head", recursively: true)
+        
+        let ps = SCNParticleSystem()
+        ps.emitterShape = head?.geometry
+        
+        head?.addParticleSystem(ps)
     }
     
     class func simplePlayer(world: RMSWorld, asAi: Bool = false, unique: Bool? = nil) -> RMXSprite {

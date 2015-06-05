@@ -48,6 +48,17 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         return _aiOn
     }
 
+    
+    private var _earth: RMXSprite?
+    var earth: RMXSprite? {
+        if self._earth != nil {
+            return self._earth
+        } else {
+            self._earth = self.rootNode.childNodeWithName("Earth", recursively: true)?.sprite
+            return self._earth
+        }
+    }
+    
     var children: Array<RMXSprite> = Array<RMXSprite>()
 //    var children: [RMXSprite] {
 //        return environments.current

@@ -230,9 +230,9 @@ class RMXInterface : NSObject, RendererDelegate {
         debugData = ""
     }
     
-    private static let DEFAULT_GAME: GameType = .TEAM_GAME
+    private static let DEFAULT_GAME: GameType = .WEAPONS
     
-    var availableGames: [ GameType ] = [ .TEAM_GAME, .TEST, .EMPTY ]
+    var availableGames: [ GameType ] = [ .WEAPONS, .TEAM_GAME, .TEST, .EMPTY ]
     
     var activeGames: [GameType: RMSWorld] = Dictionary<GameType,RMSWorld>()
     

@@ -89,6 +89,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         return _world
     }
     
+    
+    
+    
     var type: RMXSpriteType
 //    var wasJustThrown:Bool = false
     var anchor = RMXVector3Zero
@@ -626,15 +629,13 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     func manipulate(node: SCNNode! = nil) -> Void {
         if let item = self.item {
-            let itemRadius = item.radius // 2
-            var newPos = self.position + self.forwardVector * (self.length / 2 + itemRadius)
-            if self.world.hasGravity && newPos.y < itemRadius {
-                newPos.y = itemRadius
+            var newPos = self.position + self.forwardVector * (self.length / 2 + item.radius)
+            if let earth = self.world.earth {
+                let minHeight:RMFloatB = earth.top.y + earth.position.y + item.radius
+                if self.world.hasGravity && newPos.y < minHeight {
+                    newPos.y = minHeight
+                }
             }
-//            if self.isActiveSprite {
-//                println("\n bottom: \(item.bottom.print),\n height: \(item.height), width: \(item.width), length: \(item.length), radius: \(item.radius)\n scaleY: \(item.node.scale.print), altitudes: me=\(self.altitude.toData()), item=\(item.altitude.toData())")
-//            }
-
             item.setPosition(position: newPos)//, resetTransform: false)
            
         }
