@@ -45,7 +45,7 @@ class AiPoppy : NSObject, RMXAiDelegate {
     var behaviours: [String:() -> String?]?
     var sprite: RMXSprite
     var itemToWatch: SCNNode?
-    var speed:RMFloatB {
+    var speed:RMFloat {
         return self.sprite.speed
     }
     //        poppy.world?.interface.collider.trackers.append(poppy.tracker)
@@ -129,7 +129,7 @@ class AiRandom: NSObject, RMXAiDelegate {
             self.sprite.tracker.setTarget(self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.sprite.grab(target) {
                     self.sprite.tracker.setTarget(self.getTarget(self.args), ignoreClaims: true, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                        self.sprite.throwItem(atObject: target, withForce: 1)
+                        self.sprite.throwItem(atObject: target, withForce: 1, tracking: true)
                     })
                 }
                 else {

@@ -104,8 +104,8 @@ class RMXInterface : NSObject, RendererDelegate {
     var timer: NSTimer? //CADisplayLink?
 //    var world: RMSWorld?
 
-    static var lookSpeed: RMFloatB = 1
-    static var moveSpeed: RMFloatB = 2
+    internal static var lookSpeed: RMFloat = 1
+    internal static var moveSpeed: RMFloat = 2
     
     var activeSprite: RMXSprite {
         return self.world.activeSprite
@@ -311,9 +311,9 @@ class RMXInterface : NSObject, RendererDelegate {
                 
                     var animate: Bool = false
                     if type == RMXInterface.THROW_ITEM {
-                        animate = self.actionProcessor.throwOrGrab(node.sprite)
+                        animate = self.actionProcessor.throwOrGrab(node.sprite, tracking: true)
                     } else {
-                        animate = self.actionProcessor.throwOrGrab(node)
+                        animate = self.actionProcessor.throwOrGrab(node, tracking: false)
                     }
                         // get its material
                     if animate {
@@ -391,7 +391,7 @@ class RMXInterface : NSObject, RendererDelegate {
     ///@virtual
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }
 
-    func action(action: String = "reset",speed: RMFloatB = 1, args: Any? = nil) -> Bool {
+    func action(action: String = "reset",speed: RMFloat = 1, args: Any? = nil) -> Bool {
         return self.actionProcessor.action( action,speed: speed, args: args)
     }
     

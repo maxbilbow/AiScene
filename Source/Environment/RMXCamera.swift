@@ -91,8 +91,8 @@ class RMXCamera : SCNCamera {
         sprite.cameras.append(followCam)
         
 
-//        let yScale: RMFloatB = sprite.type == .BACKGROUND ? 1 : 3
-//        let zScale: RMFloatB = sprite.type == .BACKGROUND ? 2 : 2 * 5
+//        let yScale: RMFloat = sprite.type == .BACKGROUND ? 1 : 3
+//        let zScale: RMFloat = sprite.type == .BACKGROUND ? 2 : 2 * 5
 //        var pos = SCNVector3Make(0,sprite.height * yScale, sprite.radius * zScale)
 
         
@@ -189,7 +189,7 @@ class RMXCameraNode : SCNNode {
         self._resetOrientation = true
     }
     
-    private func _calibrate(var value: RMFloatB,_ target: RMFloatB,_ i: RMFloatB) -> RMFloatB {
+    private func _calibrate(var value: RMFloat,_ target: RMFloat,_ i: RMFloat) -> RMFloat {
         if value == target {
             return value
         } else if value < target {
@@ -207,18 +207,18 @@ class RMXCameraNode : SCNNode {
     
     }
     
-    func calibrate(x: Bool = true, y: Bool = false, z: Bool = false, pos: Bool = false, force: Bool = false, speed: RMFloatB = 1) -> Bool {
+    func calibrate(x: Bool = true, y: Bool = false, z: Bool = false, pos: Bool = false, force: Bool = false, speed: RMFloat = 1) -> Bool {
         if self.shouldAutoCalibrate || force {
             if x { self.eulerAngles.x = _calibrate(self.eulerAngles.x, self.restingEulerAngles.x, speed * 0.01) }
             if y { self.eulerAngles.y = _calibrate(self.eulerAngles.y, self.restingEulerAngles.y, speed * 0.01) }
             if z { self.eulerAngles.z = _calibrate(self.eulerAngles.z, self.restingEulerAngles.z, speed * 0.01) }
         
             if pos {
-                self.camera?.xFov = Double(_calibrate(RMFloatB(self.camera!.xFov), 65, RMFloatB(speed)))
+                self.camera?.xFov = Double(_calibrate(RMFloat(self.camera!.xFov), 65, RMFloat(speed)))
                 self.camera?.yFov = self.camera!.xFov //_calibrate(self.camera!.yFov, 65, speed)
-                self.pivot.m41 = RMFloatB(_calibrate(self.pivot.m41, self.restingPivotPoint.x, speed))
-                self.pivot.m42 = RMFloatB(_calibrate(self.pivot.m42, self.restingPivotPoint.y, speed))
-                self.pivot.m43 = RMFloatB(_calibrate(self.pivot.m43, self.restingPivotPoint.z, speed))
+                self.pivot.m41 = RMFloat(_calibrate(self.pivot.m41, self.restingPivotPoint.x, speed))
+                self.pivot.m42 = RMFloat(_calibrate(self.pivot.m42, self.restingPivotPoint.y, speed))
+                self.pivot.m43 = RMFloat(_calibrate(self.pivot.m43, self.restingPivotPoint.z, speed))
             }
         }
         return self.pivot.position.z == self.restingPivotPoint.z && self.eulerAngles.x == self.restingEulerAngles.x && self.fov == self.camera!.xFov
@@ -228,9 +228,9 @@ class RMXCameraNode : SCNNode {
     lazy private var fovXMin: Double = self.fovYMin// * 16 / 9
     
     private let zoomSpeed: Double = 0.5
-    var zoomRatio: RMFloatB = 0.98
+    var zoomRatio: RMFloat = 0.98
 
-    func moveIn(speed: RMFloatB = 1) {
+    func moveIn(speed: RMFloat = 1) {
 //        print()
         
         if let fov = self.camera?.xFov {
@@ -257,20 +257,20 @@ class RMXCameraNode : SCNNode {
         }
     }
     
-    lazy var zMin: RMFloatB = -RMFloatB(self.camera!.zFar)
+    lazy var zMin: RMFloat = -RMFloat(self.camera!.zFar)
 //        {
-//        return self.world.radius - RMFloatB(self.camera!.zFar)
+//        return self.world.radius - RMFloat(self.camera!.zFar)
 //    }
     
     var fov: Double {
         return self.camera!.xFov //+ self.camera!.yFov / 2
     }
     
-    var zoomFactor: RMFloatB {
+    var zoomFactor: RMFloat {
         if self.pivot.m43 < self.zMin {
             return 0.25
         } else {
-            return RMFloatB(self.fov / self.restingFOV) * (1 - self.pivot.m43 * 0.75 / self.zMin)
+            return RMFloat(self.fov / self.restingFOV) * (1 - self.pivot.m43 * 0.75 / self.zMin)
         }
     }
     func print() {
@@ -281,7 +281,7 @@ class RMXCameraNode : SCNNode {
         s += "\n   appeture: \(self.camera!.aperture.print), orthScale: \(self.camera!.orthographicScale.print)\n zFar: \(self.camera!.zFar)"
         println(s)
     }
-    func moveOut(speed: RMFloatB = 1) {
+    func moveOut(speed: RMFloat = 1) {
 //        print()
         if let fov = self.camera?.xFov {
 //            NSLog("pivot: \(self.pivot.position.print), FOV: \(fov.toData()), phi: \(self.eulerAngles.x.toData()), zoomFactor: \(self.zoomFactor.toData())")

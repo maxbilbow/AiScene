@@ -20,10 +20,10 @@ import GLKit
 class RMXArt {
     static let colorBronzeDiff: [Float]  = [ 0.8, 0.6, 0.0, 1.0 ]
     static let colorBronzeSpec: [Float]  = [ 1.0, 1.0, 0.4, 1.0 ]
-    static let colorBlue: [RMFloatB]        = [ 0.0, 0.0, 0.1, 1.0 ]
+    static let colorBlue: [RMFloat]        = [ 0.0, 0.0, 0.1, 1.0 ]
     static let colorNone: [Float]        = [ 0.0, 0.0, 0.0, 0.0 ]
-    static let colorRed: [RMFloatB]         = [ 0.1, 0.0, 0.0, 1.0 ]
-    static let colorGreen: [RMFloatB]       = [ 0.0, 0.1, 0.0, 1.0 ]
+    static let colorRed: [RMFloat]         = [ 0.1, 0.0, 0.0, 1.0 ]
+    static let colorGreen: [RMFloat]       = [ 0.0, 0.1, 0.0, 1.0 ]
     static let colorYellow: [Float]      = [ 1.0, 0.0, 0.0, 1.0 ]
     static let nillVector: [Float]       = [ 0  ,   0,  0,  0   ]
     
@@ -33,7 +33,7 @@ class RMXArt {
     static let redVector: GLKVector4 = GLKVector4Make(1.0, 0.0, 0.0, 1.0)
 
     
-    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloatB = 1000, radius: RMFloatB? = nil, shapes: ShapeType ...) -> RMSWorld {
+    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloat = 1000, radius: RMFloat? = nil, shapes: ShapeType ...) -> RMSWorld {
         
         //RMXArt.drawPlane(world)
         if drawAxis {
@@ -48,7 +48,7 @@ class RMXArt {
     
 
     
-    class func drawAxis(world: RMSWorld, radius: RMFloatB) {//xCol y:(float*)yCol z:(float*)zCol{
+    class func drawAxis(world: RMSWorld, radius: RMFloat) {//xCol y:(float*)yCol z:(float*)zCol{
         
         
         func drawAxis(axis: String) {
@@ -101,20 +101,20 @@ class RMXArt {
         drawAxis("z2")
     }
     
-    class func randomObjects(world: RMSWorld, noOfShapes: RMFloatB = 100, radius r: RMFloatB? = nil, ofType types: [ShapeType])    {
+    class func randomObjects(world: RMSWorld, noOfShapes: RMFloat = 100, radius r: RMFloat? = nil, ofType types: [ShapeType])    {
     //int max =100, min = -100;
     //BOOL gravity = true;
         let radius = r ?? world.radius
         
-        for(var i: RMFloatB = -noOfShapes / 2; i < noOfShapes / 2; ++i) {
-            var randPos: [RMFloatB]
-            var X: RMFloatB = 0; var Y: RMFloatB = 0; var Z: RMFloatB = 0
-            func thisRandom(inout x: RMFloatB, inout y: RMFloatB, inout z: RMFloatB) -> [RMFloatB] {
-                func drawCondition(x:RMFloatB, inout y:RMFloatB, z:RMFloatB) -> Bool{
+        for(var i: RMFloat = -noOfShapes / 2; i < noOfShapes / 2; ++i) {
+            var randPos: [RMFloat]
+            var X: RMFloat = 0; var Y: RMFloat = 0; var Z: RMFloat = 0
+            func thisRandom(inout x: RMFloat, inout y: RMFloat, inout z: RMFloat) -> [RMFloat] {
+                func drawCondition(x:RMFloat, inout y:RMFloat, z:RMFloat) -> Bool{
                     let position = RMXVector3Make(x,y,z)
                     let distance = RMXVector3Distance(position, RMXVector3Zero)
                     var test: Bool
-                    y = RMFloatB(fabs(y))
+                    y = RMFloat(fabs(y))
                     
                     return distance < radius
                 }
@@ -128,7 +128,7 @@ class RMXArt {
             }
             randPos = thisRandom(&X,&Y,&Z)
 
-            let size = RMFloatB(8) //RMFloatB(random() % 5 + 5)
+            let size = RMFloat(8) //RMFloat(random() % 5 + 5)
             var scale = RMXVector3Make(size,size,size)
             var shape: ShapeType = types[random() % types.count]
 
@@ -137,7 +137,7 @@ class RMXArt {
             #if OSX
                 let color = NSColor(calibratedRed: colorVector.x, green: colorVector.y, blue: colorVector.z, alpha: colorVector.w)
                 #elseif iOS
-                let color = UIColor(red: RMFloat(colorVector.x), green: RMFloat(colorVector.y), blue: RMFloat(colorVector.z), alpha: RMFloat(colorVector.w))
+                let color = UIColor(red: CGFloat(colorVector.x), green: CGFloat(colorVector.y), blue: CGFloat(colorVector.z), alpha: CGFloat(colorVector.w))
             #endif
         
             let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color)
@@ -169,9 +169,9 @@ class RMXArt {
     class func randomNSColor() -> RMColor {
             //float rCol[4];
         var rCol = RMColor(
-            red: RMFloat(random() % 10)/10,
-            green: RMFloat(random() % 10)/10,
-            blue: RMFloat(random() % 10)/10,
+            red: CGFloat(random() % 10)/10,
+            green: CGFloat(random() % 10)/10,
+            blue: CGFloat(random() % 10)/10,
             alpha: 1.0
            )
         
@@ -182,9 +182,9 @@ class RMXArt {
 func RMXVector3Random(max: Int, min: Int, div: Int = 1) -> RMXVector3 {
     
     return RMXVector3Make(
-        RMFloatB((random() % max + min)/div),
-        RMFloatB(abs((random() % max + min)/div)),
-        RMFloatB((random() % max + min)/div)
+        RMFloat((random() % max + min)/div),
+        RMFloat(abs((random() % max + min)/div)),
+        RMFloat((random() % max + min)/div)
     )
 
 }
@@ -192,9 +192,9 @@ func RMXVector3Random(max: Int, min: Int, div: Int = 1) -> RMXVector3 {
 func RMXRandomColor() -> RMXVector4 {
     //float rCol[4];
     return RMXVector4Make(
-        RMFloatB(random() % 800)/500,
-        RMFloatB(random() % 800)/500,
-        RMFloatB(random() % 800)/500,
+        RMFloat(random() % 800)/500,
+        RMFloat(random() % 800)/500,
+        RMFloat(random() % 800)/500,
         1.0)
 }
 

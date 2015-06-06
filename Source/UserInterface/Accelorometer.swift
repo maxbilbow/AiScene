@@ -18,12 +18,12 @@ extension RMXDPad {
 //        if true { return }
 //        else {
 //            let g = self.motionManager.deviceMotion.gravity
-//            self.world!.physics.directionOfGravity = RMXVector3Make(RMFloatB(g.x), RMFloatB(g.y), RMFloatB(g.z))
+//            self.world!.physics.directionOfGravity = RMXVector3Make(RMFloat(g.x), RMFloat(g.y), RMFloat(g.z))
 //        }
         
-        func tilt(direction: String, tilt: RMFloatB){
+        func tilt(direction: String, tilt: RMFloat){
             let rollSpeed = self.rollSpeed
-            let rollThreshold: RMFloatB = 0.1
+            let rollThreshold: RMFloat = 0.1
             if tilt > rollThreshold {
                 let speed = (1.0 + tilt) * rollSpeed
                 self.action(action: direction, speed: speed)
@@ -37,19 +37,19 @@ extension RMXDPad {
 //        let i = self.world!.clock?.getCounter(forKey:key)
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
         if let deviceMotion = self.motionManager.deviceMotion {
-            tilt("roll", RMFloatB(self.motionManager.deviceMotion.gravity.y))
-            //tilt("pitch", RMFloatB(self.motionManager.deviceMotion.gravity.z))
-//            tilt("yaw", RMFloatB(self.motionManager.deviceMotion.gravity.x)
+            tilt("roll", RMFloat(self.motionManager.deviceMotion.gravity.y))
+            //tilt("pitch", RMFloat(self.motionManager.deviceMotion.gravity.z))
+//            tilt("yaw", RMFloat(self.motionManager.deviceMotion.gravity.x)
             func updateGravity() {
                 let g = deviceMotion.gravity
-                RMX.gravity.x = RMFloatB(g.x)
-                RMX.gravity.y = RMFloatB(g.y)
-                RMX.gravity.z = RMFloatB(g.z)
+                RMX.gravity.x = RMFloat(g.x)
+                RMX.gravity.y = RMFloat(g.y)
+                RMX.gravity.z = RMFloat(g.z)
             }
 //            updateGravity()
             if let attitude = deviceMotion.attitude {
-                //self.action(action: "setRoll",speed: RMFloatB(attitude.roll))
-                //self.action(action: "setPitch",speed: RMFloatB(-attitude.pitch))
+                //self.action(action: "setRoll",speed: RMFloat(attitude.roll))
+                //self.action(action: "setPitch",speed: RMFloat(-attitude.pitch))
                 
             }
             if !_testing { return }

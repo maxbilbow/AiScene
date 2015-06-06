@@ -51,13 +51,13 @@ class RM3DModels  {
     
     
    
-    class func getNode(shapeType type: ShapeType, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> SCNNode {
+    class func getNode(shapeType type: ShapeType, radius r: RMFloat? = nil, height h: RMFloat? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> SCNNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
         var scale = s ?? SCNVector3Make(radius * 2,height * 2,radius * 2)
         if r == nil {
-            radius = RMFloatB(scale.average)
+            radius = RMFloat(scale.average)
         }
         if h == nil {
             height = scale.y
@@ -67,19 +67,19 @@ class RM3DModels  {
         switch(type){
         case .CUBE:
             node = SCNNode(geometry: SCNBox(
-                width: RMFloat(scale.x),
-                height:RMFloat(scale.y),
-                length:RMFloat(scale.z),
+                width: CGFloat(scale.x),
+                height:CGFloat(scale.y),
+                length:CGFloat(scale.z),
                 chamferRadius:0.0)
             )
             hasColor = true
             break
         case ShapeType.SPHERE, .SUN:
-            node = SCNNode(geometry: SCNSphere(radius: RMFloat(radius)))
+            node = SCNNode(geometry: SCNSphere(radius: CGFloat(radius)))
             hasColor = true
             break
         case ShapeType.CYLINDER:
-            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: RMFloat(height)))
+            node = SCNNode(geometry: SCNCylinder(radius: CGFloat(radius), height: CGFloat(height)))
             hasColor = true
             break
         case ShapeType.ROCK:
@@ -88,11 +88,11 @@ class RM3DModels  {
             break
         case ShapeType.PLANE:
              hasColor = true
-            node = SCNNode(geometry: SCNPlane(width: RMFloat(scale.x), height: RMFloat(scale.y)))
+            node = SCNNode(geometry: SCNPlane(width: CGFloat(scale.x), height: CGFloat(scale.y)))
             break
         case ShapeType.FLOOR:
             hasColor = true
-            node = SCNNode(geometry: SCNCylinder(radius: RMFloat(radius), height: 100))
+            node = SCNNode(geometry: SCNCylinder(radius: CGFloat(radius), height: 100))
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
             //node.geometry?.firstMaterial!.doubleSided = true
             
@@ -118,7 +118,7 @@ class RM3DModels  {
             node.scale *= 0.01 * radius
             break
         case ShapeType.BOBBLE_MAN:
-            let r: RMFloatB = 8
+            let r: RMFloat = 8
             node = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: r, color: color)
             let head = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: r / 2)
             head.name = "head"
@@ -131,7 +131,7 @@ class RM3DModels  {
             node.scale = scale
             break
         default:
-            node = SCNNode(geometry: SCNSphere(radius: RMFloat(radius)))
+            node = SCNNode(geometry: SCNSphere(radius: CGFloat(radius)))
             hasColor = true
         }
         

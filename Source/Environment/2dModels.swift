@@ -14,13 +14,13 @@ typealias RMXModels = RM2DModels
 class RM2DModels : RMXModelsProtocol {
     
     
-    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloatB? = nil, height h: RMFloatB? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode  {
+    class func getNode(shapeType type: Int, mode: RMXSpriteType = .PASSIVE, radius r: RMFloat? = nil, height h: RMFloat? = nil, scale s: RMXSize? = nil, color: NSColor! = nil) -> RMXNode  {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
         var scale = CGPoint(x: RMFloat(radius * 2), y: RMFloat(height * 2))
         if r == nil {
-            radius = RMFloatB(sqrt(scale.x * scale.x * scale.y * scale.y))
+            radius = RMFloat(sqrt(scale.x * scale.x * scale.y * scale.y))
         }
         
         var node: RMXNode = SKNode()

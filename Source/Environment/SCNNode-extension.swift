@@ -22,9 +22,9 @@ extension SCNNode : RMXLocatable, RMXObject {
     
     func getPosition() -> SCNVector3 {
         if self.physicsBody?.type == SCNPhysicsBodyType.Dynamic {
-            return self.presentationNode().worldTransform.position
+            return self.presentationNode().position
         } else {
-            return self.worldTransform.position
+            return self.position
         }
     }
     
@@ -74,10 +74,10 @@ extension SCNNode : RMXLocatable, RMXObject {
         return self.rmxNode?._geometryNode
     }
     
-    var boundingSphere: (center: RMXVector3, radius: RMFloatB) {
-        var center: RMXVector3 = RMXVector3Zero; var radius: RMFloat = 0
+    var boundingSphere: (center: RMXVector3, radius: CGFloat) {
+        var center: RMXVector3 = RMXVector3Zero; var radius: CGFloat = 0
         self.getBoundingSphereCenter(&center, radius: &radius)
-        return (center, RMFloatB(radius))
+        return (center, radius)
     }
     
     var boundingBox: (min: RMXVector, max: RMXVector) {
@@ -87,8 +87,8 @@ extension SCNNode : RMXLocatable, RMXObject {
         return (min, max)
     }
     
-    var radius: RMFloatB {
-        return self.boundingSphere.radius * RMFloatB(self.scale.average)
+    var radius: RMFloat {
+        return RMFloat(self.boundingSphere.radius) * RMFloat(self.scale.average)
     }
     
 }

@@ -79,7 +79,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
 
-    func setRadius(radius: RMFloatB) {
+    func setRadius(radius: RMFloat) {
         self._radius = radius
     }
     
@@ -96,12 +96,12 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private var _radius: RMFloatB?
-    var radius: RMFloatB {
+    private var _radius: RMFloat?
+    var radius: RMFloat {
         return _radius ?? RMSWorld.RADIUS
     }
     
-    private static var RADIUS: RMFloatB = 1250
+    private static var RADIUS: RMFloat = 1250
     
     
     ///Note: May become public
@@ -112,7 +112,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         self.calibrate()
         return self
     }
-    var ground: RMFloatB = 0
+    var ground: RMFloat = 0
     func calibrate() -> SCNScene {
         _aiOn = false
         self.interface.gameView!.scene = self//._scene
@@ -159,7 +159,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
 
     
-    private let GRAVITY: RMFloatB = 0
+    private let GRAVITY: RMFloat = 0
     
     
     private var _activeSprite: RMXSprite!
@@ -182,11 +182,11 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     @availability(*,deprecated=1)
     func closestObjectTo(sender: RMXSprite)->RMXSprite? {
         var closest: Int = -1
-        var dista: RMFloatB = RMFloatB.infinity// = sender.body.distanceTo(closest)
+        var dista: RMFloat = RMFloat.infinity// = sender.body.distanceTo(closest)
         for object in children {
             let child = object
             if child != sender {
-                let distb: RMFloatB = sender.distanceTo(child)
+                let distb: RMFloat = sender.distanceTo(child)
                 if distb < dista {
                     closest = child.rmxID!
                     dista = distb
@@ -199,11 +199,11 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     @availability(*,deprecated=1)
     func furthestObjectFrom(sender: RMXSprite)->RMXSprite? {
         var furthest: Int = -1
-        var dista: RMFloatB = 0// = sender.body.distanceTo(closest)
+        var dista: RMFloat = 0// = sender.body.distanceTo(closest)
         for object in children {
             let child = object
             if child != sender {
-                let distb: RMFloatB = sender.distanceTo(child)
+                let distb: RMFloat = sender.distanceTo(child)
                 if distb > dista {
                     furthest = child.rmxID!
                     dista = distb
@@ -287,24 +287,35 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         }
     }
     
-    private var _ground: RMFloatB?
+    private var _ground: RMFloat?
     func validate(sprite: RMXSprite) -> Bool {
-        var valid = true
-        if let radius = _radius {
-            var position = sprite.position
-            position.y = 0
-            if radius > 0 && position.distanceTo(RMXVector3Zero) > radius {
-                return false
+        
+        if self.hasGravity {
+            if let earth = self.earth {
+                if sprite.position.y < earth.position.y {
+                    return false
+                }
             }
-        } else if let earth = self.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
-            _radius = earth.radius
-            _ground = earth.sprite?.top.y
-            self.validate(sprite)
         }
-        if let ground = _ground {
-            valid = sprite.position.y < ground
-        }
-        return valid
+        return true
+//        var valid = true
+//        if let radius = _radius {
+//            var position = sprite.position
+//            position.y = 0
+//            if radius > 0 && position.distanceTo(RMXVector3Zero) > radius {
+//                return false
+//            }
+//        } else if let earth = self.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
+//            _radius = earth.radius
+//            _ground = earth.sprite?.top.y
+//            self.validate(sprite)
+//        } else {
+//            _radius = self.radius
+//        }
+//        if let ground = _ground {
+//            valid = sprite.position.y < ground
+//        }
+//        return valid
     }
     
 }

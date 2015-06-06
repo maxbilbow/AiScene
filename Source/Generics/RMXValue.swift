@@ -196,9 +196,9 @@ extension SCNVector3 {
         return SCNVector3Make(-x,-y,-z)
     }
     
-    func distanceTo(v: SCNVector3) -> RMFloatB{
+    func distanceTo(v: SCNVector3) -> RMFloat{
         let A = SCNVector3ToGLKVector3(self); let B = SCNVector3ToGLKVector3(v)
-        return RMFloatB(GLKVector3Distance(A,B))
+        return RMFloat(GLKVector3Distance(A,B))
         //return RMXVector3Distance(self, v)
     }
     
@@ -210,11 +210,11 @@ extension SCNVector3 {
         return (self.sum > 0 ? 1 : -1) * self.length
     }
     
-    var sum: RMFloatB {
+    var sum: RMFloat {
         return x + y + z
     }
     
-    var average: RMFloatB {
+    var average: RMFloat {
         return self.sum / 3
     }
 }
@@ -319,7 +319,7 @@ extension CGVector {
 
 extension SCNQuaternion {
     var up: CGVector  {
-        return CGVector(dx: RMFloat(x * sin(w)), dy: RMFloat(y * cos(w)))
+        return CGVector(dx: CGFloat(x * sin(w)), dy: CGFloat(y * cos(w)))
     }
     
     var left: CGVector {
@@ -327,7 +327,7 @@ extension SCNQuaternion {
     }
     
     var forward: CGVector {
-        return CGVector(dx: RMFloat(x * cos(w)), dy: RMFloat(y * sin(w)))
+        return CGVector(dx: CGFloat(x * cos(w)), dy: CGFloat(y * sin(w)))
     }
 
 }

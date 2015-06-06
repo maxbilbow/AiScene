@@ -14,7 +14,7 @@ import SceneKit
 class AiCubo {
    
    
-    class func createEarth(inWorld world: RMSWorld, radius: RMFloatB? = nil, addCameras: Bool = true) {
+    class func createEarth(inWorld world: RMSWorld, radius: RMFloat? = nil, addCameras: Bool = true) {
         let worldRadius = radius ?? world.radius
         
         let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, unique: true)
@@ -35,7 +35,7 @@ class AiCubo {
         
     }
  
-    class func createLight(inWorld world: RMSWorld, fixed: Bool = true, radius: RMFloatB? = nil, addCameras: Bool = true){
+    class func createLight(inWorld world: RMSWorld, fixed: Bool = true, radius: RMFloat? = nil, addCameras: Bool = true){
         let worldRadius = radius ?? world.radius
         
         let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
@@ -49,7 +49,7 @@ class AiCubo {
         sun.node.pivot.m43 = -worldRadius
         sun.node.eulerAngles.x = -45 * PI_OVER_180
         if !fixed {
-            sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(RMFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+            sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
         }
         if addCameras {
             RMXCamera.headcam(sun)
@@ -69,7 +69,7 @@ class AiCubo {
             moon.node.pivot.m43 = sun.node.pivot.m43
             moon.node.eulerAngles.x = 4 * sun.node.eulerAngles.x
             if !fixed {
-                moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(RMFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+                moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
             }
             if addCameras {
                 RMXCamera.headcam(moon)
@@ -198,7 +198,7 @@ class AiCubo {
         
     }
     
-    class func initialWorldSetup(world: RMSWorld, radius: RMFloatB? = nil, poppy: Bool = true, player2: Bool = true, additionalCameras: Bool = true){
+    class func initialWorldSetup(world: RMSWorld, radius: RMFloat? = nil, poppy: Bool = true, player2: Bool = true, additionalCameras: Bool = true){
         
         if let r = radius {
             world.setRadius(r)

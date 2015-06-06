@@ -31,7 +31,7 @@ extension RMX {
 
 public class RMSActionProcessor {
     
-    var boomTimer: RMFloatB = 1
+    private var boomTimer: RMFloat = 1
 
     var interface: RMXInterface
     
@@ -59,11 +59,11 @@ public class RMSActionProcessor {
         return self.world.activeCamera as? RMXCameraNode
     }
     
-    private var _movement: (x:RMFloatB, y:RMFloatB, z:RMFloatB) = (x:0, y:0, z:0)
-    private var _panThreshold: RMFloatB = 70
+    private var _movement: (x:RMFloat, y:RMFloat, z:RMFloat) = (x:0, y:0, z:0)
+    private var _panThreshold: RMFloat = 70
     
     
-    func action(action: String!, var speed: RMFloatB = 1,  args: Any?) -> Bool {
+    func action(action: String!, var speed: RMFloat = 1,  args: Any?) -> Bool {
         let sprite = self.activeSprite
         switch action {
         case nil:
@@ -71,8 +71,8 @@ public class RMSActionProcessor {
             return true
         case "move", "Move", "MOVE":
             if let point = args as? CGPoint {
-                sprite.accelerate(left: RMFloatB(point.x), forward: RMFloatB(point.y))
-            } else if let point = args as? [RMFloatB] {
+                sprite.accelerate(left: RMFloat(point.x), forward: RMFloat(point.y))
+            } else if let point = args as? [RMFloat] {
                 if point.count == 3 {
                     sprite.accelerate(forward: point[2] * speed, left: point[0] * speed, up: point[1] * speed)
                     return true
@@ -91,20 +91,20 @@ public class RMSActionProcessor {
                     speed *= camera.zoomFactor
                     if !self.activeSprite.isPOV {
 //                        self.world.activeCamera.eulerAngles.y += point.x * 0.1 * speed * PI_OVER_180
-                        let phi: RMFloatB = self.world.activeCamera.eulerAngles.x - RMFloatB(point.y) * 0.1 * speed * PI_OVER_180
+                        let phi: RMFloat = self.world.activeCamera.eulerAngles.x - RMFloat(point.y) * 0.1 * speed * PI_OVER_180
                         if phi < 1 && phi > -1 {
                             self.world.activeCamera.eulerAngles.x = phi
                         }
     //                    }
                     } else {
                         if self.world.hasGravity {
-                            let phi = self.world.activeCamera.eulerAngles.x - RMFloatB(point.y) * 0.1 * speed * PI_OVER_180
+                            let phi = self.world.activeCamera.eulerAngles.x - RMFloat(point.y) * 0.1 * speed * PI_OVER_180
                             if phi < 1 && phi > -1 {
                                 self.world.activeCamera.eulerAngles.x = phi
                             }
                         }
                         
-                        sprite.lookAround(theta: RMFloatB(point.x) * speed,phi: RMFloatB(point.y) * speed)
+                        sprite.lookAround(theta: RMFloat(point.x) * speed,phi: RMFloat(point.y) * speed)
 
                     }
                 }
@@ -199,8 +199,9 @@ public class RMSActionProcessor {
                 let size = (sprite.item?.radius)! * speed
                 if size > 0.5 && size < 15 {
 //                    sprite.item?.setRadius(size)
-                    sprite.item?.physicsBody!.mass *= RMFloat(size)
+                    sprite.item?.physicsBody!.mass *= CGFloat(size)
                 }
+                
             }
             return true
         case "extendArm":
@@ -295,8 +296,10 @@ public class RMSActionProcessor {
             }
 
         case RMXInterface.BOOM:
-            if speed > 0 && sprite.hasItem {
-                return self.action(RMXInterface.THROW_ITEM, speed: speed, args: args)
+            if sprite.hasItem && speed > 0 && self.boomTimer > 1 {
+                let result = sprite.throwItem(force: speed * self.boomTimer)
+                self.boomTimer = 1
+                return result
             } else {
                 if speed == 0 && self.boomTimer == 1 {
                     self.boomTimer = 2
@@ -311,18 +314,19 @@ public class RMSActionProcessor {
             if speed == 0 && self.boomTimer == 1 {
                 if sprite.hasItem {
                     self.boomTimer = 2
-                    return false
+                    return true
                 } else {
                     return true
                 }
             } else if speed > 0 {
                 var result = false
                 if let item = sprite.item {
-                    return true //self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
+                    return true//self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
                 }
                 self.boomTimer = 1
                 return false
             }
+            self.boomTimer = 1
             return false
         case RMXInterface.INCREASE:
             self.scene.physicsWorld.speed * 1.5
@@ -420,7 +424,7 @@ public class RMSActionProcessor {
             #if iOS
             if let dPad: RMXDPad = self.interface as? RMXDPad {
                 if let att = dPad.motionManager.deviceMotion.attitude {
-                    let attitude = SCNVector3Make(RMFloatB(att.pitch), RMFloatB(att.yaw), RMFloatB(att.roll))
+                    let attitude = SCNVector3Make(RMFloat(att.pitch), RMFloat(att.yaw), RMFloat(att.roll))
                     angles      += "\n    - SPRITE: \(sprite.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
                     angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
                 }
@@ -467,11 +471,11 @@ public class RMSActionProcessor {
     }
         
     
-    var extendArm: RMFloatB = 0
+    var extendArm: RMFloat = 0
 //    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
     var isMouseLocked = false
     
-    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloatB? = nil, yaw y: RMFloatB? = nil, roll z: RMFloatB? = nil) {
+    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloat? = nil, yaw y: RMFloat? = nil, roll z: RMFloat? = nil) {
         let sprite = s ?? self.activeSprite
         if let orientation = orientation {
             RMLog("not implemented")
@@ -480,27 +484,26 @@ public class RMSActionProcessor {
         }
     }
     
-    func throwOrGrab(target: Any?, withForce force: RMFloatB = 1) -> Bool{
+    func throwOrGrab(target: Any?, withForce force: RMFloat = 1, tracking: Bool) -> Bool{
         if let item = self.activeSprite.item {
-            return self.activeSprite.throwItem(atObject: target as? AnyObject, withForce: force)
-//            return item.tracker.target?.node
+            let boom = self.boomTimer
+            self.boomTimer = 1
+            return self.activeSprite.throwItem(atObject: target as? AnyObject, withForce: force * boom, tracking: tracking)
         } else {
+            self.boomTimer = 1
             return self.activeSprite.grab(target as? AnyObject)
-//            if let item = self.activeSprite.item {
-//                 return item.isPlayer
-//            }
         }
     }
     
        
-    func explode(sprite s: RMXSprite? = nil, force: RMFloatB = 1, range: RMFloatB = 500) -> Bool{
+    func explode(sprite s: RMXSprite? = nil, force: RMFloat = 1, range: RMFloat = 500) -> Bool{
         let sprite = s ?? self.activeSprite
         sprite.world.interface.av.playSound(RMXInterface.BOOM, info: sprite.position, range: Float(range))
         return RMSActionProcessor.explode(sprite, force: force * 10000, range: range)
         
     }
     
-    class func explode(sprite: RMXSprite?, force: RMFloatB = 1, range: RMFloatB = 500) -> Bool {
+    class func explode(sprite: RMXSprite?, force: RMFloat = 1, range: RMFloat = 500) -> Bool {
         if let sprite = sprite {
             let world = sprite.world
             for child in world.children {

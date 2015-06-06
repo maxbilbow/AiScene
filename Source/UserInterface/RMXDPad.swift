@@ -20,7 +20,7 @@ class RMXDPad : RMXInterface {
      let _hasMotion = true
     
     let motionManager: CMMotionManager = CMMotionManager()
-    let rollSpeed: RMFloatB = -1
+    let rollSpeed: RMFloat = -1
     
     var moveButtonPad: UIImageView?// = RMXModels.getImage()
     var moveButton: UIView?
@@ -39,7 +39,7 @@ class RMXDPad : RMXInterface {
             self.motionManager.startMagnetometerUpdates()
         }
         
-        RMXInterface.moveSpeed *= 2 //-0.01 //-0.4
+        RMXInterface.moveSpeed *= -2 //-0.01 //-0.4
         RMXInterface.lookSpeed *= 0.1
 
         
@@ -310,7 +310,7 @@ class RMXDPad : RMXInterface {
     var moveOrigin: CGPoint = CGPoint(x: 0,y: 0)
     var lookOrigin: CGPoint = CGPoint(x: 0,y: 0)
 
-    var boomTimer: RMFloatB = 1
+    var boomTimer: RMFloat = 1
     
     
     

@@ -76,7 +76,7 @@ class RMXNode : SCNNode {
         case .AI, .PLAYER, .PASSIVE:
             self.physicsBody = SCNPhysicsBody.dynamicBody()
             self.physicsBody?.friction = 0.1
-            self.physicsBody?.mass = RMFloat(4 * PI * self.radius * self.radius)
+            self.physicsBody?.mass = CGFloat(4 * PI * self.radius * self.radius)
             break
         case .PASSIVE:
             self.physicsBody?.damping = 0.3

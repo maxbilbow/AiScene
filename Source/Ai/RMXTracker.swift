@@ -67,10 +67,10 @@ class RMXTracker : NSObject {
     
     var isProjectile = false
 
-    var speed: RMFloatB = 0
+    var speed: RMFloat = 0
 
     
-    func setTarget(target: RMXSprite?, speed: RMFloatB? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
+    func setTarget(target: RMXSprite?, speed: RMFloat? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
         let oldTarget = self.target ; let newTarget = target
 
         if let target = target {

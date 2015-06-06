@@ -43,8 +43,8 @@ extension RMXDPad {
         return baseButton
     }
 
-    private func _limit(x: CGFloat, limit lim: CGFloat? = nil) -> CGFloat {
-        let limit: CGFloat = lim ?? CGFloat(RMXInterface.moveSpeed)
+    private func _limit(x: CGFloat, limit lim: CGFloat) -> CGFloat {
+        let limit: CGFloat = lim// ?? 2// CGFloat(RMXInterface.moveSpeed)
         if x > limit {
             return limit
         } else if x < -limit {
@@ -61,18 +61,20 @@ extension RMXDPad {
             self.moveButtonPad!.frame = self.moveButtonCenter
             self.action(action: "stop")
         } else {
-            let move = CGPoint(x: point.x - self.moveOrigin.x, y: point.y - self.moveOrigin.y)
-            let rect = self.moveButtonCenter
+            var move = CGPoint(x: point.x - self.moveOrigin.x, y: point.y - self.moveOrigin.y)
             var bMove = move
-            let limX = rect.size.width * 0.5 ; let limY = rect.size.height * 0.5
-            let x = _limit(move.x, limit: limX) // log10(1 + 100 * move.x * move.x)
-            let y = _limit(move.y, limit: limY)//log10(1 + 100 * move.y * move.y)
-            bMove.x = x /// limX //move.x > 0 ? x : -x
-            bMove.y = y /// limY //move.y > 0 ? y : -y
             
-            self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + bMove * 1//move * -0.3 //rect.origin + bMove//self.moveOrigin + move
-            self.moveButtonPad?.setNeedsDisplay()
-            self.action(action: "move", speed: -RMXInterface.moveSpeed, args: bMove / limX)
+            let rect = self.moveButtonCenter
+            
+            let limX = rect.size.width * 0.5 ; let limY = rect.size.height * 0.5
+            
+            move.x = _limit(move.x, limit: limX) /// limX //move.x > 0 ? x : -x
+            move.y = _limit(move.y, limit: limY) /// limY //move.y > 0 ? y : -y
+            
+            var percentage = CGPoint(x: move.x / limX, y: move.y / limY)
+            self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + move * 1
+//            self.moveButtonPad?.setNeedsDisplay()
+            self.action(action: "move", speed: 1, args: percentage * CGFloat(RMXInterface.moveSpeed))
 //            NSLog("FWD: \((x / limX).toData()), SIDE: \((y / limY).toData())),  TOTAL: \(1)")
         }
         
@@ -97,7 +99,12 @@ extension RMXDPad {
     func explode(recogniser: UILongPressGestureRecognizer) {
         //        self.activeSprite?.setAngle(roll: 0)
         if recogniser.state == .Ended {
-            self.action(action: "explode", speed: 1)
+            if self.activeSprite.hasItem {
+                self.actionProcessor.throwOrGrab(nil, withForce: 1, tracking: false)
+                self.activeSprite.throwItem(force: 1)
+            } else {
+                self.action(action: "explode", speed: 1)
+            }
             //self.actionProcessor.explode(force: self.boomTimer)
             
         } else {
@@ -115,7 +122,7 @@ extension RMXDPad {
     }
     
     func jump(recogniser: UILongPressGestureRecognizer){
-        let speed: RMFloatB = recogniser.state == .Ended ? 1 : 0
+        let speed: RMFloat = recogniser.state == .Ended ? 1 : 0
         self.action(action: "jump", speed: speed)
     }
 }
