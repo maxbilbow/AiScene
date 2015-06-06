@@ -275,6 +275,10 @@ func * (lhs: CGPoint, rhs: RMFloat) -> CGPoint {
     return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
 }
 
+func / (lhs: CGPoint, rhs: RMFloat) -> CGPoint {
+    return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+}
+
 
 func * (lhs: CGSize, rhs: RMFloat) -> CGSize {
     return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)

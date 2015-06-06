@@ -8,44 +8,44 @@
 
 import Foundation
 import SceneKit
-
-func +=(inout lhs: RMXNumber, rhs: RMXNumber) {
-    lhs = (lhs.ns.doubleValue + rhs.ns.doubleValue)
-}
-
-func -=(inout lhs: RMXNumber, rhs: RMXNumber) {
-    lhs = (lhs.ns.doubleValue - rhs.ns.doubleValue)
-}
-
-func *=(inout lhs: RMXNumber, rhs: RMXNumber) {
-    lhs = (lhs.ns.doubleValue * rhs.ns.doubleValue)
-}
-
-func /=(inout lhs: RMXNumber, rhs: RMXNumber) {
-    lhs = (lhs.ns.doubleValue / rhs.ns.doubleValue)
-}
-
-
-func + (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
-    return (lhs.ns.doubleValue + rhs.ns.doubleValue)
-}
-
-func - (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
-    return(lhs.ns.doubleValue - rhs.ns.doubleValue)
-}
-
-func * (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
-    return (lhs.ns.doubleValue * rhs.ns.doubleValue)
-}
-
-func / (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber{
-    return (lhs.ns.doubleValue / rhs.ns.doubleValue)
-}
-
-
+//
+//func +=(inout lhs: RMXNumber, rhs: RMXNumber) {
+//    lhs = (lhs.ns.doubleValue + rhs.ns.doubleValue)
+//}
+//
+//func -=(inout lhs: RMXNumber, rhs: RMXNumber) {
+//    lhs = (lhs.ns.doubleValue - rhs.ns.doubleValue)
+//}
+//
+//func *=(inout lhs: RMXNumber, rhs: RMXNumber) {
+//    lhs = (lhs.ns.doubleValue * rhs.ns.doubleValue)
+//}
+//
+//func /=(inout lhs: RMXNumber, rhs: RMXNumber) {
+//    lhs = (lhs.ns.doubleValue / rhs.ns.doubleValue)
+//}
+//
+//
+//func + (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
+//    return (lhs.ns.doubleValue + rhs.ns.doubleValue)
+//}
+//
+//func - (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
+//    return(lhs.ns.doubleValue - rhs.ns.doubleValue)
+//}
+//
+//func * (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
+//    return (lhs.ns.doubleValue * rhs.ns.doubleValue)
+//}
+//
+//func / (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber{
+//    return (lhs.ns.doubleValue / rhs.ns.doubleValue)
+//}
 
 
-protocol RMXNumber  {
+
+
+protocol RMXNumber: Comparable  {
     var ns: NSNumber { get }
 
     

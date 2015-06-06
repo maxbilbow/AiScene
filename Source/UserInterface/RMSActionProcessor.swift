@@ -13,12 +13,7 @@ import AppKit
     import UIKit
     
     #endif
-
-//#if SceneKit
     import SceneKit
-   // #elseif SpriteKit
-    import SpriteKit
- //   #endif
 
 enum RMXMoveType { case PUSH, DRAG }
 
@@ -75,13 +70,14 @@ public class RMSActionProcessor {
             RMLog("ACTION IS NIL")
             return true
         case "move", "Move", "MOVE":
-            if let point = args as? [RMFloatB] {
+            if let point = args as? CGPoint {
+                sprite.accelerate(left: RMFloatB(point.x), forward: RMFloatB(point.y))
+            } else if let point = args as? [RMFloatB] {
                 if point.count == 3 {
-                    sprite.accelerateForward(point[2] * speed)
-                    sprite.accelerateLeft(point[0] * speed)
-                    sprite.accelerateUp(point[1] * speed)
+                    sprite.accelerate(forward: point[2] * speed, left: point[0] * speed, up: point[1] * speed)
                     return true
                 }
+                    
             }
             return true
         case "Stop", "stop", "STOP":
@@ -94,21 +90,21 @@ public class RMSActionProcessor {
                 if let camera = self.world.activeCamera as? RMXCameraNode {
                     speed *= camera.zoomFactor
                     if !self.activeSprite.isPOV {
-                        self.world.activeCamera.eulerAngles.y += point.x * 0.1 * speed * PI_OVER_180
-                        let phi = self.world.activeCamera.eulerAngles.x - point.y * 0.1  * speed * PI_OVER_180
+//                        self.world.activeCamera.eulerAngles.y += point.x * 0.1 * speed * PI_OVER_180
+                        let phi: RMFloatB = self.world.activeCamera.eulerAngles.x - RMFloatB(point.y) * 0.1 * speed * PI_OVER_180
                         if phi < 1 && phi > -1 {
                             self.world.activeCamera.eulerAngles.x = phi
                         }
     //                    }
                     } else {
                         if self.world.hasGravity {
-                            let phi = self.world.activeCamera.eulerAngles.x - point.y * 0.1  * speed * PI_OVER_180
+                            let phi = self.world.activeCamera.eulerAngles.x - RMFloatB(point.y) * 0.1 * speed * PI_OVER_180
                             if phi < 1 && phi > -1 {
                                 self.world.activeCamera.eulerAngles.x = phi
                             }
                         }
                         
-                        sprite.lookAround(theta: point.x * -speed,phi: point.y * speed)
+                        sprite.lookAround(theta: RMFloatB(point.x) * speed,phi: RMFloatB(point.y) * speed)
 
                     }
                 }
@@ -146,7 +142,7 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                sprite.accelerateForward(speed)
+                sprite.accelerate(forward: speed)
             }
             return true
         case "back":
@@ -154,7 +150,7 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                sprite.accelerateForward(-speed)
+                sprite.accelerate(forward: -speed)
             }
             return true
         case "left":
@@ -162,7 +158,7 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                sprite.accelerateLeft(speed)
+                sprite.accelerate(left: speed)
             }
             return true
         case "right":
@@ -170,7 +166,7 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                sprite.accelerateLeft(-speed)
+                sprite.accelerate(left: -speed)
             }
             return true
         case "up":
@@ -178,7 +174,7 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                sprite.accelerateUp(speed)
+                sprite.accelerate(up: speed)
             }
             return true
         case "down":
@@ -186,7 +182,7 @@ public class RMSActionProcessor {
                 sprite.stop()
             }
             else {
-                sprite.accelerateUp(-speed)
+                sprite.accelerate(up: -speed)
             }
             return true
         case RMXInterface.JUMP:

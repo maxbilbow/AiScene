@@ -79,7 +79,7 @@ extension RMXDPad {
             if recognizer.numberOfTouches() == 1 {
                 let point = recognizer.velocityInView(self.gameView)
                 
-                self.action(action: "look", speed: RMXInterface.lookSpeed, point: point])
+                self.action(action: "look", speed: RMXInterface.lookSpeed, args: point)
             }
 //            _handleRelease(recognizer.state)
         }
@@ -113,7 +113,7 @@ extension RMXDPad {
         // check what nodes are tapped
         let p = recognizer.locationInView(scnView)
         
-        self.processHit(point: p)
+        self.processHit(point: p, type: RMXInterface.THROW_ITEM)
 
 //        self.processHit(scnView.hitTest(p, options: nil))
     }

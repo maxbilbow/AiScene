@@ -310,7 +310,7 @@ class RMXInterface : NSObject, RendererDelegate {
 //                NSLog(result.)
                 
                     var animate: Bool = false
-                    if type == RMXInterface.RIGHT_CLICK {
+                    if type == RMXInterface.THROW_ITEM {
                         animate = self.actionProcessor.throwOrGrab(node.sprite)
                     } else {
                         animate = self.actionProcessor.throwOrGrab(node)

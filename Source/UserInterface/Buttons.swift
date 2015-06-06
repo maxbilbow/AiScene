@@ -67,12 +67,12 @@ extension RMXDPad {
             let limX = rect.size.width * 0.5 ; let limY = rect.size.height * 0.5
             let x = _limit(move.x, limit: limX) // log10(1 + 100 * move.x * move.x)
             let y = _limit(move.y, limit: limY)//log10(1 + 100 * move.y * move.y)
-            bMove.x = x / limX //move.x > 0 ? x : -x
-            bMove.y = y / limY //move.y > 0 ? y : -y
+            bMove.x = x /// limX //move.x > 0 ? x : -x
+            bMove.y = y /// limY //move.y > 0 ? y : -y
             
             self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + bMove * 1//move * -0.3 //rect.origin + bMove//self.moveOrigin + move
             self.moveButtonPad?.setNeedsDisplay()
-            self.action(action: "move", speed: -RMXInterface.moveSpeed, args: bMove)
+            self.action(action: "move", speed: -RMXInterface.moveSpeed, args: bMove / limX)
 //            NSLog("FWD: \((x / limX).toData()), SIDE: \((y / limY).toData())),  TOTAL: \(1)")
         }
         

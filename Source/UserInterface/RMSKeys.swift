@@ -251,13 +251,12 @@ class RMSKeys : RMXInterface {
         let lastPos = self.lastPos
 //        RMLog("  OLD: \(lastPos.x), \(lastPos.y)\n  New: \(newPos.x), \(newPos.y)")
         let delta = NSPoint(
-            x: newPos.x - lastPos.x,// - self.mousePos.x,
+            x: -(newPos.x - lastPos.x),// - self.mousePos.x,
             y: newPos.y - lastPos.y//self.mousePos.y
         )
 //        CGDisplayHideCursor(0)
         CGAssociateMouseAndMouseCursorPosition(0)
         CGWarpMouseCursorPosition(self.origin)
-//        CGDisplayMoveCursorToPoint(displayAtPoint(screenPoint), self.origin)
         
         /* perform your application’s main loop */
         self.lastPos = NSEvent.mouseLocation()
@@ -459,7 +458,7 @@ extension GameView {
 
         if self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.release() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            self.interface?.processHit(point: p, type: RMXInterface.RIGHT_CLICK)
+            self.interface?.processHit(point: p, type: RMXInterface.THROW_ITEM)
             RMLog("UP hit successful: \(p)", id: "keys")
         } else {
 //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
@@ -473,7 +472,7 @@ extension GameView {
         
         if self.keys.get(forChar: RMXInterface.RIGHT_CLICK)?.press() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            self.interface?.processHit(point: p, type: RMXInterface.RIGHT_CLICK)
+            self.interface?.processHit(point: p, type: RMXInterface.THROW_ITEM)
             RMLog("UP hit successful: \(p)", id: "keys")
         } else {
             //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
@@ -486,7 +485,7 @@ extension GameView {
     override func mouseUp(theEvent: NSEvent) {
         if self.keys.get(forChar: RMXInterface.LEFT_CLICK)?.release() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            self.interface?.processHit(point: p, type: RMXInterface.LEFT_CLICK)
+            self.interface?.processHit(point: p, type: RMXInterface.GRAB_ITEM)
             RMLog("UP hit successful: \(p)", id: "keys")
         } else {
             //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
@@ -500,7 +499,7 @@ extension GameView {
         // check what nodes are clicked
         if self.keys.get(forChar: RMXInterface.LEFT_CLICK)?.press() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            self.interface?.processHit(point: p, type: RMXInterface.LEFT_CLICK)
+            self.interface?.processHit(point: p, type: RMXInterface.GRAB_ITEM)
             RMLog("UP hit successful: \(p)", id: "keys")
         } else {
             //            RMLog("UP hit unSuccessful: \(p)", id: "keys")

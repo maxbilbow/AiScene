@@ -799,7 +799,20 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     
-    func accelerateForward(v: RMFloatB) {
+    
+    func accelerate(left: RMFloatB? = nil, up: RMFloatB? = nil, forward: RMFloatB? = nil) {
+        if let left = left {
+            self.accelerateLeft(left)
+        }
+        if let up = up {
+            self.accelerateUp(up)
+        }
+        if let forward = forward {
+            self.accelerateForward(forward)
+        }
+    }
+    
+    private func accelerateForward(v: RMFloatB) {
         if !self.isPOV {
             self.applyForce(self.world.forwardVector * v * self.speed, atPosition: self.front)
         } else {
@@ -807,7 +820,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         }
     }
     
-    func accelerateUp(v: RMFloatB) {
+    private func accelerateUp(v: RMFloatB) {
         if !self.isPOV {
             self.applyForce(self.world.upVector * v * self.speed, atPosition: self.front)
         } else {
@@ -816,7 +829,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     
-    func accelerateLeft(v: RMFloatB) {
+    private func accelerateLeft(v: RMFloatB) {
         if !self.isPOV {
             self.applyForce(self.world.leftVector * v * self.speed, atPosition: self.front)
         } else {
