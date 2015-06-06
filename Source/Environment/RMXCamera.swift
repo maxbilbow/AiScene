@@ -214,11 +214,12 @@ class RMXCameraNode : SCNNode {
             if z { self.eulerAngles.z = _calibrate(self.eulerAngles.z, self.restingEulerAngles.z, speed * 0.01) }
         
             if pos {
+                let dist = 1 + 100 * fabs((self.pivot.position - self.restingPivotPoint).length / self.zMin)
                 self.camera?.xFov = Double(_calibrate(RMFloat(self.camera!.xFov), 65, RMFloat(speed)))
                 self.camera?.yFov = self.camera!.xFov //_calibrate(self.camera!.yFov, 65, speed)
-                self.pivot.m41 = RMFloat(_calibrate(self.pivot.m41, self.restingPivotPoint.x, speed))
-                self.pivot.m42 = RMFloat(_calibrate(self.pivot.m42, self.restingPivotPoint.y, speed))
-                self.pivot.m43 = RMFloat(_calibrate(self.pivot.m43, self.restingPivotPoint.z, speed))
+                self.pivot.m41 = RMFloat(_calibrate(self.pivot.m41, self.restingPivotPoint.x, speed * dist))
+                self.pivot.m42 = RMFloat(_calibrate(self.pivot.m42, self.restingPivotPoint.y, speed * dist))
+                self.pivot.m43 = RMFloat(_calibrate(self.pivot.m43, self.restingPivotPoint.z, speed * dist))
             }
         }
         return self.pivot.position.z == self.restingPivotPoint.z && self.eulerAngles.x == self.restingEulerAngles.x && self.fov == self.camera!.xFov
@@ -231,8 +232,7 @@ class RMXCameraNode : SCNNode {
     var zoomRatio: RMFloat = 0.98
 
     func moveIn(speed: RMFloat = 1) {
-//        print()
-        
+        self._resetZoom = false
         if let fov = self.camera?.xFov {
             if self.pivot.m43 < 0 {
                 if self.pivot.m43 <= self.zMin {
@@ -282,7 +282,7 @@ class RMXCameraNode : SCNNode {
         println(s)
     }
     func moveOut(speed: RMFloat = 1) {
-//        print()
+        self._resetZoom = false
         if let fov = self.camera?.xFov {
 //            NSLog("pivot: \(self.pivot.position.print), FOV: \(fov.toData()), phi: \(self.eulerAngles.x.toData()), zoomFactor: \(self.zoomFactor.toData())")
             

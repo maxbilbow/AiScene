@@ -86,12 +86,13 @@ class AiCubo {
         if let interface = interface {
 
             let world = RMSWorld(interface: interface) //interface.world//
-            
+            world.addObserver(interface, forKeyPath: RMSWorld.kvScores, options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
             //SetUpEnvironment
             switch type {
             case .EMPTY:
                 AiCubo.initialWorldSetup(world)
                 world.gravityOff()
+                world.name = "Empty Space"
 //                AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 10, shapes: .CYLINDER, .ROCK)
@@ -99,6 +100,7 @@ class AiCubo {
                 
                 break
             case .TEST:
+                world.name = "Testing World"
                 AiCubo.initialWorldSetup(world, radius: world.radius * 2)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
@@ -107,12 +109,14 @@ class AiCubo {
                 RMXAi.addRandomMovement(to: world.children)
                 break
             case .WEAPONS:
+                world.name = "Weapons World"
                 AiCubo.initialWorldSetup(world)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
                 AiCubo.particles(inWorld: world)
                 break
             case .DOMED:
+                world.name = "Domed World"
                 AiCubo.initialWorldSetup(world)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
@@ -125,6 +129,7 @@ class AiCubo {
                 AiCubo.insideGlobe(world)
                 break
             case .TEAM_GAME:
+                world.name = "Team Game: Play to win!"
                 AiCubo.initialWorldSetup(world)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
@@ -239,29 +244,42 @@ class AiCubo {
             let player = world.activeSprite
             let teamA = RMXTeam(gameWorld: world, captain: player)
             player.attributes.invincible = true
-//            NSLog(teamA.id.toData())
+            NSLog(teamA.id)
             for ( var i = 1; i < teams; i++) {
                 let team = RMXTeam(gameWorld: world)
             }
             
             let max: Int = n / teams
+            NSLog("\(max)")
             var count = 0
-            var teamID = 1 //team 0 is not a team
-            for player in world.children {
-                if player.isPlayer && player.attributes.teamID == "0" {
-                    if let team = world.teams["\(teamID)"] {
-                        if team.addPlayer(player) {
-                            count++
-                            if team.players!.count == max {
-//                                NSLog("Team: \(team.id), players: \(count)")
-                                teamID++
-                                count = 0
-                            }
-
-                        }
+            for team in world.teams {
+                for player in world.children.filter({ (player) -> Bool in
+                    NSLog("\(player.attributes.teamID)")
+                    return player.attributes.teamID == RMXSprite.TEAM_ASSIGNABLE
+                }) {
+                    NSLog("\(player.name!) added to team: \(team.0)")
+                    if team.1.addPlayer(player) && ++count > max {
+                        count = 0
+                        break
                     }
+                    
                 }
             }
+//            for player in world.children {
+//                if player.isPlayer && player.attributes.teamID == "0" {
+//                    if let team = world.teams["\(teamID)"] {
+//                        if team.addPlayer(player) {
+//                            count++
+//                            if team.players!.count == max {
+////                                NSLog("Team: \(team.id), players: \(count)")
+//                                teamID++
+//                                count = 0
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
             
 
         }

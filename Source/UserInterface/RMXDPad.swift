@@ -183,7 +183,7 @@ class RMXDPad : RMXInterface {
         self.gameView!.addSubview(self.pauseMenu!)
     }
     
-    private let topColumns: CGFloat = 8
+    private let topColumns: CGFloat = 7
     
     internal func makeTopBar ()  {
         
@@ -204,10 +204,10 @@ class RMXDPad : RMXInterface {
         
         self.makeButton(title: " GRAV  ", selector: "toggleAllGravity:", view: view, row: (1,rows), col: (4,self.topColumns))
         
-        self.makeButton(title: " DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
+//        self.makeButton(title: " DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
         
 //        self.makeButton(title: " Video ", selector: "startVideo:", view: view, row: (1,rows), col: (6,self.topColumns))
-        self.makeButton(title: " SCORE ", selector: "showScores:", view: view, row: (1,rows), col: (6,self.topColumns))
+        self.makeButton(title: " SCORE ", selector: "showScores:", view: view, row: (1,rows), col: (5,self.topColumns))
         
         self.makeButton(title: "  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (last - 1,self.topColumns))
         
@@ -227,7 +227,7 @@ class RMXDPad : RMXInterface {
         
         let topBar = self.topBar!
 
-        self.skView.alpha = 0.5
+        self.scoreboard.alpha = 0.5
        
         
         
@@ -304,6 +304,10 @@ class RMXDPad : RMXInterface {
         
         self.gameView!.bringSubviewToFront(self.boomButton!)
         self.gameView!.bringSubviewToFront(self.jumpButton!)
+        
+        let resetCamera = UITapGestureRecognizer(target: self, action: "resetCamera:")
+        resetCamera.numberOfTapsRequired = 2
+        self.gameView?.addGestureRecognizer(resetCamera)
     }
     
     var i = 0
@@ -312,7 +316,9 @@ class RMXDPad : RMXInterface {
 
     var boomTimer: RMFloat = 1
     
-    
+    func resetCamera(recogniser: UITapGestureRecognizer) {
+        self.action(action: RMXInterface.RESET_CAMERA, speed: 1)
+    }
     
 }
 

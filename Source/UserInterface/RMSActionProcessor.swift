@@ -69,7 +69,7 @@ public class RMSActionProcessor {
         case nil:
             RMLog("ACTION IS NIL")
             return true
-        case "move", "Move", "MOVE":
+        case RMXInterface.MOVE:
             if let point = args as? CGPoint {
                 sprite.accelerate(left: RMFloat(point.x), forward: RMFloat(point.y))
             } else if let point = args as? [RMFloat] {
@@ -84,13 +84,13 @@ public class RMSActionProcessor {
             sprite.stop()
             _movement = (0,0,0)
             return true
-        case "look", "Look", "LOOK":
+        case RMXInterface.LOOK:
             
             if let point = args as? CGPoint {
                 if let camera = self.world.activeCamera as? RMXCameraNode {
                     speed *= camera.zoomFactor
                     if !self.activeSprite.isPOV {
-//                        self.world.activeCamera.eulerAngles.y += point.x * 0.1 * speed * PI_OVER_180
+                        self.world.activeCamera.eulerAngles.y -= RMFloat(point.x) * 0.1 * speed * PI_OVER_180
                         let phi: RMFloat = self.world.activeCamera.eulerAngles.x - RMFloat(point.y) * 0.1 * speed * PI_OVER_180
                         if phi < 1 && phi > -1 {
                             self.world.activeCamera.eulerAngles.x = phi
@@ -270,28 +270,29 @@ public class RMSActionProcessor {
             return true
         case RMXInterface.GET_INFO:
             if speed == 1 {
-                self.interface.dataView.hidden = !self.interface.dataView.hidden
-                self.interface.skView.hidden = self.interface.dataView.hidden
+//                self.interface.dataView.hidden = !self.interface.dataView.hidden
+//                self.interface.skView.hidden = self.interface.dataView.hidden
             }
             return true
         case RMXInterface.SHOW_SCORES:
             if speed == 1 {
                 self.interface.scoreboard.hidden = false
-                self.interface.skView.hidden = false
+                self.interface.updateScoreboard()
                 return true
             }
             return false
         case RMXInterface.HIDE_SCORES:
             if speed == 1 {
                 self.interface.scoreboard.hidden = true
-                self.interface.skView.hidden = true
+//                self.interface.skView.hidden = true
                 return true
             }
             return false
         case RMXInterface.TOGGLE_SCORES:
             if speed == 1 {
                 self.interface.scoreboard.hidden = !self.interface.scoreboard.hidden
-                self.interface.skView.hidden = self.interface.scoreboard.hidden
+//                self.interface.skView.hidden = self.interface.scoreboard.hidden
+                self.interface.updateScoreboard()
                 return true
             }
 

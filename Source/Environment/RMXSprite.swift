@@ -361,7 +361,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     static let NO_COLLISIONS: String = "-2"
-
+    static let TEAM_ASSIGNABLE: String = "0"
+    static let TEAMLESS_MAVERICS: String = "-1"
     
     func spriteDidInitialize(){
         if self.isPlayer {
@@ -375,6 +376,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.timer.activate()
         if type != .PLAYER && type != .AI {
             self.attributes.setTeamID(RMXSprite.NO_COLLISIONS)
+        } else {
+            self.attributes.setTeamID(RMXSprite.TEAM_ASSIGNABLE)
         }
         self.arm.physicsBody = SCNPhysicsBody.staticBody()
         self.arm.position = self.front

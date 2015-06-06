@@ -234,12 +234,12 @@ class RMXAi {
     }
     
 
-    static func selectTargetPlayer(inWorld world: RMSWorld, inTeam: String = "-1", notInTeam: String = "-1") -> RMXSprite? {
+    static func selectTargetPlayer(inWorld world: RMSWorld, inTeam: String = RMXSprite.TEAMLESS_MAVERICS, notInTeam: String = RMXSprite.TEAMLESS_MAVERICS) -> RMXSprite? {
         
-        if inTeam != "-1" && inTeam == notInTeam { return nil }
+        if inTeam != RMXSprite.TEAMLESS_MAVERICS && inTeam == notInTeam { return nil }
         
         let players = world.liveTeamPlayers.filter({(player)-> Bool in
-            return ( inTeam == "-1" || player.attributes.teamID == inTeam ) && ( notInTeam == "-1" || player.attributes.teamID != inTeam )
+            return ( inTeam == RMXSprite.TEAMLESS_MAVERICS || player.attributes.teamID == inTeam ) && ( notInTeam == RMXSprite.TEAMLESS_MAVERICS || player.attributes.teamID != inTeam )
         })
         
 //        NSLog("count: \(players.count)")

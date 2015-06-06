@@ -7,3 +7,6 @@ print( NSNumber(double: 1.0).compare(-1.0).rawValue)
 
 NSUpArrowFunctionKey
 NSDownArrowFunctionKey
+var count = 0
+
+print(++count)

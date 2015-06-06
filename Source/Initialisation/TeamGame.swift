@@ -22,7 +22,8 @@ protocol RMXTeamGame  {
     func getTeam(#team: RMXTeam?) -> Array<RMXSprite>?
     var winningTeam: RMXTeam? { get }
     func addTeam(team: RMXTeam)
-    var teams: [String:RMXTeam] { get set }
+    var teams: Dictionary<String, RMXTeam> { get }
+    func updateTeam(team: RMXTeam) -> RMXTeam?
 }
 
 protocol RMXTeamMember {
@@ -32,9 +33,42 @@ protocol RMXTeamMember {
 
 extension RMSWorld : RMXTeamGame {
     
-    func addTeam(team: RMXTeam) {
-        self.teams[team.id] = team
+
+    
+    var teamScores: [String] {
+        var scores = Array<String>()
+        for team in self._teams {
+            scores.append(team.1.printScore)
+        }
+        return scores
     }
+    
+    var teams:Dictionary<String ,RMXTeam> {
+        return self._teams
+    }
+    
+    func addTeam(team: RMXTeam) {
+        //team.addObserver(self, forKeyPath: "score", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
+        self._teams[team.id] = team
+    }
+    
+    func removeTeam(teamID: String) -> RMXTeam? {
+        //self._teams[teamID]?.removeObserver(self, forKeyPath: "score")
+        return self._teams.removeValueForKey(teamID)
+    }
+    
+    func updateTeam(team: RMXTeam) -> RMXTeam? {
+        if self._teams[team.id] == nil {
+            //team.addObserver(self, forKeyPath: "score", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
+        }
+        RMLog("WARNING:  observer should be removed if switching teams - however this shouln't happend for unique team id", id: "")
+        return self._teams.updateValue(team, forKey: team.id)
+    }
+    
+    func getTeam(foKey key: String) -> RMXTeam? {
+        return self._teams[key]
+    }
+
     
     func getTeam(#id: String) -> Array<RMXSprite>? {
         return self.children.filter({ (child: RMXSprite) -> Bool in
@@ -119,7 +153,10 @@ class SpriteAttributes : NSObject {
     var rmxID: Int? {
         return sprite.rmxID
     }
+    
     var health: Int = 100
+
+
     var points: Int = 0
     
     var kit: SCNMaterial? {
@@ -136,7 +173,7 @@ class SpriteAttributes : NSObject {
     }
     
     ///Call this, not the team.addPlayer: function (I think)
-    func setTeamID(ID: String) -> Bool {
+    func setTeamID(ID: String) {
         if self.teamID != ID {
             self.willChangeValueForKey("teamID")
             var newID = ID
@@ -144,15 +181,15 @@ class SpriteAttributes : NSObject {
                 if self.world.teams[ID] == nil { //create a team in one doesn't exist
                     let newTeam = RMXTeam(gameWorld: self.world, captain: self.sprite, withID: ID)
                     newID = newTeam.id
-                    self.world.teams[newID] = newTeam
+                    self.world.addTeam(newTeam)
                 }
             }
             _teamID = newID
             self.didChangeValueForKey("teamID")
             
-            return true
+//            return true
         }
-        return false
+//        return false
         
     }
     
@@ -243,9 +280,9 @@ class SpriteAttributes : NSObject {
 }
 
 typealias ScoreCard = (kills: Int, deaths: Int, points: Int, health: Int)
-class RMXTeam {
+class RMXTeam : NSObject {
     static var COUNT: Int = 0
-    lazy var id: String = "\(++COUNT)" //first time is 1
+    lazy var id: String = "\(++COUNT)" //first team is 1
     var kit: SCNMaterial? {
         return self.captain?.kit
     }
@@ -278,7 +315,7 @@ class RMXTeam {
     init(gameWorld game: RMXTeamGame, captain: RMXSprite? = nil, var withID: AnyObject? = nil){
         self.game = game
         
-        
+        super.init()
         if let id: AnyObject = withID {
             var newID: String = ""
             while game.teams["\(id)"] != nil {
@@ -286,10 +323,12 @@ class RMXTeam {
             }
             self.id = newID
         }
+        
         game.addTeam(self)
         if let captain = captain {
             self.addPlayer(captain)
         }
+        
 
     }
     
@@ -306,7 +345,8 @@ class RMXTeam {
             return false
         }
         var players = self.players?.count ?? 0
-        if player.attributes.setTeamID(self.id) { //did we get a new player?
+        if player.attributes.teamID != self.id { //will we get a new player?
+            player.attributes.setTeamID(self.id)
             if let captain = self.captain { //do we have a captain?
                 RMXTeam.setColor(self.kit, receiver: player.attributes)
             } else { //otherwise assign new player as captain and update team
@@ -315,12 +355,15 @@ class RMXTeam {
                 self.update()
             }
             if player.attributes.health < self.startingHealth {
+                player.attributes.willChangeValueForKey("health")
                 player.attributes.health = self.startingHealth
+                player.attributes.didChangeValueForKey("health")
             }
+            return true
         } else {
             return false
         }
-        return players < self.players?.count ?? 0
+//        return true //players < self.players?.count ?? 0
 
     }
     
@@ -409,7 +452,9 @@ class RMXTeam {
     
     class func challengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> Bool {
         if !defender.isAlive { return false }
-        let health = defender.health
+        attacker.willChangeValueForKey("points")
+        defender.willChangeValueForKey("health")
+        var health = defender.health
         defender.health /= 2
         attacker.points += health - defender.health
         if defender.health < 20 {
@@ -417,9 +462,10 @@ class RMXTeam {
             defender.die()
             attacker.kill()
             attacker.points += defender.points
-            return true
         }
-        return false
+        attacker.didChangeValueForKey("points")
+        defender.didChangeValueForKey("health")
+        return true
     }
     
     class func isGameWon(game: RMXTeamGame?) -> Bool {
@@ -429,6 +475,7 @@ class RMXTeam {
     var printScore: String {
         return "TEAM-\(self.id) SCORE: \(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.players!.count)"
     }
+    
     
 
     class func throwChallenge(challenger: RMXSprite, projectile: RMXSprite)  {
@@ -445,7 +492,7 @@ class RMXTeam {
             }
         }
         projectile.node.collisionActions["Attack"] = _challenge
-        NSTimer.scheduledTimerWithTimeInterval(5, target: projectile.node, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(3, target: projectile.node, selector: "removeCollisionActions", userInfo: nil, repeats: false)
     }
     
 }

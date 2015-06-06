@@ -15,11 +15,13 @@ typealias RMSWorld = RMXScene
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
+    static let kvScores = "teamScores"
+    
     lazy var uniqueID: String? = "\(self.name!)/\(self.rmxID)"; var name: String? = classForCoder().description() ; lazy var rmxID: Int? = RMX.COUNT++ ; lazy var print: String = self.uniqueID!
     
-    var teams: [String : RMXTeam] = Dictionary<String ,RMXTeam>()
+    internal var _teams: Dictionary<String ,RMXTeam> = Dictionary<String ,RMXTeam>()
     
-
+    
     static let ZERO_GRAVITY = RMXVector3Zero
     static let EARTH_GRAVITY = RMXVector3Make(0, -9.8, 0)
     
@@ -118,8 +120,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         self.interface.gameView!.scene = self//._scene
         self.cameraNumber = 0
         self.interface.gameView!.pointOfView = self.activeCamera
-        
-        NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
         return self
     }
     
@@ -215,6 +216,8 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     func insertChild(child: RMXSprite, andNode:Bool = true){
         self.children.append(child)
+        child.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
+        
         if andNode {
             (self).rootNode.addChildNode(child.node)
         }
@@ -318,6 +321,16 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
 //        return valid
     }
     
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        switch keyPath {
+        case "points":
+            self.didChangeValueForKey(RMSWorld.kvScores)
+            break
+        default:
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            break
+        }
+    }
 }
 
 extension RMSWorld {

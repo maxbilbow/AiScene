@@ -135,7 +135,7 @@ class RMSKeys : RMXInterface {
     
     override func setUpViews() {
         super.setUpViews()
-        self.skView.alphaValue = 0.5
+        self.scoreboard.alphaValue = 0.5
     }
     
     override func pauseGame(sender: AnyObject?) -> Bool {

@@ -28,6 +28,7 @@ import SpriteKit
 
 class RMXInterface : NSObject, RendererDelegate {
 
+    static let MOVE: String = "move"
     static let MOVE_FORWARD: String = "forward"
     static let MOVE_BACKWARD: String = "back"
     static let MOVE_LEFT: String = "left"
@@ -38,6 +39,7 @@ class RMXInterface : NSObject, RendererDelegate {
     static let ROLL_RIGHT: String = "rollRight"
     static let JUMP: String = "jump"
     static let ROTATE: String = "look"
+    static let LOOK: String = "look"
     
     //Interactions
     static let GRAB_ITEM: String = "grab"
@@ -112,65 +114,17 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     internal var keyboard: KeyboardType = .UK
     
-    private var _dataView: SKLabelNode! = nil
-    var dataView: SKLabelNode {
-        if _dataView != nil {
-            return _dataView
-        } else {
-            _dataView = SKLabelNode(text: "Hello, World!")
-            _dataView.position.x = self.skView.scene!.size.width / 10
-            _dataView.position.y = self.skView.scene!.size.height * 9 / 10
-            _dataView.alpha = 0.5
-            _dataView.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Left
-            _dataView.verticalAlignmentMode = .Top
-            _dataView.fontSize /= 2
-            _dataView.fontColor = RMColor.whiteColor()
-            _dataView.hidden = true
-            return _dataView
-        }
-
-    }
+   
     
-    private var _scoreboard: SKView! = nil
-    let line1 = SKLabelNode(text: "line1")
-    let line2 = SKLabelNode(text: "line2")
-    let line3 = SKLabelNode(text: "line3")
+//    private var _scoreboard: SKView! = nil
+    var lines: [SKLabelNode] = [ SKLabelNode(text: "") , SKLabelNode(text: ""), SKLabelNode(text: ""), SKLabelNode(text: "") ]
+//    let line1 = SKLabelNode(text: "line1")
+//    let line2 = SKLabelNode(text: "line2")
+//    let line3 = SKLabelNode(text: "line3")
 
-    lazy var skScene: SKScene = SKScene(size: self.gameView!.bounds.size)
     
-    var scoreboard: SKView {
-        if _scoreboard != nil {
-            return _scoreboard
-        } else {
-            _scoreboard = SKView(frame: self.gameView!.bounds)
-
-            _scoreboard.hidden = true
-
-            self.line1.verticalAlignmentMode = .Top
-            self.line1.fontSize /= 2
-            self.line1.fontColor = RMColor.whiteColor()
-            self.line1.position.x = self.skView.scene!.size.width / 2
-            self.line1.position.y = self.skView.scene!.size.height / 2 - 10
-            
-            self.line2.verticalAlignmentMode = .Center
-            self.line2.fontSize /= 2
-            self.line2.fontColor = RMColor.whiteColor()
-            self.line2.position.x = self.skView.scene!.size.width / 2
-            self.line2.position.y = self.skView.scene!.size.height / 2
-            
-            self.line3.verticalAlignmentMode = .Bottom
-            self.line3.fontSize /= 2
-            self.line3.fontColor = RMColor.whiteColor()
-            self.line3.position.x = self.skView.scene!.size.width / 2
-            self.line3.position.y = self.skView.scene!.size.height / 2 + 10
-            
-            _scoreboard.presentScene(self.skScene)
-            _scoreboard.scene!.addChild(self.line1)
-            _scoreboard.scene!.addChild(self.line2)
-            _scoreboard.scene!.addChild(self.line3)
-            return _scoreboard
-        }
-    }
+    
+    var scoreboard: SKView!
 
     
 //    var activeCamera: RMXCamera? {
@@ -193,7 +147,7 @@ class RMXInterface : NSObject, RendererDelegate {
     ///Run this last when overriding
     func viewDidLoad(){
         self.gameView!.delegate = self
-        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "updateScoreboard", userInfo: nil, repeats: true)
+       // NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "updateScoreboard", userInfo: nil, repeats: true)
     }
     
     func setUpTimers(){
@@ -201,17 +155,22 @@ class RMXInterface : NSObject, RendererDelegate {
 //        self.timer!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
     }
     
-    lazy var skView: SKView = SKView(frame: self.gameView!.bounds)
     
     func setUpViews() {
-        self.gameView!.addSubview(self.skView)
-        self.skView.presentScene(self.skScene)
-
-        self.skView.allowsTransparency = true
-        
-        self.skView.addSubview(self.scoreboard)
-        self.skView.scene?.addChild(self.dataView)
-        self.skView.hidden = true
+        var bounds = self.gameView!.bounds
+        bounds.size.height = bounds.size.height * 0.3
+        bounds.origin = CGPoint(x: bounds.size.width / 3, y: bounds.size.height / 3)
+        var skScene: SKScene = SKScene(size: bounds.size)
+        //            bounds.height =
+        self.scoreboard = SKView(frame: bounds)
+        self.scoreboard.presentScene(skScene)
+        self.scoreboard.hidden = true
+        for line in self.lines {
+            self.scoreboard.scene?.addChild(line)
+        }
+        self.scoreboard.allowsTransparency = true
+        self.gameView!.addSubview(self.scoreboard)
+        self.scoreboard.hidden = true
         
     }
 
@@ -230,9 +189,9 @@ class RMXInterface : NSObject, RendererDelegate {
         debugData = ""
     }
     
-    private static let DEFAULT_GAME: GameType = .WEAPONS
+    private static let DEFAULT_GAME: GameType = .TEAM_GAME
     
-    var availableGames: [ GameType ] = [ .WEAPONS, .TEAM_GAME, .TEST, .EMPTY ]
+    var availableGames: [ GameType ] = [ .TEAM_GAME, .WEAPONS, .TEST, .EMPTY ]
     
     var activeGames: [GameType: RMSWorld] = Dictionary<GameType,RMSWorld>()
     
@@ -244,13 +203,17 @@ class RMXInterface : NSObject, RendererDelegate {
     var world: RMSWorld {
         return _world ?? _newGame()
     }
-    
+    private var isNewGame = true
     ///Swictches between gamemode without deleting or duplicating environments.
     func newGame(type: GameType? = nil) {
         self.pauseGame(nil)
         _world = _newGame(type: type)
+        self.isNewGame = true
         _world?.calibrate()
-        self.unPauseGame(nil)
+        self.updateScoreboard()
+//        self.organiseLines()
+//        self.unPauseGame(nil)
+        self.pauseGame(nil)
     }
     
     private func _newGame(type: GameType? = nil) -> RMSWorld! {
@@ -350,35 +313,78 @@ class RMXInterface : NSObject, RendererDelegate {
 //        return self.gameView?.scene
 //    }
     
+    private var lineCount = 0
     func updateScoreboard() {
-//        NSLog(self.actionProcessor.getData(type: .SCORES))
-        if self.scoreboard.hidden || self.skView.hidden {
+        if self.scoreboard.hidden && !self.isNewGame {
             return
         }
         if let world = _world {
-            if let team1 = self.world.teams["1"] {
-                if let team2 = self.world.teams["2"] {
-                    self.line3.text = self.activeSprite.attributes.printScore
-                    self.line2.text = team1.printScore
-                    self.line1.text = team2.printScore
-                    return
+            var min = 0
+            var lns: [String] = [ self.world.name ?? "Unknown Gamemode", self.activeSprite.attributes.printScore ]
+            if self.world.teams.count > 0 {
+                for team in self.world.teams {
+                    lns.append(team.1.printScore)
                 }
             }
-        } else {
-            self.line3.text = "Hello!"
-            self.line2.text = "Unfortunately this isn't \"Team Mode\""
-            self.line1.text = "Try pausing and restarting (top left)"
-        }
+            lns.append("Try selecting a defferent game mode")
+            lns.append("Numbers 0..9 in OSX or fromt' pause menu in iOS")
+            
+            
+            if self.lineCount != lns.count {
+                self.lineCount = lns.count
+                for line in self.lines {
+                    line.text = ""
+                }
+                let diff = lns.count - self.lines.count
+                if diff > 0 {
+                    for var i = 0; i < diff ; ++i {
+                        self.lines.append(SKLabelNode(text: ""))
+                        self.scoreboard.scene?.addChild(self.lines.last!)
+                    }
+                }
+               
+                var count = 0
+                for text in lns {
+                    self.lines[count++].text = text
+                }
+                self.organiseLines()
+                self.isNewGame = false
+            } else {
+                var count = 0
+                for text in lns {
+                    self.lines[count++].text = text
+                }
+            }
 
+            
+        }
+    }
+    
+    func organiseLines() {
+        var lnHeight = self.scoreboard.bounds.size.height / CGFloat(self.lineCount + 2)
+        var yPos: CGFloat = self.scoreboard.bounds.size.height - lnHeight * 1.7
+        for label in self.lines {
+            if label.text == "" {
+                label.hidden = true
+            } else {
+                label.hidden = false
+                label.fontSize = lnHeight * 0.9
+                label.horizontalAlignmentMode = .Left
+                label.fontColor = RMColor.whiteColor()
+                label.position.x = 10 // self.scoreboard.bounds.size.width / 2 //self.skView.scene!.size.width / 2
+                label.position.y = yPos
+                yPos -= lnHeight
+            }
+        }
+            
+        
+        
     }
     
     func update(){
         if _world != nil && !_world!.paused {//.scene.paused {
             self.actionProcessor.animate()
             _world?.animate()
-            if !self.dataView.hidden {
-                self.updateDataView()
-            }
         }
 
     }
@@ -410,9 +416,12 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func pauseGame(sender: AnyObject?) -> Bool {
         if _world?.pause() != nil {
-            self.updateScoreboard()
+//            self.updateScoreboard()
             self.updateDataView()
-            self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
+            if self.lines.count > 0 {
+                self.scoreboard.hidden = false// self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
+                self.updateScoreboard()
+            }
             self.hideButtons(true)
             return true
         }
@@ -421,7 +430,7 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func unPauseGame(sender: AnyObject?) -> Bool {
         if _world?.unPause() != nil {
-            self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
+            self.scoreboard.hidden = true //self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
             self.hideButtons(false)
             return true
         }
@@ -446,5 +455,16 @@ class RMXInterface : NSObject, RendererDelegate {
     func getRect(withinRect bounds: CGRect? = nil, row: (CGFloat, CGFloat), col: (CGFloat, CGFloat)) -> CGRect {
         let bounds = bounds ?? self.gameView!.bounds
         return CGRectMake(bounds.width * (col.0 - 1) / col.1, bounds.height * (row.0 - 1) / row.1, bounds.width / col.1, bounds.height / row.1)
+    }
+    
+    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+        switch keyPath {
+        case RMSWorld.kvScores:
+            self.updateScoreboard()
+            break
+        default:
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            break
+        }
     }
 }

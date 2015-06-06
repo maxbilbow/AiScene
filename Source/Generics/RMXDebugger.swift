@@ -10,7 +10,7 @@ import Foundation
 import SceneKit
 
 extension RMXLog {
-    static let isDebugging: Bool = true
+    static let isDebugging: Bool = false
 
 }
 
@@ -123,16 +123,20 @@ class RMXLog {// : NSObject {
     
     
     static func flush(){
+        #if DEBUG
         for l in RMX.log {
             l.message = nil
         }
+        #endif
     }
     
     static func printAndFlush() {
+        #if DEBUG
         if let data = self.data {
             println("\n\(data)")
         }
         self.flush()
+        #endif
     }
     
     static var data: String? {
@@ -148,23 +152,27 @@ class RMXLog {// : NSObject {
     
     static func next() {
         #if DEBUG
-        if self.current == RMX.log.count - 1 {
-            self.current = 0
-        } else {
-            self.current++
-        }
-        NSLog(" >>>>>>> Switching to RMLog: \(RMX.log[current].logID) <<<<<<<<")
+            if isDebugging {
+                if self.current == RMX.log.count - 1 {
+                    self.current = 0
+                } else {
+                    self.current++
+                }
+                NSLog(" >>>>>>> Switching to RMLog: \(RMX.log[current].logID) <<<<<<<<")
+            }
         #endif
     }
     
     static func previous() {
         #if DEBUG
-        if self.current == 0 {
-            self.current = RMX.log.count - 1
-        } else {
-            self.current--
-        }
-        NSLog(" >>>>>>> Switching to RMLog: \(RMX.log[current].logID) <<<<<<<<")
+            if isDebugging {
+                if self.current == 0 {
+                    self.current = RMX.log.count - 1
+                } else {
+                    self.current--
+                }
+                NSLog(" >>>>>>> Switching to RMLog: \(RMX.log[current].logID) <<<<<<<<")
+            }
         #endif
     }
     
