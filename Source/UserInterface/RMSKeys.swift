@@ -62,8 +62,8 @@ class RMSKeys : RMXInterface {
     RMKey(self, action: UserAction.ROTATE, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
     
     //Interactions
-    RMKey(self, action: THROW_ITEM + GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: THROW_ITEM + GRAB_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
+    RMKey(self, action: UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
     RMKey(self, action: UserAction.BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
     
     //Environmentals
@@ -255,7 +255,7 @@ class RMSKeys : RMXInterface {
         //self.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(self.mouseDelta.x), RMFloat(self.mouseDelta.y)])
         if self.actionProcessor.isMouseLocked {
             let delta = self.mouseDelta
-            self.action(UserAction.LOOK, speed: RMXInterface.lookSpeed, args: delta)
+            self.action(UserAction.LOOK_AROUND, speed: RMXInterface.lookSpeed, args: delta)
 //            RMLog("MOUSE: \(delta.x), \(delta.y)")
             
         }
@@ -438,7 +438,7 @@ extension GameView {
 
         if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.release() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: RMXInterface.THROW_ITEM) {
+            if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
                 super.rightMouseUp(theEvent)
             }
     
@@ -455,7 +455,7 @@ extension GameView {
         
         if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.press() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: RMXInterface.THROW_ITEM) {
+            if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
                 super.rightMouseDown(theEvent)
             }
             RMLog("UP hit successful: \(p)", id: "keys")
@@ -470,7 +470,7 @@ extension GameView {
     override func mouseUp(theEvent: NSEvent) {
         if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.release() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: RMXInterface.GRAB_ITEM) {
+            if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
                 super.mouseUp(theEvent)
             }
             RMLog("UP hit successful: \(p)", id: "keys")
@@ -486,7 +486,7 @@ extension GameView {
         // check what nodes are clicked
         if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.press() ?? false {
             let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: RMXInterface.GRAB_ITEM) {
+            if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
                 super.mouseDown(theEvent)
             }
             RMLog("UP hit successful: \(p)", id: "keys")

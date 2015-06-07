@@ -78,7 +78,7 @@ public class RMSActionProcessor {
                         
                 }
                 return true
-            case .LOOK:
+            case .LOOK_AROUND:
                 
                 if let point = args as? CGPoint {
                     if let camera = self.world.activeCamera as? RMXCameraNode {
@@ -278,6 +278,16 @@ public class RMSActionProcessor {
     //            ++self.gameView.pointOfView!.camera!.yFov
                 assert((self.world.activeCamera as? RMXCameraNode)?.moveOut(speed: 1) != nil, "not an RMXCamera")
                 return true
+            case .ZoomInAnOut:
+                if let cameraNode = self.activeCamera {
+                    if speed > 0 {
+                        cameraNode.moveIn(speed: speed)
+                    } else if speed < 0 {
+                        cameraNode.moveOut(speed: -speed)
+                    }
+                }
+                return false
+
             case .RESET_CAMERA:
                 if speed == 1 {
                     self.activeCamera?.zoomNeedsReset()
@@ -334,16 +344,7 @@ public class RMSActionProcessor {
             case "setYaw":
                 sprite.setAngle(yaw: speed)
                 break
-            case RMXInterface.ZOOM_IN + RMXInterface.ZOOM_OUT, "zoom":
-                if let cameraNode = self.activeCamera {
-                    if speed > 0 {
-                        cameraNode.moveIn(speed: speed)
-                    } else if speed < 0 {
-                        cameraNode.moveOut(speed: -speed)
-                    }
-                }
-                return false
-            case RMXInterface.THROW_ITEM + RMXInterface.GRAB_ITEM:
+            case UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue:
                 if speed == 0 && self.boomTimer == 1 {
                     if sprite.hasItem {
                         self.boomTimer = 2
@@ -482,7 +483,7 @@ public class RMSActionProcessor {
        
     func explode(sprite s: RMXSprite? = nil, force: RMFloat = 1, range: RMFloat = 500) -> Bool{
         let sprite = s ?? self.activeSprite
-        sprite.world.interface.av.playSound(RMXInterface.BOOM, info: sprite.node, range: Float(range))
+        sprite.world.interface.av.playSound(UserAction.BOOM.description, info: sprite.node, range: Float(range))
         return RMSActionProcessor.explode(sprite, force: force * 10000, range: range)
         
     }

@@ -508,7 +508,7 @@ class RMXTeam : NSObject, RMXObject {
                     RMXTeam.challenge(challenger.attributes, defender: defender.attributes, doOnWin: self.indirectChallenge)
                     RMXTeam.challenge(challenger.attributes, defender: projectile.attributes, doOnWin: self.indirectChallenge)
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
-                    challenger.world.interface.av.playSound(RMXInterface.THROW_ITEM, info: defender)
+                    challenger.world.interface.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
                     projectile.tracker.abort()
                 }
             }

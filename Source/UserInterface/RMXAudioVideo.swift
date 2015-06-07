@@ -20,9 +20,9 @@ class RMXAudioVideo {
     var interface: RMXInterface
     
     var sounds: [String:AVAudioPlayer] = [
-        RMXInterface.BOOM : RMXAudioVideo.player(RMXAudioVideo.url("Air Reverse Burst 2", ofType: "caf")),
-        RMXInterface.JUMP : RMXAudioVideo.player(RMXAudioVideo.url("Pop", ofType: "m4a")),
-        RMXInterface.THROW_ITEM : RMXAudioVideo.player(RMXAudioVideo.url("Baseball Catch", ofType: "caf")),
+        UserAction.BOOM.description : RMXAudioVideo.player(RMXAudioVideo.url("Air Reverse Burst 2", ofType: "caf")),
+        UserAction.JUMP.description : RMXAudioVideo.player(RMXAudioVideo.url("Pop", ofType: "m4a")),
+        UserAction.THROW_ITEM.description : RMXAudioVideo.player(RMXAudioVideo.url("Baseball Catch", ofType: "caf")),
         "Pop"  : RMXAudioVideo.player(RMXAudioVideo.url("Pop", ofType: "m4a")),
         "pop2" : RMXAudioVideo.player(RMXAudioVideo.url("pop2", ofType: "m4a")),
         "pop1" : RMXAudioVideo.player(RMXAudioVideo.url("pop1", ofType: "m4a"))

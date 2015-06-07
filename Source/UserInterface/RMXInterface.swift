@@ -28,16 +28,6 @@ import SpriteKit
 
 class RMXInterface : NSObject, RendererDelegate {
 
-    static let JUMP: String = "jump"
-    
-    static let GRAB_ITEM: String = "throwItem"
-    static let THROW_ITEM: String = "throwItem"
-    static let BOOM: String = "explode"
-    
-    static let ZOOM_IN: String = "zoomIn"
-    static let ZOOM_OUT: String = "zoomOut"
-    
-
     
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
@@ -246,7 +236,7 @@ class RMXInterface : NSObject, RendererDelegate {
         }
     }
     
-    func processHit(point p: CGPoint, type: String) -> Bool {
+    func processHit(point p: CGPoint, type: UserAction) -> Bool {
         if let hitResults = self.gameView?.hitTest(p, options: nil) {
             // check that we clicked on at least one object
             if hitResults.count > 0 {
@@ -255,7 +245,7 @@ class RMXInterface : NSObject, RendererDelegate {
 //                NSLog(result.)
                 
                     var animate: Bool = false
-                    if type == RMXInterface.THROW_ITEM {
+                    if type == .THROW_ITEM {
                         if self.actionProcessor.throwOrGrab(node.sprite, tracking: true) {
                             self.animateHit(node)
                         } else {
