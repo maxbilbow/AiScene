@@ -683,9 +683,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     var isLocked: Bool = false
-    private func setItem(item itemIn: RMXSprite?) -> Bool{
+    private func setItem(item itemIn: RMXSprite?) -> Bool {
         if let itemIncoming = itemIn {
-            if itemIncoming.isLocked { return false } else { itemIncoming.isLocked = true }
+            if itemIncoming.rmxID == self.rmxID || self.hasItem  || itemIncoming.isLocked { return false } else { itemIncoming.isLocked = true }
             if  itemIncoming.isActiveSprite && !self.canGrabPlayers {  RMLog("\(__FUNCTION__)- cant grab \(itemIncoming.name)", id: "THROW") ;return false  } //Prevent accidentily holding oneself
             if self.isWithinReachOf(itemIncoming) {
                 itemIncoming.node.removeCollisionActions()
@@ -705,7 +705,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
             } else {
                 if itemIncoming.type == .PASSIVE || (self.isActiveSprite && itemIncoming.isPlayerOrAi ) { ///active player can grab anything for now
                     itemIncoming.tracker.setTarget(self, willJump: false, asProjectile: true, impulse: true, doOnArrival: { (target) -> () in// speed: 10 * item.mass
-                        self.grab(itemIncoming)
+                        self.setItem(item: itemIncoming)
 //                        item.tracker.removeTarget()
                     })
                     itemIncoming.isLocked = false
@@ -723,8 +723,9 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
                 _arm = nil
             }
             itemInHand.holder = nil
-            self._itemInHand = nil
+            itemInHand.followers.removeAll(keepCapacity: false)
             itemInHand.isLocked = false
+            self._itemInHand = nil
             return true
         }
         else {
@@ -748,19 +749,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     ///returns true if item is now held (even if it is not a new item)
     func grab(item: RMXSprite?) -> Bool {
-//        if self.hasItem { return false }
-        if let item = item {
-            if item.rmxID == self.rmxID {
-                return false
-            }
-            if self.hasItem {
-                return false
-            } // return false }
-            else {
-                return setItem(item: item)
-            }
-        }
-        return false
+        return setItem(item: item)
     }
     
     func releaseItem() {
