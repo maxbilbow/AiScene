@@ -10,7 +10,7 @@ import Foundation
 import GLKit
 import SceneKit
 
-#if iOS
+
 import UIKit
 
 extension RMXDPad {
@@ -18,14 +18,14 @@ extension RMXDPad {
     
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
-        self.action(action: "reset")
+        self.action(UserAction.RESET)
     }
     func printData(recogniser: UITapGestureRecognizer){
-        self.action(action: RMXInterface.GET_INFO)
+        self.action(UserAction.GET_INFO)
     }
     
     func showScores(recogniser: UITapGestureRecognizer){
-        self.action(action: RMXInterface.TOGGLE_SCORES, speed: 1)
+        self.action(UserAction.TOGGLE_SCORES, speed: 1)
     }
     
     func toggleAi(recogniser: UITapGestureRecognizer){
@@ -34,22 +34,14 @@ extension RMXDPad {
     
     
     func zoom(recogniser: UIPinchGestureRecognizer) {        
-        self.action(action: "zoom", speed: RMFloat(recogniser.velocity))
+        self.action(RMXInterface.ZOOM_IN + RMXInterface.ZOOM_OUT, speed: RMFloat(recogniser.velocity))
     }
     
-    @availability(*,deprecated=1)
-        internal func _handleRelease(state: UIGestureRecognizerState) {
-            if state == UIGestureRecognizerState.Ended {
-                self.action(action: "stop")
-                self.action(action: "extendArm", speed: 0)
-                self.log()
-            }
-        }
-    
+
     @availability(*,deprecated=1)
         func noTouches(recognizer: UIGestureRecognizer) {
             if recognizer.state == UIGestureRecognizerState.Ended {
-                self.action(action: "stop")
+                self.action(UserAction.STOP_MOVEMENT)
                 self.log("noTouches?")
             }
 //            _handleRelease(recognizer.state)
@@ -58,14 +50,14 @@ extension RMXDPad {
         
         func toggleGravity(recognizer: UITapGestureRecognizer) {
             self.log()
-            self.action(action: "toggleGravity", speed: 1)
+            self.action(UserAction.TOGGLE_GRAVITY, speed: 1)
 //            _handleRelease(recognizer.state)
         }
         
         
     func toggleAllGravity(recognizer: UITapGestureRecognizer) {
         self.log()
-        self.action(action: "toggleAllGravity", speed: 1)
+        self.action(UserAction.TOGGLE_GRAVITY, speed: 1)
 //        _handleRelease(recognizer.state)
     }
     
@@ -79,31 +71,21 @@ extension RMXDPad {
             if recognizer.numberOfTouches() == 1 {
                 let point = recognizer.velocityInView(self.gameView)
                 
-                self.action(action: "look", speed: RMXInterface.lookSpeed, args: point)
+                self.action(UserAction.LOOK, speed: RMXInterface.lookSpeed, args: point)
             }
 //            _handleRelease(recognizer.state)
         }
     
     
     func nextCamera(recogniser: UITapGestureRecognizer) {
-            self.action(action: "nextCamera", speed: 1)
+            self.action(UserAction.NEXT_CAMERA, speed: 1)
     }
     
     func previousCamera(recogniser: UITapGestureRecognizer) {
-        self.action(action: "previousCamera", speed: 1)
+        self.action(UserAction.PREV_CAMERA, speed: 1)
     }
 
-    
-        func extendArm(recognizer: UILongPressGestureRecognizer) {
-            self.log()
-            if recognizer.state == UIGestureRecognizerState.Began {
-                self.action(action: "extendArm", speed: 1)
-            } else if recognizer.state == UIGestureRecognizerState.Ended {
-                self.action(action: "extendArm", speed: 0)
-            }
-           
-        }
-    
+
     func grabOrThrow(recognizer: UITapGestureRecognizer) {
         let spriteAction = self.world.activeSprite
 
@@ -122,7 +104,5 @@ extension RMXDPad {
 }
 
 
-
-#endif
 
 

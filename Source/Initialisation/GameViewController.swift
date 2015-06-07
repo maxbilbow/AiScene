@@ -91,7 +91,7 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if let attributes = object as? SpriteAttributes {
 //            if !attributes.isAlive {
-                NSLog("\(keyPath) \(attributes.sprite.name!) just died!")
+            RMLog("\(keyPath) \(attributes.sprite.name!) just died!", id: "Observers")
 //                attributes.deRetire()
 //            }
         }

@@ -10,43 +10,98 @@ import Foundation
 
 typealias AiBehaviour = (SCNNode!) -> Void
 typealias AiCollisionBehaviour = (SCNPhysicsContact) -> Void
-struct InWhichTeams {
-    var inc, exc: [String]
-    init(inc: String? = nil, exc: String? = nil){
-        if let i = inc {
-            self.inc = [ i ]
-        } else {
-            self.inc = []
-        }
-        if let e = exc {
-            self.exc = [ e ]
-        } else {
-            self.exc = []
-        }
-    }
-}
 
 protocol RMXAiDelegate : NSObjectProtocol {
-    var state: String? { get set }
-    var args: [Any]? { get }
-    var behaviours: [String:() -> String?]? { get set }
+    var state: String? { get }
+    var args: [RMXSpriteType] { get }
+    var behaviours: [AiBehaviour] { get }
+    func addBehaviour(behaviour: AiBehaviour)
     var sprite: RMXSprite { get }
     init(sprite: RMXSprite)
-    func run(node: SCNNode!) -> Void
-    func getTarget(args: Any? ...) -> RMXSprite?
+    func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) -> Void
+    func getTarget(args: RMXSpriteType ...) -> RMXSprite?
 }
 
 
-class AiPoppy : NSObject, RMXAiDelegate {
-    var state: String?
-    var args: [Any]? {
-        return nil
+class RMXAi : NSObject, RMXAiDelegate {
+    
+    private var _state: String?
+    
+    func setState(state: String?) {
+        self._state = state
     }
-    var behaviours: [String:() -> String?]?
-    var sprite: RMXSprite
+    
+    var state: String? {
+        return self.state
+    }
+    
+    var world: RMSWorld {
+        return self.sprite.world
+    }
+    
+    var args: [RMXSpriteType] {
+        return [ RMXSpriteType.PASSIVE ]
+    }
+    
+    private var _behaviours: [AiBehaviour] = Array<AiBehaviour>()
+    var behaviours: [AiBehaviour] {
+        return _behaviours
+    }
+    
+    private var _sprite: RMXSprite
+    
+    var sprite: RMXSprite {
+        return _sprite
+    }
+    
+    required init(sprite: RMXSprite) {
+        _sprite = sprite
+        super.init()
+        var string = "init \(sprite.name!) :: behaviours copied: 0"
+        var count = 0
+        if sprite.aiDelegate != nil {
+            for behaviour in sprite.aiDelegate!.behaviours {
+                self._behaviours.append(behaviour)
+                string += ", \(++count)"
+            }
+        } else {
+            if sprite.type != .BACKGROUND && sprite.type != .ABSTRACT {
+                self._behaviours.append(sprite.tracker.headToTarget)
+                self._behaviours.append(sprite.manipulate)
+            }
+//            self._behaviours.append(sprite.tracker.headToTarget)
+        }
+        string += "Behaviour count is \(_behaviours.count) and should be \(count)"
+        RMLog(string, id: "AI")
+//        sprite.node.rendererDelegate = self
+    }
+    
+    internal func getTarget(args: RMXSpriteType ...) -> RMXSprite? {
+        return RMXAi.randomSprite(self.world, not: self.sprite, type: args.count == 0 ? self.args : args)
+    }
+    
+    func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+        for behaviour in self.behaviours {
+            behaviour(self.sprite.node)
+        }
+        self.sprite.timer.activate()
+    }
+    
+    func addBehaviour(behaviour: AiBehaviour) {
+        self._behaviours.append(behaviour)
+    }
+
+}
+
+class AiPoppy : RMXAi {
+   
     var itemToWatch: SCNNode?
     var speed:RMFloat {
         return self.sprite.speed
+    }
+    
+    override var args: [RMXSpriteType] {
+        return [RMXSpriteType.PLAYER, RMXSpriteType.AI]
     }
     //        poppy.world?.interface.collider.trackers.append(poppy.tracker)
     private var _count: Int = 0; private let _limit = 100
@@ -58,18 +113,14 @@ class AiPoppy : NSObject, RMXAiDelegate {
         self.master = master
     }
     required init(sprite: RMXSprite) {
-        self.sprite = sprite
-//        self.speed = sprite.speed// 150 * (sprite.mass + 1)
-//        sprite.setSpeed(speed: speed)
         self.master = sprite.world.activeSprite
-        super.init()
+        super.init(sprite: sprite)
     }
     
-    func getTarget(args: Any? ...) -> RMXSprite? {
-        return RMXAi.randomSprite(self.sprite.world, type: .PLAYER, .AI)
-    }
     
-    func run(node: SCNNode!) -> Void {
+    
+    override func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) -> Void {
+        super.run(aRenderer, updateAtTime: time)
         if self.master.hasItem && !self.master.isHolding(self.sprite) {
             self.sprite.releaseItem()
             self.itemToWatch = self.master.item?.node
@@ -92,7 +143,7 @@ class AiPoppy : NSObject, RMXAiDelegate {
                     self._count = 0
                     self.sprite.grab(target)
                     self.sprite.tracker.setTarget(self.master, ignoreClaims: true, doOnArrival: { (target: RMXSprite?) -> () in
-                        self.sprite.world.interface.av.playSound("pop2", info: self.sprite.position)
+                        self.sprite.world.interface.av.playSound("pop2", info: self.sprite.node)
                         self.sprite.releaseItem()
                         
                     })
@@ -107,33 +158,34 @@ class AiPoppy : NSObject, RMXAiDelegate {
     }
 }
 
-class AiRandom: NSObject, RMXAiDelegate {
-    var state: String?
-    var args: [Any]? {
+class AiRandom: RMXAi {
+    override var state: String? {
+        return super.state
+    }
+    
+    override var args: [RMXSpriteType] {
         return [ RMXSpriteType.PLAYER, RMXSpriteType.AI ]
     }
-    
-    var behaviours: [String:() -> String?]?
-    var sprite: RMXSprite
-    var world: RMSWorld {
-        return self.sprite.world
-    }
-    
-    required init(sprite: RMXSprite) {
-        self.sprite = sprite
-    }
-    
-    func run(node: SCNNode!) -> Void {
+
+    override func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) -> Void {
+        super.run(aRenderer, updateAtTime: time)
         if !self.world.aiOn { return }
-        if !self.sprite.tracker.hasTarget && !self.sprite.hasItem { //after time to prevent grabbing (ish)
-            self.sprite.tracker.setTarget(self.getTarget(RMXSpriteType.PASSIVE), willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
-                if self.sprite.grab(target) {
-                    self.sprite.tracker.setTarget(self.getTarget(self.args), ignoreClaims: true, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                        self.sprite.throwItem(atObject: target, withForce: 1, tracking: true)
-                    })
+        if self.sprite.hasItem && !self.sprite.tracker.hasTarget {
+            self.sprite.tracker.setTarget(self.getTarget(), ignoreClaims: false, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
+                if !self.sprite.throwItem(atObject: target, withForce: 1, tracking: true) {
+                    self.sprite.throwItem(atObject: target, withForce: 1, tracking: false)
                 }
-                else {
-                    //                        NSLog("Failed to grab \(target?.name)")
+            })
+        }
+        if !self.sprite.hasItem && !self.sprite.tracker.hasTarget { //after time to prevent grabbing (ish)
+            let target = self.getTarget(RMXSpriteType.PASSIVE)
+            self.sprite.tracker.setTarget(target, willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
+                if self.sprite.grab(target) {
+                    self.sprite.tracker.setTarget(self.getTarget(), ignoreClaims: false, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
+                        if !self.sprite.throwItem(atObject: target, withForce: 1, tracking: true) {
+                            self.sprite.throwItem(atObject: target, withForce: 1, tracking: false)
+                        }
+                    })
                 }
             })
             
@@ -141,38 +193,28 @@ class AiRandom: NSObject, RMXAiDelegate {
         
     }
     
-    func getTarget(args: Any? ...) -> RMXSprite? {
-        for arg in args {
-            if let condition = arg as? InWhichTeams {
-                let players = self.world.liveTeamPlayers.filter({(player)-> Bool in
-                    for teamID in condition.inc {
-                        if teamID == player.attributes.teamID {
-                            return true
-                        }
-                    }
-                    for teamID in condition.exc {
-                        if teamID == player.attributes.teamID {
-                            return false
-                        }
-                    }
-                    return true
-                })
-                if players.count > 0 {
-                    let n = random() % (players.count)
-                    return players[n]
-                } else {
-                    return self.getTarget(RMXSpriteType.BACKGROUND)
-                }
-            } else if let condition = arg as? RMXSpriteType {
-                return RMXAi.randomSprite(self.world,type: condition)
-            }
-        }
-        
-        return RMXAi.randomSprite(world,type: .PLAYER, .AI)
-    }
+    
 }
 
 class AiTeamPlayer : AiRandom {
+    
+    struct InWhichTeams {
+        var inc, exc: [String]
+        init(inc: String? = nil, exc: String? = nil){
+            if let i = inc {
+                self.inc = [ i ]
+            } else {
+                self.inc = []
+            }
+            if let e = exc {
+                self.exc = [ e ]
+            } else {
+                self.exc = []
+            }
+        }
+    }
+
+    
     var inWhichTeams: InWhichTeams!
     required init(sprite: RMXSprite) {
         super.init(sprite: sprite)
@@ -201,19 +243,52 @@ class AiTeamPlayer : AiRandom {
             break
         }
     }
+    
     func checkTeam(){
         
         if self.sprite.attributes.isTeamCaptain {
 //            NSLog("I am \(self.sprite.name) on team \(self.sprite.attributes.teamID)")
         }
     }
-    override var args: [Any]? {
-        return [ self.inWhichTeams ]
+    
+    override func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+        if self.sprite.attributes.isAlive {
+            super.run(aRenderer, updateAtTime: time)
+        }
+    }
+
+    
+    internal func getTargetPlayer(args: InWhichTeams...) -> RMXSprite? {
+        for condition in args {
+            let players = self.world.liveTeamPlayers.filter({(player)-> Bool in
+                for teamID in condition.exc { //exclude team if...
+                    if teamID == player.attributes.teamID || player == self.sprite {
+                        return false
+                    }
+                }
+                
+                for teamID in condition.inc { //include team if...
+                    if teamID == player.attributes.teamID {
+                        return true
+                    }
+                }
+                return true
+            })
+    
+            if players.count > 0 {
+                let n = random() % (players.count)
+                return players[n]
+                }
+            
+        }
+        return nil
     }
     
 }
 
-class RMXAi {
+
+
+extension RMXAi {
 //    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
         let ai = { (node: SCNNode!) -> Void in
@@ -222,19 +297,19 @@ class RMXAi {
                 sprite.physicsBody?.applyForce(sprite.world.gravity * sprite.mass, atPosition: sprite.bottom, impulse: false)
             }
         }
-        sprite.addAi(ai)
+        sprite.addBehaviour(ai)
         
         
     }
 
     
-    
+    @availability(*,deprecated=0)
     static var randomTimeInterval: Int {
         return  random() % 600 + 100
     }
     
 
-    static func selectTargetPlayer(inWorld world: RMSWorld, inTeam: String = RMXSprite.TEAMLESS_MAVERICS, notInTeam: String = RMXSprite.TEAMLESS_MAVERICS) -> RMXSprite? {
+    class func selectTargetPlayer(inWorld world: RMSWorld, inTeam: String = RMXSprite.TEAMLESS_MAVERICS, notInTeam: String = RMXSprite.TEAMLESS_MAVERICS) -> RMXSprite? {
         
         if inTeam != RMXSprite.TEAMLESS_MAVERICS && inTeam == notInTeam { return nil }
         
@@ -254,18 +329,19 @@ class RMXAi {
         
     }
     
-    static func randomSprite(world: RMSWorld, type: RMXSpriteType ...) -> RMXSprite? {
-        var sprite: RMXSprite?
-        let array = world.children.filter { (child) -> Bool in
-            for t in type {
-                if child.type == t {
-                    return true
+    class func randomSprite(world: RMSWorld, not: RMXSprite, type: [RMXSpriteType]?) -> RMXSprite? {
+        if let types = type {
+            let array = world.children.filter { (child) -> Bool in
+                for type in types {
+                    if child.type == type && child != not {
+                        return true
+                    }
                 }
+                return false
             }
-            return false
+            return array.count == 0 ? nil : array[random() % array.count]
         }
-        
-        return array[random() % array.count]
+        return nil
     }
     
     enum MoveState { case MOVING, TURNING, IDLE }

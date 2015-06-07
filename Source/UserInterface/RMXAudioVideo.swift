@@ -50,14 +50,14 @@ class RMXAudioVideo {
         return NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(name, ofType: ext)!)
     }
     
-    func playSound(name: String, info: RMXLocatable?, volume maxVolume: Float = 1, range: Float = 500, autoPlay: Bool = true, volume: Float = 1) -> Bool {
+    func playSound(name: String, info: AnyObject?, volume maxVolume: Float = 1, range: Float = 500, autoPlay: Bool = true, volume: Float = 1) -> Bool {
         var position: RMXVector!
-        if let contact = info {
-            position = contact.getPosition()
+        if let contact = info as? SCNNode {
+            position = contact.presentationNode().position
         } else {
-            position = self.interface.activeCamera.getPosition()
+            position = self.interface.activeCamera.presentationNode().position
         }
-        if position.length > range {
+        if Float(position.length) > range {
             return false
         }
 
@@ -65,8 +65,8 @@ class RMXAudioVideo {
 
             let camera = self.interface.activeCamera
             let left = camera.worldTransform.leftTo(position)
-            let distance = (position - camera.getPosition()).length
-            if  distance < Float(camera.camera!.zNear) || distance == 0 {
+            let distance = Float((position - camera.worldTransform.position).length)
+            if  distance < Float(camera.camera!.zNear) || distance == Float(0) {
                 sound.volume = volume
             } else if distance > range {
                 return false

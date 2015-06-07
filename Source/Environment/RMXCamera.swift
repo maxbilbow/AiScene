@@ -58,7 +58,7 @@ class RMXCamera : SCNCamera {
                 break
             case .FREE:
 //                followCam.node
-                sprite.addAi({ AiBehaviour in
+                sprite.addBehaviour({ AiBehaviour in
                     if sprite.world.activeCamera.rmxID == followCam.rmxID {
                         followCam.position = sprite.position
                     }
@@ -70,7 +70,7 @@ class RMXCamera : SCNCamera {
                 type = "SLOW-FOLLOW"
                 followCam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
                 let slowFollow = SCNAction.moveTo(followCam.position, duration: 1)
-                sprite.addAi({ AiBehaviour in
+                sprite.addBehaviour({ AiBehaviour in
                     if sprite.world.activeCamera.rmxID == followCam.rmxID {
                             //followCam.runAction(slowFollow)
                     }
@@ -139,6 +139,8 @@ class RMXCameraNode : SCNNode {
 //    var rmxID: Int?
     var cameraType: CameraOptions = .FIXED
     
+    var aiDelegate: RMXAiDelegate!
+    
     init(sprite: RMXSprite? = nil, world: RMSWorld! = nil) {
         self.rmxSprite = sprite ?? world.activeSprite
         self._rmxID = sprite?.rmxID ?? world.activeSprite.rmxID ?? world.rmxID
@@ -146,6 +148,12 @@ class RMXCameraNode : SCNNode {
         super.init()
         self.camera = RMXCamera.standardCamera()
         self.name = "CAM\(self.cameraID)"
+        self.rmxSprite?.addBehaviour({ (node) -> Void in
+            if self.isActiveCamera {
+                self.resetOrientation()
+                self.resetPosition()
+            }
+        })
     }
 
     required init(coder aDecoder: NSCoder) {

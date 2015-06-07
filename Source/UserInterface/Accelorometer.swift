@@ -21,15 +21,15 @@ extension RMXDPad {
 //            self.world!.physics.directionOfGravity = RMXVector3Make(RMFloat(g.x), RMFloat(g.y), RMFloat(g.z))
 //        }
         
-        func tilt(direction: String, tilt: RMFloat){
+        func tilt(direction: RMInputKeyValue, tilt: RMFloat){
             let rollSpeed = self.rollSpeed
             let rollThreshold: RMFloat = 0.1
             if tilt > rollThreshold {
                 let speed = (1.0 + tilt) * rollSpeed
-                self.action(action: direction, speed: speed)
+                self.action(direction, speed: speed)
             } else if tilt < -rollThreshold {
                 let speed = (-1.0 + tilt) * rollSpeed
-                self.action(action: direction, speed: speed)
+                self.action(direction, speed: speed)
             }
         }
         
@@ -37,7 +37,7 @@ extension RMXDPad {
 //        let i = self.world!.clock?.getCounter(forKey:key)
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
         if let deviceMotion = self.motionManager.deviceMotion {
-            tilt("roll", RMFloat(self.motionManager.deviceMotion.gravity.y))
+            tilt(UserAction.ROLL_LEFT, RMFloat(self.motionManager.deviceMotion.gravity.y))
             //tilt("pitch", RMFloat(self.motionManager.deviceMotion.gravity.z))
 //            tilt("yaw", RMFloat(self.motionManager.deviceMotion.gravity.x)
             func updateGravity() {

@@ -20,12 +20,14 @@ extension SCNNode : RMXLocatable, RMXObject {
         return self.uniqueID!
     }
     
+    @availability(*,deprecated=1)
     func getPosition() -> SCNVector3 {
-        if self.physicsBody?.type == SCNPhysicsBodyType.Dynamic {
-            return self.presentationNode().position
-        } else {
-            return self.position
-        }
+        return self.presentationNode().position
+//        if self.physicsBody?.type == SCNPhysicsBodyType.Dynamic {
+//            return self.presentationNode().position
+//        } else {
+//            return self.position
+//        }
     }
     
     var rmxID: Int? {
@@ -37,7 +39,7 @@ extension SCNNode : RMXLocatable, RMXObject {
     }
     
     var doesCollide: Bool {
-        return self.sprite?.isPlayer ?? false
+        return self.sprite?.isPlayerOrAi ?? false
     }
     
     var collisionNode: RMXNode? {

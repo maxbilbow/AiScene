@@ -27,7 +27,7 @@ class RMXTracker : NSObject {
         return _target != nil
     }
     
-    var doOnArrival:((target: RMXSprite?)->())?
+    private var doOnArrival:((target: RMXSprite?)->())?
     
     var isAi: Bool {
         return self.sprite.type == .AI
@@ -101,10 +101,10 @@ class RMXTracker : NSObject {
             if self.impulse {
                 self.speed *= 100 / (self.sprite.mass + 1)
                 if self.sprite.isActiveSprite {
-                    NSLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+                    RMLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
                 }
             } else if self.sprite.isActiveSprite {
-                    NSLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+                    RMLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
             }
             
             
@@ -126,13 +126,17 @@ class RMXTracker : NSObject {
     }
     
     internal func didReachTarget(target: RMXSprite?) -> Bool {
-        if self.isProjectile { //if holming missile with timer, do not let interferrence
-            self.sprite.isLocked = false
+        if self.hasTarget {
+            if self.isProjectile { //if holming missile with timer, do not let interferrence
+                self.sprite.isLocked = false
+            }
+            self._target = nil
+            self.sprite.stopFollowing(target)
+            self.doOnArrival?(target: target)
+            return true
+        } else {
+            return false
         }
-        self._target = nil
-        self.sprite.stopFollowing(target)
-        self.doOnArrival?(target: target)
-        return true
     }
     private var _count: Int = 0 ; private var _limit: Int = 0
    
@@ -155,7 +159,8 @@ class RMXTracker : NSObject {
         self.doOnArrival = nil
         self.didReachTarget(self.target)
     }
-    internal func headToTarget() {
+    
+    func headToTarget(node: SCNNode!) -> Void {
        
         if !self.world.aiOn {
             if self.isAi {

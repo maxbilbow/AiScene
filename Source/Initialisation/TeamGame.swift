@@ -10,16 +10,17 @@ import Foundation
 
 import SceneKit
 
-typealias Challenge = (SpriteAttributes, SpriteAttributes) -> Bool
+typealias Challenge = (SpriteAttributes, SpriteAttributes) -> RMXTeam.ChallengeOutcome
 typealias WinLogic = (Any? ...) -> Bool
 
 protocol RMXTeamGame  {
+    var interface: RMXInterface { get }
     var players: Array<RMXSprite> { get }
     var teamPlayers: Array<RMXSprite> { get }
     var nonPlayers: Array<RMXSprite> { get }
     var nonTeamPlayers: Array<RMXSprite> { get }
-    func getTeam(#id: String) -> Array<RMXSprite>?
-    func getTeam(#team: RMXTeam?) -> Array<RMXSprite>?
+    func getTeam(#id: String) -> RMXTeam?
+    func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXSprite>
     var winningTeam: RMXTeam? { get }
     func addTeam(team: RMXTeam)
     var teams: Dictionary<String, RMXTeam> { get }
@@ -38,7 +39,7 @@ extension RMSWorld : RMXTeamGame {
     var teamScores: [String] {
         var scores = Array<String>()
         for team in self._teams {
-            scores.append(team.1.printScore)
+            scores.append(team.1.print)
         }
         return scores
     }
@@ -64,40 +65,36 @@ extension RMSWorld : RMXTeamGame {
         RMLog("WARNING:  observer should be removed if switching teams - however this shouln't happend for unique team id", id: "")
         return self._teams.updateValue(team, forKey: team.id)
     }
-    
-    func getTeam(foKey key: String) -> RMXTeam? {
-        return self._teams[key]
-    }
 
     
-    func getTeam(#id: String) -> Array<RMXSprite>? {
-        return self.children.filter({ (child: RMXSprite) -> Bool in
-            return child.attributes.teamID == id
-        })
+    func getTeam(#id: String) -> RMXTeam? {
+        return self._teams[id]
     }
     
     
-    func getTeam(#team: RMXTeam?) -> Array<RMXSprite>? {
-        return team != nil ? self.getTeam(id: team!.id) : nil
+    func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXSprite> {
+        return self.children.filter({ (child: RMXSprite) -> Bool in
+            return child.attributes.teamID == team?.id
+        })
     }
     
     /// Team IDs must be > 0. I.e. payer is assigned to a team
     var teamPlayers: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.attributes.teamID.toInt() ?? 1 > 0 && child.isPlayer
+            return child.attributes.teamID.toInt() ?? 1 > 0 && child.isPlayerOrAi
         })
     }
     
     var liveTeamPlayers: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.attributes.teamID.toInt() ?? 1 > 0 && child.isPlayer && child.attributes.isAlive
+            return child.attributes.teamID.toInt() ?? 1 > 0 && child.isPlayerOrAi && child.attributes.isAlive
         })
     }
     
     ///Players not assigend to a team (i.e. teamID == 0 )
     var nonTeamPlayers: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.isPlayer //&& child.attributes.teamID == 0
+            return child.isPlayerOrAi //&& child.attributes.teamID == 0
         })
     }
     
@@ -105,13 +102,13 @@ extension RMSWorld : RMXTeamGame {
     
     var players: Array<RMXSprite> {
         return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.isPlayer
+            return child.isPlayerOrAi
         })
     }
     
     var nonPlayers: Array<RMXSprite> {
         return self.children.filter({ (child: RMXSprite) -> Bool in
-            return !child.isPlayer
+            return !child.isPlayerOrAi
         })
     }
     
@@ -207,28 +204,45 @@ class SpriteAttributes : NSObject {
     private var _transparency: CGFloat?
     
     var isAlive: Bool {
-        return self._isAlive
+        if self.teamID.toInt() ?? 1 < 0 {
+            return true
+        } else {
+            return self._isAlive
+        }
     }
     
     private var _isAlive = true
     func retire() {
-        if !self.invincible && self.isAlive{
+        if !self.invincible { // && self.isAlive {
             self.willChangeValueForKey("isAlive")
-//            self.sprite.node.paused = true
-//            _collisionBitMask = self.sprite.physicsBody?.collisionBitMask
-//            self.sprite.physicsBody?.collisionBitMask = 0
-            self.sprite.node.opacity = 0.5
-//            self.kit?.transparency = 0
-//            _deathCount++
-            
+
             self._isAlive = false
+            self.sprite.node.opacity = 0.1
+            //
             self.sprite.releaseItem()
-            self.sprite.followers.removeAll()
-//            self.sprite.timer.timers.append(
+            self.sprite.node.removeCollisionActions()
+            self.sprite.followers.removeAll(keepCapacity: true)
+            self.sprite.tracker.abort()
             self.die()
+//            self.sprite.timer.addTimer(interval: 5, target: self, selector: "deRetire", repeats: false)
+            self.sprite.node.runAction(SCNAction.fadeOpacityTo(1, duration: 5), completionHandler: { () -> Void in
+                self.deRetire()
+            })
+
+            
             self.didChangeValueForKey("isAlive")
             
         }
+        
+    }
+    
+    func deRetire() {
+//        if !self._isAlive {
+            self.willChangeValueForKey("isAlive")
+            self._isAlive = true
+            self.sprite.node.opacity = 1
+            self.didChangeValueForKey("isAlive")
+//        }
         
     }
     
@@ -251,23 +265,6 @@ class SpriteAttributes : NSObject {
     }
     
     
-    func deRetire() {
-        if !self.isAlive {
-            self.willChangeValueForKey("isAlive")
-            self._isAlive = true
-            self.sprite.node.opacity = 1
-            self.didChangeValueForKey("isAlive")
-        }
-
-    }
-    
-    func challenge(defender: SpriteAttributes, winCondition didWin: Challenge){
-        if defender.isTeamPlayer && didWin(self,defender) {
-            self.kill()
-//            defender.die()
-        }
-    }
-    
     var score: ScoreCard {
         return (kills: self.killCount, deaths: self.deathCount, points: self.points, health: self.health)
     }
@@ -280,7 +277,14 @@ class SpriteAttributes : NSObject {
 }
 
 typealias ScoreCard = (kills: Int, deaths: Int, points: Int, health: Int)
-class RMXTeam : NSObject {
+class RMXTeam : NSObject, RMXObject {
+    var name: String? {
+        return self.id
+    }
+    var rmxID: Int?
+    var uniqueID: String? {
+        return self.id
+    }
     static var COUNT: Int = 0
     lazy var id: String = "\(++COUNT)" //first team is 1
     var kit: SCNMaterial? {
@@ -291,13 +295,12 @@ class RMXTeam : NSObject {
     
     var score: ScoreCard {
         var score: ScoreCard = (kills: 0, deaths: 0, points: 0, health: 0)
-        if let team = game.getTeam(id: self.id) {
-            for player in team {
-                score.kills  += player.attributes.killCount
-                score.deaths += player.attributes.deathCount
-                score.points += player.attributes.points
-                score.health += player.attributes.health
-            }
+        let team = self.players
+        for player in team {
+            score.kills  += player.attributes.killCount
+            score.deaths += player.attributes.deathCount
+            score.points += player.attributes.points
+            score.health += player.attributes.health
         }
         return score
     }
@@ -306,8 +309,8 @@ class RMXTeam : NSObject {
     
     var isRetired: Bool = false
     
-    var players: Array<RMXSprite>? {
-        return self.game.getTeam(id: self.id)
+    var players: Array<RMXSprite> {
+        return self.game.getTeamRoster(forTeam: self)
     }
     
     var captain: SpriteAttributes?
@@ -344,7 +347,7 @@ class RMXTeam : NSObject {
             RMLog("Warning: \(player.name!), with teamID: \(player.attributes.teamID), was not assigned a new team?")
             return false
         }
-        var players = self.players?.count ?? 0
+        var players = self.players.count
         if player.attributes.teamID != self.id { //will we get a new player?
             player.attributes.setTeamID(self.id)
             if let captain = self.captain { //do we have a captain?
@@ -387,6 +390,7 @@ class RMXTeam : NSObject {
     func retire() {
         if RMXTeam.isGameWon(self.game) {
             self.isRetired = true
+            self.game.interface.pauseGame(self)
         }
     }
     
@@ -398,21 +402,11 @@ class RMXTeam : NSObject {
         }
     }
     
-    private class func retireIf(defender: SpriteAttributes) -> Bool {
-        return defender.isTeamCaptain && defender.team!.players!.count <= 1
-    }
+//    private class func retireIf(defender: SpriteAttributes) -> Bool {
+//        return defender.isTeamCaptain && defender.team!.players.count <= 1
+//    }
     
     
-    
-    class func convert(defender: SpriteAttributes, toTeam team: RMXTeam?, willRetireIf: (SpriteAttributes) -> Bool = RMXTeam.retireIf) {
-        if defender.isTeamPlayer {
-            if willRetireIf(defender) {
-                defender.team?.retire()
-            } else if let team = team {
-                team.addPlayer(defender.sprite)
-            }
-        }
-    }
     
     private class func setColor(color: RMColor, receiver: SpriteAttributes) {
         if let receiver = receiver.kit {
@@ -435,64 +429,92 @@ class RMXTeam : NSObject {
     }
     
     /// doOnWin returns true if defender is totally defeated
-    class func challenge(attacker: SpriteAttributes, defender: SpriteAttributes?, doOnWin: Challenge = RMXTeam.challengeWon) {
+    class func challenge(attacker: SpriteAttributes, defender: SpriteAttributes?, doOnWin: Challenge?) {
         if let defender = defender {
             if attacker.teamID == defender.teamID || defender.teamID.toInt() ?? 1 <= 0 { return }
-            if defender.isAlive && doOnWin(attacker,defender) {
-                defender.retire()
+            if defender.isAlive  {
+                switch doOnWin?(attacker,defender) ?? challengeWon(attacker, defender: defender) {
+                case .DefenderWasKilled:
+                    attacker.team?.addPlayer(defender.sprite)
+                    defender.retire()
+                    break
+                default:
+                    break
+                }
             }
         }
 //        NSLog(attacker.points.toData())
     }
     
-    private class func doAfterChallengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> Void {
-        self.convert(defender, toTeam: attacker.team)
-    }
+//    private class func doAfterChallengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> Void {
+//        self.convert(defender, toTeam: attacker.team)
+//    }
     
-    
-    class func challengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> Bool {
-        if !defender.isAlive { return false }
+    enum ChallengeOutcome { case DefenderWasKilled, DefenderAlreadyDead, DefenderWasNotKilled}
+    class func challengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> ChallengeOutcome {
+        if !defender.isAlive { return .DefenderAlreadyDead }
         attacker.willChangeValueForKey("points")
         defender.willChangeValueForKey("health")
         var health = defender.health
-        defender.health /= 2
+        defender.health -= 20
         attacker.points += health - defender.health
-        if defender.health < 20 {
-            self.convert(defender, toTeam: attacker.team)
+        if defender.health <= 0 {
+//            self.convert(defender, toTeam: attacker.team)
             defender.die()
             attacker.kill()
             attacker.points += defender.points
+            attacker.didChangeValueForKey("points")
+            defender.didChangeValueForKey("health")
+            return .DefenderWasKilled
         }
         attacker.didChangeValueForKey("points")
         defender.didChangeValueForKey("health")
-        return true
+        return .DefenderWasNotKilled
     }
     
     class func isGameWon(game: RMXTeamGame?) -> Bool {
         return game?.winningTeam != nil
     }
     
-    var printScore: String {
-        return "TEAM-\(self.id) SCORE: \(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.players!.count)"
+    var print: String {
+        return "TEAM-\(self.id) SCORE: \(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.players.count)"
+    }
+    
+    class func indirectChallenge(attacker: SpriteAttributes, defender: SpriteAttributes) -> ChallengeOutcome {
+        if !defender.isAlive { return .DefenderAlreadyDead }
+        attacker.willChangeValueForKey("points")
+        defender.willChangeValueForKey("health")
+        var health = defender.health
+        if defender.health > 0 { defender.health -= 10 }
+        attacker.points += health - defender.health
+        if defender.health <= 0 {
+            defender.die()
+            attacker.kill()
+            attacker.points += defender.points
+            attacker.didChangeValueForKey("points")
+            defender.didChangeValueForKey("health")
+            return .DefenderWasKilled
+        }
+        attacker.didChangeValueForKey("points")
+        defender.didChangeValueForKey("health")
+        return .DefenderWasNotKilled
     }
     
     
-
     class func throwChallenge(challenger: RMXSprite, projectile: RMXSprite)  {
         func _challenge(contact: SCNPhysicsContact) -> Void {
             if let defender = contact.getDefender(forChallenger: challenger).sprite {
                 if defender.willCollide ?? false && defender.attributes.teamID != challenger.attributes.teamID {
-                    RMXTeam.challenge(challenger.attributes, defender: defender.attributes)
-                    RMXTeam.challenge(challenger.attributes, defender: projectile.attributes)
+                    RMXTeam.challenge(challenger.attributes, defender: defender.attributes, doOnWin: self.indirectChallenge)
+                    RMXTeam.challenge(challenger.attributes, defender: projectile.attributes, doOnWin: self.indirectChallenge)
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
-                    projectile.node.removeCollisionAction("Attack")
                     challenger.world.interface.av.playSound(RMXInterface.THROW_ITEM, info: defender)
                     projectile.tracker.abort()
                 }
             }
         }
-        projectile.node.collisionActions["Attack"] = _challenge
-        NSTimer.scheduledTimerWithTimeInterval(3, target: projectile.node, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+        projectile.node.addCollisionAction(named: "Attack", removeAfterTime: 2, action: _challenge)
+        
     }
     
 }

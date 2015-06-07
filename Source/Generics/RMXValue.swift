@@ -8,48 +8,35 @@
 
 import Foundation
 import SceneKit
-//
-//func +=(inout lhs: RMXNumber, rhs: RMXNumber) {
-//    lhs = (lhs.ns.doubleValue + rhs.ns.doubleValue)
-//}
-//
-//func -=(inout lhs: RMXNumber, rhs: RMXNumber) {
-//    lhs = (lhs.ns.doubleValue - rhs.ns.doubleValue)
-//}
-//
-//func *=(inout lhs: RMXNumber, rhs: RMXNumber) {
-//    lhs = (lhs.ns.doubleValue * rhs.ns.doubleValue)
-//}
-//
-//func /=(inout lhs: RMXNumber, rhs: RMXNumber) {
-//    lhs = (lhs.ns.doubleValue / rhs.ns.doubleValue)
-//}
-//
-//
-//func + (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
-//    return (lhs.ns.doubleValue + rhs.ns.doubleValue)
-//}
-//
-//func - (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
-//    return(lhs.ns.doubleValue - rhs.ns.doubleValue)
-//}
-//
-//func * (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber {
-//    return (lhs.ns.doubleValue * rhs.ns.doubleValue)
-//}
-//
-//func / (lhs: RMXNumber, rhs: RMXNumber) -> RMXNumber{
-//    return (lhs.ns.doubleValue / rhs.ns.doubleValue)
-//}
 
 
-
-
-protocol RMXNumber: Comparable  {
-    var ns: NSNumber { get }
-
+protocol RMInputKeyValue {
     
 }
+
+extension String : RMInputKeyValue {
+    
+}
+
+
+
+func == (lhs: RMInputKeyValue?, rhs: RMInputKeyValue?) -> Bool {
+    if lhs is String && rhs is String {
+        return lhs as! String == rhs as! String
+    } else if lhs is UserAction && rhs is UserAction {
+        return lhs as! UserAction == rhs as! UserAction
+    } else {
+        return false
+    }
+}
+
+
+
+//protocol RMXNumber: Comparable  {
+//    var ns: NSNumber { get }
+//
+//    
+//}
 
 class RMXValue<T: Comparable> {
    // var n: NSValue = 0
@@ -99,7 +86,7 @@ class RMXValue<T: Comparable> {
 
 
 
-extension Int : RMXNumber {
+extension Int {
     func toData(dp:String="05") -> String {
         return RMXValue.toData(self, dp: dp)///NSString(format: "%.\(dp)f", self)
     }
@@ -117,7 +104,7 @@ extension Int : RMXNumber {
     
 }
 
-extension Float: RMXNumber {
+extension Float {
     func toData(dp:String="05.2") -> String {
         return RMXValue.toData(self, dp: dp)///NSString(format: "%.\(dp)f", self)
     }
@@ -134,7 +121,7 @@ extension Float: RMXNumber {
         return NSNumber(float: self)
     }
 }
-extension Double: RMXNumber {
+extension Double {
     func toData(dp:String="05.2") -> String {
         return RMXValue.toData(self, dp: dp)
     }
@@ -148,7 +135,7 @@ extension Double: RMXNumber {
     }
 }
 
-extension CGFloat: RMXNumber {
+extension CGFloat {
     func toData(dp:String="05.2") -> String {
         return RMXValue.toData(self, dp: dp)
     }
@@ -202,11 +189,11 @@ extension SCNVector3 {
         //return RMXVector3Distance(self, v)
     }
     
-    var length: Float {
-        return Float(self.distanceTo(SCNVector3Zero))
+    var length: RMFloat {
+        return RMFloat(self.distanceTo(SCNVector3Zero))
     }
     
-    var velocity: Float {
+    var velocity: RMFloat {
         return (self.sum > 0 ? 1 : -1) * self.length
     }
     

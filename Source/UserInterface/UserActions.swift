@@ -8,18 +8,18 @@
 
 import Foundation
 
-enum UserAction {
+public enum UserAction : RMInputKeyValue {
     //Movement
-    case MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, ROLL_LEFT, ROLL_RIGHT, JUMP, ROTATE
+    case MOVE, MOVE_FORWARD, MOVE_BACKWARD, MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, ROLL_LEFT, ROLL_RIGHT, JUMP, ROTATE, LOOK, STOP_MOVEMENT
     
     //Interactions
     case GRAB_ITEM, THROW_ITEM, BOOM
     
     //Environmentals
-    case TOGGLE_GRAVITY, TOGGLE_AI, RESET
+    case TOGGLE_GRAVITY, TOGGLE_AI, RESET, RESET_CAMERA
     
     //Interface options
-    case LOCK_CURSOR, NEXT_CAMERA, PREV_CAMERA, PAUSE_GAME, KEYBOARD_LAYOUT, SHOW_SCORE
+    case LOCK_CURSOR, NEXT_CAMERA, PREV_CAMERA, PAUSE_GAME, UNPAUSE_GAME, KEYBOARD_LAYOUT, SHOW_SCORES, HIDE_SCORES, TOGGLE_SCORES
     
     //Misc: generically used for testing
     case GET_INFO
@@ -27,16 +27,10 @@ enum UserAction {
     case ZOOM_OUT
     case INCREASE
     case DECREASE
-    
-    //Non-ASCKI commands
-    case MOVE_CURSOR_PASSIVE
-    case LEFT_CLICK
-    case RIGHT_CLICK
+    case NEW_GAME
+    case DEBUG_NEXT, DEBUG_PREVIOUS
     
     
 }
 
-extension UserAction {
-   
-}
 

@@ -120,10 +120,11 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         self.interface.gameView!.scene = self//._scene
         self.cameraNumber = 0
         self.interface.gameView!.pointOfView = self.activeCamera
-        NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+        self
+        self.shouldTurnOnAi = true
         return self
     }
-    
+    var shouldTurnOnAi = false
     func pause() -> Bool {
             (self).paused = true
 //            self.switchOffAi()
@@ -132,7 +133,10 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     func unPause() -> Bool {
         (self).paused = false
-        
+        if self.shouldTurnOnAi {
+            NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+            self.shouldTurnOnAi = false
+        }
         return true
     }
     
@@ -176,7 +180,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
     func worldDidInitialize() {
-        
+        //Set the render delegate
     }
   
     
@@ -219,7 +223,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         child.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
         
         if andNode {
-            (self).rootNode.addChildNode(child.node)
+            self.rootNode.addChildNode(child.node)
         }
     }
     
@@ -273,29 +277,19 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
                 RMLog("Gravity on: \((self).physicsWorld.gravity.print)")
             }
     }
-
     
-    func animate() {
-        (self.activeCamera as? RMXCameraNode)?.resetOrientation()
-        (self.activeCamera as? RMXCameraNode)?.resetPosition()
-        
-        
-        
-        
-        if !(self).paused {
-            for child in self.children {
-                child.animate()
-            }
-            (self).physicsWorld.updateCollisionPairs()
+    func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+        for child in self.children {
+            child.aiDelegate?.run(aRenderer, updateAtTime: time)
         }
     }
     
     private var _ground: RMFloat?
     func validate(sprite: RMXSprite) -> Bool {
         
-        if self.hasGravity {
+        if self.hasGravity && !sprite.isLocked {
             if let earth = self.earth {
-                if sprite.position.y < earth.position.y {
+                if sprite.node.presentationNode().position.y < earth.node.presentationNode().position.y {
                     return false
                 }
             }
@@ -322,13 +316,16 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        switch keyPath {
-        case "points":
-            self.didChangeValueForKey(RMSWorld.kvScores)
-            break
-        default:
-            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
-            break
+        if let attributes = object as? SpriteAttributes {
+            switch keyPath {
+            case "points":
+                self.willChangeValueForKey(RMSWorld.kvScores)
+                self.didChangeValueForKey(RMSWorld.kvScores)
+                break
+            default:
+                super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+                break
+            }
         }
     }
 }

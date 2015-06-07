@@ -230,8 +230,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     
     
-    
-    var behaviours: Array<(SCNNode!) -> Void> = Array<(SCNNode!) -> Void>()
+
 
     
     
@@ -276,6 +275,17 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.init(inWorld: world, geometry: RMXModels.getNode(shapeType: shape, color: color), type: type, shape: shape, unique: unique)
     }
     
+    deinit {
+        self.holder?.releaseItem()
+        self.releaseItem()
+        self.tracker.abort()
+        self.aiDelegate = nil
+        self.node.removeCollisionActions()
+        self.followers.removeAll(keepCapacity: false)
+        self.attributes = nil
+        self.node.removeFromParentNode()
+        
+    }
     var arm: SCNNode
     init(inWorld world: RMSWorld, geometry node: SCNNode? = nil, type: RMXSpriteType, shape: ShapeType = .CUBE, unique: Bool){
         self._world = world
@@ -341,22 +351,21 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     var willCollide: Bool {
         return self.attributes.teamID != "-2"
     }
+    
+    @availability(*,deprecated=1)
     var hasFollowers: Bool {
-        return followers.count > 0
+        return false// followers.count > 0
     }
     
+    @availability(*,deprecated=1)
     var followers: [ Int: RMXSprite ] = Dictionary<Int,RMXSprite>()
     
+    @availability(*,deprecated=1)
     func follow(sprite: RMXSprite?){
         sprite?.followers[self.rmxID!] = self
     }
-    
+    @availability(*,deprecated=1)
     func stopFollowing(sprite: RMXSprite?) {
-//        if let target = sprite {
-//            self.tracker.setTarget(nil)
-//        
-//            
-//        }
         sprite?.followers.removeValueForKey(self.rmxID!)
     }
     
@@ -364,9 +373,16 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     static let TEAM_ASSIGNABLE: String = "0"
     static let TEAMLESS_MAVERICS: String = "-1"
     
+    var requiresAI: Bool {
+        return self.isPlayerOrAi || self.type == .PASSIVE
+    }
+    
     func spriteDidInitialize(){
-        if self.isPlayer {
+        if self.isPlayerOrAi {
             self.addCameras()
+        }
+        if self.aiDelegate == nil && self.requiresAI {
+            self.aiDelegate = RMXAi(sprite: self)
         }
 //        RMXBrain.giveBrainTo(self)
         self.setName()
@@ -409,11 +425,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
 //    var acceleration: RMXVector3?// = RMXVector3Zero
     private let _zNorm = 90 * PI_OVER_180
     
-    func processAi(node: SCNNode! = nil) -> Void {
-        for behaviour in self.behaviours {
-            behaviour(node)
-        }
-    }
+
     
     func runActions(name: String, actions: (SCNNode!) -> Void ...) {
         var count = 0
@@ -423,32 +435,11 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         }
         
     }
-    internal func headToTarget(node: SCNNode! = nil) -> Void {
-        self.tracker.headToTarget()
-    }
+//    internal func headToTarget(node: SCNNode! = nil) -> Void {
+//        self.tracker.headToTarget()
+//    }
     
-    
-    func animate() {
-        if self.attributes.isAlive {
-            self.aiDelegate?.run(nil)
-        }
-        switch self.type {
-        case .AI, .PLAYER:
-            self.timer.activate()
-            self.runActions("animate", actions: self.processAi, self.manipulate, self.headToTarget)
-            return
-        case .PASSIVE:
-            self.timer.activate()
-            self.runActions("animate", actions: self.processAi, self.headToTarget)
-            return
-        case .BACKGROUND:
-            self.runActions("animate", actions: self.processAi)
-            return
-        default:
-            self.runActions("animate", actions: self.processAi)
-            return
-        }
-    }
+
     
 
     func debug(_ yes: Bool = true){
@@ -485,7 +476,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         
     }
     
-    var isPlayer: Bool {
+    var isPlayerOrAi: Bool {
         return self.type == RMXSpriteType.PLAYER || self.type == RMXSpriteType.AI
     }
     
@@ -532,15 +523,12 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
             
 
         } else {
-            NSLog("cameras already set up for \(self.name)")
+            RMLog("cameras already set up for \(self.name)")
         }
         
     }
 
-    
-    func removeBehaviours(){
-        self.behaviours.removeAll()
-    }
+
     
 //    func updateCoordinateSystem() {
 //        _useWorldCoordinates = !self.world.activeCamera.isPOV
@@ -572,8 +560,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
                 RMLog("SPRITE -> SPRITE: \(sprite.name!)", sender: self, id: "THROW")//, sender: self)
                 return self.throwItem(atSprite: sprite, withForce: strength)
             } else {
-                RMLog("NODE -> Position: \(node.getPosition().print)", sender: self, id: "THROW")//, sender: self)
-                return self.throwItem(atPosition: node.getPosition(), withForce: strength)
+                RMLog("NODE -> Position: \(node.position.print)", sender: self, id: "THROW")//, sender: self)
+                return self.throwItem(atPosition: node.position, withForce: strength)
             }
         } else if let node = object as? SCNNode {
             if !(node.sprite?.isTargetable ?? true){
@@ -584,8 +572,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
                 RMLog("NODE -> Sprite: \(node.sprite!.name!)", sender: self, id: "THROW")//, sender: self)
                 return self.throwItem(atObject: node.sprite, withForce: strength, tracking: tracking)
             } else {
-                RMLog("NODE -> Position: \(node.getPosition())", sender: self, id: "THROW")//, sender: self)
-                return self.throwItem(atPosition: node.getPosition(), withForce: strength)
+                RMLog("NODE -> Position: \(node.position)", sender: self, id: "THROW")//, sender: self)
+                return self.throwItem(atPosition: node.position, withForce: strength)
             }
         } else if let position = object as? SCNVector3 {
             RMLog("VECTOR -> Position: \(position.print)", sender: self, id: "THROW")
@@ -597,19 +585,18 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     private func throwItem(atSprite sprite: RMXSprite?, withForce strength: RMFloat = 1) -> Bool{
-        if let item = self.item {
+        if let itemInHand = self.item {
             if let sprite = sprite {
+                if sprite == self || sprite == itemInHand {
+                    return false
+                }
                 RMLog("Item thrown at sprite (force: \(strength.print))", sender: self, id: "THROW")
                 self.releaseItem()
-//                if sprite.isPlayer && sprite.rmxID != self.rmxID && sprite.rmxID != item.rmxID {
-                    item.tracker.setTarget(sprite, speed: strength, ignoreClaims: true, asProjectile: true, impulse: true, willJump: false, doOnArrival: { (target) -> () in
-                        if self.isActiveSprite { RMSActionProcessor.explode(item, force: strength / 200, range: 500) } //only fr player
-                        RMXTeam.challenge(self.attributes, defender: target!.attributes)
-//                        item.tracker.removeTarget()
-                    })
-                    RMXTeam.throwChallenge(self, projectile: item)
+                itemInHand.tracker.setTarget(sprite, speed: strength, ignoreClaims: true, asProjectile: true, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                    RMXTeam.challenge(self.attributes, defender: target!.attributes, doOnWin: nil)
+                })
+                RMXTeam.throwChallenge(self, projectile: itemInHand)
                 
-//                }
             } else {
                  RMLog(" *Item thrown at sprite (force: \(strength.print)) but nothing to throw", sender: self, id: "THROW")
             }
@@ -637,7 +624,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
             }
             self.releaseItem()
             RMXTeam.throwChallenge(self, projectile: itemInHand)
-            let force = RMFloat((itemInHand.physicsBody?.damping ?? 0.1 ) + 1) * strength * itemInHand.mass
+            let force = RMFloat((itemInHand.physicsBody?.damping ?? 0.1 ) + 1) * itemInHand.mass * ( strength < 150 ? 150 : strength )
             itemInHand.applyForce(direction * force, impulse: true)
         } else {
             RMLog(" *Item thrown with force but nothing to throw: \(strength.print)", sender: self, id: "THROW")
@@ -646,18 +633,20 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         
     }
     
-    private func throwItem(atPosition target: SCNVector3, withForce strength: RMFloat) -> Bool {
-        if let itemInHand = self.item {
-            let direction = (target - self.position).normalised
-            self.releaseItem()
-            RMXTeam.throwChallenge(self, projectile: itemInHand)
-            let force = RMFloat((itemInHand.physicsBody?.damping ?? 0.1 ) + 1) * strength * itemInHand.mass * ( strength < 150 ? 150 : strength )
-            itemInHand.applyForce( direction * force, impulse: true)
-            RMLog("Throw Item thrown from: \(itemInHand.position.print) to \(target.print)", sender: self, id: "THROW")
-            RMLog("          in Direction: \(direction.print))", sender: self, id: "THROW")
-            RMLog("            with force: \((direction * force).print))", sender: self, id: "THROW")
-        } else {
-            RMLog(" *Item thrown in direction: \(target.print) but Nothing to throw", sender: self, id: "THROW")
+    func throwItem(atPosition target: SCNVector3?, withForce strength: RMFloat) -> Bool {
+        if let target = target {
+            if let itemInHand = self.item {
+                let direction = (target - self.position)//.normalised
+                self.releaseItem()
+                RMXTeam.throwChallenge(self, projectile: itemInHand)
+                let force = RMFloat((itemInHand.physicsBody?.damping ?? 0.1 ) + 1) * strength * itemInHand.mass //* ( strength < 150 ? 150 : strength )
+                itemInHand.applyForce( direction * force, impulse: true)
+                RMLog("Throw Item thrown from: \(itemInHand.position.print) to \(target.print)", sender: self, id: "THROW")
+                RMLog("          in Direction: \(direction.print))", sender: self, id: "THROW")
+                RMLog("            with force: \((direction * force).print))", sender: self, id: "THROW")
+            } else {
+                RMLog(" *Item thrown in direction: \(target.print) but Nothing to throw", sender: self, id: "THROW")
+            }
         }
         return self.item == nil
     }
@@ -671,7 +660,7 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         RMLog("\(self.name) pos: \(self.position.print), R: \(radius.toData()), boxMin: \(min.print), boxMax: \(max.print)")
     }
     
-    @availability(*,deprecated=0,message="Not applicable to dynamic bodies")
+//    @availability(*,deprecated=0,message="Not applicable to dynamic bodies")
     func manipulate(node: SCNNode! = nil) -> Void {
         if self.hasItem && self.item?.physicsBody?.type != .Dynamic {
             var newPos = self.position + self.forwardVector * (self.length / 2 + self.item!.radius)
@@ -695,42 +684,51 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     var isLocked: Bool = false
     private func setItem(item itemIn: RMXSprite?) -> Bool{
-        if let item = itemIn {
-            if !item.isLocked { RMLog("\(__FUNCTION__)-item should be locked") }
-            if  item.isActiveSprite && !self.canGrabPlayers {  NSLog("\(__FUNCTION__)- cant grab \(item.name)") ;return false  } //Prevent accidentily holding oneself
-            if self.isWithinReachOf(item) {
-                _itemInHand = item
-                _itemInHand?.holder = self
-//                _itemInHand?.physicsBody?.type = .Kinematic
-                _itemInHand?.setMass(mass: 1)
-                
-                _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody, anchorA: self.arm.position, bodyB: item.physicsBody, anchorB: item.arm.position) //+ RMXVector3Make(item.arm.radius))
-                
-                _itemInHand?.physicsBody?.restitution = 0
-                self.scene?.physicsWorld.addBehavior(_arm)
+        if let itemIncoming = itemIn {
+            if itemIncoming.isLocked { return false } else { itemIncoming.isLocked = true }
+            if  itemIncoming.isActiveSprite && !self.canGrabPlayers {  RMLog("\(__FUNCTION__)- cant grab \(itemIncoming.name)", id: "THROW") ;return false  } //Prevent accidentily holding oneself
+            if self.isWithinReachOf(itemIncoming) {
+                itemIncoming.node.removeCollisionActions()
+                _itemInHand = itemIncoming
+                itemIncoming.followers.removeAll(keepCapacity: false) ///TODO: this may not be necessary
+                itemIncoming.holder = self
+                if itemIncoming.isPlayerOrAi {
+                    itemIncoming.physicsBody?.type = .Static
+                } else {
+                    itemIncoming.setMass(mass: 1)
+                    _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody, anchorA: self.arm.position, bodyB: itemIncoming.physicsBody, anchorB: itemIncoming.arm.position) //+ RMXVector3Make(item.arm.radius))
+                    itemIncoming.physicsBody?.restitution = 0
+                    self.scene?.physicsWorld.addBehavior(_arm)
+                }
                 //joint
                 return true
             } else {
-                if item.type != .BACKGROUND && ( !item.tracker.hasTarget || self.isActiveSprite ) { ///active player can grab anything for now
-                    item.tracker.setTarget(self, willJump: false, asProjectile: true, impulse: true, doOnArrival: { (target) -> () in// speed: 10 * item.mass
-                        self.grab(item)
+                if itemIncoming.type == .PASSIVE || (self.isActiveSprite && itemIncoming.isPlayerOrAi ) { ///active player can grab anything for now
+                    itemIncoming.tracker.setTarget(self, willJump: false, asProjectile: true, impulse: true, doOnArrival: { (target) -> () in// speed: 10 * item.mass
+                        self.grab(itemIncoming)
 //                        item.tracker.removeTarget()
                     })
-                    item.isLocked = false
+                    itemIncoming.isLocked = false
                     return true
                 }
                 return false
             }
-        } else {
-            self.scene?.physicsWorld.removeBehavior(_arm)
-            _arm = nil
-//                self.item?.physicsBody?.type = .Dynamic
-            self.item?.holder = nil
-            self.item?.setMass()
-            self.item?.physicsBody?.restitution = 0.2
-            self.item?.isLocked = false
+        } else if let itemInHand = self._itemInHand {
+            if itemInHand.isPlayerOrAi {
+                itemInHand.physicsBody?.type = .Dynamic
+            } else {
+                self.scene?.physicsWorld.removeBehavior(_arm)
+                itemInHand.setMass()
+                itemInHand.physicsBody?.restitution = 0.5
+                _arm = nil
+            }
+            itemInHand.holder = nil
             self._itemInHand = nil
+            itemInHand.isLocked = false
             return true
+        }
+        else {
+            return false
         }
     }
     
@@ -752,23 +750,14 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     func grab(item: RMXSprite?) -> Bool {
 //        if self.hasItem { return false }
         if let item = item {
-            if item.isLocked && !self.isActiveSprite { //TODO: may want to rethink
+            if item.rmxID == self.rmxID {
                 return false
-            } else {
-                item.isLocked = true
-                if item.rmxID == self.rmxID {
-                    item.isLocked = false
-                    return false
-                }
-                if self.hasItem { self.releaseItem() } // return false }
-                item.isLocked = true
-                if setItem(item: item) {
-                    item.node.collisionActions.removeAll(keepCapacity: true)
-                    return true
-                } else {
-                    item.isLocked = false
-                    return false
-                }
+            }
+            if self.hasItem {
+                return false
+            } // return false }
+            else {
+                return setItem(item: item)
             }
         }
         return false
@@ -910,8 +899,8 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
         //        self.acceleration = nil
     }
     
-    var weight: Float {
-        return Float(self.physicsBody!.mass) * self.world.gravity.length * 2
+    var weight: CGFloat {
+        return self.physicsBody!.mass * CGFloat(self.world.gravity.length * 2)
     }
     
     func distanceTo(point: RMXVector3) -> RMFloat{
@@ -957,8 +946,13 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
 
 
     
-    func addAi(ai: AiBehaviour) {
-        self.behaviours.append(ai)
+    func addBehaviour(behaviour: AiBehaviour) {
+        if let aiDelegate = self.aiDelegate {
+            aiDelegate.addBehaviour(behaviour)
+        } else {
+            self.aiDelegate = RMXAi(sprite: self)
+            self.aiDelegate?.addBehaviour(behaviour)
+        }
         //self.behaviours.last?()
     }
     
@@ -984,7 +978,6 @@ class RMXSprite : RMXSpriteManager, RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     
     var leftVector: RMXVector {
-        
         return self.transform.left
     }
     

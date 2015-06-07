@@ -36,25 +36,39 @@ class RMXNode : SCNNode {
         return self.rmxSprite
     }
     
-//    var rootNode: RMXNode? {
-//        return self.rmxSprite?.rmxNode
-//    }
-    
-    
-    func removeCollisionAction(name: String) {
-        if self.rmxSprite?.tracker.isStuck ?? true {
-            self.collisionActions.removeValueForKey(name)
-        } else {
-            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+    func addCollisionAction(named name: String, removeAfterTime time: NSTimeInterval = 3, action: AiCollisionBehaviour) {
+        self.collisionActions[name] = action
+        if time > 0 {
+            NSTimer.scheduledTimerWithTimeInterval(time, target: self, selector: "removeDueCollisionAction:", userInfo: name, repeats: false)
         }
     }
-    func removeCollisionActions() {
-        if self.rmxSprite?.tracker.isStuck ?? true {
-            NSLog(__FUNCTION__)
-            self.collisionActions.removeAll()
-        } else {
-            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+    
+    
+    
+    func removeDueCollisionAction(timer: NSTimer) {
+        
+        if let name = timer.userInfo as? String {
+            RMLog("Collision Action: \(name) was removed from \(self.name!)", id: "Collisions")
+            self.collisionActions.removeValueForKey(name)
         }
+    }
+    
+//    func removeCollisionAction(name: String) {
+//        if self.rmxSprite?.tracker.isStuck ?? true {
+//            self.collisionActions.removeValueForKey(name)
+//        } else {
+//            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+//        }
+//    }
+    
+    func removeCollisionActions() {
+        self.collisionActions.removeAll(keepCapacity: true)
+//        if self.rmxSprite?.tracker.isStuck ?? true {
+//            NSLog(__FUNCTION__)
+//            self.collisionActions.removeAll()
+//        } else {
+//            NSTimer.scheduledTimerWithTimeInterval(1, target:self, selector: "removeCollisionActions", userInfo: nil, repeats: false)
+//        }
     }
     
         
@@ -137,7 +151,7 @@ class RMXNode : SCNNode {
         self.collisionActions.removeValueForKey("ouch")
     }
     
-    lazy var collisionActions: [String:AiCollisionBehaviour] = [
+    private lazy var collisionActions: [String:AiCollisionBehaviour] = [
         "ouch" : self.test
     ]
     
@@ -171,17 +185,18 @@ extension RMXSprite {
 
     
     var transform: RMXMatrix4 {
-        return self.presentationNode().transform
+        return self.node.presentationNode().transform
     }
     
     var position: SCNVector3 {
-        return self.presentationNode().position
+        return self.node.presentationNode().position//.getPosition()
     }
     
     
-    func presentationNode() -> SCNNode {
-        return self.node.presentationNode()
-    }
+//    func presentationNode() -> SCNNode {
+//        return self.node.presentationNode()
+//    }
+    
     var geometry: SCNGeometry? {
         return self.geometryNode?.geometry ?? self.geometryNode?.geometry
     }
@@ -204,7 +219,7 @@ extension RMXSprite {
     }
     
     var orientation: SCNQuaternion {
-        return self.presentationNode().orientation
+        return self.node.presentationNode().orientation
     }
     
     func resetTransform() {

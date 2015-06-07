@@ -20,7 +20,7 @@ class RMXGameManager {
         self.localPlayer = GKLocalPlayer()
         self.score = GKScore()
 //        self.score = savedGame
-        NSLog("\(self.localPlayer.alias)")
+        RMLog("\(self.localPlayer.alias)")
         
     }
     

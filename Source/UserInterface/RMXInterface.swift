@@ -28,63 +28,16 @@ import SpriteKit
 
 class RMXInterface : NSObject, RendererDelegate {
 
-    static let MOVE: String = "move"
-    static let MOVE_FORWARD: String = "forward"
-    static let MOVE_BACKWARD: String = "back"
-    static let MOVE_LEFT: String = "left"
-    static let MOVE_RIGHT: String = "right"
-    static let MOVE_UP: String = "up"
-    static let MOVE_DOWN: String = "down"
-    static let ROLL_LEFT: String = "rollLeft"
-    static let ROLL_RIGHT: String = "rollRight"
     static let JUMP: String = "jump"
-    static let ROTATE: String = "look"
-    static let LOOK: String = "look"
     
-    //Interactions
-    static let GRAB_ITEM: String = "grab"
+    static let GRAB_ITEM: String = "throwItem"
     static let THROW_ITEM: String = "throwItem"
     static let BOOM: String = "explode"
     
-    //Environmentals
-    static let TOGGLE_GRAVITY: String = "toggleAllGravity"
-    //static let XXX: String = "toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
-    static let TOGGLE_AI: String = "toggleAI"
-    static let RESET: String = "reset"
-    static let RESET_CAMERA: String = "resetCamera"
-    
-    //Interface options
-    static let LOCK_CURSOR: String = "lockMouse"
-    static let NEXT_CAMERA: String = "nextCamera"
-    static let PREV_CAMERA: String = "previousCamera"
-    static let PAUSE_GAME: String = "pauseGame"
-    static let KEYBOARD_LAYOUT: String = "switchKeyboard"
-    static let SHOW_SCORES: String = "ShowScoreboard"
-    static let HIDE_SCORES: String = "HideScoreboard"
-    static let TOGGLE_SCORES: String = "toggleScores"
-    
-    //Misc: generically used for testing
-    static let GET_INFO: String = "information"
     static let ZOOM_IN: String = "zoomIn"
     static let ZOOM_OUT: String = "zoomOut"
-    static let INCREASE: String = "increase"
-    static let DECREASE: String = "decrease"
-    static let NEW_GAME: String = "newGame"
-    static let DEBUG_NEXT: String = "debugNext"
-    static let DEBUG_PREVIOUS: String = "debugPrevious"
     
-    //Non-ASCKI commands
-    static let MOVE_CURSOR_PASSIVE: String = "mouseMoved"
-    static let LEFT_CLICK: String = "Mouse 1"
-    static let RIGHT_CLICK: String = "Mouse 2"
-    static let KEY_LEFT: String = "123"
-    static let KEY_RIGHT: String = "124"
-    static let KEY_DOWN: String = "125"
-    static let KEY_UP: String = "126"
-    static let KEY_BACKSPACE: String = "\u{7F}"
-    static let KEY_ESCAPE: String = "\u{1B}"
-    static let KEY_TAB: String = "\t"
-    static let KEY_SHIFT_TAB: String = "\t"
+
     
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
@@ -155,11 +108,15 @@ class RMXInterface : NSObject, RendererDelegate {
 //        self.timer!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
     }
     
-    
-    func setUpViews() {
+    private var _scoreboardRect: CGRect {
         var bounds = self.gameView!.bounds
         bounds.size.height = bounds.size.height * 0.3
         bounds.origin = CGPoint(x: bounds.size.width / 3, y: bounds.size.height / 3)
+        return bounds
+    }
+    
+    func setUpViews() {
+        let bounds = _scoreboardRect
         var skScene: SKScene = SKScene(size: bounds.size)
         //            bounds.height =
         self.scoreboard = SKView(frame: bounds)
@@ -171,6 +128,7 @@ class RMXInterface : NSObject, RendererDelegate {
         self.scoreboard.allowsTransparency = true
         self.gameView!.addSubview(self.scoreboard)
         self.scoreboard.hidden = true
+        
         
     }
 
@@ -206,14 +164,14 @@ class RMXInterface : NSObject, RendererDelegate {
     private var isNewGame = true
     ///Swictches between gamemode without deleting or duplicating environments.
     func newGame(type: GameType? = nil) {
-        self.pauseGame(nil)
+        self.pauseGame()
         _world = _newGame(type: type)
         self.isNewGame = true
         _world?.calibrate()
         self.updateScoreboard()
 //        self.organiseLines()
 //        self.unPauseGame(nil)
-        self.pauseGame(nil)
+        self.pauseGame()
     }
     
     private func _newGame(type: GameType? = nil) -> RMSWorld! {
@@ -256,12 +214,36 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
         self.update()
+        self.world.renderer(aRenderer, updateAtTime: time)
         RMXLog.printAndFlush()
     }
     
     func updateDataView(){
 //        let text = self.actionProcessor.getData()
 //        NSLog(text)
+    }
+    
+    func animateHit(node: SCNNode){
+        if let material = node.geometryNode?.geometry?.firstMaterial {
+            
+            // highlight it
+            SCNTransaction.begin()
+            SCNTransaction.setAnimationDuration(0.5)
+            
+            // on completion - unhighlight
+            SCNTransaction.setCompletionBlock {
+                SCNTransaction.begin()
+                SCNTransaction.setAnimationDuration(0.5)
+                
+                material.emission.contents = RMColor.blackColor()
+                
+                SCNTransaction.commit()
+            }
+            
+            material.emission.contents = RMColor.redColor()
+            
+            SCNTransaction.commit()
+        }
     }
     
     func processHit(point p: CGPoint, type: String) -> Bool {
@@ -274,33 +256,13 @@ class RMXInterface : NSObject, RendererDelegate {
                 
                     var animate: Bool = false
                     if type == RMXInterface.THROW_ITEM {
-                        animate = self.actionProcessor.throwOrGrab(node.sprite, tracking: true)
-                    } else {
-                        animate = self.actionProcessor.throwOrGrab(node, tracking: false)
-                    }
-                        // get its material
-                    if animate {
-                        if let material = node.geometryNode?.geometry?.firstMaterial {
-                            
-                            // highlight it
-                            SCNTransaction.begin()
-                            SCNTransaction.setAnimationDuration(0.5)
-                            
-                            // on completion - unhighlight
-                            SCNTransaction.setCompletionBlock {
-                                SCNTransaction.begin()
-                                SCNTransaction.setAnimationDuration(0.5)
-                                
-                                material.emission.contents = RMColor.blackColor()
-                                
-                                SCNTransaction.commit()
-                            }
-                            
-                            material.emission.contents = RMColor.redColor()
-                            
-                            SCNTransaction.commit()
-                            return true
+                        if self.actionProcessor.throwOrGrab(node.sprite, tracking: true) {
+                            self.animateHit(node)
+                        } else {
+                            self.actionProcessor.throwOrGrab(hitResults[0].worldCoordinates, tracking: false) //activeSprite.throwItem(atPosition: hitResults[0].worldCoordinates, withForce: 1)
                         }
+                    } else if self.actionProcessor.throwOrGrab(node, tracking: false) {
+                        self.animateHit(node)
                     }
                 }
             }
@@ -315,7 +277,7 @@ class RMXInterface : NSObject, RendererDelegate {
     
     private var lineCount = 0
     func updateScoreboard() {
-        if self.scoreboard.hidden && !self.isNewGame {
+        if self.scoreboard.hidden {
             return
         }
         if let world = _world {
@@ -323,7 +285,7 @@ class RMXInterface : NSObject, RendererDelegate {
             var lns: [String] = [ self.world.name ?? "Unknown Gamemode", self.activeSprite.attributes.printScore ]
             if self.world.teams.count > 0 {
                 for team in self.world.teams {
-                    lns.append(team.1.printScore)
+                    lns.append(team.1.print)
                 }
             }
             lns.append("Try selecting a defferent game mode")
@@ -343,20 +305,22 @@ class RMXInterface : NSObject, RendererDelegate {
                     }
                 }
                
-                var count = 0
-                for text in lns {
-                    self.lines[count++].text = text
-                }
+                self.updateSKLabels(self.lines, withText: lns)
                 self.organiseLines()
                 self.isNewGame = false
             } else {
-                var count = 0
-                for text in lns {
-                    self.lines[count++].text = text
-                }
+                self.updateSKLabels(self.lines, withText: lns)
             }
-
             
+//            self.scoreboard.setNeedsDisplay()
+        }
+
+    }
+    
+    func updateSKLabels(labels: [SKLabelNode], withText lns: [String]) {
+        var count = 0
+        for text in lns {
+            labels[count++].text = text
         }
     }
     
@@ -384,7 +348,6 @@ class RMXInterface : NSObject, RendererDelegate {
     func update(){
         if _world != nil && !_world!.paused {//.scene.paused {
             self.actionProcessor.animate()
-            _world?.animate()
         }
 
     }
@@ -397,7 +360,7 @@ class RMXInterface : NSObject, RendererDelegate {
     ///@virtual
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }
 
-    func action(action: String = "reset",speed: RMFloat = 1, args: Any? = nil) -> Bool {
+    func action(action: RMInputKeyValue ,speed: RMFloat = 1, args: Any? = nil) -> Bool {
         return self.actionProcessor.action( action,speed: speed, args: args)
     }
     
@@ -414,7 +377,8 @@ class RMXInterface : NSObject, RendererDelegate {
         return _world != nil && !_world!.paused//scene.paused
     }
     
-    func pauseGame(sender: AnyObject?) -> Bool {
+    func pauseGame(_ sender: AnyObject? = nil) -> Bool {
+//        if sender is RMXObject { RMLog("Pause requested by \(sender?.uniqueID)") }
         if _world?.pause() != nil {
 //            self.updateScoreboard()
             self.updateDataView()
@@ -428,7 +392,8 @@ class RMXInterface : NSObject, RendererDelegate {
         return true
     }
     
-    func unPauseGame(sender: AnyObject?) -> Bool {
+    func unPauseGame(_ sender: AnyObject? = nil) -> Bool {
+//        if sender is RMXObject { RMLog("UnPause requested by \(sender?.uniqueID)") }
         if _world?.unPause() != nil {
             self.scoreboard.hidden = true //self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
             self.hideButtons(false)

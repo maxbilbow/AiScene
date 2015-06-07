@@ -243,21 +243,21 @@ class AiCubo {
         if teams > 0 {
             let player = world.activeSprite
             let teamA = RMXTeam(gameWorld: world, captain: player)
-            player.attributes.invincible = true
-            NSLog(teamA.id)
+//            player.attributes.invincible = true
+            RMLog(teamA.id)
             for ( var i = 1; i < teams; i++) {
                 let team = RMXTeam(gameWorld: world)
             }
             
             let max: Int = n / teams
-            NSLog("\(max)")
+            RMLog("\(max)")
             var count = 0
             for team in world.teams {
                 for player in world.children.filter({ (player) -> Bool in
-                    NSLog("\(player.attributes.teamID)")
+                    RMLog("\(player.attributes.teamID)")
                     return player.attributes.teamID == RMXSprite.TEAM_ASSIGNABLE
                 }) {
-                    NSLog("\(player.name!) added to team: \(team.0)")
+                    RMLog("\(player.name!) added to team: \(team.0)")
                     if team.1.addPlayer(player) && ++count > max {
                         count = 0
                         break

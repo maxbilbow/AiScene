@@ -124,7 +124,7 @@ class RMXDPad : RMXInterface {
         super.hideButtons(hide)
     }
     
-    override func pauseGame(sender: AnyObject?) -> Bool {
+    override func pauseGame(_ sender: AnyObject? = nil) -> Bool {
         if super.pauseGame(sender) {
             self.pauseMenu?.hidden = false
             self.menuAccessBar?.hidden = true
@@ -135,7 +135,7 @@ class RMXDPad : RMXInterface {
     
     }
     
-    override func unPauseGame(sender: AnyObject?) -> Bool {
+    override func unPauseGame(_ sender: AnyObject? = nil) -> Bool {
         if super.unPauseGame(sender) {
             self.pauseMenu?.hidden = true
             self.menuAccessBar?.hidden = false
@@ -317,7 +317,7 @@ class RMXDPad : RMXInterface {
     var boomTimer: RMFloat = 1
     
     func resetCamera(recogniser: UITapGestureRecognizer) {
-        self.action(action: RMXInterface.RESET_CAMERA, speed: 1)
+        self.action(UserAction.RESET_CAMERA, speed: 1)
     }
     
 }
