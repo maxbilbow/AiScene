@@ -166,17 +166,7 @@ class RMXArt {
         return rCol
     }
     
-    class func randomNSColor() -> RMColor {
-            //float rCol[4];
-        var rCol = RMColor(
-            red: CGFloat(random() % 10)/10,
-            green: CGFloat(random() % 10)/10,
-            blue: CGFloat(random() % 10)/10,
-            alpha: 1.0
-           )
-        
-        return rCol
-    }
+    
    
 }
 func RMXVector3Random(max: Int, min: Int, div: Int = 1) -> RMXVector3 {

@@ -25,22 +25,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMSArt.swift"
-            timestampString = "455110486.510717"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "randomNSColor()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
             timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
@@ -1006,8 +990,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "152"
             endingLineNumber = "152"
-            landmarkName = "RMXLog"
-            landmarkType = "3">
+            landmarkName = "next()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1022,8 +1006,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "151"
             endingLineNumber = "151"
-            landmarkName = "RMXLog"
-            landmarkType = "3">
+            landmarkName = "next()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1038,8 +1022,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "RMXLog"
-            landmarkType = "3">
+            landmarkName = "next()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1845,7 +1829,7 @@
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
-                  timestampString = "455449352.78617"
+                  timestampString = "455456095.306307"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -1860,7 +1844,7 @@
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
-                  timestampString = "455449352.786316"
+                  timestampString = "455456095.306438"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "278"

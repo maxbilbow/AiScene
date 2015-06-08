@@ -28,3 +28,13 @@ protocol RMXObject {
 
 
 
+#if iOS
+    import UIKit
+    typealias RMButton = UIButton
+    typealias RMView = UIView
+#elseif OSX
+    import AppKit
+    typealias RMButton = NSButton
+    typealias RMView = NSView
+#endif
+

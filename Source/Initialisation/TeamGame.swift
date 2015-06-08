@@ -383,7 +383,7 @@ class RMXTeam : NSObject, RMXObject {
         case "4":
             return RMColor.blueColor()
         default:
-            return RMXArt.randomNSColor()
+            return RMX.randomColor()
         }
     }
     

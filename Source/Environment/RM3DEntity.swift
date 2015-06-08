@@ -270,7 +270,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.init(inWorld: world, type: type, shape: shape)
     }
 
-    convenience init(inWorld world: RMSWorld, type: RMXSpriteType = .PASSIVE, shape: ShapeType = .CUBE, color: RMColor? = RMXArt.randomNSColor(), unique: Bool = false) {
+    convenience init(inWorld world: RMSWorld, type: RMXSpriteType = .PASSIVE, shape: ShapeType = .CUBE, color: RMColor? = RMX.randomColor(), unique: Bool = false) {
         self.init(inWorld: world, geometry: RMXModels.getNode(shapeType: shape, color: color), type: type, shape: shape, unique: unique)
     }
     

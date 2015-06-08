@@ -175,7 +175,7 @@ class AiCubo {
     
     class func simpleSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
-        let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMXArt.randomNSColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique).asPlayer()
+        let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique).asPlayer()
         
         let lim = Int(world.radius)
         player.setPosition(position: RMXVector3Random(lim, -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
