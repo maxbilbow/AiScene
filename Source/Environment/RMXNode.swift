@@ -15,7 +15,7 @@ import SceneKit
 
 class RMXNode : SCNNode {
     
-    internal var _geometryNode: SCNNode!
+//    internal var _geometryNode: SCNNode!
     
     private var _rmxID: Int?
     
@@ -30,7 +30,9 @@ class RMXNode : SCNNode {
 //        }
 //    }
 
-    internal var rmxSprite: RMXSprite?
+    internal var rmxSprite: RMXSprite {
+        return self._sprite
+    }
     
     func getSprite() -> RMXSprite? {
         return self.rmxSprite
@@ -77,16 +79,26 @@ class RMXNode : SCNNode {
     }
    
     init(sprite: RMXSprite){
-        self.rmxSprite = sprite
+        self._sprite = sprite
         super.init()
         self._rmxID = sprite.rmxID
-        self._geometryNode = sprite.geometryNode// ?? RMXModels.getNode(shapeType: .CUBE, mode: .PASSIVE, radius: 5)
-        self._geometryNode.name = "\(sprite.name)/geometry"
+//        self._geometryNode = sprite.geometryNode// ?? RMXModels.getNode(shapeType: .CUBE, mode: .PASSIVE, radius: 5)
+//        self._geometryNode.name = "\(sprite.name)/geometry"
         sprite.setNode(self)
-        self.addChildNode(self._geometryNode)
+//        self.addChildNode(self._geometryNode)
 
-        switch sprite.type {
         
+        
+        //self.geometryNode?.physicsBody
+
+        
+    }
+
+    func setGeometryNode(node: SCNNode) {
+        node.name = "geometry"
+        self.addChildNode(node)
+        switch self._sprite.type {
+            
         case .AI, .PLAYER, .PASSIVE:
             self.physicsBody = SCNPhysicsBody.dynamicBody()
             self.physicsBody?.friction = 0.1
@@ -95,7 +107,7 @@ class RMXNode : SCNNode {
         case .PASSIVE:
             self.physicsBody?.damping = 0.3
             self.physicsBody?.angularDamping = 0.2
-//            self.physicsBody?.restitution = 0.1
+            //            self.physicsBody?.restitution = 0.1
         case .AI, .PLAYER:
             self.physicsBody?.damping = 0.5
             self.physicsBody?.angularDamping = 0.5
@@ -122,7 +134,7 @@ class RMXNode : SCNNode {
         
         
         
-        switch sprite.shapeType {
+        switch self._sprite.shapeType {
         case .BOBBLE_MAN:
             
             break
@@ -132,19 +144,14 @@ class RMXNode : SCNNode {
         default:
             break
         }
+        
 
-        
-        
-        //self.geometryNode?.physicsBody
-
-        
     }
-
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    private var _sprite: RMXSprite?
+    private var _sprite: RMXSprite!
     
     func test(node: SCNPhysicsContact) {
 //         NSLog("\(self.name): \"ouch! I bumped into \(node.name)\"")
@@ -198,15 +205,16 @@ extension RMXSprite {
 //    }
     
     var geometry: SCNGeometry? {
-        return self.geometryNode?.geometry ?? self.geometryNode?.geometry
+        return self.node.geometry ?? self.node.childNodeWithName("geometry", recursively: false)?.geometry
+//        return  self.geometryNode?.geometry ?? self.geometryNode?.geometry
     }
     
     var physicsBody: SCNPhysicsBody? {
-        return self.node.physicsBody ?? self.geometryNode?.physicsBody
+        return self.node.physicsBody
     }
     
     var physicsField: SCNPhysicsField? {
-        return self.node.physicsField ?? self.geometryNode?.physicsField
+        return self.node.physicsField
     }
     
     

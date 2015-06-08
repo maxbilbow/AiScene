@@ -72,8 +72,9 @@ extension SCNNode : RMXLocatable, RMXObject {
         (self as? RMXCameraNode)?._rmxID = rmxID
     }
 
+    @availability(*,deprecated=1)
     var geometryNode: SCNNode? {
-        return self.rmxNode?._geometryNode
+        return self.rmxNode?.childNodeWithName("geometry", recursively: false)
     }
     
     var boundingSphere: (center: RMXVector3, radius: CGFloat) {

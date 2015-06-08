@@ -214,7 +214,7 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func animateHit(node: SCNNode){
-        if let material = node.geometryNode?.geometry?.firstMaterial {
+        if let material = node.geometry?.firstMaterial {
             
             // highlight it
             SCNTransaction.begin()

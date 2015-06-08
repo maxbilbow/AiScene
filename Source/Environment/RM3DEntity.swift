@@ -286,16 +286,53 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         
     }
     var arm: SCNNode
-    init(inWorld world: RMSWorld, geometry node: SCNNode? = nil, type: RMXSpriteType, shape: ShapeType = .CUBE, unique: Bool){
+    init(inWorld world: RMSWorld, geometry node: SCNNode, type: RMXSpriteType, shape: ShapeType = .CUBE, unique: Bool){
         self._world = world
         self.type = type
         self.shapeType = shape
         self.isUnique = unique
-        self.geometryNode = node
+//        self.geometryNode = node
         self.arm = RMXModels.getNode(shapeType: .SPHERE, radius: 2)
         self._rmxNode = RMXNode(sprite: self)
+        self._rmxNode.setGeometryNode(node)
         self.attributes = SpriteAttributes(self)
         self.spriteDidInitialize()
+    }
+    
+    func spriteDidInitialize(){
+        switch self.type {
+        case .PLAYER, .AI, .PASSIVE:
+            self._spriteLogic.append(self.tracker.headToTarget)
+            self.setMass()
+            break
+        case .PLAYER, .AI:
+            self._spriteLogic.append(self.manipulate)
+            break
+        default:
+            break
+        }
+        
+        if self.isPlayerOrAi {
+            self.addCameras()
+        }
+        if self.aiDelegate == nil && self.requiresAI {
+            self.aiDelegate = RMXAi(sprite: self)
+        }
+        //        RMXBrain.giveBrainTo(self)
+        self.setName()
+        self.setSpeed()
+        //        NSLog(self.speed.toData())
+        self.world.insertChild(self, andNode: true)
+        self.timer.activate()
+        if type != .PLAYER && type != .AI {
+            self.attributes.setTeamID(RMXSprite.NO_COLLISIONS)
+        } else {
+            self.attributes.setTeamID(RMXSprite.TEAM_ASSIGNABLE)
+        }
+        self.arm.physicsBody = SCNPhysicsBody.staticBody()
+        self.arm.position = self.front
+        self.node.addChildNode(self.arm)
+        
     }
     
     func setNode(node: RMXNode){
@@ -317,11 +354,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         
         if speed == nil && rotationSpeed == nil {
             switch self.type {
-            case .PLAYER, .AI, .PASSIVE:
-                self._spriteLogic.append(self.tracker.headToTarget)
-                break
             case .PLAYER, .AI:
-                self._spriteLogic.append(self.manipulate)
                 self.physicsBody?.damping = 0.5
                 self.physicsBody?.angularDamping = 0.99
             case .PASSIVE:
@@ -393,29 +426,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.isPlayerOrAi || self.type == .PASSIVE
     }
     
-    func spriteDidInitialize(){
-        if self.isPlayerOrAi {
-            self.addCameras()
-        }
-        if self.aiDelegate == nil && self.requiresAI {
-            self.aiDelegate = RMXAi(sprite: self)
-        }
-//        RMXBrain.giveBrainTo(self)
-        self.setName()
-        self.setSpeed()
-//        NSLog(self.speed.toData())
-        self.world.insertChild(self, andNode: true)
-        self.timer.activate()
-        if type != .PLAYER && type != .AI {
-            self.attributes.setTeamID(RMXSprite.NO_COLLISIONS)
-        } else {
-            self.attributes.setTeamID(RMXSprite.TEAM_ASSIGNABLE)
-        }
-        self.arm.physicsBody = SCNPhysicsBody.staticBody()
-        self.arm.position = self.front
-        self.node.addChildNode(self.arm)
-        
-    }
+    
     
     func toggleGravity() {
        /// self.hasGravity = !self.hasGravity
@@ -788,7 +799,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return (min, max)
     }
     
-    internal var geometryNode: SCNNode?
+//    internal var geometryNode: SCNNode?
 
     private var _jumpStrength: RMFloat {
         return fabs(RMFloat(self.weight) * self.jumpStrength)// * self.squatLevel/_maxSquat)
