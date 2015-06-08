@@ -14,6 +14,10 @@ protocol RMInputKeyValue {
     
 }
 
+protocol SCNLocatable3 {
+    func getPosition() -> SCNVector3
+}
+
 extension String : RMInputKeyValue {
     
 }
@@ -28,6 +32,29 @@ func == (lhs: RMInputKeyValue?, rhs: RMInputKeyValue?) -> Bool {
     } else {
         return false
     }
+}
+
+func == (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
+    return lhs.rmxID == rhs.rmxID
+}
+
+//
+//func == (lhs: RMSWorld, rhs: RMSWorld) -> Bool {
+//    return lhs.rmxID == rhs.rmxID
+//}
+//
+//func != (lhs: RMSWorld, rhs: RMSWorld) -> Bool {
+//    return lhs.rmxID != rhs.rmxID
+//}
+
+
+func != (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
+    return lhs.rmxID != rhs.rmxID
+}
+
+
+protocol RMXUniqueEntity {
+    var rmxID: Int? { get }
 }
 
 
@@ -242,7 +269,7 @@ extension SCNVector4 {
 }
 
 
-extension SCNMatrix4 : RMXLocatable {
+extension SCNMatrix4 : SCNLocatable3 {
     var print: String {
         let row1 = "   ROW1: \(m11.toData()) \(m12.toData()) \(m13.toData()) \(m14.toData())"
         let row2 = "   ROW2: \(m21.toData()) \(m22.toData()) \(m23.toData()) \(m24.toData())"

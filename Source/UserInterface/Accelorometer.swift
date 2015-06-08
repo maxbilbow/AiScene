@@ -9,10 +9,6 @@
 import Foundation
 import GLKit
 
-#if iOS
-    extension RMX {
-        static var gravity: RMXVector3 = RMXVector3Make(0,-1,0)
-    }
 extension RMXDPad {
     func accelerometer() {
 //        if true { return }
@@ -102,4 +98,3 @@ extension RMXDPad {
     }
 }
 
-#endif

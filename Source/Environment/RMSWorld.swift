@@ -61,17 +61,22 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         }
     }
     
-    var children: Array<RMXSprite> = Array<RMXSprite>()
+    @availability(*,deprecated=1)
+    var children: Array<RMXSprite> {
+        return self.sprites
+    }
+    
+    var sprites: Array<RMXSprite> = Array<RMXSprite>()
 //    var children: [RMXSprite] {
 //        return environments.current
 //    }
     
     var hasChildren: Bool {
-        return self.children.isEmpty
+        return self.sprites.isEmpty
     }
     
     private func destroy() -> RMSWorld {
-        self.children.removeAll()
+        self.sprites.removeAll()
         self.cameras.removeAll()
         self._gravity = RMSWorld.ZERO_GRAVITY
         _activeSprite = nil
@@ -219,7 +224,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
     func insertChild(child: RMXSprite, andNode:Bool = true){
-        self.children.append(child)
+        self.sprites.append(child)
         child.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
         
         if andNode {
@@ -279,7 +284,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
-        for child in self.children {
+        for child in self.sprites {
             child.aiDelegate?.run(aRenderer, updateAtTime: time)
         }
     }

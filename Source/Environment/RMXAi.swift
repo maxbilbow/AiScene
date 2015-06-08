@@ -8,90 +8,9 @@
 import SceneKit
 import Foundation
 
-typealias AiBehaviour = (SCNNode!) -> Void
-typealias AiCollisionBehaviour = (SCNPhysicsContact) -> Void
-
-protocol RMXAiDelegate : NSObjectProtocol {
-    var state: String? { get }
-    var args: [RMXSpriteType] { get }
-    var behaviours: [AiBehaviour] { get }
-    func addBehaviour(behaviour: AiBehaviour)
-    var sprite: RMXSprite { get }
-    init(sprite: RMXSprite)
-    func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) -> Void
-    func getTarget(args: RMXSpriteType ...) -> RMXSprite?
-}
 
 
-class RMXAi : NSObject, RMXAiDelegate {
-    
-    private var _state: String?
-    
-    func setState(state: String?) {
-        self._state = state
-    }
-    
-    var state: String? {
-        return self.state
-    }
-    
-    var world: RMSWorld {
-        return self.sprite.world
-    }
-    
-    var args: [RMXSpriteType] {
-        return [ RMXSpriteType.PASSIVE ]
-    }
-    
-    private var _behaviours: [AiBehaviour] = Array<AiBehaviour>()
-    var behaviours: [AiBehaviour] {
-        return _behaviours
-    }
-    
-    private var _sprite: RMXSprite
-    
-    var sprite: RMXSprite {
-        return _sprite
-    }
-    
-    required init(sprite: RMXSprite) {
-        _sprite = sprite
-        super.init()
-        var string = "init \(sprite.name!) :: behaviours copied: 0"
-        var count = 0
-        if sprite.aiDelegate != nil {
-            for behaviour in sprite.aiDelegate!.behaviours {
-                self._behaviours.append(behaviour)
-                string += ", \(++count)"
-            }
-        } else {
-            if sprite.type != .BACKGROUND && sprite.type != .ABSTRACT {
-                self._behaviours.append(sprite.tracker.headToTarget)
-                self._behaviours.append(sprite.manipulate)
-            }
-//            self._behaviours.append(sprite.tracker.headToTarget)
-        }
-        string += "Behaviour count is \(_behaviours.count) and should be \(count)"
-        RMLog(string, id: "AI")
-//        sprite.node.rendererDelegate = self
-    }
-    
-    internal func getTarget(args: RMXSpriteType ...) -> RMXSprite? {
-        return RMXAi.randomSprite(self.world, not: self.sprite, type: args.count == 0 ? self.args : args)
-    }
-    
-    func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
-        for behaviour in self.behaviours {
-            behaviour(self.sprite.node)
-        }
-        self.sprite.timer.activate()
-    }
-    
-    func addBehaviour(behaviour: AiBehaviour) {
-        self._behaviours.append(behaviour)
-    }
 
-}
 
 class AiPoppy : RMXAi {
    
@@ -119,8 +38,8 @@ class AiPoppy : RMXAi {
     
     
     
-    override func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) -> Void {
-        super.run(aRenderer, updateAtTime: time)
+    override func run(sender: AnyObject?, updateAtTime time: NSTimeInterval) -> Void {
+        super.run(sender, updateAtTime: time)
         if self.master.hasItem && !self.master.isHolding(self.sprite) {
             self.sprite.releaseItem()
             self.itemToWatch = self.master.item?.node
@@ -167,8 +86,8 @@ class AiRandom: RMXAi {
         return [ RMXSpriteType.PLAYER, RMXSpriteType.AI ]
     }
 
-    override func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) -> Void {
-        super.run(aRenderer, updateAtTime: time)
+    override func run(sender: AnyObject?, updateAtTime time: NSTimeInterval) -> Void {
+        super.run(sender, updateAtTime: time)
         if !self.world.aiOn { return }
         if self.sprite.hasItem && !self.sprite.tracker.hasTarget {
             self.sprite.tracker.setTarget(self.getTarget(), ignoreClaims: false, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
@@ -251,9 +170,9 @@ class AiTeamPlayer : AiRandom {
         }
     }
     
-    override func run(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+    override func run(sender: AnyObject?, updateAtTime time: NSTimeInterval) {
         if self.sprite.attributes.isAlive {
-            super.run(aRenderer, updateAtTime: time)
+            super.run(sender, updateAtTime: time)
         }
     }
 
@@ -329,22 +248,8 @@ extension RMXAi {
         
     }
     
-    class func randomSprite(world: RMSWorld, not: RMXSprite, type: [RMXSpriteType]?) -> RMXSprite? {
-        if let types = type {
-            let array = world.children.filter { (child) -> Bool in
-                for type in types {
-                    if child.type == type && child != not {
-                        return true
-                    }
-                }
-                return false
-            }
-            return array.count == 0 ? nil : array[random() % array.count]
-        }
-        return nil
-    }
     
-    enum MoveState { case MOVING, TURNING, IDLE }
+    
     
     
     static func addRandomMovement(to players: [RMXSprite]) {

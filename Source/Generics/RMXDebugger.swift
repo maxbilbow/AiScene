@@ -20,13 +20,6 @@ extension RMX {
     static var log: [RMXLogEntry] = [ RMXLogEntry(sender: nil, function: __FUNCTION__, filename: (__FILE__ as String).lastPathComponent, line: "\(__LINE__)", id: RMXLog.DEBUG) ]
 }
 
-protocol RMXObject {
-    var name: String? { get }
-    var rmxID: Int? { get }
-    var uniqueID: String? { get }
-    var print: String { get }
-    
-}
 
 class RMXLogEntry {
     var senderID, message: String?

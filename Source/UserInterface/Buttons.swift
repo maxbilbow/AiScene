@@ -15,7 +15,7 @@ import UIKit
     typealias RMImage = NSImage
     #endif
 
-extension RMXModels {
+extension RMXDPad {
     
     class func getImage() -> RMImage {
         return RMImage(named: "art.scnassets/2D/circle_shape.png")!

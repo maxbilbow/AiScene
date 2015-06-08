@@ -23,7 +23,7 @@ import AVFoundation
     import SceneKit
 import SpriteKit
 
-    typealias RendererDelegate = SCNSceneRendererDelegate
+    
 
 
 class RMXInterface : NSObject, RendererDelegate {
@@ -184,7 +184,7 @@ class RMXInterface : NSObject, RendererDelegate {
             let n = random() % self.availableGames.count
             let type = self.availableGames[n]
             if let newWorld = self.activeGames[type] {
-                if _world != nil && _world! == newWorld && self.availableGames.count > 1 {
+                if _world != nil && _world! === newWorld && self.availableGames.count > 1 {
                     RMLog("Game matched the current world - try again: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (fail)")
                     return self._newGame(type: nil)
                 } else {

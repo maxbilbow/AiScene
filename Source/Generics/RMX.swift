@@ -9,56 +9,22 @@
 import Foundation
 
 enum PoppyState: Int32 { case IDLE = 1, READY_TO_CHASE , CHASING, FETCHING }
+enum RMXSpriteType: Int { case  AI = 0, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC, CAMERA }
+
 
 public struct RMX {
 
-    static let isFullscreen: Bool = false
-    static let usingDepreciated: Bool = true
-    static let usingSceneKit: Bool = false
-
-static var COUNT: Int = 0
-}
-
-import GLKit
-
-#if OPENGL_ES
-    import UIKit
-//    typealias RMXView = UIView
-    typealias RMXContext = EAGLContext
-//    typealias RMXController = RMXDPad
-    #elseif OSX
-    import Cocoa
-    import OpenGL
-    import GLUT
-//    typealias RMXController = RMSKeys
-    typealias GLKViewController = NSViewController
-//    typealias RMXView = NSView
-    typealias RMXContext = UnsafeMutablePointer<_CGLContextObject>
-#endif
-
-#if iOS
-typealias NSColor = UIColor
-#endif
-
-func == (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
-    return lhs.rmxID == rhs.rmxID
-}
-
-func == (lhs: RMSWorld, rhs: RMSWorld) -> Bool {
-    return lhs.rmxID == rhs.rmxID
-}
-
-func != (lhs: RMSWorld, rhs: RMSWorld) -> Bool {
-    return lhs.rmxID != rhs.rmxID
+    static var COUNT: Int = 0
 }
 
 
-func != (lhs: RMXUniqueEntity, rhs: RMXUniqueEntity) -> Bool {
-    return lhs.rmxID != rhs.rmxID
-}
-
-
-protocol RMXUniqueEntity {
+protocol RMXObject {
+    var name: String? { get }
     var rmxID: Int? { get }
+    var uniqueID: String? { get }
+    var print: String { get }
+    
 }
+
+
 

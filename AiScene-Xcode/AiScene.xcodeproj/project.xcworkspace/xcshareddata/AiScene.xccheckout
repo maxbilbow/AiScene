@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>60E495DD-0DA6-49A6-95F1-3CCB53563263</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>AiScene</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2</key>
 		<string>https://github.com/maxbilbow/AiScene.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>AiScene-Xcode/AiScene.xcodeproj/project.xcworkspace</string>
+	<string>AiScene-Xcode/AiScene.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2</key>

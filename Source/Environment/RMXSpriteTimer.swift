@@ -28,12 +28,7 @@ class RMXSpriteTimer : NSObject {
     
     func validate() {
         if self.sprite.world.isLive {
-            if !self.sprite.world.validate(self.sprite) {
-//                NSLog("reset \(sprite.name)")
-                let lim = Int(self.sprite.world.radius / 2)
-                self.sprite.setPosition(position: RMXVector3Random(lim, -lim), resetTransform: true)
-                self.sprite.releaseItem()
-            }
+            self.sprite.validate()
         } else {
 //             NSLog("\(self.timer.valid)")
             for timer in self.timers {

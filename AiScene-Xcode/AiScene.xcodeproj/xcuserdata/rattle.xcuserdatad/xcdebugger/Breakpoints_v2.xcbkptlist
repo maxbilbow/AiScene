@@ -41,12 +41,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455396776.071683"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "668"
-            endingLineNumber = "668"
+            startingLineNumber = "684"
+            endingLineNumber = "684"
             landmarkName = "manipulate(node:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -233,12 +233,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455388386.987502"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "516"
-            endingLineNumber = "516"
+            startingLineNumber = "532"
+            endingLineNumber = "532"
             landmarkName = "addCameras()"
             landmarkType = "5">
          </BreakpointContent>
@@ -346,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455395384.448369"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "363"
-            endingLineNumber = "363"
+            startingLineNumber = "282"
+            endingLineNumber = "282"
             landmarkName = "offenciveBehaviour(to:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -362,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455395384.448369"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "364"
-            endingLineNumber = "364"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "offenciveBehaviour(to:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -493,22 +493,6 @@
             timestampString = "455206526.705801"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "validate()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSpriteTimer.swift"
-            timestampString = "455206526.705801"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
             startingLineNumber = "30"
             endingLineNumber = "30"
             landmarkName = "validate()"
@@ -522,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMSWorld.swift"
-            timestampString = "455395160.457154"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "288"
-            endingLineNumber = "288"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
             landmarkName = "validate(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -554,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "184"
-            endingLineNumber = "184"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
             <Locations>
@@ -952,12 +936,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455388386.987502"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "633"
-            endingLineNumber = "633"
+            startingLineNumber = "649"
+            endingLineNumber = "649"
             landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -968,12 +952,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455388386.987502"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "634"
-            endingLineNumber = "634"
+            startingLineNumber = "650"
+            endingLineNumber = "650"
             landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -984,13 +968,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455388386.987502"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "635"
-            endingLineNumber = "635"
-            landmarkName = "RMXSprite"
+            startingLineNumber = "651"
+            endingLineNumber = "651"
+            landmarkName = "RM3DEntity"
             landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1000,12 +984,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455396776.071683"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "638"
-            endingLineNumber = "638"
+            startingLineNumber = "654"
+            endingLineNumber = "654"
             landmarkName = "throwItem(atPosition:withForce:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1097,11 +1081,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "observeValueForKeyPath(_:ofObject:change:context:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1369,11 +1353,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1385,11 +1369,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1401,11 +1385,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1417,11 +1401,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "181"
-            endingLineNumber = "181"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1433,13 +1417,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455386588.676265"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "init(sprite:)"
-            landmarkType = "5">
+            startingLineNumber = "13"
+            endingLineNumber = "13">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1449,11 +1431,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1465,11 +1447,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1481,11 +1463,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
             <Locations>
@@ -1529,11 +1511,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "102"
+            endingLineNumber = "102"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1545,11 +1527,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1561,11 +1543,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455394424.930176"
+            timestampString = "455449031.5027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
             landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
             <Locations>
@@ -1608,12 +1590,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455387728.101482"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455445917.294459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "deinit"
             landmarkType = "5">
          </BreakpointContent>
@@ -1624,13 +1606,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455388365.060611"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455445917.294459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "RMXSprite"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "RM3DEntity"
             landmarkType = "3">
             <Locations>
                <Location
@@ -1702,12 +1684,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455400060.605104"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455449352.450014"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "943"
-            endingLineNumber = "943"
+            startingLineNumber = "952"
+            endingLineNumber = "952"
             landmarkName = "addBehaviour(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1827,31 +1809,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXAi.swift"
-            timestampString = "455395384.448369"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "333"
-            endingLineNumber = "333"
-            landmarkName = "randomSprite(_:not:type:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455392225.95174"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455445917.294459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "279"
-            endingLineNumber = "279"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
             landmarkName = "deinit"
             landmarkType = "5">
          </BreakpointContent>
@@ -1862,12 +1828,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RMXSprite.swift"
-            timestampString = "455392896.914547"
+            filePath = "../Source/Environment/RM3DEntity.swift"
+            timestampString = "455445917.294459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
             landmarkName = "deinit"
             landmarkType = "5">
             <Locations>
@@ -1875,11 +1841,11 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RMXSprite.__deallocating_deinit"
+                  symbolName = "AiScene_OSX.RM3DEntity.__deallocating_deinit"
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "455407879.53526"
+                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
+                  timestampString = "455449352.78617"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -1890,15 +1856,15 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RMXSprite.deinit"
+                  symbolName = "AiScene_OSX.RM3DEntity.deinit"
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RMXSprite.swift"
-                  timestampString = "455407879.535407"
+                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
+                  timestampString = "455449352.786316"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "279"
-                  endingLineNumber = "279"
+                  startingLineNumber = "278"
+                  endingLineNumber = "278"
                   offsetFromSymbolStart = "15">
                </Location>
             </Locations>
@@ -1917,6 +1883,22 @@
             startingLineNumber = "439"
             endingLineNumber = "439"
             landmarkName = "rightMouseUp(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/RMXAiDelegate.swift"
+            timestampString = "455449031.5027"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "run(_:updateAtTime:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
