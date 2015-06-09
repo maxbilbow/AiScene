@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "684"
             endingLineNumber = "684"
-            landmarkName = "manipulate(node:)"
+            landmarkName = "printBounds()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -223,7 +223,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "532"
             endingLineNumber = "532"
-            landmarkName = "addCameras()"
+            landmarkName = "asPlayer()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -575,7 +575,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "189"
             endingLineNumber = "189"
-            landmarkName = "RMXVector3Random(_:_:div:)"
+            landmarkName = "RMXRandomColor()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -958,8 +958,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "651"
             endingLineNumber = "651"
-            landmarkName = "RM3DEntity"
-            landmarkType = "3">
+            landmarkName = "throwItem(force:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -974,7 +974,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "654"
             endingLineNumber = "654"
-            landmarkName = "throwItem(atPosition:withForce:)"
+            landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1674,7 +1674,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "952"
             endingLineNumber = "952"
-            landmarkName = "addBehaviour(_:)"
+            landmarkName = "rootNode(_:rootNode:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1829,7 +1829,7 @@
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
-                  timestampString = "455456095.306307"
+                  timestampString = "455519991.345886"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "0"
@@ -1844,7 +1844,7 @@
                   moduleName = "AiScene-OSX"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
-                  timestampString = "455456095.306438"
+                  timestampString = "455519991.346027"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "278"

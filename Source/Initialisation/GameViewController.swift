@@ -77,7 +77,7 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
         self.gameView?.showsStatistics = true
         
         // configure the view
-        self.gameView?.backgroundColor = NSColor.blackColor()
+        self.gameView?.backgroundColor = RMColor.blackColor()
         
         for player in self.world!.children {
             player.attributes.addObserver(self, forKeyPath: "isAlive", options: NSKeyValueObservingOptions.Old, context: UnsafeMutablePointer<Void>())

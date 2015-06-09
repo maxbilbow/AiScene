@@ -16,7 +16,7 @@ enum ShapeType: Int { case CUBE , SPHERE, CYLINDER,  OILDRUM, BOBBLE_MAN, LAST,R
 
 
 protocol RMXModelsProtocol {
-    static func getNode(shapeType type: ShapeType, mode: RMXSpriteType, radius r: RMFloat?, height h: RMFloat?, scale s: RMXSize?, color: NSColor!) -> SCNNode
+    static func getNode(shapeType type: ShapeType, mode: RMXSpriteType, radius r: RMFloat?, height h: RMFloat?, scale s: RMXSize?, color: RMColor!) -> SCNNode
 }
 
 

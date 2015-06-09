@@ -17,7 +17,7 @@ class AiCubo {
     class func createEarth(inWorld world: RMSWorld, radius: RMFloat? = nil, addCameras: Bool = true) {
         let worldRadius = radius ?? world.radius
         
-        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: NSColor.yellowColor()), type: .BACKGROUND, unique: true)
+        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: RMColor.yellowColor()), type: .BACKGROUND, unique: true)
         
         world.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
         
@@ -41,7 +41,7 @@ class AiCubo {
         let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
         lightNode.light = SCNLight()
         lightNode.light!.type = SCNLightTypeOmni
-        lightNode.geometry?.firstMaterial!.emission.contents = NSColor.whiteColor()
+        lightNode.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
         lightNode.geometry?.firstMaterial!.emission.intensity = 1
         
         let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
@@ -59,7 +59,7 @@ class AiCubo {
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = SCNLightTypeAmbient
-        ambientLightNode.light!.color = NSColor.darkGrayColor()
+        ambientLightNode.light!.color = RMColor.darkGrayColor()
         
         if fixed {
             sun.node.addChildNode(ambientLightNode)

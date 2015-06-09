@@ -12,7 +12,7 @@ import GLKit
 
 import CoreMotion
 import UIKit
-
+import AVFoundation
 class RMXDPad : RMXInterface {
     
      let _testing = false
@@ -265,7 +265,7 @@ class RMXDPad : RMXInterface {
         self.gameView!.addSubview(self.moveButton!)
         self.gameView!.bringSubviewToFront(self.moveButton!)
         
-        let padImage: UIImage = RMXModels.getImage()
+        let padImage: UIImage = RMXDPad.getImage()
         self.moveButtonPad = UIImageView(frame: self.moveButtonCenter)//(image: padImage)
         self.moveButtonPad!.image = padImage
         self.moveButtonPad?.setNeedsDisplay()
@@ -277,7 +277,7 @@ class RMXDPad : RMXInterface {
 
         
         self.jumpButton = UIButton(frame: self.jumpButtonCenter)
-        self.jumpButton?.setImage(RMXModels.getImage(), forState: UIControlState.Normal)
+        self.jumpButton?.setImage(RMXDPad.getImage(), forState: UIControlState.Normal)
 //        self.jumpButton?.setNeedsDisplay()
         let jump = UILongPressGestureRecognizer(target: self, action: "jump:")
         jump.minimumPressDuration = 0.0
@@ -286,7 +286,7 @@ class RMXDPad : RMXInterface {
         self.gameView!.addSubview(self.jumpButton!)
         
         self.boomButton = UIButton(frame: self.boomButtonCenter)
-        self.boomButton?.setImage(RMXModels.getImage(), forState: UIControlState.Normal)
+        self.boomButton?.setImage(RMXDPad.getImage(), forState: UIControlState.Normal)
 //        self.boomButton?.setNeedsDisplay()
         let explode = UILongPressGestureRecognizer(target: self, action: "explode:")
         explode.minimumPressDuration = 0.0

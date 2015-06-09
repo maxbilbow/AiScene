@@ -7,8 +7,11 @@
 //
 
 import Foundation
+#if iOS
+import UIKit
+    #endif
 
-    
+
 extension RMX {
  
     #if iOS

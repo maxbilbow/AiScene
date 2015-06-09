@@ -34,7 +34,7 @@ extension RMXDPad {
     
     
     func zoom(recogniser: UIPinchGestureRecognizer) {        
-        self.action(RMXInterface.ZOOM_IN + RMXInterface.ZOOM_OUT, speed: RMFloat(recogniser.velocity))
+        self.action(UserAction.ZoomInAnOut, speed: RMFloat(recogniser.velocity))
     }
     
 
@@ -71,7 +71,7 @@ extension RMXDPad {
             if recognizer.numberOfTouches() == 1 {
                 let point = recognizer.velocityInView(self.gameView)
                 
-                self.action(UserAction.LOOK, speed: RMXInterface.lookSpeed, args: point)
+                self.action(UserAction.LOOK_AROUND, speed: RMXInterface.lookSpeed, args: point)
             }
 //            _handleRelease(recognizer.state)
         }
@@ -95,7 +95,7 @@ extension RMXDPad {
         // check what nodes are tapped
         let p = recognizer.locationInView(scnView)
         
-        self.processHit(point: p, type: RMXInterface.THROW_ITEM)
+        self.processHit(point: p, type: UserAction.THROW_ITEM)
 
 //        self.processHit(scnView.hitTest(p, options: nil))
     }

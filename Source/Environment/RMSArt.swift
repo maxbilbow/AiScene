@@ -53,30 +53,30 @@ class RMXArt {
         
         func drawAxis(axis: String) {
             var point =  -radius
-            var color: NSColor
+            var color: RMColor
             var scale: RMXVector3 = RMXVector3Make(10)
             var position = RMXVector3Make(0, scale.y / 2, 0)
             switch axis {
             case "x":
                 scale.x = radius * 2
-                color = NSColor.redColor()
+                color = RMColor.redColor()
                 break
             case "y":
-                color = NSColor.greenColor()
+                color = RMColor.greenColor()
                 position.y = scale.y + radius / 2
                 scale.y = radius
                 break
             case "z":
                 scale.z = radius * 2
-                color = NSColor.blueColor()
+                color = RMColor.blueColor()
                 break
             case "z1":
-                color = NSColor.blueColor()
+                color = RMColor.blueColor()
                 position.z = (radius + scale.y) / 2
                 scale.z = radius
                 break
             case "z2":
-                color = NSColor.blueColor()
+                color = RMColor.blueColor()
                 position.z = -(radius + scale.y) / 2// -radius / 2 - scale.y
                 scale.z = radius
                 break

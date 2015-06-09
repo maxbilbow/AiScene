@@ -37,10 +37,10 @@ extension RMXDPad {
             //tilt("pitch", RMFloat(self.motionManager.deviceMotion.gravity.z))
 //            tilt("yaw", RMFloat(self.motionManager.deviceMotion.gravity.x)
             func updateGravity() {
-                let g = deviceMotion.gravity
-                RMX.gravity.x = RMFloat(g.x)
-                RMX.gravity.y = RMFloat(g.y)
-                RMX.gravity.z = RMFloat(g.z)
+//                let g = deviceMotion.gravity
+//                self.gravity.x = RMFloat(g.x)
+//                RMX.gravity.y = RMFloat(g.y)
+//                RMX.gravity.z = RMFloat(g.z)
             }
 //            updateGravity()
             if let attitude = deviceMotion.attitude {

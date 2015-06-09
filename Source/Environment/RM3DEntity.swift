@@ -998,7 +998,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
 extension RMXSprite {
     
     
-    func setColor(#color: NSColor){
+    func setColor(#color: RMColor){
         
         self.geometry?.firstMaterial!.diffuse.contents = color
         self.geometry?.firstMaterial!.diffuse.intensity = 1
