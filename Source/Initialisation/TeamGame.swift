@@ -105,7 +105,7 @@ extension RMSWorld : RMXTeamGame {
     
     
     var players: Array<RMXSprite> {
-        return self.players.filter( { (child: RMXSprite) -> Bool in
+        return self.sprites.filter( { (child: RMXSprite) -> Bool in
             return child.isPlayerOrAi
         })
     }
@@ -208,16 +208,15 @@ class SpriteAttributes : NSObject {
     private var _transparency: CGFloat?
     
     var isAlive: Bool {
-        if Int(self.teamID) ?? 1 < 0 {
-            return true
-        } else {
-            return self._isAlive
-        }
+            return !(!self._isAlive && self.isTeamPlayer)
     }
     
+    var canBeKilled: Bool {
+        return !self.invincible && self.isAlive
+    }
     private var _isAlive = true
     func retire() {
-        if !self.invincible { // && self.isAlive {
+        if self.canBeKilled { // && self.isAlive {
             self.willChangeValueForKey("isAlive")
 
             self._isAlive = false
@@ -225,15 +224,13 @@ class SpriteAttributes : NSObject {
             //
             self.sprite.releaseItem()
             self.sprite.node.removeCollisionActions()
-            self.sprite.followers.removeAll(keepCapacity: true)
+
             self.sprite.tracker.abort()
             self.die()
 //            self.sprite.timer.addTimer(interval: 5, target: self, selector: "deRetire", repeats: false)
             self.sprite.node.runAction(SCNAction.fadeOpacityTo(1, duration: 5), completionHandler: { () -> Void in
                 self.deRetire()
             })
-
-            
             self.didChangeValueForKey("isAlive")
             
         }

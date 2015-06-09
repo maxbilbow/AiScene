@@ -45,59 +45,59 @@ class RMSKeys : RMXInterface {
     static let ON_KEY_UP: (on:RMFloat,off:RMFloat) = (0,1)
     static let TOGGLE: (on:RMFloat,off:RMFloat) = (0,-1)
     static let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.moveSpeed, 0)
-    static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (RMXInterface.lookSpeed * -10, 0)
-    
+    static let LOOK_SPEED: (on:RMFloat,off:RMFloat) = (-1, 0)
+    let lookSpeed: RMFloat = -1
     ///Key settings
     lazy var keys: [ RMKey ] = [
-    
+        
     // Basic Movement
-    RMKey(self, action: UserAction.MOVE_FORWARD, characters: "w", speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.MOVE_BACKWARD, characters: "s", speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.MOVE_LEFT, characters: "a", speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.MOVE_RIGHT, characters: "d", speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.MOVE_UP, characters: "e", speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.MOVE_DOWN, characters: "q", speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.ROLL_LEFT, characters: "z", speed: LOOK_SPEED),
-    RMKey(self, action: UserAction.ROLL_RIGHT, characters: "x", speed: LOOK_SPEED),
-    RMKey(self, action: UserAction.JUMP, characters: " ", speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.ROTATE, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
+    RMKey(self, action: .MOVE_FORWARD, characters: "w", speed: MOVE_SPEED),
+    RMKey(self, action: .MOVE_BACKWARD, characters: "s", speed: MOVE_SPEED),
+    RMKey(self, action: .MOVE_LEFT, characters: "a", speed: MOVE_SPEED),
+    RMKey(self, action: .MOVE_RIGHT, characters: "d", speed: MOVE_SPEED),
+    RMKey(self, action: .MOVE_UP, characters: "e", speed: MOVE_SPEED),
+    RMKey(self, action: .MOVE_DOWN, characters: "q", speed: MOVE_SPEED),
+    RMKey(self, action: .ROLL_LEFT, characters: "z", speed: (10, 0)),
+    RMKey(self, action: .ROLL_RIGHT, characters: "x", speed: (10, 0)),
+    RMKey(self, action: .JUMP, characters: " ", speed: ON_KEY_UP),
+    RMKey(self, action: .LOOK_AROUND, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
     
     //Interactions
-    RMKey(self, action: UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
+    RMKey(self, action: .THROW_OR_GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .THROW_OR_GRAB_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
+    RMKey(self, action: .BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
     
     //Environmentals
-    RMKey(self, action: UserAction.TOGGLE_GRAVITY, characters: "g", isRepeating: false,speed: ON_KEY_UP),
-    //RMKey(self, action: UserAction."toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.TOGGLE_AI, characters: "A", isRepeating: false,speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.RESET, characters: "R", isRepeating: false,speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.RESET_CAMERA, characters: "r", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: .TOGGLE_GRAVITY, characters: "g", isRepeating: false,speed: ON_KEY_UP),
+    //RMKey(self, action: ."toggleGravity", characters: "G", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: .TOGGLE_AI, characters: "A", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: .RESET, characters: "R", isRepeating: false,speed: ON_KEY_UP),
+    RMKey(self, action: .RESET_CAMERA, characters: "r", isRepeating: false,speed: ON_KEY_UP),
     
     //Interface options
-    RMKey(self, action: UserAction.LOCK_CURSOR, characters: "m", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.NEXT_CAMERA, characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: UserAction.PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: UserAction.PAUSE_GAME, characters: "p", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.PAUSE_GAME, characters: KEY_ESCAPE, isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.KEYBOARD_LAYOUT, characters: "k", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.NEW_GAME, characters: "N", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .LOCK_CURSOR, characters: "m", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .NEXT_CAMERA, characters: ".", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: .PREV_CAMERA, characters: ",", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: .PAUSE_GAME, characters: "p", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .PAUSE_GAME, characters: KEY_ESCAPE, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .KEYBOARD_LAYOUT, characters: "k", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .NEW_GAME, characters: "N", isRepeating: false, speed: ON_KEY_UP),
     
     //Misc: generically used for testing
-    RMKey(self, action: UserAction.GET_INFO, characters: "i", isRepeating: false, speed: ON_KEY_DOWN), //Prints to terminal when testing
-    RMKey(self, action: UserAction.TOGGLE_SCORES, characters: "S", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
-    RMKey(self, action: UserAction.INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: UserAction.DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: UserAction.DEBUG_NEXT, characters: KEY_TAB, isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: UserAction.DEBUG_PREVIOUS, characters: KEY_SHIFT_TAB, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .GET_INFO, characters: "i", isRepeating: false, speed: ON_KEY_DOWN), //Prints to terminal when testing
+    RMKey(self, action: .TOGGLE_SCORES, characters: "S", isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
+    RMKey(self, action: .ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
+    RMKey(self, action: .INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: .DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: .DEBUG_NEXT, characters: KEY_TAB, isRepeating: false, speed: ON_KEY_UP),
+    RMKey(self, action: .DEBUG_PREVIOUS, characters: KEY_SHIFT_TAB, isRepeating: false, speed: ON_KEY_UP),
         
     //Unassigned
-    RMKey(self, action: "key up", characters: KEY_UP, isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: "key down", characters: KEY_DOWN, isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: "key left", characters: KEY_LEFT, isRepeating: false, speed: ON_KEY_DOWN),
-    RMKey(self, action: "key right", characters: KEY_RIGHT, isRepeating: false, speed: ON_KEY_DOWN)
+    RMKey(self, action: nil, description: "key up", characters: KEY_UP, isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: nil, description: "key down", characters: KEY_DOWN, isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: nil, description: "key left", characters: KEY_LEFT, isRepeating: false, speed: ON_KEY_DOWN),
+    RMKey(self, action: nil, description: "key right", characters: KEY_RIGHT, isRepeating: false, speed: ON_KEY_DOWN)
     
     ]
     
@@ -107,32 +107,28 @@ class RMSKeys : RMXInterface {
         super.updateScoreboard()
         
     }
+
     
     override func viewDidLoad() {
-        RMXInterface.lookSpeed *= -1
         
         super.viewDidLoad()
     }
-    
+
     override func setUpViews() {
         super.setUpViews()
         self.scoreboard.alphaValue = 0.5
     }
-    
-    override func pauseGame(sender: AnyObject?) -> Bool {
-        if super.pauseGame(sender) {
-            self.actionProcessor.isMouseLocked = false
-            return true
-        } else {
-            return false
-        }
+
+    override func pauseGame(sender: AnyObject? = nil) -> Bool {
+        self.lockCursor = false
+        return super.pauseGame(sender)
     }
     
-    func set(action a: RMInputKeyValue, characters k: String ) {
-        let newKey = RMKey(self, action: a, characters: k)
+    func set(action: UserAction?, description string: String = "NULL", characters k: String ) {
+        let newKey = RMKey(self, action: action, description: string, characters: k)
         var exists = false
         for key in self.keys {
-            if key.action == a {
+            if key.description == newKey.description {
                 key.set(k)
                 exists = true
                 break
@@ -143,14 +139,6 @@ class RMSKeys : RMXInterface {
         }
     }
     
-    func get(forAction action: RMInputKeyValue?) -> RMKey? {
-        for key in keys {
-            if key.action == action {
-                return key
-            }
-        }
-        return nil
-    }
     
     func forEvent(theEvent: NSEvent) -> RMKey? {
         if let key = self.get(forChar: theEvent.characters) {
@@ -195,30 +183,6 @@ class RMSKeys : RMXInterface {
         return nil
     }
     
-//    func match(chr: String) -> NSMutableArray {
-//        let keys: NSMutableArray = NSMutableArray(capacity: chr.pathComponents.count)
-//        for key in self.keys {
-//            RMLog(key.description)
-//            for str in chr.pathComponents {
-//                if key.characters == str {
-//                    keys.addObject(key)
-//                }
-//            }
-//            
-//        }
-//        return keys
-//    }
-    
-//    func match(value: UInt16) -> RMKey? {
-//        for key in keys {
-//            RMLog(key.description)
-//            if key.charToInt == Int(value) {
-//                return key
-//            }
-//        }
-//        return nil
-//    }
-    
     private var origin: NSPoint{
         let size = (self.gameView?.frame.size)!//.window!.frame
         let point = (self.gameView?.window!.frame.origin)!
@@ -232,22 +196,22 @@ class RMSKeys : RMXInterface {
     private var mouseDelta: NSPoint {
         let newPos = NSEvent.mouseLocation()
         let lastPos = self.lastPos
-//        RMLog("  OLD: \(lastPos.x), \(lastPos.y)\n  New: \(newPos.x), \(newPos.y)")
+
         let delta = NSPoint(
-            x: -(newPos.x - lastPos.x),// - self.mousePos.x,
-            y: newPos.y - lastPos.y//self.mousePos.y
+            x: -(newPos.x - lastPos.x),
+            y: newPos.y - lastPos.y
         )
-//        CGDisplayHideCursor(0)
+
         CGAssociateMouseAndMouseCursorPosition(0)
         CGWarpMouseCursorPosition(self.origin)
         
         /* perform your application’s main loop */
         self.lastPos = NSEvent.mouseLocation()
         CGAssociateMouseAndMouseCursorPosition (1)
-//        CGDisplayShowCursor(1)
         
         return delta
     }
+    
     
     override func update() {
         for key in self.keys {
@@ -255,14 +219,10 @@ class RMSKeys : RMXInterface {
         }
         super.update()
         
-        //self.get(forChar: "mouseMoved")?.actionWithValues([RMFloat(self.mouseDelta.x), RMFloat(self.mouseDelta.y)])
-        if self.actionProcessor.isMouseLocked {
+        if self.lockCursor {
             let delta = self.mouseDelta
-            self.action(UserAction.LOOK_AROUND, speed: RMXInterface.lookSpeed, args: delta)
-//            RMLog("MOUSE: \(delta.x), \(delta.y)")
-            
+            self.actionProcessor.action(.LOOK_AROUND, speed: self.lookSpeed, args: delta)
         }
-//        RMLog("\(self.mouseDelta.x), \(self.mouseDelta.y)")
     }
     
     ///Adapt the keyboard for different layouts
@@ -270,28 +230,28 @@ class RMSKeys : RMXInterface {
         super.setKeyboard(type)
         switch type {
         case .French:
-            self.set(action: UserAction.MOVE_FORWARD, characters: "z")
-            self.set(action: UserAction.MOVE_LEFT, characters: "q")
-            self.set(action: UserAction.MOVE_DOWN, characters: "a")
-            self.set(action: UserAction.ROLL_LEFT, characters: "w")
+            self.set(.MOVE_FORWARD, characters: "z")
+            self.set(.MOVE_LEFT, characters: "q")
+            self.set(.MOVE_DOWN, characters: "a")
+            self.set(.ROLL_LEFT, characters: "w")
             
-            self.set(action: UserAction.NEXT_CAMERA, characters: "=")
-            self.set(action: UserAction.PREV_CAMERA, characters: ":")
+            self.set(.NEXT_CAMERA, characters: "=")
+            self.set(.PREV_CAMERA, characters: ":")
             
-            self.set(action: UserAction.ZOOM_IN, characters: "-")
-            self.set(action: UserAction.ZOOM_OUT, characters: ")")
+            self.set(.ZOOM_IN, characters: "-")
+            self.set(.ZOOM_OUT, characters: ")")
             break
         case .UK:
-            self.set(action: UserAction.MOVE_FORWARD, characters: "w")
-            self.set(action: UserAction.MOVE_LEFT, characters: "a")
-            self.set(action: UserAction.MOVE_DOWN, characters: "q")
-            self.set(action: UserAction.ROLL_LEFT, characters: "z")
+            self.set(.MOVE_FORWARD, characters: "w")
+            self.set(.MOVE_LEFT, characters: "a")
+            self.set(.MOVE_DOWN, characters: "q")
+            self.set(.ROLL_LEFT, characters: "z")
             
-            self.set(action: UserAction.NEXT_CAMERA, characters: ".")
-            self.set(action: UserAction.PREV_CAMERA, characters: ",")
+            self.set(.NEXT_CAMERA, characters: ".")
+            self.set(.PREV_CAMERA, characters: ",")
             
-            self.set(action: UserAction.ZOOM_IN, characters: "=")
-            self.set(action: UserAction.ZOOM_OUT, characters: "-")
+            self.set(.ZOOM_IN, characters: "=")
+            self.set(.ZOOM_OUT, characters: "-")
             break
         default:
             break
@@ -299,234 +259,8 @@ class RMSKeys : RMXInterface {
     }
 }
 
-/// Single mapping for a control on the desktop interface.
-/// This maps a most binary commands to the action processor
-///
-/// See also: `RMKeys` and  `RMSActionProcessor`.
-
-@available(OSX 10.10, *)
-class RMKey {
-//    private var _key: String?
-    var isPressed: Bool = false
-    var action: RMInputKeyValue!
-    var characters: String
-    var isSpecial = false
-    var speed:(on:RMFloat,off:RMFloat)
-    var isRepeating: Bool = true
-    var values: AnyObject?
-    private var keys: RMSKeys
-    
-    init(_ keys: RMSKeys, action: RMInputKeyValue, characters: String, isRepeating: Bool = true, speed: (on:RMFloat,off:RMFloat) = (1,0), values: AnyObject? = nil) {
-        self.keys = keys
-        self.action = action
-        self.isSpecial = true
-        self.characters = characters
-        self.speed = speed
-        self.isRepeating = isRepeating
-        if values != nil {
-            self.values = values!
-        }
-    }
-    
-    func set(characters: String){
-        self.characters = characters
-    }
-    
-    ///Returns true if key was not already pressed, and sets isPressed = true
-    func press(object: Any? = nil) -> Bool{
-        if self.isRepeating {
-            if self.isPressed {
-                return true //false
-            } else {
-                self.isPressed = true
-                return true
-            }
-        } else  {
-            self.isPressed = true
-            
-            return self.keys.action(self.action, speed: self.speed.on, args: object ?? self.values)
-        }
-    }
-    
-//    func actionWithValues(values: [RMFloat]){
-//        self.keys.action(self.action, speed: self.speed.on, args: values)
-//    }
-    
-    ///Returns true if key was already pressed, and sets isPressed = false
-    func release(object: Any? = nil) -> Bool{
-        if self.isPressed {
-            self.isPressed = false
-            return self.keys.action(self.action, speed: self.speed.off, args: self.values)
-        } else {
-            return true //false
-        }
-    }
-    
-    init(name: String){
-        fatalError("'\(name)' not recognised")
-    }
-    
-//    var charToInt: Int {
-//        return Int(self.characters) ?? -1
-//    }
-    
-    var description: String {
-        return "\(self.action): \(self.characters), speed: \(self.speed), pressed: \(self.isPressed)"
-    }
-    
-    func update(){
-        if self.isRepeating && self.isPressed {
-            self.keys.action(self.action, speed: self.speed.on, args: self.values)
-        }
-    }
-    
-    var print: String {
-        return "Action: \(self.action), key: \(self.characters), speed: \(self.speed.on), \(self.speed.off)"
-    }
-    
-}
-
-//func ==(lhs: RMKey, rhs: Int) -> Bool{
-//    return lhs.charToInt == rhs
-//}
-//
-//func ==(lhs: RMKey, rhs: String) -> Bool{
-//    return lhs.action == rhs
-//}
-//
-//func ==(lhs: RMKey, rhs: RMKey) -> Bool{
-//    return lhs.action == rhs.action
-//}
 
 
 
-extension GameView {
-    
-    @available(OSX 10.10, *)
-    var keys: RMSKeys {
-        return self.interface as! RMSKeys
-    }
-    
-    
-    override func keyDown(theEvent: NSEvent) {
-        if #available(OSX 10.10, *) {
-            if let key = self.keys.forEvent(theEvent) {
-                if !key.press() {
-                    RMLog("ERROR on Key Down for \(key.print)")
-                }
-            } else {
-                if let n = Int((theEvent.characters)!) {
-                    self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: "\(n)", isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
-                } else {
-                    super.keyDown(theEvent)
-                }
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-        
-    }
-    
-    override func keyUp(theEvent: NSEvent) {
-        if #available(OSX 10.10, *) {
-            if let key = self.keys.forEvent(theEvent) {
-                RMLog("Key recognised: \(key.print) \n\(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
-                if !key.release() {
-                    RMLog("ERROR on Key Up for \(key.print)")
-                }
-            } else {
-    //            RM("new key added:\n\n \(theEvent.description)")
-                RMLog("Key unrecognised \(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
-                
-                super.keyUp(theEvent)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-    
-    
-    override func rightMouseUp(theEvent: NSEvent) {
-        
-
-        if #available(OSX 10.10, *) {
-            if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.release() ?? false {
-                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-                if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
-                    super.rightMouseUp(theEvent)
-                }
-        
-                RMLog("UP hit successful: \(p)", id: "keys")
-            } else {
-    //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-                super.rightMouseUp(theEvent)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-        
-       
-    }
-    
-    override func rightMouseDown(theEvent: NSEvent) {
-        
-        if #available(OSX 10.10, *) {
-            if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.press() ?? false {
-                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-                if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
-                    super.rightMouseDown(theEvent)
-                }
-                RMLog("UP hit successful: \(p)", id: "keys")
-            } else {
-                //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-                super.rightMouseDown(theEvent)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
- 
-        
-    }
-    
-    override func mouseUp(theEvent: NSEvent) {
-        if #available(OSX 10.10, *) {
-            if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.release() ?? false {
-                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-                if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
-                    super.mouseUp(theEvent)
-                }
-                RMLog("UP hit successful: \(p)", id: "keys")
-            } else {
-                //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-                super.mouseUp(theEvent)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-    
-    override func mouseDown(theEvent: NSEvent) {
-        /* Called when a mouse click occurs */
-        
-        // check what nodes are clicked
-        if #available(OSX 10.10, *) {
-            if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.press() ?? false {
-                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-                if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
-                    super.mouseDown(theEvent)
-                }
-                RMLog("UP hit successful: \(p)", id: "keys")
-            } else {
-                //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-               super.mouseDown(theEvent)
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-        
-    }
-    
-
-}
 
 

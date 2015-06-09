@@ -18,14 +18,14 @@ extension RMXDPad {
     
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
-        self.action(UserAction.RESET)
+        self.actionProcessor.action(UserAction.RESET)
     }
     func printData(recogniser: UITapGestureRecognizer){
-        self.action(UserAction.GET_INFO)
+        self.actionProcessor.action(UserAction.GET_INFO)
     }
     
     func showScores(recogniser: UITapGestureRecognizer){
-        self.action(UserAction.TOGGLE_SCORES, speed: 1)
+        self.actionProcessor.action(UserAction.TOGGLE_SCORES, speed: 1)
     }
     
     func toggleAi(recogniser: UITapGestureRecognizer){
@@ -34,17 +34,17 @@ extension RMXDPad {
     
     
     func zoom(recogniser: UIPinchGestureRecognizer) {        
-        self.action(UserAction.ZoomInAnOut, speed: RMFloat(recogniser.velocity))
+        self.actionProcessor.action(UserAction.ZoomInAnOut, speed: RMFloat(recogniser.velocity))
     }
     
     
     func toggleGravity(recognizer: UITapGestureRecognizer) {
-            self.action(UserAction.TOGGLE_GRAVITY, speed: 1)
+            self.actionProcessor.action(UserAction.TOGGLE_GRAVITY, speed: 1)
         }
         
         
     func toggleAllGravity(recognizer: UITapGestureRecognizer) {
-        self.action(UserAction.TOGGLE_GRAVITY, speed: 1)
+        self.actionProcessor.action(UserAction.TOGGLE_GRAVITY, speed: 1)
     }
     
     
@@ -57,18 +57,18 @@ extension RMXDPad {
             if recognizer.numberOfTouches() == 1 {
                 let point = recognizer.velocityInView(self.gameView)
                 
-                self.action(UserAction.LOOK_AROUND, speed: RMXInterface.lookSpeed, args: point)
+                self.actionProcessor.action(.LOOK_AROUND, speed: self.lookSpeed, args: point)
             }
 //            _handleRelease(recognizer.state)
         }
     
     
     func nextCamera(recogniser: UITapGestureRecognizer) {
-            self.action(UserAction.NEXT_CAMERA, speed: 1)
+            self.actionProcessor.action(UserAction.NEXT_CAMERA, speed: 1)
     }
     
     func previousCamera(recogniser: UITapGestureRecognizer) {
-        self.action(UserAction.PREV_CAMERA, speed: 1)
+        self.actionProcessor.action(UserAction.PREV_CAMERA, speed: 1)
     }
 
 

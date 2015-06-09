@@ -18,7 +18,7 @@ class AiCubo {
     class func createEarth(inWorld world: RMSWorld, radius: RMFloat? = nil, addCameras: Bool = true) {
         let worldRadius = radius ?? world.radius
         
-        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: RMColor.yellowColor()), type: .BACKGROUND, unique: true)
+        let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: RMColor.lightGrayColor()), type: .BACKGROUND, unique: true)
         
         world.physicsWorld.gravity = SCNVector3Make(0,y: -9.8 * 10,z: 0)
         
@@ -36,19 +36,38 @@ class AiCubo {
         
     }
  
-    class func createLight(inWorld world: RMSWorld, fixed: Bool = true, radius: RMFloat? = nil, addCameras: Bool = true){
+    class func createLight(inWorld world: RMSWorld, fixed: Bool = false, radius: RMFloat? = nil, addCameras: Bool = false){
         let worldRadius = radius ?? world.radius
         
-        let lightNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
+//        world.physicsWorld
+        let lightNode = SCNNode()
         lightNode.light = SCNLight()
-        lightNode.light!.type = SCNLightTypeOmni
-        lightNode.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
-        lightNode.geometry?.firstMaterial!.emission.intensity = 1
+        lightNode.light!.type = SCNLightTypeSpot
         
-        let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
-        sun.setName("Sun")
+        lightNode.light?.castsShadow = true
+        lightNode.light?.shadowRadius = 3
+        lightNode.light?.spotInnerAngle = 45
+        lightNode.light?.spotOuterAngle = 100
+        lightNode.light?.shadowBias = 1
+        #if OSX
+        lightNode.light?.shadowMapSize = CGSizeMake(10000, 10000)
+        #elseif iOS
+//            lightNode.light?.shadowMapSize = CGSizeMake(1000, 1000)
+        #endif
+//        lightNode.light?.shadowMode = .Deferred
+//
+        lightNode.light?.zFar = CGFloat(worldRadius * 2)
+        lightNode.light?.zNear = 100
+//        lightNode.light?
+        let sunNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
+        sunNode.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
+        sunNode.geometry?.firstMaterial!.emission.intensity = 1
+        let sun: RMXSprite = RMXSprite(inWorld: world, geometry: sunNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
+        sunNode.addChildNode(lightNode)
+        sun.setName("sun")
         sun.node.pivot.m43 = -worldRadius
         sun.node.eulerAngles.x = -45 * PI_OVER_180
+//        lightNode.pivot.m43 = sun.radius * 2
         if !fixed {
             sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: SCNVector3Make(1, y: 0, z: 0), duration: 1)))
         }
@@ -60,24 +79,43 @@ class AiCubo {
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = SCNLightTypeAmbient
+//        ambientLightNode.light?.shadowMode = .Deferred
+//        ambientLightNode.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
+//        ambientLightNode.geometry?.firstMaterial!.emission.intensity = 0.5
         ambientLightNode.light!.color = RMColor.darkGrayColor()
+//        ambientLightNode.light?.castsShadow = true
+        ambientLightNode.position = SCNVector3Make(worldRadius / 4, worldRadius / 4, worldRadius / 4)
+        world.rootNode.addChildNode(ambientLightNode)
         
-        if fixed {
-            sun.node.addChildNode(ambientLightNode)
-        } else {
-            let moon = RMXSprite(inWorld: world, type: .ABSTRACT, shape: .SUN, color: RMColor.lightGrayColor(), unique: true)
-            moon.setName("Moon")
-            moon.node.pivot.m43 = sun.node.pivot.m43
-            moon.node.eulerAngles.x = 4 * sun.node.eulerAngles.x
-            if !fixed {
-                moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: SCNVector3Make(1, y: 0, z: 0), duration: 1)))
-            }
-            if addCameras {
-                RMXCamera.headcam(moon)
-                world.cameras += moon.cameras
-            }
-
-        }
+//        let moonNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 80)
+//        moonNode.light = SCNLight()
+//        moonNode.light!.type = SCNLightTypeOmni
+//        
+//        moonNode.light?.castsShadow = true
+//        
+//        moonNode.light?.shadowMode = .Deferred
+//        moonNode.light?.zFar = worldRadius * 2
+//        
+//        
+//        let moon: RMXSprite = RMXSprite(inWorld: world, geometry: moonNode, type: .ABSTRACT, shape: .SUN, unique: true)
+//        moon.setName("moon")
+//        moon.node.pivot.m43 = -worldRadius
+//        moon.node.eulerAngles.x = 135 * PI_OVER_180
+//        moon.node.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
+//        moon.node.geometry?.firstMaterial!.emission.intensity = 1
+//
+//        moonNode.pivot.m43 += worldRadius / 2
+//        if !fixed {
+//            moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: SCNVector3Make(1, y: 0, z: 0), duration: 1)))
+//        }
+//        
+//        if addCameras {
+//            RMXCamera.headcam(moon)
+//            world.cameras += moon.cameras
+//        }
+        
+        
+        
     }
     
   
@@ -104,7 +142,7 @@ class AiCubo {
                 world.name = "Testing World"
                 AiCubo.initialWorldSetup(world, radius: world.radius * 2)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
-                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: false, addCameras: true)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 50, shapes: .CYLINDER, .CUBE, .SPHERE)
                 AiCubo.addPlayers(world, noOfPlayers: 20, teams: 0)
                 RMXAi.addRandomMovement(to: world.sprites)
@@ -133,9 +171,9 @@ class AiCubo {
                 world.name = "Team Game: Play to win!"
                 AiCubo.initialWorldSetup(world)
                 AiCubo.createEarth(inWorld: world, addCameras: true)
-                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
-                RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 50, shapes: .CYLINDER, .SPHERE)
-                AiCubo.addPlayers(world, noOfPlayers: 20, teams: 2)
+                AiCubo.createLight(inWorld: world, fixed: false, addCameras: true)
+                RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 20, shapes: .CYLINDER, .CUBE)
+                AiCubo.addPlayers(world, noOfPlayers: 10, teams: 2)
                 RMXAi.offenciveBehaviour(to: world.sprites)
                 break
             default:
@@ -145,7 +183,13 @@ class AiCubo {
             
 //            interface.gameView!.scene = world.scene
 //            interface.gameView.pointOfView = world.activeCamera
-            
+            world.rootNode.castsShadow = true
+            for node in world.rootNode.childNodes {
+                if node.sprite?.type != .ABSTRACT {
+                    node.castsShadow = true
+                }
+            }
+
             return world
         } else {
             fatalError("inteface not initialised")
@@ -176,10 +220,10 @@ class AiCubo {
     
     class func simpleSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
-        let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique).asPlayer()
+        let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique)
         
-        let lim = Int(world.radius)
-        player.setPosition(SCNVector3Random(lim, min: -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
+        let lim = world.radius
+        player.setPosition(SCNVector3Random(lim, min: -lim, setY: world.ground + 20))//(0, 50, 50))//, resetTransform: <#Bool#>
 
         
         
@@ -206,9 +250,7 @@ class AiCubo {
     
     class func initialWorldSetup(world: RMSWorld, radius: RMFloat? = nil, poppy: Bool = true, player2: Bool = true, additionalCameras: Bool = true){
         
-        if let r = radius {
-            world.setRadius(r)
-        }
+        world.setRadius(radius)
         //Set up Main Player
         let player = world.activeSprite
         

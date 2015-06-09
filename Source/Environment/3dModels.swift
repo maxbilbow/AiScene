@@ -94,7 +94,12 @@ class RM3DModels  {
         case ShapeType.FLOOR:
             hasColor = true
 //            node = SCNFloor
-            node = SCNNode(geometry: SCNCylinder(radius: CGFloat(radius), height: 100))
+            let geometry = SCNCylinder(radius: CGFloat(radius), height: 100)
+            node = SCNNode(geometry:geometry)
+            geometry.firstMaterial?.shininess = 0
+            geometry.firstMaterial?.reflective.intensity = 0.1
+            
+//            geometry.firstMaterial
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)
             //node.geometry?.firstMaterial!.doubleSided = true
             

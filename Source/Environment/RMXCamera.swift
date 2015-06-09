@@ -285,6 +285,7 @@ class RMXCameraNode : SCNNode {
         s += "\n   appeture: \(self.camera!.aperture.print), orthScale: \(self.camera!.orthographicScale.print)\n zFar: \(self.camera!.zFar)"
         Swift.print(s)
     }
+    
     func moveOut(speed: RMFloat = 1) {
         self._resetZoom = false
         if let fov = self.camera?.xFov {

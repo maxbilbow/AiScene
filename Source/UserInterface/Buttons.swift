@@ -59,7 +59,7 @@ extension RMXDPad {
             self.moveOrigin = point
         } else if recogniser.state == .Ended {
             self.moveButtonPad!.frame = self.moveButtonCenter
-            self.action(UserAction.STOP_MOVEMENT)
+            self.actionProcessor.action(.STOP_MOVEMENT)
         } else {
             var move = CGPoint(x: point.x - self.moveOrigin.x, y: point.y - self.moveOrigin.y)
 
@@ -74,7 +74,7 @@ extension RMXDPad {
             let percentage = CGPoint(x: move.x / limX, y: move.y / limY)
             self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + move * 1
 //            self.moveButtonPad?.setNeedsDisplay()
-            self.action(UserAction.MOVE, speed: 1, args: percentage * CGFloat(RMXInterface.moveSpeed))
+            self.actionProcessor.action(.MOVE, speed: 1, args: percentage * self.moveSpeed)
 //            NSLog("FWD: \((x / limX).toData()), SIDE: \((y / limY).toData())),  TOTAL: \(1)")
         }
         
@@ -103,12 +103,12 @@ extension RMXDPad {
                 self.actionProcessor.throwOrGrab(nil, withForce: 1, tracking: false)
                 self.activeSprite.throwItem(force: 1)
             } else {
-                self.action(UserAction.BOOM, speed: 1)
+                self.actionProcessor.action(UserAction.BOOM, speed: 1)
             }
             //self.actionProcessor.explode(force: self.boomTimer)
             
         } else {
-            self.action(UserAction.BOOM, speed: 0)
+            self.actionProcessor.action(UserAction.BOOM, speed: 0)
             self.boomTimer++ //TODO: put this in the ActionProcessor class
         }
     }
@@ -123,6 +123,6 @@ extension RMXDPad {
     
     func jump(recogniser: UILongPressGestureRecognizer){
         let speed: RMFloat = recogniser.state == .Ended ? 1 : 0
-        self.action(UserAction.JUMP, speed: speed)
+        self.actionProcessor.action(UserAction.JUMP, speed: speed)
     }
 }

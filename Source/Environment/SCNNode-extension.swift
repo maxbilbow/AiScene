@@ -32,12 +32,7 @@ extension SCNNode : RMXObject {
     }
     
     var rmxID: Int? {
-        if #available(OSX 10.10, *) {
-            return self.rmxNode?.sprite?.rmxID
-        } else {
-            return nil
-            // Fallback on earlier versions
-        }//.getRmxID() ?? -1
+        return self.rmxNode?.sprite?.rmxID
     }
 
     @available(OSX 10.10, *)
@@ -46,11 +41,7 @@ extension SCNNode : RMXObject {
     }
     
     var doesCollide: Bool {
-        if #available(OSX 10.10, *) {
-            return self.sprite?.isPlayerOrAi ?? false
-        } else {
-            return false// Fallback on earlier versions
-        }
+           return self.sprite?.isPlayerOrAi ?? false
     }
     
     @available(OSX 10.10, *)
@@ -90,11 +81,7 @@ extension SCNNode : RMXObject {
 
     @available(*,deprecated=1)
     var geometryNode: SCNNode? {
-        if #available(OSX 10.10, *) {
-            return self.rmxNode?.childNodeWithName("geometry", recursively: false)
-        } else {
-            return nil // Fallback on earlier versions
-        }
+        return self.rmxNode?.childNodeWithName("geometry", recursively: false)
     }
     
     @available(OSX 10.10, *)

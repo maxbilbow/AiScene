@@ -9,28 +9,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Source/UserInterface/RMSKeys.swift"
-            timestampString = "455375759.979388"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
-            landmarkName = "RMSKeys"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684"
+            startingLineNumber = "658"
+            endingLineNumber = "658"
             landmarkName = "printBounds()"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMXInterface.swift"
-            timestampString = "455407879.146108"
+            timestampString = "455540049.281205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "RMXInterface"
             landmarkType = "3">
          </BreakpointContent>
@@ -58,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMXInterface.swift"
-            timestampString = "455407879.146108"
+            timestampString = "455540049.281205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
             landmarkName = "RMXInterface"
             landmarkType = "3">
          </BreakpointContent>
@@ -79,24 +63,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "105"
             endingLineNumber = "105"
-            landmarkName = "updateScoreboard()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "532"
-            endingLineNumber = "532"
-            landmarkName = "asPlayer()"
-            landmarkType = "5">
+            landmarkName = "RMSKeys"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -106,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "simpleSprite(_:type:isUnique:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "initialWorldSetup(_:radius:poppy:player2:additionalCameras:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -138,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
             landmarkName = "initialWorldSetup(_:radius:poppy:player2:additionalCameras:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -154,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "263"
-            endingLineNumber = "263"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -170,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "238"
-            endingLineNumber = "238"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
+            startingLineNumber = "289"
+            endingLineNumber = "289"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
             landmarkName = "RMXTeam"
             landmarkType = "3">
          </BreakpointContent>
@@ -266,7 +234,23 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "RMXTeam"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Initialisation/TeamGame.swift"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "308"
@@ -282,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "311"
-            endingLineNumber = "311"
+            startingLineNumber = "309"
+            endingLineNumber = "309"
             landmarkName = "RMXTeam"
             landmarkType = "3">
          </BreakpointContent>
@@ -298,27 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "312"
-            endingLineNumber = "312"
-            landmarkName = "RMXTeam"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "325"
-            endingLineNumber = "325"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
             landmarkName = "init(gameWorld:captain:withID:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -362,13 +330,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RMSWorld.swift"
-            timestampString = "455449031.5027"
+            timestampString = "455548073.681156"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "293"
-            endingLineNumber = "293"
-            landmarkName = "validate(_:)"
-            landmarkType = "5">
+            startingLineNumber = "294"
+            endingLineNumber = "294"
+            landmarkName = "RMXScene"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -442,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "241"
-            endingLineNumber = "241"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -458,11 +426,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -474,11 +442,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -490,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "253"
-            endingLineNumber = "253"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -506,11 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "256"
-            endingLineNumber = "256"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -522,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "254"
-            endingLineNumber = "254"
+            startingLineNumber = "296"
+            endingLineNumber = "296"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -538,11 +506,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
+            startingLineNumber = "299"
+            endingLineNumber = "299"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -554,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -570,11 +538,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/AiCubo Basic.swift"
-            timestampString = "455231305.108073"
+            timestampString = "455555953.341721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
             landmarkName = "addPlayers(_:noOfPlayers:teams:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -649,11 +617,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455387906.42068"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -665,11 +633,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455387906.42068"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -681,11 +649,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455387906.42068"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -697,11 +665,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455387743.914474"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "146"
-            endingLineNumber = "146"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "checkForCollision(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -729,11 +697,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455387906.42068"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "186"
-            endingLineNumber = "186"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -745,11 +713,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455387906.42068"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -777,11 +745,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "649"
-            endingLineNumber = "649"
+            startingLineNumber = "623"
+            endingLineNumber = "623"
             landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -793,11 +761,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "650"
-            endingLineNumber = "650"
+            startingLineNumber = "624"
+            endingLineNumber = "624"
             landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -809,11 +777,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "651"
-            endingLineNumber = "651"
+            startingLineNumber = "625"
+            endingLineNumber = "625"
             landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -825,11 +793,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "654"
-            endingLineNumber = "654"
+            startingLineNumber = "628"
+            endingLineNumber = "628"
             landmarkName = "throwItem(force:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -889,11 +857,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSKeys.swift"
-            timestampString = "455375759.979388"
+            timestampString = "455540049.281205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "forEvent(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -905,11 +873,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "347"
-            endingLineNumber = "347"
+            startingLineNumber = "344"
+            endingLineNumber = "344"
+            landmarkName = "update()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Initialisation/TeamGame.swift"
+            timestampString = "455547476.740811"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "addPlayer(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -921,11 +905,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "355"
+            endingLineNumber = "355"
             landmarkName = "addPlayer(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -937,7 +921,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "358"
@@ -953,39 +937,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
-            landmarkName = "addPlayer(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
-            landmarkName = "addPlayer(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "354"
@@ -1001,7 +953,71 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "351"
+            endingLineNumber = "351"
+            landmarkName = "addPlayer(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Initialisation/TeamGame.swift"
+            timestampString = "455547476.740811"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
+            landmarkName = "addPlayer(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Initialisation/TeamGame.swift"
+            timestampString = "455547476.740811"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
+            landmarkName = "addPlayer(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Initialisation/TeamGame.swift"
+            timestampString = "455547476.740811"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "361"
+            endingLineNumber = "361"
+            landmarkName = "addPlayer(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/Initialisation/TeamGame.swift"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "363"
@@ -1017,59 +1033,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
+            timestampString = "455547476.740811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "365"
-            endingLineNumber = "365"
-            landmarkName = "addPlayer(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "364"
-            endingLineNumber = "364"
-            landmarkName = "addPlayer(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
-            landmarkName = "addPlayer(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/Initialisation/TeamGame.swift"
-            timestampString = "455397795.709761"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
             landmarkName = "addPlayer(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1081,29 +1049,29 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMXInterface.swift"
-            timestampString = "455407879.146108"
+            timestampString = "455540049.281205"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "414"
+            endingLineNumber = "414"
+            landmarkName = "RMXInterface"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Source/UserInterface/RMXInterface.swift"
+            timestampString = "455540049.281205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "416"
             endingLineNumber = "416"
-            landmarkName = "observeValueForKeyPath(_:ofObject:change:context:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/UserInterface/RMXInterface.swift"
-            timestampString = "455407879.146108"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "418"
-            endingLineNumber = "418"
-            landmarkName = "observeValueForKeyPath(_:ofObject:change:context:)"
-            landmarkType = "5">
+            landmarkName = "RMXInterface"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1445,11 +1413,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455449352.450014"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "952"
-            endingLineNumber = "952"
+            startingLineNumber = "926"
+            endingLineNumber = "926"
             landmarkName = "rootNode(_:rootNode:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1466,7 +1434,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
             endingLineNumber = "75"
-            landmarkName = "setTarget(_:speed:afterTime:willJump:impulse:asProjectile:ignoreClaims:doOnArrival:)"
+            landmarkName = "setTarget(_:speed:afterTime:willJump:impulse:asProjectile:doOnArrival:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1482,7 +1450,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "78"
             endingLineNumber = "78"
-            landmarkName = "setTarget(_:speed:afterTime:willJump:impulse:asProjectile:ignoreClaims:doOnArrival:)"
+            landmarkName = "setTarget(_:speed:afterTime:willJump:impulse:asProjectile:doOnArrival:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1493,11 +1461,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455389223.633294"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1509,11 +1477,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455389231.357187"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "173"
-            endingLineNumber = "173"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1525,11 +1493,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455389235.186787"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1541,11 +1509,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455389256.962108"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1557,11 +1525,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Ai/RMXTracker.swift"
-            timestampString = "455389258.38401"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "headToTarget(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1596,54 +1564,6 @@
             endingLineNumber = "277"
             landmarkName = "deinit"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RM3DEntity.__deallocating_deinit"
-                  moduleName = "AiScene-OSX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
-                  timestampString = "455519991.345886"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AiScene_OSX.RM3DEntity.deinit"
-                  moduleName = "AiScene-OSX"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/rattle/Gits/AiScene/Source/Environment/RM3DEntity.swift"
-                  timestampString = "455519991.346027"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "278"
-                  endingLineNumber = "278"
-                  offsetFromSymbolStart = "15">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Source/UserInterface/RMSKeys.swift"
-            timestampString = "455393146.721187"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "439"
-            endingLineNumber = "439"
-            landmarkName = "rightMouseUp(_:)"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1669,11 +1589,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/RM3DEntity.swift"
-            timestampString = "455526481.407454"
+            timestampString = "455552496.46724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "728"
-            endingLineNumber = "728"
+            startingLineNumber = "702"
+            endingLineNumber = "702"
             landmarkName = "setItem(item:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1717,11 +1637,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSActionProcessor.swift"
-            timestampString = "455530838.744594"
+            timestampString = "455542849.321987"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "317"
-            endingLineNumber = "317"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
             landmarkName = "action(_:speed:args:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -1733,11 +1653,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/Environment/SCNNode-extension.swift"
-            timestampString = "455531473.923302"
+            timestampString = "455541705.799097"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "SCNNode"
             landmarkType = "3">
          </BreakpointContent>
@@ -1765,13 +1685,93 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Source/UserInterface/RMSKeys.swift"
-            timestampString = "455533015.388045"
+            timestampString = "455540049.281205"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
             landmarkName = "RMSKeys"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../RMXKit/RMXSpriteTimer.swift"
+            timestampString = "455546818.648673"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
+            landmarkName = "validate()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../RMXKit/RMXSpriteTimer.swift"
+            timestampString = "455546818.648673"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "activate(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../RMXKit/RMXSpriteTimer.swift"
+            timestampString = "455546818.648673"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "activate(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../RMXKit/RMXSpriteTimer.swift"
+            timestampString = "455546818.648673"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "validate()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../RMXKit/RMXSpriteTimer.swift"
+            timestampString = "455547022.518359"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "activate(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

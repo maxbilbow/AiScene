@@ -82,12 +82,13 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         self._gravity = RMSWorld.ZERO_GRAVITY
         _activeSprite = nil
         self.setScene()
+        
         _aiOn = false//TODO check if this is right as default
         return self
     }
     
 
-    func setRadius(radius: RMFloat) {
+    func setRadius(radius: RMFloat?) {
         self._radius = radius
     }
     
@@ -291,35 +292,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
     
     private var _ground: RMFloat?
-    func validate(sprite: RMXSprite) -> Bool {
-        
-        if self.hasGravity && !sprite.isLocked {
-            if let earth = self.earth {
-                if sprite.node.presentationNode().position.y < earth.node.presentationNode().position.y {
-                    return false
-                }
-            }
-        }
-        return true
-//        var valid = true
-//        if let radius = _radius {
-//            var position = sprite.position
-//            position.y = 0
-//            if radius > 0 && position.distanceTo(SCNVector3Zero) > radius {
-//                return false
-//            }
-//        } else if let earth = self.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
-//            _radius = earth.radius
-//            _ground = earth.sprite?.top.y
-//            self.validate(sprite)
-//        } else {
-//            _radius = self.radius
-//        }
-//        if let ground = _ground {
-//            valid = sprite.position.y < ground
-//        }
-//        return valid
-    }
+
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if object is SpriteAttributes {

@@ -70,19 +70,12 @@ class RMXTracker : NSObject {
     var speed: RMFloat = 0
 
     
-    func setTarget(target: RMXSprite?, speed: RMFloat? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
-        let oldTarget = self.target// ; let newTarget = target
+    func setTarget(target: RMXSprite?, speed: RMFloat? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
+//        let oldTarget = self.target// ; let newTarget = target
 
         if let target = target {
             if target == self.sprite {
                 self._target = nil
-                self.sprite.stopFollowing(self.sprite)
-                return false
-            }
-        
-            if !asProjectile && !(self.sprite.isActiveSprite || ignoreClaims) && target.hasFollowers {
-                self._target = nil
-                self.sprite.stopFollowing(target)
                 return false
             }
         
@@ -118,10 +111,6 @@ class RMXTracker : NSObject {
                 }
             }
         }
-//        if oldTarget?.rmxID != newTarget?.rmxID || self.target == nil {
-            self.sprite.stopFollowing(oldTarget)
-            self.sprite.follow(self.target)
-//        }
         return self.hasTarget
     }
     
@@ -131,7 +120,6 @@ class RMXTracker : NSObject {
                 self.sprite.isLocked = false
             }
             self._target = nil
-            self.sprite.stopFollowing(target)
             self.doOnArrival?(target: target)
             return true
         } else {

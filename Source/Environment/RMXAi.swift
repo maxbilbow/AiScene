@@ -55,13 +55,13 @@ class AiPoppy : RMXAi {
                         } else {
                             self.master = self.sprite.world.activeSprite
                         }
-                        self.sprite.tracker.setTarget(self.master, ignoreClaims: true)
+                        self.sprite.tracker.setTarget(self.master)
                         self._count = 0
                     }
                 } else {
                     self._count = 0
                     self.sprite.grab(target)
-                    self.sprite.tracker.setTarget(self.master, ignoreClaims: true, doOnArrival: { (target: RMXSprite?) -> () in
+                    self.sprite.tracker.setTarget(self.master, doOnArrival: { (target: RMXSprite?) -> () in
                         self.sprite.world.interface.av.playSound("pop2", info: self.sprite.node)
                         self.sprite.releaseItem()
                         
@@ -91,7 +91,7 @@ class AiRandom: RMXAi {
         super.run(sender, updateAtTime: time)
         if !self.world.aiOn { return }
         if self.sprite.hasItem && !self.sprite.tracker.hasTarget {
-            self.sprite.tracker.setTarget(self.getTarget(), ignoreClaims: false, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
+            self.sprite.tracker.setTarget(self.getTarget(), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
                 if !self.sprite.throwItem(atObject: target, withForce: 1, tracking: true) {
                     self.sprite.throwItem(atObject: target, withForce: 1, tracking: false)
                 }
@@ -101,7 +101,7 @@ class AiRandom: RMXAi {
             let target = self.getTarget(RMXSpriteType.PASSIVE)
             self.sprite.tracker.setTarget(target, willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
                 if self.sprite.grab(target) {
-                    self.sprite.tracker.setTarget(self.getTarget(), ignoreClaims: false, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
+                    self.sprite.tracker.setTarget(self.getTarget(), willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
                         if !self.sprite.throwItem(atObject: target, withForce: 1, tracking: true) {
                             self.sprite.throwItem(atObject: target, withForce: 1, tracking: false)
                         }

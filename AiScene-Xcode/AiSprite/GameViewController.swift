@@ -59,6 +59,7 @@ class GameViewController: UIViewController {
     }
 
     override func didReceiveMemoryWarning() {
+        lightNode.light?.shadowMapSize = CGSizeMake(10000, 10000)
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
     }

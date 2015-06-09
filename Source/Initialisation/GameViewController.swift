@@ -8,7 +8,7 @@
 
 import SceneKit
 import QuartzCore
-import GameKit
+//import GameKit
 
 #if iOS
     typealias ViewController = UIViewController
@@ -16,7 +16,7 @@ import GameKit
     typealias ViewController = NSViewController
     #endif
 
-@available(OSX 10.10, *)
+//@available(OSX 10.10, *)
 class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
     
     var rmxID: Int?; var uniqueID, name: String? ; var print: String = classForCoder().description()
@@ -82,25 +82,18 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
         
         // configure the view
         self.gameView?.backgroundColor = RMColor.blackColor()
-            for player in self.world!.sprites {
-                player.attributes.addObserver(self, forKeyPath: "isAlive", options: NSKeyValueObservingOptions.Old, context: UnsafeMutablePointer<Void>())
-                player.attributes.addObserver(self, forKeyPath: "health", options: NSKeyValueObservingOptions.Initial, context: UnsafeMutablePointer<Void>())
-                player.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: GameViewController.context)
-            }
+        
 
 
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-            if let attributes = object as? SpriteAttributes {
-    //            if !attributes.isAlive {
-                RMLog("\(keyPath) \(attributes.sprite.name!) just died!", id: "Observers")
-    //                attributes.deRetire()
-    //            }
-            }
-    }
-    func somethingHappened(thing: AnyObject?){
       
+    #if iOS
+    override func didReceiveMemoryWarning() {
+        self.gameView.world?.rootNode.childNodeWithName("sun", recursively: true)?.light?.shadowMapSize = CGSizeZero
+        super.didReceiveMemoryWarning()
     }
+    #endif
+    
     static var context = UnsafeMutablePointer<Void>()
 }

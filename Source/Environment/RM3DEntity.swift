@@ -149,7 +149,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
 
     var altitude: RMFloat {
-        return RMFloat(self.position.y)
+        return self.position.y
     }
     
     func setAltitude(y: RMFloat, resetTransform: Bool = true) {
@@ -279,19 +279,18 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.tracker.abort()
         self.aiDelegate = nil
         self.node.removeCollisionActions()
-        self.followers.removeAll(keepCapacity: false)
+//        self.followers.removeAll(keepCapacity: false)
         self.attributes = nil
         self.node.removeFromParentNode()
         
     }
-    var arm: SCNNode
+    var arm: SCNNode?
     init(inWorld world: RMSWorld, geometry node: SCNNode, type: RMXSpriteType, shape: ShapeType = .CUBE, unique: Bool){
         self._world = world
         self.type = type
         self.shapeType = shape
         self.isUnique = unique
 //        self.geometryNode = node
-        self.arm = RMXModels.getNode(shapeType: .SPHERE, radius: 2)
         self._rmxNode = RMXNode(sprite: self)
         self._rmxNode.setGeometryNode(node)
         self.attributes = SpriteAttributes(self)
@@ -302,7 +301,13 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         switch self.type {
         case .PLAYER, .AI, .PASSIVE:
             self._spriteLogic.append(self.tracker.headToTarget)
+            self._spriteLogic.append(self.timer.activate)
+            self.arm = RMXModels.getNode(shapeType: .SPHERE, radius: 2)
+            self.arm?.physicsBody = SCNPhysicsBody.staticBody()
+            self.arm?.position = self.front
+            self.node.addChildNode(self.arm!)
             self.setMass()
+            
             break
         case _ where self.isPlayerOrAi:
             self._spriteLogic.append(self.manipulate)
@@ -322,15 +327,15 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.setSpeed()
         //        NSLog(self.speed.toData())
         self.world.insertChild(self, andNode: true)
-        self.timer.activate()
+        
         if type != .PLAYER && type != .AI {
             self.attributes.setTeamID(RMXSprite.NO_COLLISIONS)
         } else {
             self.attributes.setTeamID(RMXSprite.TEAM_ASSIGNABLE)
         }
-        self.arm.physicsBody = SCNPhysicsBody.staticBody()
-        self.arm.position = self.front
-        self.node.addChildNode(self.arm)
+        
+   
+       
         
     }
     
@@ -358,7 +363,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                 self.physicsBody?.angularDamping = 0.99
             case .PASSIVE:
                 self.physicsBody?.damping = 0.5
-                self.physicsBody?.angularDamping = 0.5
+                self.physicsBody?.angularDamping = 0.8
                 break
             case .BACKGROUND:
                 self.physicsBody?.restitution = 0.1
@@ -372,27 +377,27 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                 break
             }
         }
-        
+        let damping = self.physicsBody?.damping ?? 0.1
         if let speed = speed {
             _speed = speed
         } else {
-            _speed = 150 * (self.mass + 1) /// (1 - damping)
+            _speed = 150 * (self.mass + 1) * RMFloat(damping) * 2
         }
         
         if let rSpeed = rotationSpeed {
             _rotationSpeed = rSpeed
         } else {
-            _rotationSpeed = 15 * (self.mass + 1) /// (1 - rDamping)
+            _rotationSpeed = 15 * (self.mass + 1) // (1 - rDamping)
         }
 
     }
     
     func validate() {
-        if !self.world.validate(self) {
+        if self.world.hasGravity && self.world.earth?.altitude > self.altitude {
             //                NSLog("reset \(sprite.name)")
-            let lim = Int(self.world.radius / 2)
-            self.setPosition(SCNVector3Random(lim, min: -lim), resetTransform: true)
-            self.releaseItem()
+            let lim = self.world.radius
+            self.setPosition(SCNVector3Random(lim, min: -lim, setY: self.world.ground + 100), resetTransform: true)
+            self.attributes.retire()
         }
     }
     
@@ -400,22 +405,6 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.attributes.teamID != "-2"
     }
     
-    @available(*,deprecated=1)
-    var hasFollowers: Bool {
-        return false// followers.count > 0
-    }
-    
-    @available(*,deprecated=1)
-    var followers: [ Int: RMXSprite ] = Dictionary<Int,RMXSprite>()
-    
-    @available(*,deprecated=1)
-    func follow(sprite: RMXSprite?){
-        sprite?.followers[self.rmxID!] = self
-    }
-    @available(*,deprecated=1)
-    func stopFollowing(sprite: RMXSprite?) {
-        sprite?.followers.removeValueForKey(self.rmxID!)
-    }
     
     static let NO_COLLISIONS: String = "-2"
     static let TEAM_ASSIGNABLE: String = "0"
@@ -515,21 +504,6 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         }
     }
     
-    func asPlayer() -> RMXSprite {
-//        self.type = .PLAYER
-
-        if let body = self.physicsBody {
-//           body.rollingFriction = 1000//0.99
-            body.angularDamping = 0.99
-            body.damping = 0.5
-            body.friction = 0.1
-        } else {
-            fatalError("Should already have physics body")
-        }
-        
-        self.setSpeed()
-        return self
-    }
     
 //    func addCamera(cameraNode: RMXNode){
 //        self.cameras.append(cameraNode)
@@ -617,7 +591,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                 }
                 RMLog("Item thrown at sprite (force: \(strength.print))", sender: self, id: "THROW")
                 self.releaseItem()
-                itemInHand.tracker.setTarget(sprite, speed: strength, ignoreClaims: true, asProjectile: true, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                itemInHand.tracker.setTarget(sprite, speed: strength, asProjectile: true, impulse: true, willJump: false, doOnArrival: { (target) -> () in
                     RMXTeam.challenge(self.attributes, defender: target!.attributes, doOnWin: nil)
                 })
                 RMXTeam.throwChallenge(self, projectile: itemInHand)
@@ -715,13 +689,13 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
             if self.isWithinReachOf(itemIncoming) {
                 itemIncoming.node.removeCollisionActions()
                 _itemInHand = itemIncoming
-                itemIncoming.followers.removeAll(keepCapacity: false) ///TODO: this may not be necessary
+//                itemIncoming.followers.removeAll(keepCapacity: false) ///TODO: this may not be necessary
                 itemIncoming.holder = self
                 if itemIncoming.isPlayerOrAi {
                     itemIncoming.physicsBody?.type = .Static
-                } else {
-                    itemIncoming.setMass(1)
-                    _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody!, anchorA: self.arm.position, bodyB: itemIncoming.physicsBody!, anchorB: itemIncoming.arm.position) //+ SCNVector3Make(item.arm.radius))
+                } else if itemIncoming.arm != nil {
+                    itemIncoming.setMass(self.mass * 0.05)
+                    _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody!, anchorA: self.arm!.position, bodyB: itemIncoming.physicsBody!, anchorB: itemIncoming.arm!.position) //+ SCNVector3Make(item.arm.radius))
                     itemIncoming.physicsBody?.restitution = 0
                     self.scene?.physicsWorld.addBehavior(_arm!)
                 }
@@ -748,7 +722,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                 _arm = nil
             }
             itemInHand.holder = nil
-            itemInHand.followers.removeAll(keepCapacity: false)
+//            itemInHand.followers.removeAll(keepCapacity: false)
             itemInHand.isLocked = false
             self._itemInHand = nil
             return true

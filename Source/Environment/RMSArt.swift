@@ -137,7 +137,7 @@ class RMXArt {
             
             
             let sprite = RMXSprite(inWorld: world, geometry: node, type: .PASSIVE, shape: .CUBE, unique: false)
-            sprite.setPosition( SCNVector3Make(randPos[0], randPos[1], randPos[2]))
+            sprite.setPosition( SCNVector3Random(world.radius, min: -world.radius, setY: world.ground + 20))
 
                 
         }
@@ -156,18 +156,8 @@ class RMXArt {
     }
     
     
-   
 }
 
-func SCNVector3Random(max: Int, min: Int, div: Int = 1) -> SCNVector3 {
-    
-    return SCNVector3Make(
-        RMFloat((random() % max + min)/div),
-        y: RMFloat(abs((random() % max + min)/div)),
-        z: RMFloat((random() % max + min)/div)
-    )
-
-}
 
 
 

@@ -28,6 +28,8 @@ class RMXDPad : RMXInterface {
     var topBar: UIView?
     var menuAccessBar: UIView?
     var pauseMenu: UIView?
+    var moveSpeed: CGFloat = -4 //-0.01 //-0.4
+    var lookSpeed: RMFloat = 0.1
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -38,8 +40,8 @@ class RMXDPad : RMXInterface {
             self.motionManager.startMagnetometerUpdates()
         }
         
-        RMXInterface.moveSpeed *= -2 //-0.01 //-0.4
-        RMXInterface.lookSpeed *= 0.1
+        
+        
 
         
     }
@@ -306,7 +308,7 @@ class RMXDPad : RMXInterface {
     var boomTimer: RMFloat = 1
     
     func resetCamera(recogniser: UITapGestureRecognizer) {
-        self.action(UserAction.RESET_CAMERA, speed: 1)
+        self.actionProcessor.action(.RESET_CAMERA, speed: 1)
     }
     
 }

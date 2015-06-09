@@ -63,9 +63,9 @@ class RMSActionProcessor {
     private var _panThreshold: RMFloat = 70
     
     
-    func action(action: RMInputKeyValue!, var speed: RMFloat = 1,  args: Any?) -> Bool {
+    func action(action: UserAction?, speed: RMFloat = 1,  args: Any? = nil) -> Bool {
+        if let action = action {
         let sprite = self.activeSprite
-        if let action = action as? UserAction {
             switch action {
             case .MOVE:
                 if let point = args as? CGPoint {
@@ -79,10 +79,9 @@ class RMSActionProcessor {
                 }
                 return true
             case .LOOK_AROUND:
-                
                 if let point = args as? CGPoint {
                     if let camera = self.world.activeCamera as? RMXCameraNode {
-                        speed *= camera.zoomFactor
+                        let speed = speed * camera.zoomFactor
                         if !self.activeSprite.isPOV {
                             self.world.activeCamera.eulerAngles.y -= RMFloat(point.x) * 0.1 * speed * PI_OVER_180
                             let phi: RMFloat = self.world.activeCamera.eulerAngles.x - RMFloat(point.y) * 0.1 * speed * PI_OVER_180
@@ -175,7 +174,7 @@ class RMSActionProcessor {
                 if speed == 1 { self.world.toggleGravity() }
                 return true
             case .LOCK_CURSOR:
-                if speed == 1 { self.isMouseLocked = !self.isMouseLocked }
+                if speed == 1 { self.interface.lockCursor = !self.interface.lockCursor }
                 return true
             case .NEXT_CAMERA:
                 if speed == 1 {
@@ -262,6 +261,24 @@ class RMSActionProcessor {
                     }
                 }
                 return false
+            case .THROW_OR_GRAB_ITEM:
+                if speed == 0 && self.boomTimer == 1 {
+                    if sprite.hasItem {
+                        self.boomTimer = 2
+                        return true
+                    } else {
+                        return true
+                    }
+                } else if speed > 0 {
+                    //                    var result = false
+                    if sprite.hasItem {
+                        return true//self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
+                    }
+                    self.boomTimer = 1
+                    return false
+                }
+                self.boomTimer = 1
+                return false
             case .INCREASE:
                 self.scene.physicsWorld.speed * 1.5
                 return true
@@ -327,7 +344,13 @@ class RMSActionProcessor {
                 NSLog("'\(action)' not recognised")
                 return false
             }
-        } else if let action = action as? String {
+        }
+        return false
+    }
+    
+    func action(string: String, speed: RMFloat = 1,  args: Any?) -> Bool {
+        let action = string
+        let sprite = self.activeSprite
             switch action {
             case "pitch", "Pitch", "PITCH":
                 sprite.lookAround(phi: speed)
@@ -344,24 +367,6 @@ class RMSActionProcessor {
             case "setYaw":
                 sprite.setAngle(speed)
                 break
-            case UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue:
-                if speed == 0 && self.boomTimer == 1 {
-                    if sprite.hasItem {
-                        self.boomTimer = 2
-                        return true
-                    } else {
-                        return true
-                    }
-                } else if speed > 0 {
-//                    var result = false
-                    if sprite.hasItem {
-                        return true//self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
-                    }
-                    self.boomTimer = 1
-                    return false
-                }
-                self.boomTimer = 1
-                return false
             case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10":
                 let n = Int(action)! - 1
                 if n < self.interface.availableGames.count  {
@@ -374,16 +379,11 @@ class RMSActionProcessor {
                 NSLog("'\(action)' not recognised")
                 return false
             }
-        } else {
-            RMLog("ERROR: ACTION UNRECOGNISED: \(action)")
-            return false
-        }
-        
-        
        
         return false
-        
     }
+    
+    
     enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES, SCORES }
     func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
         let node = self.activeSprite.node//.presentationNode()
@@ -450,7 +450,7 @@ class RMSActionProcessor {
     
     var extendArm: RMFloat = 0
 //    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
-    var isMouseLocked = false
+//    var isMouseLocked = false
     
     func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloat? = nil, yaw y: RMFloat? = nil, roll z: RMFloat? = nil) {
         let sprite = s ?? self.activeSprite

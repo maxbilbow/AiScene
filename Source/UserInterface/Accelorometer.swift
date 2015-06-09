@@ -17,15 +17,15 @@ extension RMXDPad {
 //            self.world!.physics.directionOfGravity = RMXVector3Make(RMFloat(g.x), RMFloat(g.y), RMFloat(g.z))
 //        }
         
-        func tilt(direction: RMInputKeyValue, tilt: RMFloat){
+        func tilt(direction: UserAction, tilt: RMFloat){
             let rollSpeed = self.rollSpeed
             let rollThreshold: RMFloat = 0.1
             if tilt > rollThreshold {
                 let speed = (1.0 + tilt) * rollSpeed
-                self.action(direction, speed: speed)
+                self.actionProcessor.action(direction, speed: speed)
             } else if tilt < -rollThreshold {
                 let speed = (-1.0 + tilt) * rollSpeed
-                self.action(direction, speed: speed)
+                self.actionProcessor.action(direction, speed: speed)
             }
         }
         
