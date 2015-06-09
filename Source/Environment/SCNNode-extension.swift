@@ -9,7 +9,8 @@
 import Foundation
 import SceneKit
 
-extension SCNNode : RMXLocatable, RMXObject {
+
+extension SCNNode : RMXObject {
     
     var uniqueID: String? {
         let parentID = self.parentNode?.uniqueID ?? ""
@@ -20,7 +21,7 @@ extension SCNNode : RMXLocatable, RMXObject {
         return self.uniqueID!
     }
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     func getPosition() -> SCNVector3 {
         return self.presentationNode().position
 //        if self.physicsBody?.type == SCNPhysicsBodyType.Dynamic {
@@ -31,21 +32,33 @@ extension SCNNode : RMXLocatable, RMXObject {
     }
     
     var rmxID: Int? {
-        return self.rmxNode?.sprite?.rmxID//.getRmxID() ?? -1
+        if #available(OSX 10.10, *) {
+            return self.rmxNode?.sprite?.rmxID
+        } else {
+            return nil
+            // Fallback on earlier versions
+        }//.getRmxID() ?? -1
     }
 
+    @available(OSX 10.10, *)
     var isPointOfView: Bool {
         return (self as? RMXCameraNode)?.isFixedPointOfView ?? false
     }
     
     var doesCollide: Bool {
-        return self.sprite?.isPlayerOrAi ?? false
+        if #available(OSX 10.10, *) {
+            return self.sprite?.isPlayerOrAi ?? false
+        } else {
+            return false// Fallback on earlier versions
+        }
     }
     
+    @available(OSX 10.10, *)
     var collisionNode: RMXNode? {
         return self.rmxNode //self.parentNode as? RMXNode
     }
     
+    @available(OSX 10.10, *)
     var sprite: RMXSprite? {
         return self.rmxNode?.rmxSprite
 //        if self.isKindOfClass(RMXNode) {
@@ -57,39 +70,49 @@ extension SCNNode : RMXLocatable, RMXObject {
 //        }
     }
     
+    @available(OSX 10.10, *)
     var spriteType: RMXSpriteType {
         return self.sprite?.type ?? RMXSpriteType.ABSTRACT
     }
     
     
+    @available(OSX 10.10, *)
     var rmxNode: RMXNode? {
         return self as? RMXNode ?? (self.parentNode as? RMXNode)?.rmxNode ?? nil
     }
     
     
     
+    @available(OSX 10.10, *)
     func setRmxID(rmxID: Int?) {
         (self as? RMXCameraNode)?._rmxID = rmxID
     }
 
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     var geometryNode: SCNNode? {
-        return self.rmxNode?.childNodeWithName("geometry", recursively: false)
+        if #available(OSX 10.10, *) {
+            return self.rmxNode?.childNodeWithName("geometry", recursively: false)
+        } else {
+            return nil // Fallback on earlier versions
+        }
     }
     
-    var boundingSphere: (center: RMXVector3, radius: CGFloat) {
-        var center: RMXVector3 = RMXVector3Zero; var radius: CGFloat = 0
+    @available(OSX 10.10, *)
+    var boundingSphere: (center: SCNVector3, radius: CGFloat) {
+        var center: SCNVector3 = SCNVector3Zero; var radius: CGFloat = 0
         self.getBoundingSphereCenter(&center, radius: &radius)
         return (center, radius)
     }
     
-    var boundingBox: (min: RMXVector, max: RMXVector) {
-        var min: RMXVector3 = RMXVector3Zero
-        var max: RMXVector3 = RMXVector3Zero
+    @available(OSX 10.10, *)
+    var boundingBox: (min: SCNVector3, max: SCNVector3) {
+        var min: SCNVector3 = SCNVector3Zero
+        var max: SCNVector3 = SCNVector3Zero
         self.getBoundingBoxMin(&min, max: &max)
         return (min, max)
     }
     
+    @available(OSX 10.10, *)
     var radius: RMFloat {
         return RMFloat(self.boundingSphere.radius) * RMFloat(self.scale.average)
     }

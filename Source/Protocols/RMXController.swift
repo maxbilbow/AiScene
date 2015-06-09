@@ -9,6 +9,7 @@
 import Foundation
 import SceneKit
 
+@available(OSX 10.10, *)
 protocol RMXControllerProtocol {
     var world: RMSWorld? { get }
     var activeSprite: RMXSprite? { get }

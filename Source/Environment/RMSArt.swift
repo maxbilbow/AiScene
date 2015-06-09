@@ -11,12 +11,8 @@ import GLKit
 
     import SceneKit
 
-#if iOS
-    typealias RMColor = UIColor
-    #elseif OSX
-    typealias RMColor = NSColor
-    #endif
 
+@available(OSX 10.10, *)
 class RMXArt {
     static let colorBronzeDiff: [Float]  = [ 0.8, 0.6, 0.0, 1.0 ]
     static let colorBronzeSpec: [Float]  = [ 1.0, 1.0, 0.4, 1.0 ]
@@ -52,10 +48,9 @@ class RMXArt {
         
         
         func drawAxis(axis: String) {
-            var point =  -radius
             var color: RMColor
-            var scale: RMXVector3 = RMXVector3Make(10)
-            var position = RMXVector3Make(0, scale.y / 2, 0)
+            var scale: SCNVector3 = SCNVector3Make(10)
+            var position = SCNVector3Make(0, y: scale.y / 2, z: 0)
             switch axis {
             case "x":
                 scale.x = radius * 2
@@ -111,34 +106,28 @@ class RMXArt {
             var X: RMFloat = 0; var Y: RMFloat = 0; var Z: RMFloat = 0
             func thisRandom(inout x: RMFloat, inout y: RMFloat, inout z: RMFloat) -> [RMFloat] {
                 func drawCondition(x:RMFloat, inout y:RMFloat, z:RMFloat) -> Bool{
-                    let position = RMXVector3Make(x,y,z)
-                    let distance = RMXVector3Distance(position, RMXVector3Zero)
-                    var test: Bool
+                    let position = SCNVector3Make(x,y: y,z: z)
+                    let distance = SCNVector3Distance(position, b: SCNVector3Zero)
                     y = RMFloat(fabs(y))
                     
                     return distance < radius
                 }
-                do {
+                repeat {
                     let points = RMX.doASum(radius, count: i, noOfShapes: noOfShapes )
                     x = points.x
                     y = points.y
                     z = points.z
-                } while drawCondition(x,&y,z)
+                } while drawCondition(x,y: &y,z: z)
                 return [ x, y, z ]
             }
-            randPos = thisRandom(&X,&Y,&Z)
+            randPos = thisRandom(&X,y: &Y,z: &Z)
 
             let size = RMFloat(8) //RMFloat(random() % 5 + 5)
-            var scale = RMXVector3Make(size,size,size)
-            var shape: ShapeType = types[random() % types.count]
+            let scale = SCNVector3Make(size,y: size,z: size)
+            let shape: ShapeType = types[random() % types.count]
 
 
-            let colorVector = RMXRandomColor()
-            #if OSX
-                let color = NSColor(calibratedRed: colorVector.x, green: colorVector.y, blue: colorVector.z, alpha: colorVector.w)
-                #elseif iOS
-                let color = UIColor(red: CGFloat(colorVector.x), green: CGFloat(colorVector.y), blue: CGFloat(colorVector.z), alpha: CGFloat(colorVector.w))
-            #endif
+            let color = RMX.randomColor()
         
             let node = RMXModels.getNode(shapeType: shape, scale: scale, color: color)
             
@@ -148,7 +137,7 @@ class RMXArt {
             
             
             let sprite = RMXSprite(inWorld: world, geometry: node, type: .PASSIVE, shape: .CUBE, unique: false)
-            sprite.setPosition( position: RMXVector3Make(randPos[0], randPos[1], randPos[2]))
+            sprite.setPosition( SCNVector3Make(randPos[0], randPos[1], randPos[2]))
 
                 
         }
@@ -157,7 +146,7 @@ class RMXArt {
     
     class func randomColor() -> GLKVector4 {
     //float rCol[4];
-        var rCol = GLKVector4Make(
+        let rCol = GLKVector4Make(
             Float(random() % 10)/10,
             Float(random() % 10)/10,
             Float(random() % 10)/10,
@@ -169,23 +158,16 @@ class RMXArt {
     
    
 }
-func RMXVector3Random(max: Int, min: Int, div: Int = 1) -> RMXVector3 {
+
+func SCNVector3Random(max: Int, min: Int, div: Int = 1) -> SCNVector3 {
     
-    return RMXVector3Make(
+    return SCNVector3Make(
         RMFloat((random() % max + min)/div),
-        RMFloat(abs((random() % max + min)/div)),
-        RMFloat((random() % max + min)/div)
+        y: RMFloat(abs((random() % max + min)/div)),
+        z: RMFloat((random() % max + min)/div)
     )
 
 }
 
-func RMXRandomColor() -> RMXVector4 {
-    //float rCol[4];
-    return RMXVector4Make(
-        RMFloat(random() % 800)/500,
-        RMFloat(random() % 800)/500,
-        RMFloat(random() % 800)/500,
-        1.0)
-}
 
 

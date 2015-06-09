@@ -61,22 +61,12 @@ class RMXDPad : RMXInterface {
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         
         if let videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo) {
-            var err: NSError? = nil
-            if let videoIn : AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &err) as? AVCaptureDeviceInput {
-                if(err == nil){
-                    if (captureSession.canAddInput(videoIn as AVCaptureInput)){
+            do {
+                if let videoIn : AVCaptureDeviceInput = try AVCaptureDeviceInput(device: videoDevice) {
                         captureSession.addInput(videoIn as AVCaptureDeviceInput)
-                    }
-                    else {
-                        println("Failed to add video input.")
-                    }
                 }
-                else {
-                    println("Failed to create video input.")
-                }
-            }
-            else {
-                println("Failed to create video capture device.")
+            } catch {
+                 print(error)
             }
         }
         captureSession.startRunning()
@@ -123,7 +113,7 @@ class RMXDPad : RMXInterface {
         super.hideButtons(hide)
     }
     
-    override func pauseGame(_ sender: AnyObject? = nil) -> Bool {
+    override func pauseGame(sender: AnyObject? = nil) -> Bool {
         if super.pauseGame(sender) {
             self.pauseMenu?.hidden = false
             self.menuAccessBar?.hidden = true
@@ -134,7 +124,7 @@ class RMXDPad : RMXInterface {
     
     }
     
-    override func unPauseGame(_ sender: AnyObject? = nil) -> Bool {
+    override func unPauseGame(sender: AnyObject? = nil) -> Bool {
         if super.unPauseGame(sender) {
             self.pauseMenu?.hidden = true
             self.menuAccessBar?.hidden = false
@@ -162,8 +152,8 @@ class RMXDPad : RMXInterface {
     
     internal func makePauseMenu() {
         self.menuAccessBar = UIView(frame: self.topBarBounds)
-        self.makeButton(title: "      +", selector: "showTopBar:", view: self.menuAccessBar, row: (1,1), col: (self.topColumns,self.topColumns))
-        self.makeButton(title: "||     ", selector: "pauseGame:" , view: self.menuAccessBar, row: (1,1), col: (1,self.topColumns))
+        self.makeButton("      +", selector: "showTopBar:", view: self.menuAccessBar, row: (1,1), col: (self.topColumns,self.topColumns))
+        self.makeButton("||     ", selector: "pauseGame:" , view: self.menuAccessBar, row: (1,1), col: (1,self.topColumns))
         
         self.gameView!.addSubview(self.menuAccessBar!)
         
@@ -171,14 +161,14 @@ class RMXDPad : RMXInterface {
         self.pauseMenu!.hidden = true
         self.pauseMenu?.backgroundColor = UIColor.grayColor()
         
-        self.makeButton(title: "||     ", selector: "unPauseGame:" , view: self.pauseMenu, row: (1,1), col: (1,self.topColumns))
-        self.makeButton(title: "New Game", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (3,6))
-        self.makeButton(title: "Options", selector: "optionsMenu:", view: self.pauseMenu, row: (1,1), col: (3,4))
-        self.makeButton(title: "Exit to main menu", selector: "exitToMainMenu:", view: self.pauseMenu, row: (1,1), col: (4,4))
+        self.makeButton("||     ", selector: "unPauseGame:" , view: self.pauseMenu, row: (1,1), col: (1,self.topColumns))
+        self.makeButton("New Game", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (3,6))
+        self.makeButton("Options", selector: "optionsMenu:", view: self.pauseMenu, row: (1,1), col: (3,4))
+        self.makeButton("Exit to main menu", selector: "exitToMainMenu:", view: self.pauseMenu, row: (1,1), col: (4,4))
 
         
         
-        let last: CGFloat = self.topColumns; let rows: CGFloat = 1// view.bounds.height / height
+//        let last: CGFloat = self.topColumns; let rows: CGFloat = 1// view.bounds.height / height
         self.gameView!.addSubview(self.pauseMenu!)
     }
     
@@ -195,22 +185,22 @@ class RMXDPad : RMXInterface {
         let last: CGFloat = self.topColumns; let rows: CGFloat = 1// view.bounds.height / height
         
         
-        self.makeButton(title: "  < CAM", selector: "previousCamera:", view: view, row: (1,rows), col: (1,self.topColumns))
+        self.makeButton("  < CAM", selector: "previousCamera:", view: view, row: (1,rows), col: (1,self.topColumns))
         
-        self.makeButton(title: "  RESET", selector: "resetTransform:", view: view, row: (1,rows), col: (2,self.topColumns)) //UIButton(frame: rect(1))
+        self.makeButton("  RESET", selector: "resetTransform:", view: view, row: (1,rows), col: (2,self.topColumns)) //UIButton(frame: rect(1))
         
-        self.makeButton(title: "   AI  ", selector: "toggleAi:", view: view, row: (1,rows), col: (3,self.topColumns))
+        self.makeButton("   AI  ", selector: "toggleAi:", view: view, row: (1,rows), col: (3,self.topColumns))
         
-        self.makeButton(title: " GRAV  ", selector: "toggleAllGravity:", view: view, row: (1,rows), col: (4,self.topColumns))
+        self.makeButton(" GRAV  ", selector: "toggleAllGravity:", view: view, row: (1,rows), col: (4,self.topColumns))
         
-//        self.makeButton(title: " DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
+//        self.makeButton(" DATA  ", selector: "printData:", view: view, row: (1,rows), col: (5,self.topColumns))
         
-//        self.makeButton(title: " Video ", selector: "startVideo:", view: view, row: (1,rows), col: (6,self.topColumns))
-        self.makeButton(title: " SCORE ", selector: "showScores:", view: view, row: (1,rows), col: (5,self.topColumns))
+//        self.makeButton(" Video ", selector: "startVideo:", view: view, row: (1,rows), col: (6,self.topColumns))
+        self.makeButton(" SCORE ", selector: "showScores:", view: view, row: (1,rows), col: (5,self.topColumns))
         
-        self.makeButton(title: "  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (last - 1,self.topColumns))
+        self.makeButton("  CAM >", selector: "nextCamera:", view: view, row: (1,rows), col: (last - 1,self.topColumns))
         
-        self.makeButton(title: "      -", selector: "showTopBar:", view: view, row: (1,rows), col: (last,self.topColumns))
+        self.makeButton("      -", selector: "showTopBar:", view: view, row: (1,rows), col: (last,self.topColumns))
         
         self.gameView!.addSubview(self.topBar!)
 //        self.gameView.addSubview(self.menuAccessBar!)
@@ -238,7 +228,7 @@ class RMXDPad : RMXInterface {
         
         let w = self.gameView!.bounds.size.width
         let h = self.gameView!.bounds.size.height - topBar.bounds.height
-        let leftView: UIView = UIImageView(frame: CGRectMake(0, topBar.bounds.height, w/2, h))
+//        let leftView: UIView = UIImageView(frame: CGRectMake(0, topBar.bounds.height, w/2, h))
         let rightView: UIView = UIImageView(frame: CGRectMake(w / 3, topBar.bounds.height, w * 2 / 3, h))
         rightView.userInteractionEnabled = true
         

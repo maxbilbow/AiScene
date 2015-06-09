@@ -9,15 +9,17 @@
 import Foundation
 import SceneKit
 
-
+@available(OSX 10.10, *)
 typealias CollisionRequest = (contact: SCNPhysicsContact) -> Bool
 
+@available(OSX 10.10, *)
 extension SCNPhysicsContact : RMXLocatable {
     func getPosition() -> SCNVector3 {
         return self.contactPoint
     }
 }
 
+@available(OSX 10.10, *)
 class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     enum type { case Began, Updated, Ended }

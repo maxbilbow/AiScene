@@ -62,7 +62,7 @@ extension RMXDPad {
             self.action(UserAction.STOP_MOVEMENT)
         } else {
             var move = CGPoint(x: point.x - self.moveOrigin.x, y: point.y - self.moveOrigin.y)
-            var bMove = move
+
             
             let rect = self.moveButtonCenter
             
@@ -71,7 +71,7 @@ extension RMXDPad {
             move.x = _limit(move.x, limit: limX) /// limX //move.x > 0 ? x : -x
             move.y = _limit(move.y, limit: limY) /// limY //move.y > 0 ? y : -y
             
-            var percentage = CGPoint(x: move.x / limX, y: move.y / limY)
+            let percentage = CGPoint(x: move.x / limX, y: move.y / limY)
             self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + move * 1
 //            self.moveButtonPad?.setNeedsDisplay()
             self.action(UserAction.MOVE, speed: 1, args: percentage * CGFloat(RMXInterface.moveSpeed))

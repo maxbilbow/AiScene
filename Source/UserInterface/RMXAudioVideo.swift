@@ -10,11 +10,12 @@ import Foundation
 import AVFoundation
 import SceneKit
 
+@available(OSX 10.10,*)
 protocol RMXLocatable {
     func getPosition() -> SCNVector3
 }
 
-
+@available(OSX 10.10, *)
 class RMXAudioVideo {
     
     var interface: RMXInterface
@@ -50,8 +51,9 @@ class RMXAudioVideo {
         return NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource(name, ofType: ext)!)
     }
     
+    @available(OSX 10.10, *)
     func playSound(name: String, info: AnyObject?, volume maxVolume: Float = 1, range: Float = 500, autoPlay: Bool = true, volume: Float = 1) -> Bool {
-        var position: RMXVector!
+        var position: SCNVector3!
         if let contact = info as? SCNNode {
             position = contact.presentationNode().position
         } else {
@@ -91,8 +93,13 @@ class RMXAudioVideo {
         }
     }
     
-    class func player(url: NSURL?) -> AVAudioPlayer {
-        return AVAudioPlayer(contentsOfURL: url, error: nil)
+    class func player(url: NSURL?) -> AVAudioPlayer! {
+        do {
+            return try AVAudioPlayer(contentsOfURL: url!)
+        } catch {
+            print(error)
+            return nil
+        }
     }
 //    func getPlayer(name: String) -> AVAudioPlayer? {
 //        if let url = self.url(name, ofType ext: {

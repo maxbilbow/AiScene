@@ -13,17 +13,17 @@ import GLKit
 
 
 
-protocol RMXSpriteManager {
-//    
-}
 
+@available(OSX 10.10, *)
 extension SCNPhysicsContact {
     func getDefender(forChallenger challenger: RMXSprite) -> SCNNode {
         return self.nodeA == challenger.node ? nodeB : nodeA
     }
 }
+@available(OSX 10.10, *)
+typealias RMXSprite = RM3DEntity
 
-
+@available(OSX 10.10, *)
 class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     lazy var tracker: RMXTracker = RMXTracker(sprite: self)
 //    var hitTarget = false
@@ -44,7 +44,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     var holder: RMXSprite?
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     var isHeld: Bool {
         return self.holder != nil
     }
@@ -66,7 +66,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     var radius: RMFloat {
         
-       // let radius = RMXVector3Length(self.boundingBox.max * self.scale)
+       // let radius = SCNVector3Length(self.boundingBox.max * self.scale)
         return self.boundingSphere.radius //* RMFloat(self.scale.average)//radius
     }
 
@@ -93,7 +93,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     var type: RMXSpriteType
 //    var wasJustThrown:Bool = false
-    var anchor = RMXVector3Zero
+    var anchor = SCNVector3Zero
 
     
 //    lazy var body: RMSPhysicsBody? = RMSPhysicsBody(self)
@@ -125,17 +125,16 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     private func _updateName(ofNode node: SCNNode, oldName: String?) {
         for node in node.childNodes {
-            if let node = node as? SCNNode {
-                if node.name != nil && oldName != nil {
-                    
-                    node.name = node.name?.stringByReplacingOccurrencesOfString(oldName!, withString: self.uniqueID!, options: NSStringCompareOptions.LiteralSearch, range: nil)
-                    
-                    _updateName(ofNode: node, oldName: oldName)
-                } else {
-                    node.name = self.uniqueID
-                    
-                }
+            if node.name != nil && oldName != nil {
+                
+                node.name = node.name?.stringByReplacingOccurrencesOfString(oldName!, withString: self.uniqueID!, options: NSStringCompareOptions.LiteralSearch, range: nil)
+                
+                _updateName(ofNode: node, oldName: oldName)
+            } else {
+                node.name = self.uniqueID
+                
             }
+            
         }
     }
 
@@ -197,34 +196,34 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.boundingBox.max.y * 2//* self.scale.y
     }
     
-    var bottom: RMXVector {
+    var bottom: SCNVector3 {
         return self.boundingBox.min * self.upVector// * self.scale.y
     }
     
-    var top: RMXVector {
+    var top: SCNVector3 {
         return self.boundingBox.max * self.upVector// * self.scale.y
     }
     
-    var front: RMXVector {
+    var front: SCNVector3 {
         return self.boundingBox.max * self.forwardVector// * self.scale.z
     }
     
-    var back: RMXVector {
+    var back: SCNVector3 {
         return self.boundingBox.min * self.forwardVector// * self.scale.z
     }
     
-    var left: RMXVector {
+    var left: SCNVector3 {
         return self.boundingBox.min * self.leftVector// * self.scale.x
     }
     
-    var right: RMXVector {
+    var right: SCNVector3 {
         return self.boundingBox.max * self.leftVector// * self.scale.x
     }
     
 
     private var _maxSquat: RMFloat = 0
     
-    var startingPoint: RMXVector3 = RMXVector3Zero
+    var startingPoint: SCNVector3 = SCNVector3Zero
     var x,y,z: RMFloat?
     
     
@@ -243,7 +242,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
 
     ///Set automated rotation (used mainly for the sun)
     ///@todo create a behavior protocal/class instead of fun pointers.
-    var rAxis = RMXVector3Make(0,0,1)
+    var rAxis = SCNVector3Make(0,0,1)
     
 
     
@@ -264,7 +263,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return _itemInHand
     }
     
-    var itemPosition: RMXVector3 = RMXVector3Zero
+    var itemPosition: SCNVector3 = SCNVector3Zero
     
     convenience init(world: RMSWorld, type: RMXSpriteType = .ABSTRACT, shape: ShapeType = .NULL){
         self.init(inWorld: world, type: type, shape: shape)
@@ -305,7 +304,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
             self._spriteLogic.append(self.tracker.headToTarget)
             self.setMass()
             break
-        case .PLAYER, .AI:
+        case _ where self.isPlayerOrAi:
             self._spriteLogic.append(self.manipulate)
             break
         default:
@@ -354,7 +353,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         
         if speed == nil && rotationSpeed == nil {
             switch self.type {
-            case .PLAYER, .AI:
+            case _ where self.type == .PLAYER || self.type == .AI:
                 self.physicsBody?.damping = 0.5
                 self.physicsBody?.angularDamping = 0.99
             case .PASSIVE:
@@ -366,7 +365,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                 self.physicsBody?.damping = 1000
                 self.physicsBody?.angularDamping = 1000
                 break
-            case .PASSIVE, .BACKGROUND, .ABSTRACT:
+            case _ where !self.isPlayerOrAi:
                 self.attributes.setTeamID("\(-1)")
                 break
             default:
@@ -392,7 +391,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         if !self.world.validate(self) {
             //                NSLog("reset \(sprite.name)")
             let lim = Int(self.world.radius / 2)
-            self.setPosition(position: RMXVector3Random(lim, -lim), resetTransform: true)
+            self.setPosition(SCNVector3Random(lim, min: -lim), resetTransform: true)
             self.releaseItem()
         }
     }
@@ -401,19 +400,19 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.attributes.teamID != "-2"
     }
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     var hasFollowers: Bool {
         return false// followers.count > 0
     }
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     var followers: [ Int: RMXSprite ] = Dictionary<Int,RMXSprite>()
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     func follow(sprite: RMXSprite?){
         sprite?.followers[self.rmxID!] = self
     }
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     func stopFollowing(sprite: RMXSprite?) {
         sprite?.followers.removeValueForKey(self.rmxID!)
     }
@@ -449,13 +448,12 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
     var canGrabPlayers: Bool = false
     
-//    var acceleration: RMXVector3?// = RMXVector3Zero
+//    var acceleration: SCNVector3?// = SCNVector3Zero
     private let _zNorm = 90 * PI_OVER_180
     
 
     
     func runActions(name: String, actions: (SCNNode!) -> Void ...) {
-        var count = 0
         for action in actions {
             action(nil)
 //            self.rmxNode.runAction(SCNAction.runBlock(action), forKey: "\(name)\(++count)")//.runBlock({ (node: RMXNode!) -> Void in
@@ -469,7 +467,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
 
     
 
-    func debug(_ yes: Bool = true){
+    func debug(yes: Bool = true){
         if yes {
             let transform = self.transform
             if self.isActiveSprite { RMLog("\nTRANSFORM:\n\(transform.print),\n   POV: \(self.viewPoint.print)") }
@@ -484,7 +482,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
 //    var cameraNumber: Int = 0
 
     
-    func initPosition(startingPoint point: RMXVector3){
+    func initPosition(startingPoint point: SCNVector3){
         func set(inout value: RMFloat?, new: RMFloat) -> RMFloat {
             if let X = value {
                 return X
@@ -496,7 +494,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.x = self.x ?? point.x
         self.y = self.y ?? point.y
         self.z = self.z ?? point.z
-        self.startingPoint = RMXVector3Make(self.x!,self.y!,self.z!)
+        self.startingPoint = SCNVector3Make(self.x!,self.y!,self.z!)
         self.resetTransform()
         //self.rmxNode.position = startingPoint
         
@@ -680,10 +678,10 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     
     func printBounds() {
-        var min = RMXVector3Zero
+        var min = SCNVector3Zero
         var max = min
         self.node.getBoundingBoxMin(&min, max: &max)
-        let radius = RMXVector3Length(max)
+        let radius = max.length
         RMLog("\(self.name) pos: \(self.position.print), R: \(radius.toData()), boxMin: \(min.print), boxMax: \(max.print)")
     }
     
@@ -697,7 +695,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                     newPos.y = minHeight
                 }
             }
-            self.item!.setPosition(position: newPos)//, resetTransform: false)
+            self.item!.setPosition(newPos)//, resetTransform: false)
             RMLog("\(self.name!) is holding a non-dynamic body", sender: self, id: "MISC")
         }
     }
@@ -722,10 +720,10 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
                 if itemIncoming.isPlayerOrAi {
                     itemIncoming.physicsBody?.type = .Static
                 } else {
-                    itemIncoming.setMass(mass: 1)
-                    _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody, anchorA: self.arm.position, bodyB: itemIncoming.physicsBody, anchorB: itemIncoming.arm.position) //+ RMXVector3Make(item.arm.radius))
+                    itemIncoming.setMass(1)
+                    _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody!, anchorA: self.arm.position, bodyB: itemIncoming.physicsBody!, anchorB: itemIncoming.arm.position) //+ SCNVector3Make(item.arm.radius))
                     itemIncoming.physicsBody?.restitution = 0
-                    self.scene?.physicsWorld.addBehavior(_arm)
+                    self.scene?.physicsWorld.addBehavior(_arm!)
                 }
                 //joint
                 return true
@@ -744,7 +742,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
             if itemInHand.isPlayerOrAi {
                 itemInHand.physicsBody?.type = .Dynamic
             } else {
-                self.scene?.physicsWorld.removeBehavior(_arm)
+                self.scene?.physicsWorld.removeBehavior(_arm!)
                 itemInHand.setMass()
                 itemInHand.physicsBody?.restitution = 0.5
                 _arm = nil
@@ -784,15 +782,16 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.setItem(item: nil)
     }
     
-    
-    var boundingSphere: (center: RMXVector3, radius: RMFloat) {
+    @available(OSX 10.10, *)
+    var boundingSphere: (center: SCNVector3, radius: RMFloat) {
         var center: SCNVector3 = SCNVector3Zero
         var radius: CGFloat = 0
         self.node.getBoundingSphereCenter(&center, radius: &radius)
         return (center, RMFloat(radius))
     }
     
-    var boundingBox: (min: RMXVector, max: RMXVector) {
+    @available(OSX 10.10, *)
+    var boundingBox: (min: SCNVector3, max: SCNVector3) {
         var min: SCNVector3 = SCNVector3Zero
         var max: SCNVector3 = SCNVector3Zero
         self.node.getBoundingBoxMin(&min, max: &max)
@@ -807,7 +806,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     func jump() {
         if self.position.y < self.height * 10 {
-            self.applyForce(RMXVector3Make(0, _jumpStrength, 0), impulse: true)
+            self.applyForce(SCNVector3Make(0, y: _jumpStrength, z: 0), impulse: true)
         }
     }
     
@@ -819,20 +818,20 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     func setAngle(yaw: RMFloat? = nil, pitch: RMFloat? = nil, roll r: RMFloat? = nil) {
         self.setPosition(resetTransform: false)
-        if let theta = yaw {
+        if let _ = yaw {
             self.node.orientation.y = 0
         }
-        if let phi = pitch {
+        if let _ = pitch {
             self.node.orientation.x = 0
         }
-        if let roll = r {
+        if let _ = r {
             self.node.orientation.z = 0
         }
         self.resetTransform()
         
     }
     
-    @availability(*,deprecated=0,message="Use rotate:theta:phi:roll instead")
+    @available(*,deprecated=0,message="Use rotate:theta:phi:roll instead")
     func lookAround(theta t: RMFloat? = nil, phi p: RMFloat? = nil, roll r: RMFloat? = nil) {
         self.rotate(theta: t, phi: p, roll: r)
     }
@@ -853,7 +852,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
             let axis = self.transform.forward
             let speed = self.rotationSpeed * roll
             self.physicsBody?.applyTorque(SCNVector4Make(axis.x,axis.y,axis.z, -speed), impulse: false)
-            //            self.rmxNode.transform *= RMXMatrix4MakeRotation(speed * 0.0001, RMXVector3Make(0,0,1))
+            //            self.rmxNode.transform *= RMXMatrix4MakeRotation(speed * 0.0001, SCNVector3Make(0,0,1))
         }
         
     }
@@ -906,7 +905,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     func completeStop(){
         self.stop()
-        self.physicsBody?.velocity = RMXVector3Zero
+        self.physicsBody?.velocity = SCNVector3Zero
     }
     
     
@@ -920,7 +919,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.physicsBody!.mass * CGFloat(self.world.gravity.length * 2)
     }
     
-    func distanceTo(point: RMXVector3) -> RMFloat{
+    func distanceTo(point: SCNVector3) -> RMFloat{
         return RMFloat((self.position - point).length)
     }
     
@@ -928,15 +927,15 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         return self.distanceTo(object.position)
     }
     
-    var velocity: RMXVector {
+    var velocity: SCNVector3 {
         if let body = self.physicsBody {
             return body.velocity //body.velocity
         } else {
-            return RMXVector3Zero
+            return SCNVector3Zero
         }
     }
     
-    func setPosition(position: RMXVector3? = nil, resetTransform: Bool = true){
+    func setPosition(position: SCNVector3? = nil, resetTransform: Bool = true){
         self.node.transform = self.transform
         if let position = position {
             self.node.position = position
@@ -946,7 +945,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         }
     }
     
-    @availability(*,deprecated=0)
+    @available(*,deprecated=0)
     class func rootNode(node: SCNNode, rootNode: SCNNode) -> SCNNode {
         if node.parentNode == rootNode || node.parentNode == nil {
             RMLog("RootNode: \(node.name)")
@@ -981,24 +980,20 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     }
 
     
-    var upVector: RMXVector {
+    var upVector: SCNVector3 {
         return self.transform.up
     }
     
-    var leftVector: RMXVector {
+    var leftVector: SCNVector3 {
         return self.transform.left
     }
     
-    var forwardVector: RMXVector {
+    var forwardVector: SCNVector3 {
         return self.transform.forward
     }
-        
-}
-    
-extension RMXSprite {
     
     
-    func setColor(#color: RMColor){
+    func setColor(color color: RMColor){
         
         self.geometry?.firstMaterial!.diffuse.contents = color
         self.geometry?.firstMaterial!.diffuse.intensity = 1
@@ -1010,7 +1005,7 @@ extension RMXSprite {
         
     }
     
-    func makeAsSun(rDist: RMFloat = 1000, rAxis: RMXVector3 = RMXVector3Make(1,0,0)) -> RMXSprite {
+    func makeAsSun(rDist: RMFloat = 1000, rAxis: SCNVector3 = SCNVector3Make(1,y: 0,z: 0)) -> RMXSprite {
         //        self.type = .BACKGROUND
         
         
@@ -1033,7 +1028,7 @@ extension RMXSprite {
 
 
 
-
+@available(OSX 10.10, *)
 extension RMXSprite : RMXLocatable {
     
     func getPosition() -> SCNVector3 {

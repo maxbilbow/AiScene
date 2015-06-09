@@ -25,7 +25,7 @@ import SpriteKit
 
     
 
-
+@available(OSX 10.10, *)
 class RMXInterface : NSObject, RendererDelegate {
 
     
@@ -79,7 +79,7 @@ class RMXInterface : NSObject, RendererDelegate {
         self.gvc = gvc
         super.init()
         self.setUpViews()
-        self.newGame(type: RMXInterface.DEFAULT_GAME)
+        self.newGame(RMXInterface.DEFAULT_GAME)
         self.viewDidLoad()
         RMXLog()
     }
@@ -107,7 +107,7 @@ class RMXInterface : NSObject, RendererDelegate {
     
     func setUpViews() {
         let bounds = _scoreboardRect
-        var skScene: SKScene = SKScene(size: bounds.size)
+        let skScene: SKScene = SKScene(size: bounds.size)
         //            bounds.height =
         self.scoreboard = SKView(frame: bounds)
         self.scoreboard.presentScene(skScene)
@@ -120,21 +120,6 @@ class RMXInterface : NSObject, RendererDelegate {
         self.scoreboard.hidden = true
         
         
-    }
-
-    func log(_ message: String = "", sender: String = __FUNCTION__, line: Int = __LINE__) {
-        if _isDebugging {
-            self.debugData += "  \(sender) on line \(line): \(message)"
-        }
-    }
-    
-    func debug() {
-        if debugData != ""{
-            RMLog("\(debugData)")
-//            self.log("\n x\(leftPanData.x.toData()), y\(leftPanData.y)",sender: "LEFT")
-//            self.log("x\(rightPanData.x.toData()), y\(rightPanData.y.toData())",sender: "RIGHT")
-        }
-        debugData = ""
     }
     
     private static let DEFAULT_GAME: GameType = .TEAM_GAME
@@ -155,7 +140,7 @@ class RMXInterface : NSObject, RendererDelegate {
     ///Swictches between gamemode without deleting or duplicating environments.
     func newGame(type: GameType? = nil) {
         self.pauseGame()
-        _world = _newGame(type: type)
+        _world = _newGame(type)
         self.isNewGame = true
         _world?.calibrate()
         self.updateScoreboard()
@@ -186,7 +171,7 @@ class RMXInterface : NSObject, RendererDelegate {
             if let newWorld = self.activeGames[type] {
                 if _world != nil && _world! === newWorld && self.availableGames.count > 1 {
                     RMLog("Game matched the current world - try again: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (fail)")
-                    return self._newGame(type: nil)
+                    return self._newGame(nil)
                 } else {
                     RMLog("SUCCESS - Game exits: \(n) of \(self.availableGames.count) - \(_world?.rmxID) - \(newWorld.rmxID) (done)")
                     _world = newWorld
@@ -244,7 +229,7 @@ class RMXInterface : NSObject, RendererDelegate {
                 if let node: SCNNode = hitResults[0].node {
 //                NSLog(result.)
                 
-                    var animate: Bool = false
+//                    var animate: Bool = false
                     if type == .THROW_ITEM {
                         if self.actionProcessor.throwOrGrab(node.sprite, tracking: true) {
                             self.animateHit(node)
@@ -270,8 +255,7 @@ class RMXInterface : NSObject, RendererDelegate {
         if self.scoreboard.hidden {
             return
         }
-        if let world = _world {
-            var min = 0
+        if _world != nil{
             var lns: [String] = [ self.world.name ?? "Unknown Gamemode", self.activeSprite.attributes.printScore ]
             if self.world.teams.count > 0 {
                 for team in self.world.teams {
@@ -315,7 +299,7 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func organiseLines() {
-        var lnHeight = self.scoreboard.bounds.size.height / CGFloat(self.lineCount + 2)
+        let lnHeight = self.scoreboard.bounds.size.height / CGFloat(self.lineCount + 2)
         var yPos: CGFloat = self.scoreboard.bounds.size.height - lnHeight * 1.7
         for label in self.lines {
             if label.text == "" {
@@ -342,7 +326,7 @@ class RMXInterface : NSObject, RendererDelegate {
 
     }
     
-    enum KeyboardType { case French, UK }
+    enum KeyboardType { case French, UK, DEFAULT }
     func setKeyboard(type: KeyboardType = .UK)  {
         self.keyboard = type
     }
@@ -367,7 +351,7 @@ class RMXInterface : NSObject, RendererDelegate {
         return _world != nil && !_world!.paused//scene.paused
     }
     
-    func pauseGame(_ sender: AnyObject? = nil) -> Bool {
+    func pauseGame(sender: AnyObject? = nil) -> Bool {
 //        if sender is RMXObject { RMLog("Pause requested by \(sender?.uniqueID)") }
         if _world?.pause() != nil {
 //            self.updateScoreboard()
@@ -382,7 +366,7 @@ class RMXInterface : NSObject, RendererDelegate {
         return true
     }
     
-    func unPauseGame(_ sender: AnyObject? = nil) -> Bool {
+    func unPauseGame(sender: AnyObject? = nil) -> Bool {
 //        if sender is RMXObject { RMLog("UnPause requested by \(sender?.uniqueID)") }
         if _world?.unPause() != nil {
             self.scoreboard.hidden = true //self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
@@ -412,8 +396,8 @@ class RMXInterface : NSObject, RendererDelegate {
         return CGRectMake(bounds.width * (col.0 - 1) / col.1, bounds.height * (row.0 - 1) / row.1, bounds.width / col.1, bounds.height / row.1)
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        switch keyPath {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        switch keyPath! {
         case RMSWorld.kvScores:
             self.updateScoreboard()
             break

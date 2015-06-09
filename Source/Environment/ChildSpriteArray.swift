@@ -8,8 +8,9 @@
 
 import Foundation
 
+@available(OSX 10.10, *)
 extension RMX {
-    static func spriteWith(#ID: Int, inArray array: Array<RMXSprite>) -> RMXSprite? {
+    static func spriteWith(ID ID: Int, inArray array: Array<RMXSprite>) -> RMXSprite? {
         for sprite in array {
             if sprite.rmxID == ID {
                 return sprite

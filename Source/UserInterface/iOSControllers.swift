@@ -37,28 +37,14 @@ extension RMXDPad {
         self.action(UserAction.ZoomInAnOut, speed: RMFloat(recogniser.velocity))
     }
     
-
-    @availability(*,deprecated=1)
-        func noTouches(recognizer: UIGestureRecognizer) {
-            if recognizer.state == UIGestureRecognizerState.Ended {
-                self.action(UserAction.STOP_MOVEMENT)
-                self.log("noTouches?")
-            }
-//            _handleRelease(recognizer.state)
-        }
-
-        
-        func toggleGravity(recognizer: UITapGestureRecognizer) {
-            self.log()
+    
+    func toggleGravity(recognizer: UITapGestureRecognizer) {
             self.action(UserAction.TOGGLE_GRAVITY, speed: 1)
-//            _handleRelease(recognizer.state)
         }
         
         
     func toggleAllGravity(recognizer: UITapGestureRecognizer) {
-        self.log()
         self.action(UserAction.TOGGLE_GRAVITY, speed: 1)
-//        _handleRelease(recognizer.state)
     }
     
     
@@ -87,9 +73,6 @@ extension RMXDPad {
 
 
     func grabOrThrow(recognizer: UITapGestureRecognizer) {
-        let spriteAction = self.world.activeSprite
-
-
         // retrieve the SCNView
         let scnView = self.gameView//.view as! GameView
         // check what nodes are tapped

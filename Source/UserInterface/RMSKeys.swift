@@ -22,6 +22,7 @@ import SceneKit
 /// The RMSActionProcessor class handles the application of the human term "forward", regardless of interface used. See also `RMXDPad` for iOS.
 ///
 /// See also: `RMKeys` and  `RMSActionProcessor`.
+@available(OSX 10.10, *)
 class RMSKeys : RMXInterface {
     
     
@@ -194,39 +195,41 @@ class RMSKeys : RMXInterface {
         return nil
     }
     
-    func match(chr: String) -> NSMutableArray {
-        let keys: NSMutableArray = NSMutableArray(capacity: chr.pathComponents.count)
-        for key in self.keys {
-            RMLog(key.description)
-            for str in chr.pathComponents {
-                if key.characters == str {
-                    keys.addObject(key)
-                }
-            }
-            
-        }
-        return keys
-    }
+//    func match(chr: String) -> NSMutableArray {
+//        let keys: NSMutableArray = NSMutableArray(capacity: chr.pathComponents.count)
+//        for key in self.keys {
+//            RMLog(key.description)
+//            for str in chr.pathComponents {
+//                if key.characters == str {
+//                    keys.addObject(key)
+//                }
+//            }
+//            
+//        }
+//        return keys
+//    }
     
-    func match(value: UInt16) -> RMKey? {
-        for key in keys {
-            RMLog(key.description)
-            if key.charToInt == Int(value) {
-                return key
-            }
-        }
-        return nil
-    }
+//    func match(value: UInt16) -> RMKey? {
+//        for key in keys {
+//            RMLog(key.description)
+//            if key.charToInt == Int(value) {
+//                return key
+//            }
+//        }
+//        return nil
+//    }
     
-    var origin: NSPoint{
+    private var origin: NSPoint{
         let size = (self.gameView?.frame.size)!//.window!.frame
         let point = (self.gameView?.window!.frame.origin)!
         let x = point.x + size.width / 2
         let y = point.y + size.height / 2
         return NSPoint(x: x, y: y)
     }
-    var lastPos: NSPoint = NSEvent.mouseLocation()
-    var mouseDelta: NSPoint {
+
+    private var lastPos: NSPoint = NSEvent.mouseLocation()
+    
+    private var mouseDelta: NSPoint {
         let newPos = NSEvent.mouseLocation()
         let lastPos = self.lastPos
 //        RMLog("  OLD: \(lastPos.x), \(lastPos.y)\n  New: \(newPos.x), \(newPos.y)")
@@ -264,7 +267,7 @@ class RMSKeys : RMXInterface {
     
     ///Adapt the keyboard for different layouts
     override func setKeyboard(type: KeyboardType = .UK) {
-        super.setKeyboard(type: type)
+        super.setKeyboard(type)
         switch type {
         case .French:
             self.set(action: UserAction.MOVE_FORWARD, characters: "z")
@@ -300,6 +303,8 @@ class RMSKeys : RMXInterface {
 /// This maps a most binary commands to the action processor
 ///
 /// See also: `RMKeys` and  `RMSActionProcessor`.
+
+@available(OSX 10.10, *)
 class RMKey {
 //    private var _key: String?
     var isPressed: Bool = false
@@ -343,9 +348,9 @@ class RMKey {
         }
     }
     
-    func actionWithValues(values: [RMFloat]){
-        self.keys.action(self.action, speed: self.speed.on, args: values)
-    }
+//    func actionWithValues(values: [RMFloat]){
+//        self.keys.action(self.action, speed: self.speed.on, args: values)
+//    }
     
     ///Returns true if key was already pressed, and sets isPressed = false
     func release(object: Any? = nil) -> Bool{
@@ -358,11 +363,12 @@ class RMKey {
     }
     
     init(name: String){
-        fatalError("'\(name)' not recognised in \(__FILE__.lastPathComponent)")
+        fatalError("'\(name)' not recognised")
     }
-    var charToInt: Int {
-        return self.characters.toInt() ?? -1
-    }
+    
+//    var charToInt: Int {
+//        return Int(self.characters) ?? -1
+//    }
     
     var description: String {
         return "\(self.action): \(self.characters), speed: \(self.speed), pressed: \(self.isPressed)"
@@ -393,59 +399,70 @@ class RMKey {
 //}
 
 
+
 extension GameView {
     
+    @available(OSX 10.10, *)
     var keys: RMSKeys {
         return self.interface as! RMSKeys
     }
     
+    
     override func keyDown(theEvent: NSEvent) {
-        if let key = self.keys.forEvent(theEvent) {
-            if !key.press() {
-                RMLog("ERROR on Key Down for \(key.print)")
+        if #available(OSX 10.10, *) {
+            if let key = self.keys.forEvent(theEvent) {
+                if !key.press() {
+                    RMLog("ERROR on Key Down for \(key.print)")
+                }
+            } else {
+                if let n = Int((theEvent.characters)!) {
+                    self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: "\(n)", isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
+                } else {
+                    super.keyDown(theEvent)
+                }
             }
         } else {
-            if let n = theEvent.characters?.toInt() {
-                self.keys.keys.append(RMKey(self.keys, action: theEvent.characters!, characters: "\(n)", isRepeating: false, speed: RMSKeys.ON_KEY_DOWN))
-            } else {
-                super.keyDown(theEvent)
-            }
+            // Fallback on earlier versions
         }
         
     }
     
     override func keyUp(theEvent: NSEvent) {
-        
-        if let key = self.keys.forEvent(theEvent) {
-            RMLog("Key recognised: \(key.print) \n\(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
-            if !key.release() {
-                RMLog("ERROR on Key Up for \(key.print)")
+        if #available(OSX 10.10, *) {
+            if let key = self.keys.forEvent(theEvent) {
+                RMLog("Key recognised: \(key.print) \n\(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
+                if !key.release() {
+                    RMLog("ERROR on Key Up for \(key.print)")
+                }
+            } else {
+    //            RM("new key added:\n\n \(theEvent.description)")
+                RMLog("Key unrecognised \(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
+                
+                super.keyUp(theEvent)
             }
         } else {
-//            RM("new key added:\n\n \(theEvent.description)")
-            RMLog("Key unrecognised \(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
-            
-            super.keyUp(theEvent)
+            // Fallback on earlier versions
         }
     }
     
     
-}
-
-extension GameView {
     override func rightMouseUp(theEvent: NSEvent) {
         
 
-        if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.release() ?? false {
-            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
+        if #available(OSX 10.10, *) {
+            if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.release() ?? false {
+                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+                if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
+                    super.rightMouseUp(theEvent)
+                }
+        
+                RMLog("UP hit successful: \(p)", id: "keys")
+            } else {
+    //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
                 super.rightMouseUp(theEvent)
             }
-    
-            RMLog("UP hit successful: \(p)", id: "keys")
         } else {
-//            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-            super.rightMouseUp(theEvent)
+            // Fallback on earlier versions
         }
         
        
@@ -453,30 +470,38 @@ extension GameView {
     
     override func rightMouseDown(theEvent: NSEvent) {
         
-        if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.press() ?? false {
-            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
+        if #available(OSX 10.10, *) {
+            if self.keys.get(forChar: RMSKeys.RIGHT_CLICK)?.press() ?? false {
+                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+                if !self.interface!.processHit(point: p, type: .THROW_ITEM) {
+                    super.rightMouseDown(theEvent)
+                }
+                RMLog("UP hit successful: \(p)", id: "keys")
+            } else {
+                //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
                 super.rightMouseDown(theEvent)
             }
-            RMLog("UP hit successful: \(p)", id: "keys")
         } else {
-            //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-            super.rightMouseDown(theEvent)
+            // Fallback on earlier versions
         }
  
         
     }
     
     override func mouseUp(theEvent: NSEvent) {
-        if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.release() ?? false {
-            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
+        if #available(OSX 10.10, *) {
+            if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.release() ?? false {
+                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+                if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
+                    super.mouseUp(theEvent)
+                }
+                RMLog("UP hit successful: \(p)", id: "keys")
+            } else {
+                //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
                 super.mouseUp(theEvent)
             }
-            RMLog("UP hit successful: \(p)", id: "keys")
         } else {
-            //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-            super.mouseUp(theEvent)
+            // Fallback on earlier versions
         }
     }
     
@@ -484,15 +509,19 @@ extension GameView {
         /* Called when a mouse click occurs */
         
         // check what nodes are clicked
-        if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.press() ?? false {
-            let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
-            if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
-                super.mouseDown(theEvent)
+        if #available(OSX 10.10, *) {
+            if self.keys.get(forChar: RMSKeys.LEFT_CLICK)?.press() ?? false {
+                let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
+                if !self.interface!.processHit(point: p, type: .GRAB_ITEM) {
+                    super.mouseDown(theEvent)
+                }
+                RMLog("UP hit successful: \(p)", id: "keys")
+            } else {
+                //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
+               super.mouseDown(theEvent)
             }
-            RMLog("UP hit successful: \(p)", id: "keys")
         } else {
-            //            RMLog("UP hit unSuccessful: \(p)", id: "keys")
-           super.mouseDown(theEvent)
+            // Fallback on earlier versions
         }
         
     }

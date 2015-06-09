@@ -33,7 +33,7 @@ extension RMXDPad {
 //        let i = self.world!.clock?.getCounter(forKey:key)
 //        if i == 1 { self.world!.clock?.setCounter(forKey: key) } else { return }
         if let deviceMotion = self.motionManager.deviceMotion {
-            tilt(UserAction.ROLL_LEFT, RMFloat(self.motionManager.deviceMotion.gravity.y))
+            tilt(UserAction.ROLL_LEFT, tilt: RMFloat(deviceMotion.gravity.y))
             //tilt("pitch", RMFloat(self.motionManager.deviceMotion.gravity.z))
 //            tilt("yaw", RMFloat(self.motionManager.deviceMotion.gravity.x)
             func updateGravity() {
@@ -43,11 +43,7 @@ extension RMXDPad {
 //                RMX.gravity.z = RMFloat(g.z)
             }
 //            updateGravity()
-            if let attitude = deviceMotion.attitude {
-                //self.action(action: "setRoll",speed: RMFloat(attitude.roll))
-                //self.action(action: "setPitch",speed: RMFloat(-attitude.pitch))
-                
-            }
+  
             if !_testing { return }
             var x,y,z, q, r, s, t, u, v,a,b,c,e,f,g,h,i,j,k,l,m:Double
             x = deviceMotion.gravity.x
@@ -62,9 +58,9 @@ extension RMXDPad {
             a = deviceMotion.attitude.pitch
             b = deviceMotion.attitude.roll
             c = deviceMotion.attitude.yaw
-            e = self.motionManager.gyroData.rotationRate.x
-            f = self.motionManager.gyroData.rotationRate.y
-            g = self.motionManager.gyroData.rotationRate.z
+            e = self.motionManager.gyroData!.rotationRate.x
+            f = self.motionManager.gyroData!.rotationRate.y
+            g = self.motionManager.gyroData!.rotationRate.z
             if let magnetometerData = self.motionManager.magnetometerData {
                 h = magnetometerData.magneticField.x
                 i = magnetometerData.magneticField.y
@@ -74,20 +70,19 @@ extension RMXDPad {
             l = deviceMotion.userAcceleration.y
             m = deviceMotion.userAcceleration.z
             
-            let d = deviceMotion.magneticField.accuracy.value
+//            let d = deviceMotion.magneticField.accuracy.rawValue
             
-            println("           Gravity,\(x.toData()),\(y.toData()),\(z.toData())")
-            println("   Magnetic Field1,\(q.toData()),\(r.toData()),\(s.toData())")
-            println("   Magnetic Field2,\(h.toData()),\(i.toData()),\(j.toData())")
-            println("     Rotation Rate,\(t.toData()),\(u.toData()),\(v.toData())")
-            println("Gyro Rotation Rate,\(e.toData()),\(f.toData()),\(g.toData())")
-            println("          Attitude,\(a.toData()),\(b.toData()),\(c.toData())")
-            println("          userAcc1,\(k.toData()),\(l.toData()),\(m.toData())")
+            print("           Gravity,\(x.toData()),\(y.toData()),\(z.toData())")
+            print("   Magnetic Field1,\(q.toData()),\(r.toData()),\(s.toData())")
+            print("   Magnetic Field2,\(h.toData()),\(i.toData()),\(j.toData())")
+            print("     Rotation Rate,\(t.toData()),\(u.toData()),\(v.toData())")
+            print("Gyro Rotation Rate,\(e.toData()),\(f.toData()),\(g.toData())")
+            print("          Attitude,\(a.toData()),\(b.toData()),\(c.toData())")
+            print("          userAcc1,\(k.toData()),\(l.toData()),\(m.toData())")
             
             
             if self.motionManager.accelerometerData != nil {
-                let dp = "04.1"
-                println("          userAcc2,\(self.motionManager.accelerometerData!.acceleration.x.toData()),\(self.motionManager.accelerometerData!.acceleration.y.toData()),\(self.motionManager.accelerometerData!.acceleration.z.toData())")
+                print("          userAcc2,\(self.motionManager.accelerometerData!.acceleration.x.toData()),\(self.motionManager.accelerometerData!.acceleration.y.toData()),\(self.motionManager.accelerometerData!.acceleration.z.toData())")
                 // println("      Magnetic field accuracy: \(d)")
             }
         }

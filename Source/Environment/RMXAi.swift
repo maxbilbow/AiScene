@@ -11,7 +11,7 @@ import Foundation
 
 
 
-
+@available(OSX 10.10, *)
 class AiPoppy : RMXAi {
    
     var itemToWatch: SCNNode?
@@ -49,7 +49,7 @@ class AiPoppy : RMXAi {
                     ++self._count
                     if self._count > self._limit {
                         if self.master.isActiveSprite {
-                            do {
+                            repeat {
                                 self.master = self.getTarget()
                             } while self.master == self.sprite
                         } else {
@@ -77,6 +77,7 @@ class AiPoppy : RMXAi {
     }
 }
 
+@available(OSX 10.10, *)
 class AiRandom: RMXAi {
     override var state: String? {
         return super.state
@@ -113,8 +114,10 @@ class AiRandom: RMXAi {
     }
     
     
+
 }
 
+@available(OSX 10.10, *)
 class AiTeamPlayer : AiRandom {
     
     struct InWhichTeams {
@@ -143,23 +146,25 @@ class AiTeamPlayer : AiRandom {
 //        self.sprite.timer.addTimer(interval: 1, target: self, selector: "checkTeam", repeats: true)
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        switch keyPath {
-        case "teamID":
-            RMLog("\(self.sprite.name!)'s team did change from \(self.inWhichTeams.exc[0]) to \((object as! SpriteAttributes).teamID)", id: "Observers")
-            self.inWhichTeams.exc[0] = self.sprite.attributes.teamID
-            break
-        case "isAlive":
-            if (object as? SpriteAttributes)!.isAlive ?? false {
-                RMLog("\(self.sprite.name!) was revived!", id: "Observers")
-            } else {
-                self.sprite.timer.addTimer(interval: 5, target: self.sprite.attributes, selector: "deRetire", repeats: false)
-                RMLog("\(self.sprite.name!) died!", id: "Observers")
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if let keyPath = keyPath {
+            switch keyPath {
+            case "teamID":
+                RMLog("\(self.sprite.name!)'s team did change from \(self.inWhichTeams.exc[0]) to \((object as! SpriteAttributes).teamID)", id: "Observers")
+                self.inWhichTeams.exc[0] = self.sprite.attributes.teamID
+                break
+            case "isAlive":
+                if (object as? SpriteAttributes)!.isAlive ?? false {
+                    RMLog("\(self.sprite.name!) was revived!", id: "Observers")
+                } else {
+                    self.sprite.timer.addTimer(5, target: self.sprite.attributes, selector: "deRetire", repeats: false)
+                    RMLog("\(self.sprite.name!) died!", id: "Observers")
+                }
+                break
+            default:
+                RMLog("KeyPath: \(self.sprite.attributes.teamID) not recognised")
+                break
             }
-            break
-        default:
-            RMLog("KeyPath: \(self.sprite.attributes.teamID) not recognised")
-            break
         }
     }
     
@@ -207,6 +212,7 @@ class AiTeamPlayer : AiRandom {
 
 
 
+@available(OSX 10.10, *)
 extension RMXAi {
 //    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
@@ -222,7 +228,7 @@ extension RMXAi {
     }
 
     
-    @availability(*,deprecated=0)
+    @available(*,deprecated=0)
     static var randomTimeInterval: Int {
         return  random() % 600 + 100
     }
@@ -254,7 +260,7 @@ extension RMXAi {
     
     static func addRandomMovement(to players: [RMXSprite]) {
         for sprite in players {
-            if sprite.attributes.teamID.toInt() ?? 1 >= 0 && sprite.type == .AI && !sprite.isUnique {
+            if Int(sprite.attributes.teamID) ?? 1 >= 0 && sprite.type == .AI && !sprite.isUnique {
                 sprite.aiDelegate = AiRandom(sprite: sprite)
             }
         }
@@ -266,7 +272,7 @@ extension RMXAi {
     
     static func offenciveBehaviour(to players: [RMXSprite]) {
         for sprite in players {
-            if sprite.type == .AI && !sprite.isUnique && sprite.attributes.teamID.toInt() ?? 1 > 0 {
+            if sprite.type == .AI && !sprite.isUnique && Int(sprite.attributes.teamID) ?? 1 > 0 {
                 sprite.aiDelegate = AiTeamPlayer(sprite: sprite)
             }
         }

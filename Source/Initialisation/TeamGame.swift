@@ -10,16 +10,19 @@ import Foundation
 
 import SceneKit
 
+@available(OSX 10.10, *)
 typealias Challenge = (SpriteAttributes, SpriteAttributes) -> RMXTeam.ChallengeOutcome
+
 typealias WinLogic = (Any? ...) -> Bool
 
+@available(OSX 10.10, *)
 protocol RMXTeamGame  {
     var interface: RMXInterface { get }
     var players: Array<RMXSprite> { get }
     var teamPlayers: Array<RMXSprite> { get }
     var nonPlayers: Array<RMXSprite> { get }
     var nonTeamPlayers: Array<RMXSprite> { get }
-    func getTeam(#id: String) -> RMXTeam?
+    func getTeam(id id: String) -> RMXTeam?
     func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXSprite>
     var winningTeam: RMXTeam? { get }
     func addTeam(team: RMXTeam)
@@ -27,11 +30,12 @@ protocol RMXTeamGame  {
     func updateTeam(team: RMXTeam) -> RMXTeam?
 }
 
+@available(OSX 10.10, *)
 protocol RMXTeamMember {
     var attributes: SpriteAttributes! { get }
 }
 
-
+@available(OSX 10.10, *)
 extension RMSWorld : RMXTeamGame {
     
 
@@ -67,33 +71,33 @@ extension RMSWorld : RMXTeamGame {
     }
 
     
-    func getTeam(#id: String) -> RMXTeam? {
+    func getTeam(id id: String) -> RMXTeam? {
         return self._teams[id]
     }
     
     
     func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXSprite> {
-        return self.children.filter({ (child: RMXSprite) -> Bool in
+        return self.sprites.filter({ (child: RMXSprite) -> Bool in
             return child.attributes.teamID == team?.id
         })
     }
     
     /// Team IDs must be > 0. I.e. payer is assigned to a team
     var teamPlayers: Array<RMXSprite> {
-        return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.attributes.teamID.toInt() ?? 1 > 0 && child.isPlayerOrAi
+        return self.sprites.filter( { (child: RMXSprite) -> Bool in
+            return Int(child.attributes.teamID) ?? 1 > 0 && child.isPlayerOrAi
         })
     }
     
     var liveTeamPlayers: Array<RMXSprite> {
-        return self.children.filter( { (child: RMXSprite) -> Bool in
-            return child.attributes.teamID.toInt() ?? 1 > 0 && child.isPlayerOrAi && child.attributes.isAlive
+        return self.sprites.filter( { (child: RMXSprite) -> Bool in
+            return Int(child.attributes.teamID) ?? 1 > 0 && child.isPlayerOrAi && child.attributes.isAlive
         })
     }
     
     ///Players not assigend to a team (i.e. teamID == 0 )
     var nonTeamPlayers: Array<RMXSprite> {
-        return self.children.filter( { (child: RMXSprite) -> Bool in
+        return self.sprites.filter( { (child: RMXSprite) -> Bool in
             return child.isPlayerOrAi //&& child.attributes.teamID == 0
         })
     }
@@ -101,13 +105,13 @@ extension RMSWorld : RMXTeamGame {
     
     
     var players: Array<RMXSprite> {
-        return self.children.filter( { (child: RMXSprite) -> Bool in
+        return self.players.filter( { (child: RMXSprite) -> Bool in
             return child.isPlayerOrAi
         })
     }
     
     var nonPlayers: Array<RMXSprite> {
-        return self.children.filter({ (child: RMXSprite) -> Bool in
+        return self.sprites.filter({ (child: RMXSprite) -> Bool in
             return !child.isPlayerOrAi
         })
     }
@@ -128,7 +132,7 @@ extension RMSWorld : RMXTeamGame {
 }
 
 
-
+@available(OSX 10.10, *)
 class SpriteAttributes : NSObject {
     var invincible = false
     var sprite: RMXSprite
@@ -174,7 +178,7 @@ class SpriteAttributes : NSObject {
         if self.teamID != ID {
             self.willChangeValueForKey("teamID")
             var newID = ID
-            if ID.toInt() ?? 1 > 0 {
+            if Int(ID) ?? 1 > 0 {
                 if self.world.teams[ID] == nil { //create a team in one doesn't exist
                     let newTeam = RMXTeam(gameWorld: self.world, captain: self.sprite, withID: ID)
                     newID = newTeam.id
@@ -195,7 +199,7 @@ class SpriteAttributes : NSObject {
     }
     
     var isTeamPlayer: Bool {
-        return self.teamID.toInt() ?? 1 >= 0
+        return Int(self.teamID) ?? 1 >= 0
     }
     
     
@@ -204,7 +208,7 @@ class SpriteAttributes : NSObject {
     private var _transparency: CGFloat?
     
     var isAlive: Bool {
-        if self.teamID.toInt() ?? 1 < 0 {
+        if Int(self.teamID) ?? 1 < 0 {
             return true
         } else {
             return self._isAlive
@@ -277,6 +281,8 @@ class SpriteAttributes : NSObject {
 }
 
 typealias ScoreCard = (kills: Int, deaths: Int, points: Int, health: Int)
+
+@available(OSX 10.10, *)
 class RMXTeam : NSObject, RMXObject {
     var name: String? {
         return self.id
@@ -315,7 +321,7 @@ class RMXTeam : NSObject, RMXObject {
     
     var captain: SpriteAttributes?
     
-    init(gameWorld game: RMXTeamGame, captain: RMXSprite? = nil, var withID: AnyObject? = nil){
+    init(gameWorld game: RMXTeamGame, captain: RMXSprite? = nil, withID: AnyObject? = nil){
         self.game = game
         
         super.init()
@@ -343,14 +349,13 @@ class RMXTeam : NSObject, RMXObject {
     func addPlayer(player: RMXSprite) -> Bool{
 //    NSLog("name: \(player.name), team: \(player.attributes.teamID)")
         
-        if player.attributes.teamID.toInt() ?? 1 < 0 { ///Actually this might be OK (capture the flag for example)
+        if Int(player.attributes.teamID) ?? 1 < 0 { ///Actually this might be OK (capture the flag for example)
             RMLog("Warning: \(player.name!), with teamID: \(player.attributes.teamID), was not assigned a new team?")
             return false
         }
-        var players = self.players.count
         if player.attributes.teamID != self.id { //will we get a new player?
             player.attributes.setTeamID(self.id)
-            if let captain = self.captain { //do we have a captain?
+            if self.captain != nil { //do we have a captain?
                 RMXTeam.setColor(self.kit, receiver: player.attributes)
             } else { //otherwise assign new player as captain and update team
                 self.captain = player.attributes
@@ -431,7 +436,7 @@ class RMXTeam : NSObject, RMXObject {
     /// doOnWin returns true if defender is totally defeated
     class func challenge(attacker: SpriteAttributes, defender: SpriteAttributes?, doOnWin: Challenge?) {
         if let defender = defender {
-            if attacker.teamID == defender.teamID || defender.teamID.toInt() ?? 1 <= 0 { return }
+            if attacker.teamID == defender.teamID || Int(defender.teamID) ?? 1 <= 0 { return }
             if defender.isAlive  {
                 switch doOnWin?(attacker,defender) ?? challengeWon(attacker, defender: defender) {
                 case .DefenderWasKilled:
@@ -455,7 +460,7 @@ class RMXTeam : NSObject, RMXObject {
         if !defender.isAlive { return .DefenderAlreadyDead }
         attacker.willChangeValueForKey("points")
         defender.willChangeValueForKey("health")
-        var health = defender.health
+        let health = defender.health
         defender.health -= 20
         attacker.points += health - defender.health
         if defender.health <= 0 {
@@ -484,7 +489,7 @@ class RMXTeam : NSObject, RMXObject {
         if !defender.isAlive { return .DefenderAlreadyDead }
         attacker.willChangeValueForKey("points")
         defender.willChangeValueForKey("health")
-        var health = defender.health
+        let health = defender.health
         if defender.health > 0 { defender.health -= 10 }
         attacker.points += health - defender.health
         if defender.health <= 0 {

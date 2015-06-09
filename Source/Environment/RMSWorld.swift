@@ -10,9 +10,10 @@ import Foundation
 import GLKit
 import SceneKit
 
-
+@available(OSX 10.10, *)
 typealias RMSWorld = RMXScene
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
+@available(OSX 10.10, *)
 class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     static let kvScores = "teamScores"
@@ -22,8 +23,8 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     internal var _teams: Dictionary<String ,RMXTeam> = Dictionary<String ,RMXTeam>()
     
     
-    static let ZERO_GRAVITY = RMXVector3Zero
-    static let EARTH_GRAVITY = RMXVector3Make(0, -9.8, 0)
+    static let ZERO_GRAVITY = SCNVector3Zero
+    static let EARTH_GRAVITY = SCNVector3Make(0, -9.8, 0)
     
     var cameras: Array<SCNNode> = Array<SCNNode>()
     
@@ -61,7 +62,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         }
     }
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1,message="Use sprites")
     var children: Array<RMXSprite> {
         return self.sprites
     }
@@ -99,7 +100,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         self.worldDidInitialize()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -180,7 +181,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     private var _defaultPlayer: RMXSprite  {
         _activeSprite = AiCubo.simplePlayer(self, asAi: false, unique: true)
-        _activeSprite.setName(name: "Player")
+        _activeSprite.setName("Player")
         return _activeSprite
     }
     
@@ -189,7 +190,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
   
     
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     func closestObjectTo(sender: RMXSprite)->RMXSprite? {
         var closest: Int = -1
         var dista: RMFloat = RMFloat.infinity// = sender.body.distanceTo(closest)
@@ -206,7 +207,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
        return RMX.spriteWith(ID: closest, inArray: self.children)
     
     }
-    @availability(*,deprecated=1)
+    @available(*,deprecated=1)
     func furthestObjectFrom(sender: RMXSprite)->RMXSprite? {
         var furthest: Int = -1
         var dista: RMFloat = 0// = sender.body.distanceTo(closest)
@@ -238,7 +239,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         }
     }
 
-    func insertChildren(#children: [String:RMXSprite], insertNodes:Bool = true){
+    func insertChildren(children children: [String:RMXSprite], insertNodes:Bool = true){
         for child in children {
             self.insertChild(child.1, andNode: insertNodes)
         }
@@ -250,7 +251,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     
     private var _gravity = ZERO_GRAVITY
     
-    var gravity: RMXVector3 {
+    var gravity: SCNVector3 {
         return (self).physicsWorld.gravity
     }
     
@@ -304,7 +305,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
 //        if let radius = _radius {
 //            var position = sprite.position
 //            position.y = 0
-//            if radius > 0 && position.distanceTo(RMXVector3Zero) > radius {
+//            if radius > 0 && position.distanceTo(SCNVector3Zero) > radius {
 //                return false
 //            }
 //        } else if let earth = self.rootNode.childNodeWithName("Earth", recursively: true) as? RMXNode {
@@ -320,9 +321,9 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
 //        return valid
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if let attributes = object as? SpriteAttributes {
-            switch keyPath {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if object is SpriteAttributes {
+            switch keyPath! {
             case "points":
                 self.willChangeValueForKey(RMSWorld.kvScores)
                 self.didChangeValueForKey(RMSWorld.kvScores)
@@ -335,18 +336,19 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     }
 }
 
+@available(OSX 10.10, *)
 extension RMSWorld {
 
-    var forwardVector: RMXVector {
-        return self.activeCamera.presentationNode().worldTransform.forward// ?? RMXVector3Make(0,0,-1)
+    var forwardVector: SCNVector3{
+        return self.activeCamera.presentationNode().worldTransform.forward// ?? SCNVector3Make(0,0,-1)
     }
     
-    var upVector: RMXVector {
-        return self.activeCamera.presentationNode().worldTransform.up// ?? RMXVector3Make(0,1,0)
+    var upVector: SCNVector3 {
+        return self.activeCamera.presentationNode().worldTransform.up// ?? SCNVector3Make(0,1,0)
     }
     
-    var leftVector: RMXVector {
-        return self.activeCamera.presentationNode().worldTransform.left// ?? RMXVector3Make(-1,0,0)
+    var leftVector: SCNVector3 {
+        return self.activeCamera.presentationNode().worldTransform.left// ?? SCNVector3Make(-1,0,0)
     }
     
 }

@@ -11,6 +11,7 @@ import SceneKit
 
 
  enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, WEAPONS }
+@available(OSX 10.10, *)
 class AiCubo {
    
    
@@ -19,13 +20,13 @@ class AiCubo {
         
         let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: RMColor.yellowColor()), type: .BACKGROUND, unique: true)
         
-        world.physicsWorld.gravity = RMXVector3Make(0,-9.8 * 10,0)
+        world.physicsWorld.gravity = SCNVector3Make(0,y: -9.8 * 10,z: 0)
         
         
-        earth.setName(name: "Earth")
+        earth.setName("Earth")
         
-        let earthPosition = RMXVector3Make(0,-earth.height / 2, 0)
-        earth.setPosition(position: earthPosition)
+        let earthPosition = SCNVector3Make(0,y: -earth.height / 2, z: 0)
+        earth.setPosition(earthPosition)
         //earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
         if addCameras {
             earth.addCameras()
@@ -45,11 +46,11 @@ class AiCubo {
         lightNode.geometry?.firstMaterial!.emission.intensity = 1
         
         let sun: RMXSprite = RMXSprite(inWorld: world, geometry: lightNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
-        sun.setName(name: "Sun")
+        sun.setName("Sun")
         sun.node.pivot.m43 = -worldRadius
         sun.node.eulerAngles.x = -45 * PI_OVER_180
         if !fixed {
-            sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+            sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: SCNVector3Make(1, y: 0, z: 0), duration: 1)))
         }
         if addCameras {
             RMXCamera.headcam(sun)
@@ -65,11 +66,11 @@ class AiCubo {
             sun.node.addChildNode(ambientLightNode)
         } else {
             let moon = RMXSprite(inWorld: world, type: .ABSTRACT, shape: .SUN, color: RMColor.lightGrayColor(), unique: true)
-            moon.setName(name: "Moon")
+            moon.setName("Moon")
             moon.node.pivot.m43 = sun.node.pivot.m43
             moon.node.eulerAngles.x = 4 * sun.node.eulerAngles.x
             if !fixed {
-                moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: RMXVector3Make(1, 0, 0), duration: 1)))
+                moon.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: SCNVector3Make(1, y: 0, z: 0), duration: 1)))
             }
             if addCameras {
                 RMXCamera.headcam(moon)
@@ -106,7 +107,7 @@ class AiCubo {
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
                 RMXArt.initializeTestingEnvironment(world,withAxis: true, withCubes: 50, shapes: .CYLINDER, .CUBE, .SPHERE)
                 AiCubo.addPlayers(world, noOfPlayers: 20, teams: 0)
-                RMXAi.addRandomMovement(to: world.children)
+                RMXAi.addRandomMovement(to: world.sprites)
                 break
             case .WEAPONS:
                 world.name = "Weapons World"
@@ -135,7 +136,7 @@ class AiCubo {
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
                 RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 50, shapes: .CYLINDER, .SPHERE)
                 AiCubo.addPlayers(world, noOfPlayers: 20, teams: 2)
-                RMXAi.offenciveBehaviour(to: world.children)
+                RMXAi.offenciveBehaviour(to: world.sprites)
                 break
             default:
                 AiCubo.initialWorldSetup(world)
@@ -178,7 +179,7 @@ class AiCubo {
         let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique).asPlayer()
         
         let lim = Int(world.radius)
-        player.setPosition(position: RMXVector3Random(lim, -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
+        player.setPosition(SCNVector3Random(lim, min: -lim))//(0, 50, 50))//, resetTransform: <#Bool#>
 
         
         
@@ -212,14 +213,13 @@ class AiCubo {
         let player = world.activeSprite
         
         //Set up Poppy
-        if poppy {
-            let poppy = RMX.makePoppy(world: world, master: player)
-        }
+        RMX.makePoppy(world: world, master: player)
+        
         
         //Set Up Player 2
         if player2 {
             let p2 = self.simplePlayer(world, asAi: true)
-            p2.setName(name: "Player")
+            p2.setName("Player")
             p2.addCameras()
             world.cameras += p2.cameras
         }
@@ -228,7 +228,7 @@ class AiCubo {
         if additionalCameras {
             let farCam = RMXCamera.free(inWorld: world)
             let topCam = RMXCamera.free(inWorld: world)
-            farCam.position = RMXVector3Make(0 , 100, world.radius)
+            farCam.position = SCNVector3Make(0 , y: 100, z: world.radius)
             topCam.pivot.m43 = world.radius * -2
             topCam.eulerAngles.x = -70 * PI_OVER_180
         }
@@ -246,14 +246,14 @@ class AiCubo {
 //            player.attributes.invincible = true
             RMLog(teamA.id)
             for ( var i = 1; i < teams; i++) {
-                let team = RMXTeam(gameWorld: world)
+                RMXTeam(gameWorld: world)
             }
             
             let max: Int = n / teams
             RMLog("\(max)")
             var count = 0
             for team in world.teams {
-                for player in world.children.filter({ (player) -> Bool in
+                for player in world.players.filter({ (player) -> Bool in
                     RMLog("\(player.attributes.teamID)")
                     return player.attributes.teamID == RMXSprite.TEAM_ASSIGNABLE
                 }) {

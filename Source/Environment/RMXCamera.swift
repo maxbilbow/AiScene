@@ -13,6 +13,8 @@ import SceneKit
 
 //typealias RMXCamera = SCNCamera
 enum CameraOptions: Int16 { case FIXED, FREE, SLOW_FOLLOW }
+
+@available(OSX 10.10, *)
 class RMXCamera : SCNCamera {
     
     class func standardCamera() -> RMXCamera {
@@ -69,7 +71,7 @@ class RMXCamera : SCNCamera {
             case .SLOW_FOLLOW:
                 type = "SLOW-FOLLOW"
                 followCam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
-                let slowFollow = SCNAction.moveTo(followCam.position, duration: 1)
+                //let slowFollow = SCNAction.moveTo(followCam.position, duration: 1)
                 sprite.addBehaviour({ AiBehaviour in
                     if sprite.world.activeCamera.rmxID == followCam.rmxID {
                             //followCam.runAction(slowFollow)
@@ -78,15 +80,9 @@ class RMXCamera : SCNCamera {
 
             
                 break
-            default:
-                type = "UNKNOWN"
-                fatalError(__FUNCTION__)
-                break
             }
         }
         followCam.name! += "/\(type)/\(sprite.name)"
-        
-        
         
         sprite.cameras.append(followCam)
         
@@ -107,7 +103,7 @@ class RMXCamera : SCNCamera {
     }
     
     class func headcam(sprite: RMXSprite) -> RMXCameraNode {
-        var headcam: RMXCameraNode = RMXCameraNode(sprite: sprite)
+        let headcam: RMXCameraNode = RMXCameraNode(sprite: sprite)
         headcam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
         let type: String = headcam.cameraType == .FIXED ? "FIXED" : "FREE"
         headcam.name! += "\(type)/HEADCAM/\(sprite.name)"
@@ -126,7 +122,7 @@ class RMXCamera : SCNCamera {
     
 }
 
-
+@available(OSX 10.10, *)
 class RMXCameraNode : SCNNode {
     var rmxSprite: RMXSprite?
     var world: RMSWorld
@@ -156,7 +152,7 @@ class RMXCameraNode : SCNNode {
         })
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -180,7 +176,7 @@ class RMXCameraNode : SCNNode {
     
     func resetOrientation() -> Bool {
         if self._resetOrientation {
-            self.calibrate(x: true, y: true, z: true, force: true, speed: 1)
+            self.calibrate(true, y: true, z: true, force: true, speed: 1)
             self._resetOrientation = !(self.eulerAngles.x == self.restingEulerAngles.x)
         }
         return self._resetOrientation
@@ -287,7 +283,7 @@ class RMXCameraNode : SCNNode {
        
         s += "\n   focalSize: \(self.camera!.focalSize.print), fDist: \(self.camera!.focalDistance.print), fBlurRad: \(self.camera!.focalBlurRadius.print)"
         s += "\n   appeture: \(self.camera!.aperture.print), orthScale: \(self.camera!.orthographicScale.print)\n zFar: \(self.camera!.zFar)"
-        println(s)
+        Swift.print(s)
     }
     func moveOut(speed: RMFloat = 1) {
         self._resetZoom = false

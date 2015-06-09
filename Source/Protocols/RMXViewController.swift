@@ -9,7 +9,8 @@
 import Foundation
 import GLKit
 import SceneKit
-    
+
+@available(OSX 10.10, *)
 extension RMX {
 #if iOS
     /* static func Controller(view: GameView, world: RMSWorld) -> RMXDPad {
@@ -25,6 +26,7 @@ extension RMX {
 #endif
 }
 
+@available(OSX 10.10, *)
 protocol RMXView {
     var world: RMSWorld? { get }
     var interface: RMXInterface? { get set }
@@ -33,6 +35,7 @@ protocol RMXView {
     func initialize(gvc: GameViewController, interface: RMXInterface)
 }
 
+@available(OSX 10.10, *)
 protocol RMXViewController {
     
     var gameView: GameView? { get }

@@ -9,7 +9,7 @@
 import Foundation
 import SceneKit
 
-
+@available(OSX 10.10, *)
 class RMXTracker : NSObject {
     
     var rmxID: Int? {
@@ -47,7 +47,7 @@ class RMXTracker : NSObject {
     var state: String = IDLE
     
     let updateInterval = 1
-    var lastPosition: RMXVector = RMXVector3Zero
+    var lastPosition: SCNVector3 = SCNVector3Zero
 
     var isStuck: Bool {
         if self.hasTarget {
@@ -71,7 +71,7 @@ class RMXTracker : NSObject {
 
     
     func setTarget(target: RMXSprite?, speed: RMFloat? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, ignoreClaims: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
-        let oldTarget = self.target ; let newTarget = target
+        let oldTarget = self.target// ; let newTarget = target
 
         if let target = target {
             if target == self.sprite {
@@ -181,9 +181,9 @@ class RMXTracker : NSObject {
                 _count = 0
             } else {
                 ++_count
-                let direction = RMXVector3Normalize(target.position - self.sprite.position)
+                let direction = (target.position - self.sprite.position).normalized
                
-                self.sprite.applyForce(direction * self.speed, atPosition: self.isProjectile ? RMXVector3Zero : self.sprite.front,  impulse: self.impulse)
+                self.sprite.applyForce(direction * self.speed, atPosition: self.isProjectile ? SCNVector3Zero : self.sprite.front,  impulse: self.impulse)
                 if self.doesJump && isStuck {
                     self.sprite.jump()
                 }

@@ -7,24 +7,26 @@
 //
 
 import SceneKit
-import AVFoundation
+import Foundation
 
 class GameView: SCNView  {
     
+    @available(OSX 10.10, *)
     var world: RMSWorld? {
         return self.interface?.world
     }
     
+    @available(OSX 10.10, *)
     var activeSprite: RMXSprite? {
         return self.world?.activeSprite
     }
     
-    
+    @available(OSX 10.10, *)
     var interface: RMXInterface? {
-        return self.gvc.interface
+        return (self.gvc as? GameViewController)?.interface
     }
     
-    var gvc: GameViewController!
+    var gvc: ViewController!
     
     
 }

@@ -15,8 +15,8 @@ import AppKit
     #endif
     import SceneKit
 
-enum RMXMoveType { case PUSH, DRAG }
 
+@available(OSX 10.10, *)
 extension RMX {
     static var willDrawFog: Bool = false
     
@@ -28,8 +28,8 @@ extension RMX {
     }
 }
 
-
-public class RMSActionProcessor {
+@available(OSX 10.10, *)
+class RMSActionProcessor {
     
     private var boomTimer: RMFloat = 1
 
@@ -69,10 +69,10 @@ public class RMSActionProcessor {
             switch action {
             case .MOVE:
                 if let point = args as? CGPoint {
-                    sprite.accelerate(left: RMFloat(point.x), forward: RMFloat(point.y))
+                    sprite.accelerate(RMFloat(point.x), forward: RMFloat(point.y))
                 } else if let point = args as? [RMFloat] {
                     if point.count == 3 {
-                        sprite.accelerate(forward: point[2] * speed, left: point[0] * speed, up: point[1] * speed)
+                        sprite.accelerate(forward: point[2] * speed, point[0] * speed, up: point[1] * speed)
                         return true
                     }
                         
@@ -131,7 +131,7 @@ public class RMSActionProcessor {
                     sprite.stop()
                 }
                 else {
-                    sprite.accelerate(left: speed)
+                    sprite.accelerate(speed)
                 }
                 return true
             case .MOVE_RIGHT:
@@ -139,7 +139,7 @@ public class RMSActionProcessor {
                     sprite.stop()
                 }
                 else {
-                    sprite.accelerate(left: -speed)
+                    sprite.accelerate(-speed)
                 }
                 return true
             case .MOVE_UP:
@@ -271,19 +271,19 @@ public class RMSActionProcessor {
             case .ZOOM_IN:
     //            --self.gameView.pointOfView!.camera!.xFov
     //            --self.gameView.pointOfView!.camera!.yFov //= SCNTechnique.
-                assert((self.world.activeCamera as? RMXCameraNode)?.moveIn(speed: 1) != nil, "not an RMXCamera")
+                assert((self.world.activeCamera as? RMXCameraNode)?.moveIn(1) != nil, "not an RMXCamera")
                 return true
             case .ZOOM_OUT:
     //            ++self.gameView.pointOfView!.camera!.xFov
     //            ++self.gameView.pointOfView!.camera!.yFov
-                assert((self.world.activeCamera as? RMXCameraNode)?.moveOut(speed: 1) != nil, "not an RMXCamera")
+                assert((self.world.activeCamera as? RMXCameraNode)?.moveOut(1) != nil, "not an RMXCamera")
                 return true
             case .ZoomInAnOut:
                 if let cameraNode = self.activeCamera {
                     if speed > 0 {
-                        cameraNode.moveIn(speed: speed)
+                        cameraNode.moveIn(speed)
                     } else if speed < 0 {
-                        cameraNode.moveOut(speed: -speed)
+                        cameraNode.moveOut(-speed)
                     }
                 }
                 return false
@@ -309,13 +309,13 @@ public class RMSActionProcessor {
                 if speed == 1 {
                     switch self.interface.keyboard {
                     case .French:
-                        self.interface.setKeyboard(type: .UK)
+                        self.interface.setKeyboard(.UK)
                         break
                     case .UK:
-                        self.interface.setKeyboard(type: .French)
+                        self.interface.setKeyboard(.French)
                         break
                     default:
-                        self.interface.setKeyboard(type: .UK)
+                        self.interface.setKeyboard(.UK)
                         break
                     }
                 }
@@ -342,7 +342,7 @@ public class RMSActionProcessor {
                 sprite.setAngle(pitch: speed)
                 break
             case "setYaw":
-                sprite.setAngle(yaw: speed)
+                sprite.setAngle(speed)
                 break
             case UserAction.THROW_ITEM.rawValue + UserAction.GRAB_ITEM.rawValue:
                 if speed == 0 && self.boomTimer == 1 {
@@ -353,8 +353,8 @@ public class RMSActionProcessor {
                         return true
                     }
                 } else if speed > 0 {
-                    var result = false
-                    if let item = sprite.item {
+//                    var result = false
+                    if sprite.hasItem {
                         return true//self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
                     }
                     self.boomTimer = 1
@@ -363,9 +363,9 @@ public class RMSActionProcessor {
                 self.boomTimer = 1
                 return false
             case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10":
-                let n = action.toInt()! - 1
+                let n = Int(action)! - 1
                 if n < self.interface.availableGames.count  {
-                    self.interface.newGame(type: self.interface.availableGames[n])
+                    self.interface.newGame(self.interface.availableGames[n])
                     return true
                 } else {
                     return false
@@ -402,7 +402,7 @@ public class RMSActionProcessor {
             var angles   = "\n ANGLES: \n"
             #if iOS
             if let dPad: RMXDPad = self.interface as? RMXDPad {
-                if let att = dPad.motionManager.deviceMotion.attitude {
+                if let att = dPad.motionManager.deviceMotion?.attitude {
                     let attitude = SCNVector3Make(RMFloat(att.pitch), RMFloat(att.yaw), RMFloat(att.roll))
                     angles      += "\n    - SPRITE: \(sprite.node.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
                     angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
@@ -427,11 +427,9 @@ public class RMSActionProcessor {
                 info += "\n TEAM-\(team.0) SCORE: \(team.1.print)"
             }
             return info
-        default:
-            return info
         }
     }
-    func debug(_ yes: Bool = true){
+    func debug(yes: Bool = true){
         if yes {
             RMLog(self.getData(), id: "ActionProcessor")
         }
@@ -440,7 +438,7 @@ public class RMSActionProcessor {
     func animate(){
         if self.boomTimer > 1 {
             self.boomTimer++
-            RMLog(self.boomTimer.print, id: __FILE__.lastPathComponent)
+            RMLog(self.boomTimer.print, id: "ActionProcessor")
         }
         
         
@@ -456,15 +454,15 @@ public class RMSActionProcessor {
     
     func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloat? = nil, yaw y: RMFloat? = nil, roll z: RMFloat? = nil) {
         let sprite = s ?? self.activeSprite
-        if let orientation = orientation {
+        if  orientation != nil {
             RMLog("not implemented")
         } else {
-            sprite.setAngle(yaw: y, pitch: x, roll: z)
+            sprite.setAngle(y, pitch: x, roll: z)
         }
     }
     
     func throwOrGrab(target: Any?, withForce force: RMFloat = 1, tracking: Bool) -> Bool {
-        if let item = self.activeSprite.item {
+        if self.activeSprite.hasItem  {
             let boom = self.boomTimer
             self.boomTimer = 1
             if let target: AnyObject = target as? AnyObject {
@@ -491,10 +489,10 @@ public class RMSActionProcessor {
     class func explode(sprite: RMXSprite?, force: RMFloat = 1, range: RMFloat = 500) -> Bool {
         if let sprite = sprite {
             let world = sprite.world
-            for child in world.children {
+            for child in world.sprites {
                 let dist = sprite.distanceTo(child)
                 if  dist < range && child.physicsBody?.type != .Static && child != sprite {
-                    let direction = RMXVector3Normalize(child.position - sprite.position)
+                    let direction = (child.position - sprite.position).normalised
                     child.applyForce(direction * (force  / (dist + 0.1)) , impulse: true)
                 }
             }

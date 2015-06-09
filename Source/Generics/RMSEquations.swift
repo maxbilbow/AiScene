@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import SceneKit
 import GLKit
 
+@available(OSX 10.10, *)
 extension RMX {
-    static func doASum(radius: RMFloat, count i: RMFloat, noOfShapes limit: RMFloat ) -> RMXVector4{
+    static func doASum(radius: RMFloat, count i: RMFloat, noOfShapes limit: RMFloat ) -> SCNVector4{
 //        return thing(radius: radius, count: i, noOfShapes: limit )
         let option: Int = random() % 5
         switch option {
@@ -24,7 +26,7 @@ extension RMX {
 //            return thing(radius: radius, count: i, noOfShapes: limit )
         default:
             let radius = ceil(radius)
-            return RMXVector4Make(randomFloat(radius*2)-radius,randomFloat(2*radius),randomFloat(radius*2)-radius, randomFloat(radius))
+            return SCNVector4Make(randomFloat(radius*2)-radius,y: randomFloat(2*radius),z: randomFloat(radius*2)-radius, w: randomFloat(radius))
         }
         
     }
@@ -35,26 +37,26 @@ extension RMX {
     
     static var last1:RMFloat = 1
     static var last2:RMFloat = 0
-    static func thing(radius maxR: RMFloat, count i: RMFloat, noOfShapes limit: RMFloat) -> RMXVector4 {
+    static func thing(radius maxR: RMFloat, count i: RMFloat, noOfShapes limit: RMFloat) -> SCNVector4 {
         let thisOne = self.last1 + self.last2
         last1 = thisOne
         last2 = last1
         let r = limit * limit / thisOne
         let theta = Float(i)
-        return RMXVector4Make(r * i * RMFloat(sinf(theta)),i,r * i * RMFloat(cosf(theta)),1)
+        return SCNVector4Make(r * i * RMFloat(sinf(theta)),y: i,z: r * i * RMFloat(cosf(theta)),w: 1)
     }
 
-    static func circle ( count i: RMFloat, radius r: RMFloat, limit: RMFloat) -> RMXVector4 {
+    static func circle ( count i: RMFloat, radius r: RMFloat, limit: RMFloat) -> SCNVector4 {
         let x = RMFloat(sin(i)*sin(i)*r)
         let y = RMFloat(sin(i)*cos(i)*r)
         let z = RMFloat(cos(i)*cos(i)*r)
-        return  RMXVector4Make(x,y, z,limit)
+        return  SCNVector4Make(x,y: y, z: z,w: limit)
         
     }
-    static func randomSpurt (count i: Int) -> RMXVector4 {
-        let result = RMXVector4Make(
-            RMFloat(random() % 360 + i),RMFloat(random() % 360 + i),
-            RMFloat(random() % 360 + i),RMFloat(random() % 360 + 10)
+    static func randomSpurt (count i: Int) -> SCNVector4 {
+        let result = SCNVector4Make(
+            RMFloat(random() % 360 + i),y: RMFloat(random() % 360 + i),
+            z: RMFloat(random() % 360 + i),w: RMFloat(random() % 360 + 10)
         )
         return result;
     }
@@ -64,13 +66,13 @@ extension RMX {
     }
 
 
-    static func point_on_circle (radius: RMFloat, angle_in_degrees: RMFloat,  centre: RMFloat)->RMXVector4
+    static func point_on_circle (radius: RMFloat, angle_in_degrees: RMFloat,  centre: RMFloat)->SCNVector4
     {
         let I: RMFloat = 1
         let x:RMFloat = centre + radius * RMFloat(exp( PI * I * ( angle_in_degrees  / 180.0 ) ))
         let y:RMFloat = 0
         let z:RMFloat = centre + radius * RMFloat(exp ( PI * I * ( angle_in_degrees  / 180.0 ) ))
-        return RMXVector4Make(x, y, z,0)
+        return SCNVector4Make(x, y: y, z: z,w: 0)
     }
 }
 

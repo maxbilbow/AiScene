@@ -9,11 +9,12 @@
 import Foundation
 import SceneKit
 
+@available(OSX 10.10,*)
 typealias RMXModels = RM3DModels
 
 
 
-
+@available(OSX 10.10, *)
 class RM3DModels  {
     
     
@@ -29,7 +30,7 @@ class RM3DModels  {
     static var ship: SCNGeometry {
         let url = NSBundle.mainBundle().URLForResource("art.scnassets/ship", withExtension: "dae")
         let source = SCNSceneSource(URL: url!, options: nil)
-        let block = source!.entryWithIdentifier("Scrap_MeshShape", withClass: SCNGeometry.self) as! SCNGeometry
+        let block = source.entryWithIdentifier("Scrap_MeshShape", withClass: SCNGeometry.self) as SCNGeometry!
         return block
     }
     
@@ -37,15 +38,15 @@ class RM3DModels  {
         URL: NSBundle.mainBundle().URLForResource(
             "art.scnassets/oildrum/oildrum",
             withExtension: "dae")!,options: nil
-        )!.entryWithIdentifier("Cylinder_001-mesh",
-            withClass: SCNGeometry.self) as! SCNGeometry
+        ).entryWithIdentifier("Cylinder_001-mesh",
+            withClass: SCNGeometry.self) as SCNGeometry!
     
     static let rock = SCNSceneSource(
         URL: NSBundle.mainBundle().URLForResource(
             "art.scnassets/Rock1",
             withExtension: "dae")!,options: nil
-        )!.entryWithIdentifier("Cube-mesh",
-            withClass: SCNGeometry.self) as! SCNGeometry
+        ).entryWithIdentifier("Cube-mesh",
+            withClass: SCNGeometry.self) as SCNGeometry!
     
    
     
@@ -55,7 +56,7 @@ class RM3DModels  {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
-        var scale = s ?? SCNVector3Make(radius * 2,height * 2,radius * 2)
+        let scale = s ?? SCNVector3Make(radius * 2,height * 2,radius * 2)
         if r == nil {
             radius = RMFloat(scale.average)
         }
@@ -111,11 +112,11 @@ class RM3DModels  {
             node.scale *= 1.5 * radius
             break
         case ShapeType.DOG:
-            node = dog!.rootNode.clone() as! SCNNode
+            node = dog!.rootNode.clone() as SCNNode
             node.scale *= 1 * radius
             break
         case ShapeType.AUSFB:
-            node = ausfb!.rootNode.clone() as! SCNNode
+            node = ausfb!.rootNode.clone() as SCNNode
             node.scale *= 0.01 * radius
             break
         case ShapeType.BOBBLE_MAN:

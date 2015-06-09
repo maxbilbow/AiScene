@@ -16,7 +16,7 @@ import GameKit
     typealias ViewController = NSViewController
     #endif
 
-
+@available(OSX 10.10, *)
 class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
     
     var rmxID: Int?; var uniqueID, name: String? ; var print: String = classForCoder().description()
@@ -31,8 +31,10 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
     
 //    var gameKit: RMXGameManager = RMXGameManager()
     
+    
     var interface: RMXInterface?
     
+    @available(OSX 10.10, *)
     var world: RMSWorld? {
         return self.interface?.world
     }
@@ -45,8 +47,10 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
             
         self.view = GameView(frame: self.view.bounds)
         #endif
-//        self.gameView?.initialize(self, interface: self.interface!)
+
+        
         self.gameView?.gvc = self
+
         self.interface  = RMX.Controller(self)
         
 
@@ -78,23 +82,22 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
         
         // configure the view
         self.gameView?.backgroundColor = RMColor.blackColor()
-        
-        for player in self.world!.children {
-            player.attributes.addObserver(self, forKeyPath: "isAlive", options: NSKeyValueObservingOptions.Old, context: UnsafeMutablePointer<Void>())
-            player.attributes.addObserver(self, forKeyPath: "health", options: NSKeyValueObservingOptions.Initial, context: UnsafeMutablePointer<Void>())
-            player.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: GameViewController.context)
-        }
+            for player in self.world!.sprites {
+                player.attributes.addObserver(self, forKeyPath: "isAlive", options: NSKeyValueObservingOptions.Old, context: UnsafeMutablePointer<Void>())
+                player.attributes.addObserver(self, forKeyPath: "health", options: NSKeyValueObservingOptions.Initial, context: UnsafeMutablePointer<Void>())
+                player.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: GameViewController.context)
+            }
 
 
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if let attributes = object as? SpriteAttributes {
-//            if !attributes.isAlive {
-            RMLog("\(keyPath) \(attributes.sprite.name!) just died!", id: "Observers")
-//                attributes.deRetire()
-//            }
-        }
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+            if let attributes = object as? SpriteAttributes {
+    //            if !attributes.isAlive {
+                RMLog("\(keyPath) \(attributes.sprite.name!) just died!", id: "Observers")
+    //                attributes.deRetire()
+    //            }
+            }
     }
     func somethingHappened(thing: AnyObject?){
       

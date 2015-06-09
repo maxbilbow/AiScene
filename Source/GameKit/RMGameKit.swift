@@ -9,6 +9,7 @@
 import Foundation
 import GameKit
 
+@available(OSX 10.10, *)
 class RMXGameManager {
     
     var savedGame: GKSavedGame

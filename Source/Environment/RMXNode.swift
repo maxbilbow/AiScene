@@ -12,7 +12,7 @@ import SceneKit
 
     //typealias RMXNode = SCNNode
 
-
+@available(OSX 10.10, *)
 class RMXNode : SCNNode {
     
 //    internal var _geometryNode: SCNNode!
@@ -30,7 +30,7 @@ class RMXNode : SCNNode {
 //        }
 //    }
 
-    internal var rmxSprite: RMXSprite {
+    var rmxSprite: RMXSprite {
         return self._sprite
     }
     
@@ -99,16 +99,16 @@ class RMXNode : SCNNode {
         self.addChildNode(node)
         switch self._sprite.type {
             
-        case .AI, .PLAYER, .PASSIVE:
+        case _ where self.sprite!.isPlayerOrAi || self.sprite!.type == .PASSIVE:
             self.physicsBody = SCNPhysicsBody.dynamicBody()
             self.physicsBody?.friction = 0.1
             self.physicsBody?.mass = CGFloat(4 * PI * self.radius * self.radius)
             break
-        case .PASSIVE:
+        case .AI, .PASSIVE:
             self.physicsBody?.damping = 0.3
             self.physicsBody?.angularDamping = 0.2
             //            self.physicsBody?.restitution = 0.1
-        case .AI, .PLAYER:
+        case _ where self.sprite!.isPlayerOrAi:
             self.physicsBody?.damping = 0.5
             self.physicsBody?.angularDamping = 0.5
             break
@@ -122,14 +122,17 @@ class RMXNode : SCNNode {
         case .KINEMATIC:
             self.physicsBody = SCNPhysicsBody.kinematicBody()
             break
-        case .ABSTRACT:
+        case .ABSTRACT, .CAMERA:
             self.physicsBody?.mass = 0
             break
         default:
-            if self.physicsBody == nil {
-                self.physicsBody = SCNPhysicsBody()//.staticBody()
-                self.physicsBody!.restitution = 0.0
-            }
+            fatalError()
+//        case .:
+//            if self.physicsBody == nil {
+//                self.physicsBody = SCNPhysicsBody()//.staticBody()
+//                self.physicsBody!.restitution = 0.0
+//            }
+//            break
         }
         
         
@@ -147,7 +150,7 @@ class RMXNode : SCNNode {
         
 
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -185,13 +188,15 @@ class RMXNode : SCNNode {
         return self.sprite?.holder
     }
     
-    
-}
-
+                }
+            
+                
+                
+@available(OSX 10.10, *)
 extension RMXSprite {
-
     
-    var transform: RMXMatrix4 {
+    
+    var transform: SCNMatrix4 {
         return self.node.presentationNode().transform
     }
     
