@@ -85,13 +85,27 @@ class RMXInterface : NSObject, RendererDelegate {
         RMXLog()
     }
 
-    
+//    var world2D: SKView?
+    var world2DNode: SK3DNode?
     func startVideo(sender: AnyObject?){}
     
     ///Run this last when overriding
     func viewDidLoad(){
         self.gameView!.delegate = self
-       // NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "updateScoreboard", userInfo: nil, repeats: true)
+
+        /*
+        self.world2DNode = SK3DNode(viewportSize: self.scoreboard.scene!.size)
+        self.world2DNode?.position = self.scoreboard.scene!.position
+        self.world2DNode?.pointOfView = self.world.activeCamera
+        self.world2DNode?.projectPoint(vector_float3(10,10,0))
+       self.world2DNode?.scnScene = self._world!
+
+        self.scoreboard?.scene?.addChild(self.world2DNode!)
+        */
+        
+        
+        
+        
     }
     
     func setUpTimers(){

@@ -8,6 +8,7 @@
 
 import SceneKit
 import Foundation
+import SpriteKit
 
 class GameView: SCNView  {
     
@@ -26,6 +27,8 @@ class GameView: SCNView  {
         return (self.gvc as? GameViewController)?.interface
     }
     
+    
+
     var gvc: ViewController!
     
     #if OSX
