@@ -297,6 +297,18 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         self.spriteDidInitialize()
     }
     
+    var paused: Bool {
+        return self.node.paused
+    }
+    
+    ///could cause animation failure if deRetire() does not fire
+    func reinitialize() {
+        self.setPosition(position)
+        self.validate()
+        self.attributes.retire()
+        RMLog("could cause animation failure if deRetire() does not fire")
+    }
+    
     func spriteDidInitialize(){
         switch self.type {
         case .PLAYER, .AI, .PASSIVE:
@@ -416,10 +428,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     
     
-    func toggleGravity() {
-       /// self.hasGravity = !self.hasGravity
-        RMLog("Unimplemented")
-    }
+    
     
     var theta: RMFloat = 0
     var phi: RMFloat = 0//90 * PI_OVER_180
@@ -635,7 +644,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     func throwItem(atPosition target: SCNVector3?, withForce strength: RMFloat) -> Bool {
         if let target = target {
             if let itemInHand = self.item {
-                let direction = (target - self.position)//.normalised
+                let direction = (target - itemInHand.position)//.normalised
                 self.releaseItem()
                 RMXTeam.throwChallenge(self, projectile: itemInHand)
                 let force = RMFloat((itemInHand.physicsBody?.damping ?? 0.1 ) + 1) * strength * itemInHand.mass //* ( strength < 150 ? 150 : strength )
@@ -688,43 +697,52 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
             if  itemIncoming.isActiveSprite && !self.canGrabPlayers {  RMLog("\(__FUNCTION__)- cant grab \(itemIncoming.name)", id: "THROW") ;return false  } //Prevent accidentily holding oneself
             if self.isWithinReachOf(itemIncoming) {
                 itemIncoming.node.removeCollisionActions()
-                _itemInHand = itemIncoming
 //                itemIncoming.followers.removeAll(keepCapacity: false) ///TODO: this may not be necessary
-                itemIncoming.holder = self
-                if itemIncoming.isPlayerOrAi {
-                    itemIncoming.physicsBody?.type = .Static
-                } else if itemIncoming.arm != nil {
-                    itemIncoming.setMass(self.mass * 0.05)
+                
+                //Used to make body static here
+                if itemIncoming.arm != nil {
+                    if !itemIncoming.isPlayerOrAi { ///reduce mass to 1% of sprite unless its another player
+                        itemIncoming.setMass(self.mass * 0.01)
+                        itemIncoming.physicsBody?.restitution = 0.01
+                        itemIncoming.physicsBody?.friction = 0.01
+                    }
+                    _itemInHand = itemIncoming
+                    itemIncoming.holder = self
                     _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody!, anchorA: self.arm!.position, bodyB: itemIncoming.physicsBody!, anchorB: itemIncoming.arm!.position) //+ SCNVector3Make(item.arm.radius))
-                    itemIncoming.physicsBody?.restitution = 0
+                    
                     self.scene?.physicsWorld.addBehavior(_arm!)
                 }
                 //joint
                 return true
             } else {
-                if itemIncoming.type == .PASSIVE || (self.isActiveSprite && itemIncoming.isPlayerOrAi ) { ///active player can grab anything for now
+                ///Player can use tractor beam function on passive objects
+                itemIncoming.isLocked = false
+                if (self.isActiveSprite || self.isWithinSightOf(itemIncoming)) && itemIncoming.type == .PASSIVE { // || (self.isActiveSprite && itemIncoming.isPlayerOrAi ) { ///active player can grab anything for now
                     itemIncoming.tracker.setTarget(self, willJump: false, asProjectile: true, impulse: true, doOnArrival: { (target) -> () in// speed: 10 * item.mass
                         self.setItem(item: itemIncoming)
 //                        item.tracker.removeTarget()
                     })
-                    itemIncoming.isLocked = false
                     return true
                 }
+                
                 return false
             }
         } else if let itemInHand = self._itemInHand {
-            if itemInHand.isPlayerOrAi {
-                itemInHand.physicsBody?.type = .Dynamic
-            } else {
-                self.scene?.physicsWorld.removeBehavior(_arm!)
+            
+                //this used to make dynamic again here
+//                itemInHand.physicsBody?.type = .Dynamic
+            self._itemInHand = nil
+            self.scene?.physicsWorld.removeBehavior(_arm!)
+            if !itemInHand.isPlayerOrAi {
                 itemInHand.setMass()
                 itemInHand.physicsBody?.restitution = 0.5
-                _arm = nil
+                itemInHand.physicsBody?.friction = 0.5
             }
+                _arm = nil
             itemInHand.holder = nil
 //            itemInHand.followers.removeAll(keepCapacity: false)
             itemInHand.isLocked = false
-            self._itemInHand = nil
+            
             return true
         }
         else {
@@ -735,6 +753,10 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
     
     func isWithinReachOf(item: RMXSprite) -> Bool{
         return self.distanceTo(item) <= self.armLength * 3
+    }
+    
+    func isWithinSightOf(item: RMXSprite) -> Bool{
+        return self.distanceTo(item) <= self.world.radius / 4
     }
     
     func grab(object: AnyObject?) -> Bool {
@@ -909,10 +931,14 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
         }
     }
     
+    private var _startingPosition: SCNVector3?
     func setPosition(position: SCNVector3? = nil, resetTransform: Bool = true){
         self.node.transform = self.transform
         if let position = position {
             self.node.position = position
+            if self._startingPosition == nil {
+                self._startingPosition = position
+            }
         }
         if resetTransform {
             self.resetTransform()

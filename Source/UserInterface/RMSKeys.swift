@@ -86,8 +86,8 @@ class RMSKeys : RMXInterface {
     //Misc: generically used for testing
     RMKey(self, action: .GET_INFO, characters: "i", isRepeating: false, speed: ON_KEY_DOWN), //Prints to terminal when testing
     RMKey(self, action: .TOGGLE_SCORES, characters: "S", isRepeating: false, speed: ON_KEY_UP),
-    RMKey(self, action: .ZOOM_IN, characters: "=", isRepeating: true, speed: MOVE_SPEED),
-    RMKey(self, action: .ZOOM_OUT, characters: "-", isRepeating: true, speed: MOVE_SPEED),
+    RMKey(self, action: .ZOOM_IN, characters: "=", isRepeating: true, speed: (10,0)),
+    RMKey(self, action: .ZOOM_OUT, characters: "-", isRepeating: true, speed: (10,0)),
     RMKey(self, action: .INCREASE, characters: "+", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: .DECREASE, characters: "_", isRepeating: false, speed: ON_KEY_DOWN),
     RMKey(self, action: .DEBUG_NEXT, characters: KEY_TAB, isRepeating: false, speed: ON_KEY_UP),
@@ -103,10 +103,7 @@ class RMSKeys : RMXInterface {
     
   
     
-    override func updateScoreboard() {
-        super.updateScoreboard()
-        
-    }
+
 
     
     override func viewDidLoad() {

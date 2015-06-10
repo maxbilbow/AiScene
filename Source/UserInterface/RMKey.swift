@@ -32,10 +32,10 @@ class RMKey : CustomStringConvertible{
         return self.keys.actionProcessor
     }
     
-    init(_ keys: RMSKeys, action: UserAction?, description: String = "NULL", characters: String, isRepeating: Bool = true, speed: (on:RMFloat,off:RMFloat) = (1,0), values: AnyObject? = nil) {
+    init(_ keys: RMSKeys, action: UserAction?, description: String? = nil, characters: String, isRepeating: Bool = true, speed: (on:RMFloat,off:RMFloat) = (1,0), values: AnyObject? = nil) {
         self.keys = keys
         self.action = action
-        self.string = action?.description ?? description
+        self.string = action?.description ?? description!
         if action == nil {
             self.asString = true
         }
@@ -98,6 +98,7 @@ class RMKey : CustomStringConvertible{
     }
     
     func update(){
+//        NSLog(self.print)
         if self.isRepeating && self.isPressed {
             if asString {
                 self.actionProcessor.action(self.string, speed: self.speed.on, args: self.values)

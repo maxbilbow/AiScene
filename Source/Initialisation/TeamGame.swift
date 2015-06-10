@@ -28,6 +28,8 @@ protocol RMXTeamGame  {
     func addTeam(team: RMXTeam)
     var teams: Dictionary<String, RMXTeam> { get }
     func updateTeam(team: RMXTeam) -> RMXTeam?
+    var activeSprite: RMXSprite { get }
+    var gameOverMessage: ((AnyObject?) -> [String]?)? { get set }
 }
 
 @available(OSX 10.10, *)
@@ -38,7 +40,7 @@ protocol RMXTeamMember {
 @available(OSX 10.10, *)
 extension RMSWorld : RMXTeamGame {
     
-
+    
     
     var teamScores: [String] {
         var scores = Array<String>()
@@ -129,6 +131,10 @@ extension RMSWorld : RMXTeamGame {
         }
         return winningTeam
     }
+    
+    
+
+    
 }
 
 
@@ -155,10 +161,73 @@ class SpriteAttributes : NSObject {
         return sprite.rmxID
     }
     
-    var health: Int = 100
+    private var _health: Float = 100
+    var health: Float {
+        return _health
+    }
+    
+    func setHealth(health: Float? = nil) {
+        self.willChangeValueForKey("health")
+        _health = health ?? self.team?.startingHealth ?? 100
+        self.didChangeValueForKey("health")
+    }
+    
 
+    func reduceHealth(byDividingBy factor: Float) -> Bool {
+        if factor > 1 {
+            self.willChangeValueForKey("health")
+            _health /= factor
+            self.didChangeValueForKey("health")
+            return true
+        }
+        return false
+    }
+    
+    func reduceHealth(byMultiplyingBy factor: Float) -> Bool {
+        if factor < 1 {
+            self.willChangeValueForKey("health")
+            _health *= factor
+            self.didChangeValueForKey("health")
+            return true
+        }
+        return false
+    }
+    
+    func reduceHealth(bySubtracting amount: Float) -> Bool{
+        if amount > 0 {
+            self.willChangeValueForKey("health")
+            _health -= amount
+            self.didChangeValueForKey("health")
+            return true
+        }
+        return false
+    }
 
-    var points: Int = 0
+    private var _points: Int = 0
+    var points: Int {
+        return _points
+    }
+    
+    func givePoints(points: Int) -> Bool {
+        if points > 0 {
+            self.willChangeValueForKey("points")
+            self.team?.willChangeValueForKey("points")
+            self._points += points
+            self.team?.score.points += points
+            self.didChangeValueForKey("points")
+            self.team?.didChangeValueForKey("points")
+            return true
+        }
+        return false
+    }
+    
+    func setPoints(points: Int) {
+        if points != _points {
+            self.willChangeValueForKey("points")
+            self._points = points
+            self.didChangeValueForKey("points")
+        }
+    }
     
     var kit: SCNMaterial? {
         return self.isTeamPlayer ? self.sprite.geometry?.firstMaterial : nil
@@ -215,11 +284,14 @@ class SpriteAttributes : NSObject {
         return !self.invincible && self.isAlive
     }
     private var _isAlive = true
+    
+    ///could cause animation failure if deRetire() does not fire
     func retire() {
         if self.canBeKilled { // && self.isAlive {
             self.willChangeValueForKey("isAlive")
 
             self._isAlive = false
+//            self.sprite.node.paused = true
             self.sprite.node.opacity = 0.1
             //
             self.sprite.releaseItem()
@@ -241,6 +313,7 @@ class SpriteAttributes : NSObject {
 //        if !self._isAlive {
             self.willChangeValueForKey("isAlive")
             self._isAlive = true
+//            self.sprite.node.paused = false
             self.sprite.node.opacity = 1
             self.didChangeValueForKey("isAlive")
 //        }
@@ -259,26 +332,32 @@ class SpriteAttributes : NSObject {
     }
     
     private func kill() {
+        self.team?.willChangeValueForKey("kills")
         _killCount++
+        self.team?.score.kills++
+        self.team?.didChangeValueForKey("kills")
     }
     private func die() {
+        self.team?.willChangeValueForKey("deaths")
         _deathCount++
+        self.team?.score.deaths++
+        self.team?.didChangeValueForKey("deaths")
     }
     
     
     var score: ScoreCard {
-        return (kills: self.killCount, deaths: self.deathCount, points: self.points, health: self.health)
+        return (kills: self._killCount, deaths: self._deathCount, points: self._points)
     }
     
     var printScore: String {
         let score = self.score
-        return "PLAYER SCORE: \(score.points), KILLS: \(score.kills), DEATHS: \(score.deaths), HEALTH: \(score.health)"
+        return "\(self.sprite.name)'s Score: \(score.points), Kills: \(score.kills), Deaths: \(score.deaths), Health: \(self.health)"
     }
 
 }
 
-typealias ScoreCard = (kills: Int, deaths: Int, points: Int, health: Int)
-
+typealias ScoreCard = (kills: Int, deaths: Int, points: Int)
+typealias TeamStats = (score: ScoreCard, players: Int, livePlayers: Int)
 @available(OSX 10.10, *)
 class RMXTeam : NSObject, RMXObject {
     var name: String? {
@@ -294,18 +373,28 @@ class RMXTeam : NSObject, RMXObject {
         return self.captain?.kit
     }
     
-    var startingHealth = 100
+    var startingHealth: Float = 100
     
-    var score: ScoreCard {
-        var score: ScoreCard = (kills: 0, deaths: 0, points: 0, health: 0)
-        let team = self.players
-        for player in team {
-            score.kills  += player.attributes.killCount
-            score.deaths += player.attributes.deathCount
-            score.points += player.attributes.points
-            score.health += player.attributes.health
+    var score: ScoreCard = (0,0,0)
+    
+    var stats: TeamStats {
+        let players = self.players
+        let livePlayers = players.filter { (player) -> Bool in
+            return player.attributes.isAlive
         }
-        return score
+        return (self.score, players.count, livePlayers.count)
+    }
+    
+    var kills: Int {
+        return self.score.kills
+    }
+    
+    var deaths: Int {
+        return self.score.deaths
+    }
+    
+    var points: Int {
+        return self.score.points
     }
     
     var game: RMXTeamGame
@@ -351,6 +440,9 @@ class RMXTeam : NSObject, RMXObject {
             return false
         }
         if player.attributes.teamID != self.id { //will we get a new player?
+            if player.attributes.isTeamCaptain {
+                player.attributes.team?.captain = nil
+            }
             player.attributes.setTeamID(self.id)
             if self.captain != nil { //do we have a captain?
                 RMXTeam.setColor(self.kit, receiver: player.attributes)
@@ -361,7 +453,7 @@ class RMXTeam : NSObject, RMXObject {
             }
             if player.attributes.health < self.startingHealth {
                 player.attributes.willChangeValueForKey("health")
-                player.attributes.health = self.startingHealth
+                player.attributes.setHealth()
                 player.attributes.didChangeValueForKey("health")
             }
             return true
@@ -389,12 +481,7 @@ class RMXTeam : NSObject, RMXObject {
         }
     }
     
-    func retire() {
-        if RMXTeam.isGameWon(self.game) {
-            self.isRetired = true
-            self.game.interface.pauseGame(self)
-        }
-    }
+    
     
     class func updateTeam(team: RMXTeam?) {
         if let players = team?.players {
@@ -455,50 +542,42 @@ class RMXTeam : NSObject, RMXObject {
     enum ChallengeOutcome { case DefenderWasKilled, DefenderAlreadyDead, DefenderWasNotKilled}
     class func challengeWon(attacker: SpriteAttributes, defender: SpriteAttributes) -> ChallengeOutcome {
         if !defender.isAlive { return .DefenderAlreadyDead }
-        attacker.willChangeValueForKey("points")
-        defender.willChangeValueForKey("health")
         let health = defender.health
-        defender.health -= 20
-        attacker.points += health - defender.health
+        defender.reduceHealth(bySubtracting: 20)
+        attacker.givePoints(Int(health - defender.health))
         if defender.health <= 0 {
 //            self.convert(defender, toTeam: attacker.team)
             defender.die()
             attacker.kill()
-            attacker.points += defender.points
-            attacker.didChangeValueForKey("points")
-            defender.didChangeValueForKey("health")
+            attacker.givePoints(defender.points)
             return .DefenderWasKilled
         }
-        attacker.didChangeValueForKey("points")
-        defender.didChangeValueForKey("health")
         return .DefenderWasNotKilled
     }
     
-    class func isGameWon(game: RMXTeamGame?) -> Bool {
-        return game?.winningTeam != nil
-    }
     
     var print: String {
-        return "TEAM-\(self.id) SCORE: \(self.score.points), KILLS: \(self.score.kills), DEATHS: \(self.score.deaths), PLAYERS: \(self.players.count)"
+        return "TEAM-\(self.id) Points: \(self.score.points), Kills: \(self.score.kills), Deaths: \(self.score.deaths)"
+    }
+    
+    override var description: String {
+        let stats = self.stats
+        return "TEAM-\(self.id) Points: \(self.score.points), Kills: \(self.score.kills), Deaths: \(self.score.deaths), Players: \(stats.livePlayers) out of \(stats.players) remaining"
     }
     
     class func indirectChallenge(attacker: SpriteAttributes, defender: SpriteAttributes) -> ChallengeOutcome {
         if !defender.isAlive { return .DefenderAlreadyDead }
-        attacker.willChangeValueForKey("points")
-        defender.willChangeValueForKey("health")
+        self.willChangeValueForKey("score")
         let health = defender.health
-        if defender.health > 0 { defender.health -= 10 }
-        attacker.points += health - defender.health
+        if defender.health > 0 { defender.reduceHealth(bySubtracting: 10) }
+        attacker.givePoints(Int(health - defender.health))
         if defender.health <= 0 {
             defender.die()
             attacker.kill()
-            attacker.points += defender.points
-            attacker.didChangeValueForKey("points")
-            defender.didChangeValueForKey("health")
+            attacker.givePoints(defender.points)
             return .DefenderWasKilled
         }
-        attacker.didChangeValueForKey("points")
-        defender.didChangeValueForKey("health")
+        self.didChangeValueForKey("score")
         return .DefenderWasNotKilled
     }
     
@@ -507,8 +586,10 @@ class RMXTeam : NSObject, RMXObject {
         func _challenge(contact: SCNPhysicsContact) -> Void {
             if let defender = contact.getDefender(forChallenger: challenger).sprite {
                 if defender.willCollide ?? false && defender.attributes.teamID != challenger.attributes.teamID {
+                    challenger.attributes.team?.willChangeValueForKey("score")
                     RMXTeam.challenge(challenger.attributes, defender: defender.attributes, doOnWin: self.indirectChallenge)
                     RMXTeam.challenge(challenger.attributes, defender: projectile.attributes, doOnWin: self.indirectChallenge)
+                    challenger.attributes.team?.didChangeValueForKey("score")
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
                     challenger.world.interface.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
                     projectile.tracker.abort()
@@ -518,5 +599,21 @@ class RMXTeam : NSObject, RMXObject {
         projectile.node.addCollisionAction(named: "Attack", removeAfterTime: 2, action: _challenge)
         
     }
+    
+    class func gameOverMessage(winner teamID: String, player: RMXSprite) -> [String] {
+        let msg = teamID == player.attributes.teamID ? "Well done, \(player.name!)" : "You lose! :("
+        return [ "The winning team is team \(teamID)! \(msg)" , "Your score: \(player.attributes.printScore)" ]
+    }
+    
+    class func isGameWon(game: AnyObject?) -> [String]? {
+        if let teamID = (game as? RMXTeamGame)?.winningTeam?.id {
+            //            self.isRetired = true
+            if let player = (game as? RMXTeamGame)?.activeSprite {
+                return self.gameOverMessage(winner: teamID, player: player)
+            }
+        }
+        return nil
+    }
+
     
 }

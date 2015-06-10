@@ -26,6 +26,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
     static let ZERO_GRAVITY = SCNVector3Zero
     static let EARTH_GRAVITY = SCNVector3Make(0, -9.8, 0)
     
+    var gameOverMessage: ((AnyObject?) -> [String]?)?
     var cameras: Array<SCNNode> = Array<SCNNode>()
     
     var activeCamera: SCNNode {
@@ -122,26 +123,61 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         return self
     }
     var ground: RMFloat = 0
+    
+    func reset(withArgs args: AnyObject? = nil) {
+        for sprite in self.sprites {
+            sprite.reinitialize()
+        }
+        if self.teams.count > 1 {
+            self.resetTeams(withArgs: args)
+        }
+        self.calibrate()
+        self.unPause()
+    }
+    
+    func resetTeams(withArgs args: AnyObject? = nil) {
+        let teams = self.teams ; let teamPlayers = self.teamPlayers
+        let noTeams = teams.count; let noPlayers = teamPlayers.count
+        let playersPerTeam = noPlayers / noTeams; var count = 0
+        for player in teamPlayers {
+            for team in teams {
+                if !player.attributes.isTeamCaptain {
+                    team.1.addPlayer(player)
+                    if ++count >= playersPerTeam {
+                        break
+                    }
+                }
+            }
+        }
+        AiCubo.addPlayers(self, noOfPlayers: self.players.count, teams: self.teams.count)
+    }
+    
     func calibrate() -> SCNScene {
         _aiOn = false
         self.interface.gameView!.scene = self//._scene
         self.cameraNumber = 0
         self.interface.gameView!.pointOfView = self.activeCamera
-        self
-        self.shouldTurnOnAi = true
+//        self.shouldTurnOnAi = true
         return self
     }
-    var shouldTurnOnAi = false
+    var shouldTurnOnAi = true
     func pause() -> Bool {
-            (self).paused = true
-//            self.switchOffAi()
+        if !self.shouldTurnOnAi {
+            self.shouldTurnOnAi = self._aiOn
+        }
+        self._aiOn = false
+        self.paused = true
         return true
     }
-    
+    var aiTimer: NSTimer?
     func unPause() -> Bool {
-        (self).paused = false
+        self.paused = false
         if self.shouldTurnOnAi {
-            NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+            if !(self.aiTimer?.valid ?? true) {
+                    self.aiTimer?.fire()
+            } else {
+                self.aiTimer = NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
+            }
             self.shouldTurnOnAi = false
         }
         return true
@@ -289,6 +325,7 @@ class RMXScene : SCNScene, RMXUniqueEntity, RMXObject {
         for child in self.sprites {
             child.aiDelegate?.run(aRenderer, updateAtTime: time)
         }
+
     }
     
     private var _ground: RMFloat?

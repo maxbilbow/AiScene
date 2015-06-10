@@ -188,10 +188,7 @@ class RMSActionProcessor {
                 return true
             case .RESET:
                 if speed == 1 {
-    //                sprite.setPosition(position: RMXVector3Make(0, 50, 50))
-                    for player in self.world.players {
-                        player.attributes.deRetire()
-                    }
+                    self.world.reset()
                 }
                 return true
             case .DEBUG_NEXT:
@@ -227,7 +224,7 @@ class RMSActionProcessor {
             case .SHOW_SCORES:
                 if speed == 1 {
                     self.interface.scoreboard.hidden = false
-                    self.interface.updateScoreboard()
+                    self.interface.updateScoreboard(nil)
                     return true
                 }
                 return false
@@ -242,7 +239,7 @@ class RMSActionProcessor {
                 if speed == 1 {
                     self.interface.scoreboard.hidden = !self.interface.scoreboard.hidden
     //                self.interface.skView.hidden = self.interface.scoreboard.hidden
-                    self.interface.updateScoreboard()
+                    self.interface.updateScoreboard(nil)
                     return true
                 }
 

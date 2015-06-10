@@ -10,7 +10,7 @@ import Foundation
 import SceneKit
 
 
- enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, WEAPONS }
+ enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, TEAM_GAME_2, WEAPONS }
 @available(OSX 10.10, *)
 class AiCubo {
    
@@ -66,7 +66,7 @@ class AiCubo {
         sunNode.addChildNode(lightNode)
         sun.setName("sun")
         sun.node.pivot.m43 = -worldRadius
-        sun.node.eulerAngles.x = -45 * PI_OVER_180
+        sun.node.eulerAngles.x = -25 * PI_OVER_180
 //        lightNode.pivot.m43 = sun.radius * 2
         if !fixed {
             sun.node.runAction(SCNAction.repeatActionForever(SCNAction.rotateByAngle(CGFloat(1 * PI_OVER_180), aroundAxis: SCNVector3Make(1, y: 0, z: 0), duration: 1)))
@@ -176,6 +176,33 @@ class AiCubo {
                 AiCubo.addPlayers(world, noOfPlayers: 10, teams: 2)
                 RMXAi.offenciveBehaviour(to: world.sprites)
                 break
+            case .TEAM_GAME_2:
+                world.name = "Team Game: 3 teams"
+                
+                AiCubo.initialWorldSetup(world)
+                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 12, shapes: .CYLINDER, .CUBE)
+                AiCubo.addPlayers(world, noOfPlayers: 9, teams: 3)
+                RMXAi.offenciveBehaviour(to: world.sprites)
+                let teamPlayers: Int = world.teamPlayers.count
+                world.gameOverMessage = ({(world: AnyObject?) -> [String]? in
+                    if let game = world as? RMXTeamGame {
+                        for team in game.teams {
+//                            if (game as! RMSWorld).activeCamera.pivot.m43 == 0 {
+//                                return RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
+//                            }
+                            let score = team.1.score
+                            if score.kills == teamPlayers {
+                                return [ "Team \(team.0) killed \(score.kills) players!"] + RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
+                            } else if team.0 == game.activeSprite.attributes.teamID && score.deaths == teamPlayers {
+                                return [ "Your teammates died \(score.deaths) times!"] + RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
+                            }
+                        }
+                    }
+                    return nil
+                })
+                break
             default:
                 AiCubo.initialWorldSetup(world)
                 break
@@ -185,7 +212,7 @@ class AiCubo {
 //            interface.gameView.pointOfView = world.activeCamera
             world.rootNode.castsShadow = true
             for node in world.rootNode.childNodes {
-                if node.sprite?.type != .ABSTRACT {
+                if node.sprite?.isPlayerOrAi ?? false {
                     node.castsShadow = true
                 }
             }
@@ -278,6 +305,10 @@ class AiCubo {
     }
     
     class func addPlayers(world: RMSWorld, noOfPlayers n: Int, teams: Int = 0){
+        
+        if world.gameOverMessage == nil {
+            world.gameOverMessage = RMXTeam.isGameWon
+        }
         for ( var i = 0; i < n ; ++i) {
             self.simpleSprite(world, type: .AI, isUnique: false)
         }

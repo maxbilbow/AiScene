@@ -123,9 +123,9 @@ class RMXInterface : NSObject, RendererDelegate {
         
     }
     
-    private static let DEFAULT_GAME: GameType = .TEAM_GAME
+    private static let DEFAULT_GAME: GameType = .TEAM_GAME_2
     
-    var availableGames: [ GameType ] = [ .TEAM_GAME, .WEAPONS, .TEST, .EMPTY ]
+    var availableGames: [ GameType ] = [ .TEAM_GAME, .TEAM_GAME_2, .WEAPONS, .TEST, .EMPTY ]
     
     var activeGames: [GameType: RMSWorld] = Dictionary<GameType,RMSWorld>()
     
@@ -144,7 +144,7 @@ class RMXInterface : NSObject, RendererDelegate {
         _world = _newGame(type)
         self.isNewGame = true
         _world?.calibrate()
-        self.updateScoreboard()
+        self.updateScoreboard(nil)
 //        self.organiseLines()
 //        self.unPauseGame(nil)
         self.pauseGame()
@@ -189,16 +189,15 @@ class RMXInterface : NSObject, RendererDelegate {
     }
     
     func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
+        if !(_world?.paused ?? true) {//.scene.paused {
+            self.actionProcessor.animate()
+            self.world.renderer(aRenderer, updateAtTime: time)
+        }
         self.update()
-        self.world.renderer(aRenderer, updateAtTime: time)
         RMXLog.printAndFlush()
     }
     
-    func updateDataView(){
-//        let text = self.actionProcessor.getData()
-//        NSLog(text)
-    }
-    
+
     func animateHit(node: SCNNode){
         if let material = node.geometry?.firstMaterial {
             
@@ -220,6 +219,10 @@ class RMXInterface : NSObject, RendererDelegate {
             
             SCNTransaction.commit()
         }
+    }
+    
+    func resetButton() {
+        self.world.reset()
     }
     
     func processHit(point p: CGPoint, type: UserAction) -> Bool {
@@ -252,19 +255,18 @@ class RMXInterface : NSObject, RendererDelegate {
 //    }
     
     private var lineCount = 0
-    func updateScoreboard() {
-        if self.scoreboard.hidden {
-            return
-        }
-        if _world != nil{
-            var lns: [String] = [ self.world.name ?? "Unknown Gamemode", self.activeSprite.attributes.printScore ]
+    func updateScoreboard(lines: [String]?) {
+        if !self.scoreboard.hidden && _world != nil{
+            var lns: [String] = lines ?? [ self.world.name ?? "Unknown Gamemode", self.activeSprite.attributes.printScore ]
             if self.world.teams.count > 0 {
                 for team in self.world.teams {
                     lns.append(team.1.print)
                 }
             }
-            lns.append("Try selecting a defferent game mode")
-            lns.append("Numbers 0..9 in OSX or fromt' pause menu in iOS")
+            if lns.count <= 2 {
+                lns.append("Try selecting a defferent game mode")
+                lns.append("Numbers 0..9 in OSX or fromt' pause menu in iOS")
+            }
             
             
             if self.lineCount != lns.count {
@@ -320,26 +322,21 @@ class RMXInterface : NSObject, RendererDelegate {
         
     }
     
-    func update(){
-        if _world != nil && !_world!.paused {//.scene.paused {
-            self.actionProcessor.animate()
-        }
-
-    }
+    ///@virtual
+    func update(){}
     
     enum KeyboardType { case French, UK, DEFAULT }
     func setKeyboard(type: KeyboardType = .UK)  {
         self.keyboard = type
     }
+    
     ///Stop all inputs (i.e. no gestures received)
     ///@virtual
     func handleRelease(arg: AnyObject, args: AnyObject ...) { }
 
     
-    
-    func hideButtons(hide: Bool) {
-        
-    }
+    ///@virtual
+    func hideButtons(hide: Bool) {}
     
     var isPaused: Bool {
         return _world != nil && _world!.paused//.scene.paused
@@ -349,28 +346,22 @@ class RMXInterface : NSObject, RendererDelegate {
         return _world != nil && !_world!.paused//scene.paused
     }
     
+    ///When overriding, call super last
     func pauseGame(sender: AnyObject? = nil) -> Bool {
 //        if sender is RMXObject { RMLog("Pause requested by \(sender?.uniqueID)") }
-        if _world?.pause() != nil {
-//            self.updateScoreboard()
-            self.updateDataView()
-            if self.lines.count > 0 {
-                self.scoreboard.hidden = false// self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
-                self.updateScoreboard()
-            }
-            self.hideButtons(true)
-            return true
-        }
+        
+        // self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
+        self.hideButtons(true)
+        self.scoreboard.hidden = false
+        _world?.pause()
         return true
     }
     
+    ///When overriding, call super last
     func unPauseGame(sender: AnyObject? = nil) -> Bool {
-//        if sender is RMXObject { RMLog("UnPause requested by \(sender?.uniqueID)") }
-        if _world?.unPause() != nil {
-            self.scoreboard.hidden = true //self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
-            self.hideButtons(false)
-            return true
-        }
+        self.scoreboard.hidden = true //self.action(action: RMXInterface.HIDE_SCORES, speed: 1)
+        self.hideButtons(false)
+        _world?.unPause()
         return true
     }
     
@@ -397,7 +388,12 @@ class RMXInterface : NSObject, RendererDelegate {
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         switch keyPath! {
         case RMSWorld.kvScores:
-            self.updateScoreboard()
+            if let msg = self.world.gameOverMessage?(world) {
+                self.pauseGame()
+                self.updateScoreboard(msg)
+            } else if !self.scoreboard.hidden {
+                self.updateScoreboard(nil)
+            }
             break
         default:
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)

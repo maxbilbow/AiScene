@@ -116,24 +116,16 @@ class RMXDPad : RMXInterface {
     }
     
     override func pauseGame(sender: AnyObject? = nil) -> Bool {
-        if super.pauseGame(sender) {
-            self.pauseMenu?.hidden = false
-            self.menuAccessBar?.hidden = true
-            self.hideButtons(true)
-            return true
-        }
-        return false
+        self.pauseMenu?.hidden = false
+        self.menuAccessBar?.hidden = true
+        return super.pauseGame(sender)
     
     }
     
     override func unPauseGame(sender: AnyObject? = nil) -> Bool {
-        if super.unPauseGame(sender) {
-            self.pauseMenu?.hidden = true
-            self.menuAccessBar?.hidden = false
-            self.hideButtons(false)
-            return true
-        }
-        return false
+        self.pauseMenu?.hidden = true
+        self.menuAccessBar?.hidden = false
+        return super.unPauseGame(sender)
     }
     
     override func optionsMenu(sender: AnyObject?) {
@@ -164,7 +156,8 @@ class RMXDPad : RMXInterface {
         self.pauseMenu?.backgroundColor = UIColor.grayColor()
         
         self.makeButton("||     ", selector: "unPauseGame:" , view: self.pauseMenu, row: (1,1), col: (1,self.topColumns))
-        self.makeButton("New Game", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (3,6))
+        self.makeButton("New Game", selector: "restartSession:", view: self.pauseMenu, row: (1,1), col: (2,6))
+        self.makeButton("Reset Game", selector: "resetTransform:", view: self.pauseMenu, row: (1,1), col: (3,6))
         self.makeButton("Options", selector: "optionsMenu:", view: self.pauseMenu, row: (1,1), col: (3,4))
         self.makeButton("Exit to main menu", selector: "exitToMainMenu:", view: self.pauseMenu, row: (1,1), col: (4,4))
 
