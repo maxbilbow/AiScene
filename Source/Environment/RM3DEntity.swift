@@ -293,7 +293,7 @@ class RM3DEntity : RMXTeamMember, RMXUniqueEntity, RMXObject {
 //        self.geometryNode = node
         self._rmxNode = RMXNode(sprite: self)
         self._rmxNode.setGeometryNode(node)
-        self.attributes = SpriteAttributes(self)
+        self.attributes = SpriteAttributes(sprite: self)
         self.spriteDidInitialize()
     }
     

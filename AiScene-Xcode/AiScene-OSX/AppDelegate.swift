@@ -57,6 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var s = "\napplicationWillTerminate"
         s += "\n   Game will be archived?"
         print(s, appendNewline: true)
+        
     }
     
     func applicationDidChangeScreenParameters(notification: NSNotification) {

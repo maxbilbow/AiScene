@@ -595,7 +595,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "266"
             endingLineNumber = "266"
-            landmarkName = "toggleGravity()"
+            landmarkName = "insertChild(_:andNode:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -658,9 +658,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "424"
-            endingLineNumber = "424"
-            landmarkName = "keyDown(_:)"
-            landmarkType = "5">
+            endingLineNumber = "424">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -739,7 +737,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "259"
             endingLineNumber = "259"
-            landmarkName = "addPlayers(_:noOfPlayers:teams:)"
+            landmarkName = "simpleSprite(_:type:isUnique:)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -787,7 +785,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "261"
             endingLineNumber = "261"
-            landmarkName = "addPlayers(_:noOfPlayers:teams:)"
+            landmarkName = "simpleSprite(_:type:isUnique:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -803,7 +801,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "256"
             endingLineNumber = "256"
-            landmarkName = "addPlayers(_:noOfPlayers:teams:)"
+            landmarkName = "simpleSprite(_:type:isUnique:)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -851,7 +849,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "244"
             endingLineNumber = "244"
-            landmarkName = "addPlayers(_:noOfPlayers:teams:)"
+            landmarkName = "simplePlayer(_:asAi:unique:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -867,7 +865,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "254"
             endingLineNumber = "254"
-            landmarkName = "addPlayers(_:noOfPlayers:teams:)"
+            landmarkName = "simpleSprite(_:type:isUnique:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

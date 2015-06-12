@@ -40,8 +40,6 @@ protocol RMXTeamMember {
 @available(OSX 10.10, *)
 extension RMSWorld : RMXTeamGame {
     
-    
-    
     var teamScores: [String] {
         var scores = Array<String>()
         for team in self._teams {
@@ -131,230 +129,8 @@ extension RMSWorld : RMXTeamGame {
         }
         return winningTeam
     }
-    
-    
-
-    
 }
 
-
-@available(OSX 10.10, *)
-class SpriteAttributes : NSObject {
-    var invincible = false
-    var sprite: RMXSprite
-    
-    private var _teamID: String = ""
-    
-    var teamID: String {
-        return _teamID
-    }
-    
-    var team: RMXTeam? {
-        return self.game?.teams[self.teamID]
-    }
-    
-    var game: RMXTeamGame? {
-        return self.sprite.world
-    }
-    
-    var rmxID: Int? {
-        return sprite.rmxID
-    }
-    
-    private var _health: Float = 100
-    var health: Float {
-        return _health
-    }
-    
-    func setHealth(health: Float? = nil) {
-        self.willChangeValueForKey("health")
-        _health = health ?? self.team?.startingHealth ?? 100
-        self.didChangeValueForKey("health")
-    }
-    
-
-    func reduceHealth(byDividingBy factor: Float) -> Bool {
-        if factor > 1 {
-            self.willChangeValueForKey("health")
-            _health /= factor
-            self.didChangeValueForKey("health")
-            return true
-        }
-        return false
-    }
-    
-    func reduceHealth(byMultiplyingBy factor: Float) -> Bool {
-        if factor < 1 {
-            self.willChangeValueForKey("health")
-            _health *= factor
-            self.didChangeValueForKey("health")
-            return true
-        }
-        return false
-    }
-    
-    func reduceHealth(bySubtracting amount: Float) -> Bool{
-        if amount > 0 {
-            self.willChangeValueForKey("health")
-            _health -= amount
-            self.didChangeValueForKey("health")
-            return true
-        }
-        return false
-    }
-
-    private var _points: Int = 0
-    var points: Int {
-        return _points
-    }
-    
-    func givePoints(points: Int) -> Bool {
-        if points > 0 {
-            self.willChangeValueForKey("points")
-            self.team?.willChangeValueForKey("points")
-            self._points += points
-            self.team?.score.points += points
-            self.didChangeValueForKey("points")
-            self.team?.didChangeValueForKey("points")
-            return true
-        }
-        return false
-    }
-    
-    func setPoints(points: Int) {
-        if points != _points {
-            self.willChangeValueForKey("points")
-            self._points = points
-            self.didChangeValueForKey("points")
-        }
-    }
-    
-    var kit: SCNMaterial? {
-        return self.isTeamPlayer ? self.sprite.geometry?.firstMaterial : nil
-    }
-    
-    var isTeamCaptain: Bool {
-        return self.sprite.rmxID == self.team?.captain?.rmxID
-    }
-    
-    init(_ sprite: RMXSprite){
-        self.sprite = sprite
-        super.init()
-    }
-    
-    ///Call this, not the team.addPlayer: function (I think)
-    func setTeamID(ID: String) {
-        if self.teamID != ID {
-            self.willChangeValueForKey("teamID")
-            var newID = ID
-            if Int(ID) ?? 1 > 0 {
-                if self.world.teams[ID] == nil { //create a team in one doesn't exist
-                    let newTeam = RMXTeam(gameWorld: self.world, captain: self.sprite, withID: ID)
-                    newID = newTeam.id
-                    self.world.addTeam(newTeam)
-                }
-            }
-            _teamID = newID
-            self.didChangeValueForKey("teamID")
-            
-//            return true
-        }
-//        return false
-        
-    }
-    
-    var world: RMSWorld {
-        return self.sprite.world
-    }
-    
-    var isTeamPlayer: Bool {
-        return Int(self.teamID) ?? 1 >= 0
-    }
-    
-    
-    
-    private var _collisionBitMask: Int?
-    private var _transparency: CGFloat?
-    
-    var isAlive: Bool {
-            return !(!self._isAlive && self.isTeamPlayer)
-    }
-    
-    var canBeKilled: Bool {
-        return !self.invincible && self.isAlive
-    }
-    private var _isAlive = true
-    
-    ///could cause animation failure if deRetire() does not fire
-    func retire() {
-        if self.canBeKilled { // && self.isAlive {
-            self.willChangeValueForKey("isAlive")
-
-            self._isAlive = false
-//            self.sprite.node.paused = true
-            self.sprite.node.opacity = 0.1
-            //
-            self.sprite.releaseItem()
-            self.sprite.node.removeCollisionActions()
-
-            self.sprite.tracker.abort()
-            self.die()
-//            self.sprite.timer.addTimer(interval: 5, target: self, selector: "deRetire", repeats: false)
-            self.sprite.node.runAction(SCNAction.fadeOpacityTo(1, duration: 5), completionHandler: { () -> Void in
-                self.deRetire()
-            })
-            self.didChangeValueForKey("isAlive")
-            
-        }
-        
-    }
-    
-    func deRetire() {
-//        if !self._isAlive {
-            self.willChangeValueForKey("isAlive")
-            self._isAlive = true
-//            self.sprite.node.paused = false
-            self.sprite.node.opacity = 1
-            self.didChangeValueForKey("isAlive")
-//        }
-        
-    }
-    
-    private var _deathCount: Int = 0
-    private var _killCount: Int = 0
-    
-    var deathCount: Int {
-        return _deathCount
-    }
-    
-    var killCount: Int {
-        return _killCount
-    }
-    
-    private func kill() {
-        self.team?.willChangeValueForKey("kills")
-        _killCount++
-        self.team?.score.kills++
-        self.team?.didChangeValueForKey("kills")
-    }
-    private func die() {
-        self.team?.willChangeValueForKey("deaths")
-        _deathCount++
-        self.team?.score.deaths++
-        self.team?.didChangeValueForKey("deaths")
-    }
-    
-    
-    var score: ScoreCard {
-        return (kills: self._killCount, deaths: self._deathCount, points: self._points)
-    }
-    
-    var printScore: String {
-        let score = self.score
-        return "\(self.sprite.name)'s Score: \(score.points), Kills: \(score.kills), Deaths: \(score.deaths), Health: \(self.health)"
-    }
-
-}
 
 typealias ScoreCard = (kills: Int, deaths: Int, points: Int)
 typealias TeamStats = (score: ScoreCard, players: Int, livePlayers: Int)
@@ -547,8 +323,8 @@ class RMXTeam : NSObject, RMXObject {
         attacker.givePoints(Int(health - defender.health))
         if defender.health <= 0 {
 //            self.convert(defender, toTeam: attacker.team)
-            defender.die()
-            attacker.kill()
+            defender.registerDeath()
+            attacker.registerKill()
             attacker.givePoints(defender.points)
             return .DefenderWasKilled
         }
@@ -572,8 +348,8 @@ class RMXTeam : NSObject, RMXObject {
         if defender.health > 0 { defender.reduceHealth(bySubtracting: 10) }
         attacker.givePoints(Int(health - defender.health))
         if defender.health <= 0 {
-            defender.die()
-            attacker.kill()
+            defender.registerDeath()
+            attacker.registerKill()
             attacker.givePoints(defender.points)
             return .DefenderWasKilled
         }
