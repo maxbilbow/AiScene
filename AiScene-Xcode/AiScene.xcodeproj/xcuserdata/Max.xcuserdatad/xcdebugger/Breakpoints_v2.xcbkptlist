@@ -871,5 +871,51 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AiScene-OSX/AppDelegate.swift"
+            timestampString = "455809204.131926"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "7"
+            endingLineNumber = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AiScene_OSX.AppDelegate.__deallocating_deinit"
+                  moduleName = "AiScene-OSX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Max/Gits/AiScene/AiScene-Xcode/AiScene-OSX/AppDelegate.swift"
+                  timestampString = "455809317.335319"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "main"
+                  moduleName = "AiScene-OSX"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Max/Gits/AiScene/AiScene-Xcode/AiScene-OSX/AppDelegate.swift"
+                  timestampString = "455809317.335492"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12"
+                  offsetFromSymbolStart = "22">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
