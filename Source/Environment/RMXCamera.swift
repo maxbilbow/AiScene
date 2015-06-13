@@ -34,7 +34,7 @@ class RMXCamera : SCNCamera {
     
     
     
-    class func free(inWorld world: RMSWorld) -> RMXCameraNode {
+    class func free(inWorld world: RMXScene) -> RMXCameraNode {
 //        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT, isUnique: false)
         let cameraNode = RMXCameraNode(world: world)
         cameraNode.name = "\(cameraNode.name!)/FREE/\(world.rmxID)"
@@ -61,7 +61,7 @@ class RMXCamera : SCNCamera {
             case .FREE:
 //                followCam.node
                 sprite.addBehaviour({ AiBehaviour in
-                    if sprite.world.activeCamera.rmxID == followCam.rmxID {
+                    if sprite.scene.activeCamera.rmxID == followCam.rmxID {
                         followCam.position = sprite.position
                     }
                 } )
@@ -73,7 +73,7 @@ class RMXCamera : SCNCamera {
                 followCam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
                 //let slowFollow = SCNAction.moveTo(followCam.position, duration: 1)
                 sprite.addBehaviour({ AiBehaviour in
-                    if sprite.world.activeCamera.rmxID == followCam.rmxID {
+                    if sprite.scene.activeCamera.rmxID == followCam.rmxID {
                             //followCam.runAction(slowFollow)
                     }
                 } )
@@ -125,7 +125,7 @@ class RMXCamera : SCNCamera {
 @available(OSX 10.10, *)
 class RMXCameraNode : SCNNode {
     var rmxSprite: RMXSprite?
-    var world: RMSWorld
+    var world: RMXScene
     var restingPivotPoint: SCNVector3 = SCNVector3Zero
     var restingEulerAngles: SCNVector3 = SCNVector3Zero
     var restingFOV: Double = 65
@@ -137,10 +137,10 @@ class RMXCameraNode : SCNNode {
     
     var aiDelegate: RMXAiDelegate!
     
-    init(sprite: RMXSprite? = nil, world: RMSWorld! = nil) {
+    init(sprite: RMXSprite? = nil, world: RMXScene! = nil) {
         self.rmxSprite = sprite ?? world.activeSprite
         self._rmxID = sprite?.rmxID ?? world.activeSprite.rmxID ?? world.rmxID
-        self.world = sprite?.world ?? world
+        self.world = sprite?.scene ?? world
         super.init()
         self.camera = RMXCamera.standardCamera()
         self.name = "CAM\(self.cameraID)"

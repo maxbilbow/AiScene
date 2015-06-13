@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		501B09F41B2B217A0025AFD5 /* SpriteAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */; };
 		501B09F51B2B217A0025AFD5 /* SpriteAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */; };
-		501B09F71B2B25690025AFD5 /* KeyValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B09F61B2B25690025AFD5 /* KeyValues.swift */; };
-		501B09F81B2B25690025AFD5 /* KeyValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B09F61B2B25690025AFD5 /* KeyValues.swift */; };
 		5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
 		5031F3AC1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
 		5031F3AD1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
@@ -38,9 +36,32 @@
 		5031F3CC1B15B87C00FAB551 /* Body Hit 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */; };
 		5031F3CD1B15B87C00FAB551 /* Body Hit 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */; };
 		5031F3CE1B15B87C00FAB551 /* Body Hit 01.caf in Resources */ = {isa = PBXBuildFile; fileRef = 5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */; };
+		5063BCF01B2C5F7D00FB5558 /* RMXSpriteTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCEF1B2C5F7D00FB5558 /* RMXSpriteTimer.swift */; };
+		5063BD001B2C651D00FB5558 /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF41B2C651D00FB5558 /* iOS.swift */; };
+		5063BD031B2C651D00FB5558 /* OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF61B2C651D00FB5558 /* OSX.swift */; };
+		5063BD041B2C651D00FB5558 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF71B2C651D00FB5558 /* RMSMaths.swift */; };
+		5063BD051B2C651D00FB5558 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF71B2C651D00FB5558 /* RMSMaths.swift */; };
+		5063BD061B2C651D00FB5558 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF81B2C651D00FB5558 /* RMX.swift */; };
+		5063BD071B2C651D00FB5558 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF81B2C651D00FB5558 /* RMX.swift */; };
+		5063BD081B2C651D00FB5558 /* RMXAiDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF91B2C651D00FB5558 /* RMXAiDelegate.swift */; };
+		5063BD091B2C651D00FB5558 /* RMXAiDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCF91B2C651D00FB5558 /* RMXAiDelegate.swift */; };
+		5063BD0A1B2C651D00FB5558 /* RMXDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFA1B2C651D00FB5558 /* RMXDebugger.swift */; };
+		5063BD0B1B2C651D00FB5558 /* RMXDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFA1B2C651D00FB5558 /* RMXDebugger.swift */; };
+		5063BD0C1B2C651D00FB5558 /* RMXFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFB1B2C651D00FB5558 /* RMXFunctions.swift */; };
+		5063BD0D1B2C651D00FB5558 /* RMXFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFB1B2C651D00FB5558 /* RMXFunctions.swift */; };
+		5063BD0F1B2C651D00FB5558 /* RMXPawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFC1B2C651D00FB5558 /* RMXPawn.swift */; };
+		5063BD101B2C651D00FB5558 /* RMXWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFD1B2C651D00FB5558 /* RMXWorld.swift */; };
+		5063BD111B2C651D00FB5558 /* RMXWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFD1B2C651D00FB5558 /* RMXWorld.swift */; };
+		5063BD121B2C651D00FB5558 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFE1B2C651D00FB5558 /* RMXValue.swift */; };
+		5063BD131B2C651D00FB5558 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFE1B2C651D00FB5558 /* RMXValue.swift */; };
+		5063BD141B2C651D00FB5558 /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFF1B2C651D00FB5558 /* UserActions.swift */; };
+		5063BD151B2C651D00FB5558 /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFF1B2C651D00FB5558 /* UserActions.swift */; };
+		5063BD171B2C654D00FB5558 /* RMXPawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCFC1B2C651D00FB5558 /* RMXPawn.swift */; };
+		5063BD1B1B2C6E8800FB5558 /* RMXSpriteTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCEF1B2C5F7D00FB5558 /* RMXSpriteTimer.swift */; };
 		50AC218B1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218C1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218D1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
+		50B4B0E21B2C57A6009AF091 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50B4B0E01B2C57A6009AF091 /* Model.xcdatamodeld */; };
 		50B563ED1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
 		50B563EE1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
 		50B563EF1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
@@ -51,23 +72,7 @@
 		6C0DC6A61B26FDC200220E95 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C0DC6A51B26FDC200220E95 /* GameplayKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		6C0DC6A71B27017B00220E95 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8F11CA1B1C199E009F49DB /* GameKit.framework */; };
 		6C0DC6A81B27017E00220E95 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C8F11CC1B1C19A1009F49DB /* StoreKit.framework */; };
-		6C10B7131B26C78400C48DD9 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70A1B26C78400C48DD9 /* RMSMaths.swift */; };
-		6C10B7141B26C78400C48DD9 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70A1B26C78400C48DD9 /* RMSMaths.swift */; };
-		6C10B7151B26C78400C48DD9 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70B1B26C78400C48DD9 /* RMX.swift */; };
-		6C10B7161B26C78400C48DD9 /* RMX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70B1B26C78400C48DD9 /* RMX.swift */; };
-		6C10B7171B26C78400C48DD9 /* RMXAiDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70C1B26C78400C48DD9 /* RMXAiDelegate.swift */; };
-		6C10B7181B26C78400C48DD9 /* RMXAiDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70C1B26C78400C48DD9 /* RMXAiDelegate.swift */; };
-		6C10B71A1B26C78400C48DD9 /* RMXDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70D1B26C78400C48DD9 /* RMXDebugger.swift */; };
-		6C10B71B1B26C78400C48DD9 /* RMXFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70E1B26C78400C48DD9 /* RMXFunctions.swift */; };
-		6C10B71C1B26C78400C48DD9 /* RMXFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70E1B26C78400C48DD9 /* RMXFunctions.swift */; };
-		6C10B71F1B26C78400C48DD9 /* RMXSpriteTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B7101B26C78400C48DD9 /* RMXSpriteTimer.swift */; };
-		6C10B7201B26C78400C48DD9 /* RMXSpriteTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B7101B26C78400C48DD9 /* RMXSpriteTimer.swift */; };
-		6C10B7211B26C78400C48DD9 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B7111B26C78400C48DD9 /* RMXValue.swift */; };
-		6C10B7221B26C78400C48DD9 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B7111B26C78400C48DD9 /* RMXValue.swift */; };
-		6C10B7231B26C78400C48DD9 /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B7121B26C78400C48DD9 /* UserActions.swift */; };
-		6C10B7241B26C78400C48DD9 /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B7121B26C78400C48DD9 /* UserActions.swift */; };
 		6C10B7251B26D21300C48DD9 /* Accelorometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D01AE544C000E71811 /* Accelorometer.swift */; };
-		6C10B7261B26D55800C48DD9 /* RMXDebugger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C10B70D1B26C78400C48DD9 /* RMXDebugger.swift */; };
 		6C206C3C1B2586AF00D83CC0 /* RMXSceneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */; };
 		6C206C491B258BDD00D83CC0 /* RMXSceneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */; };
 		6C4A28721B03ACCC001C3F5B /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286A1B03ACCC001C3F5B /* icons.xcassets */; };
@@ -85,20 +90,12 @@
 		6C73A8BD1B0A66E300187A61 /* AiSpriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8BC1B0A66E300187A61 /* AiSpriteTests.swift */; };
 		6C73A8C61B0A6BBB00187A61 /* RMSActionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */; };
 		6C73A8C81B0A6BC300187A61 /* RMXInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D51AE544C000E71811 /* RMXInterface.swift */; };
-		6C73A8CA1B0A6BE400187A61 /* RMSWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMSWorld.swift */; };
-		6C73A8CB1B0A6BE700187A61 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
+		6C73A8CA1B0A6BE400187A61 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMXScene.swift */; };
 		6C73A8CF1B0A6C8C00187A61 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
 		6C73A8D11B0A6C9600187A61 /* RMSEquations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C11AE544C000E71811 /* RMSEquations.swift */; };
 		6C73A8D81B0A6CB300187A61 /* RMXViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CE1AE544C000E71811 /* RMXViewController.swift */; };
 		6C73A8DC1B0A6E6D00187A61 /* 2dModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8DA1B0A6E5F00187A61 /* 2dModels.swift */; };
-		6C73A8DF1B0A6E8000187A61 /* RMXModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */; };
-		6C73A8E01B0A6EAB00187A61 /* RMXModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */; };
-		6C73A8E11B0A6EAC00187A61 /* RMXModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */; };
-		6C73A8E21B0A6FA600187A61 /* RMXController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CD1AE544C000E71811 /* RMXController.swift */; };
 		6C73A8E31B0A70D700187A61 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
-		6C73A8E51B0A75DC00187A61 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8E41B0A75DC00187A61 /* RMXScene.swift */; };
-		6C73A8E61B0A75DE00187A61 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8E41B0A75DC00187A61 /* RMXScene.swift */; };
-		6C73A8E71B0A75DF00187A61 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8E41B0A75DC00187A61 /* RMXScene.swift */; };
 		6C73A8E81B0A7C5200187A61 /* RMXInitialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CB1AE544C000E71811 /* RMXInitialize.swift */; };
 		6C8CCAF41B0B5E3000D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
 		6C8CCAF51B0B5EF800D8DC99 /* RMXAi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */; };
@@ -108,7 +105,7 @@
 		6C9299A91AE5432100E71811 /* AiSceneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299A81AE5432100E71811 /* AiSceneTests.swift */; };
 		6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B81AE544C000E71811 /* 3dModels.swift */; };
 		6C9299D81AE544C000E71811 /* RMSArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B91AE544C000E71811 /* RMSArt.swift */; };
-		6C9299DA1AE544C000E71811 /* RMSWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMSWorld.swift */; };
+		6C9299DA1AE544C000E71811 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMXScene.swift */; };
 		6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
 		6C9299DD1AE544C000E71811 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
 		6C9299DE1AE544C000E71811 /* RM3DEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RM3DEntity.swift */; };
@@ -116,14 +113,12 @@
 		6C9299E51AE544C000E71811 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C91AE544C000E71811 /* GameView.swift */; };
 		6C9299E61AE544C000E71811 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CA1AE544C000E71811 /* GameViewController.swift */; };
 		6C9299E71AE544C000E71811 /* RMXInitialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CB1AE544C000E71811 /* RMXInitialize.swift */; };
-		6C9299E81AE544C000E71811 /* RMXController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CD1AE544C000E71811 /* RMXController.swift */; };
 		6C9299E91AE544C000E71811 /* RMXViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CE1AE544C000E71811 /* RMXViewController.swift */; };
 		6C9299EB1AE544C000E71811 /* iOSControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D11AE544C000E71811 /* iOSControllers.swift */; };
 		6C9299EC1AE544C000E71811 /* RMSActionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */; };
 		6C9299EE1AE544C000E71811 /* RMXDPad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D41AE544C000E71811 /* RMXDPad.swift */; };
 		6C9299EF1AE544C000E71811 /* RMXInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D51AE544C000E71811 /* RMXInterface.swift */; };
 		6C9299F11AE544D500E71811 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C9299F01AE544D500E71811 /* art.scnassets */; };
-		6C9299F31AE5457700E71811 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
 		6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F41AE5467000E71811 /* AppDelegate.swift */; };
 		6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299FE1AE5497800E71811 /* AppDelegate.swift */; };
 		6C929A0A1AE5497900E71811 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C929A081AE5497900E71811 /* MainMenu.xib */; };
@@ -131,14 +126,12 @@
 		6C929A1D1AE5499900E71811 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C91AE544C000E71811 /* GameView.swift */; };
 		6C929A1E1AE5499900E71811 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CA1AE544C000E71811 /* GameViewController.swift */; };
 		6C929A1F1AE5499900E71811 /* RMXInitialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CB1AE544C000E71811 /* RMXInitialize.swift */; };
-		6C929A201AE5499D00E71811 /* ChildSpriteArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */; };
 		6C929A211AE5499D00E71811 /* 3dModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B81AE544C000E71811 /* 3dModels.swift */; };
 		6C929A221AE5499D00E71811 /* RMSArt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299B91AE544C000E71811 /* RMSArt.swift */; };
-		6C929A241AE5499D00E71811 /* RMSWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMSWorld.swift */; };
+		6C929A241AE5499D00E71811 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMXScene.swift */; };
 		6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
 		6C929A271AE5499D00E71811 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
 		6C929A281AE5499D00E71811 /* RM3DEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RM3DEntity.swift */; };
-		6C929A291AE549A300E71811 /* RMXController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CD1AE544C000E71811 /* RMXController.swift */; };
 		6C929A2A1AE549A300E71811 /* RMXViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CE1AE544C000E71811 /* RMXViewController.swift */; };
 		6C929A2D1AE549A600E71811 /* RMSActionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */; };
 		6C929A2E1AE549A600E71811 /* RMSKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D31AE544C000E71811 /* RMSKeys.swift */; };
@@ -181,7 +174,6 @@
 
 /* Begin PBXFileReference section */
 		501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteAttributes.swift; sourceTree = "<group>"; };
-		501B09F61B2B25690025AFD5 /* KeyValues.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyValues.swift; sourceTree = "<group>"; };
 		5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXCollider.swift; path = UserInterface/RMXCollider.swift; sourceTree = "<group>"; };
 		5031F3AF1B15B0AA00FAB551 /* pop1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop1.m4a; sourceTree = "<group>"; };
 		5031F3B01B15B0AA00FAB551 /* pop2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop2.m4a; sourceTree = "<group>"; };
@@ -191,20 +183,24 @@
 		5031F3C31B15B77F00FAB551 /* Air Reverse Burst 2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Air Reverse Burst 2.caf"; sourceTree = "<group>"; };
 		5031F3C71B15B85100FAB551 /* Baseball Catch.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Baseball Catch.caf"; sourceTree = "<group>"; };
 		5031F3CB1B15B87C00FAB551 /* Body Hit 01.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Body Hit 01.caf"; sourceTree = "<group>"; };
+		5063BCEF1B2C5F7D00FB5558 /* RMXSpriteTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXSpriteTimer.swift; path = Ai/RMXSpriteTimer.swift; sourceTree = "<group>"; };
+		5063BCF41B2C651D00FB5558 /* iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
+		5063BCF61B2C651D00FB5558 /* OSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSX.swift; sourceTree = "<group>"; };
+		5063BCF71B2C651D00FB5558 /* RMSMaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMSMaths.swift; path = Source/RMSMaths.swift; sourceTree = "<group>"; };
+		5063BCF81B2C651D00FB5558 /* RMX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMX.swift; path = Source/RMX.swift; sourceTree = "<group>"; };
+		5063BCF91B2C651D00FB5558 /* RMXAiDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAiDelegate.swift; path = Source/RMXAiDelegate.swift; sourceTree = "<group>"; };
+		5063BCFA1B2C651D00FB5558 /* RMXDebugger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXDebugger.swift; path = Source/RMXDebugger.swift; sourceTree = "<group>"; };
+		5063BCFB1B2C651D00FB5558 /* RMXFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXFunctions.swift; path = Source/RMXFunctions.swift; sourceTree = "<group>"; };
+		5063BCFC1B2C651D00FB5558 /* RMXPawn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXPawn.swift; path = Source/RMXPawn.swift; sourceTree = "<group>"; };
+		5063BCFD1B2C651D00FB5558 /* RMXWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXWorld.swift; path = Source/RMXWorld.swift; sourceTree = "<group>"; };
+		5063BCFE1B2C651D00FB5558 /* RMXValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXValue.swift; path = Source/RMXValue.swift; sourceTree = "<group>"; };
+		5063BCFF1B2C651D00FB5558 /* UserActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserActions.swift; path = Source/UserActions.swift; sourceTree = "<group>"; };
 		50AC218A1B17AABA00A9BD28 /* TeamGame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamGame.swift; path = Initialisation/TeamGame.swift; sourceTree = "<group>"; };
+		50B4B0E11B2C57A6009AF091 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode-extension.swift"; sourceTree = "<group>"; };
 		50BF107D1B16030D00680768 /* RMXTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXTracker.swift; path = Ai/RMXTracker.swift; sourceTree = "<group>"; };
 		6C0DC69F1B26EE1400220E95 /* RMKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMKey.swift; sourceTree = "<group>"; };
 		6C0DC6A51B26FDC200220E95 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/GameplayKit.framework; sourceTree = DEVELOPER_DIR; };
-		6C10B70A1B26C78400C48DD9 /* RMSMaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSMaths.swift; sourceTree = "<group>"; };
-		6C10B70B1B26C78400C48DD9 /* RMX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMX.swift; sourceTree = "<group>"; };
-		6C10B70C1B26C78400C48DD9 /* RMXAiDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXAiDelegate.swift; sourceTree = "<group>"; };
-		6C10B70D1B26C78400C48DD9 /* RMXDebugger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXDebugger.swift; sourceTree = "<group>"; };
-		6C10B70E1B26C78400C48DD9 /* RMXFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXFunctions.swift; sourceTree = "<group>"; };
-		6C10B70F1B26C78400C48DD9 /* RMXSprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSprite.swift; sourceTree = "<group>"; };
-		6C10B7101B26C78400C48DD9 /* RMXSpriteTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSpriteTimer.swift; sourceTree = "<group>"; };
-		6C10B7111B26C78400C48DD9 /* RMXValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXValue.swift; sourceTree = "<group>"; };
-		6C10B7121B26C78400C48DD9 /* UserActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserActions.swift; sourceTree = "<group>"; };
 		6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSceneKit.swift; sourceTree = "<group>"; };
 		6C4A286A1B03ACCC001C3F5B /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
 		6C4A28831B049FF9001C3F5B /* Observers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observers.swift; sourceTree = "<group>"; };
@@ -222,8 +218,6 @@
 		6C73A8BB1B0A66E300187A61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C73A8BC1B0A66E300187A61 /* AiSpriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiSpriteTests.swift; sourceTree = "<group>"; };
 		6C73A8DA1B0A6E5F00187A61 /* 2dModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 2dModels.swift; sourceTree = "<group>"; };
-		6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXModels.swift; sourceTree = "<group>"; };
-		6C73A8E41B0A75DC00187A61 /* RMXScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXScene.swift; sourceTree = "<group>"; };
 		6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXAi.swift; path = Environment/RMXAi.swift; sourceTree = "<group>"; };
 		6C8F11C21B1C193E009F49DB /* RMGameKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMGameKit.swift; path = GameKit/RMGameKit.swift; sourceTree = "<group>"; };
 		6C8F11C71B1C1963009F49DB /* AiScene-OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "AiScene-OSX.entitlements"; sourceTree = "<group>"; };
@@ -238,7 +232,7 @@
 		6C9299A81AE5432100E71811 /* AiSceneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiSceneTests.swift; sourceTree = "<group>"; };
 		6C9299B81AE544C000E71811 /* 3dModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 3dModels.swift; sourceTree = "<group>"; };
 		6C9299B91AE544C000E71811 /* RMSArt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSArt.swift; sourceTree = "<group>"; };
-		6C9299BB1AE544C000E71811 /* RMSWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSWorld.swift; sourceTree = "<group>"; };
+		6C9299BB1AE544C000E71811 /* RMXScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXScene.swift; sourceTree = "<group>"; };
 		6C9299BC1AE544C000E71811 /* RMXCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXCamera.swift; sourceTree = "<group>"; };
 		6C9299BD1AE544C000E71811 /* RMXClock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXClock.swift; sourceTree = "<group>"; };
 		6C9299BE1AE544C000E71811 /* RMXNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXNode.swift; sourceTree = "<group>"; };
@@ -326,7 +320,6 @@
 				6C9299BF1AE544C000E71811 /* RM3DEntity.swift */,
 				50AC218A1B17AABA00A9BD28 /* TeamGame.swift */,
 				501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */,
-				501B09F61B2B25690025AFD5 /* KeyValues.swift */,
 			);
 			name = GameState;
 			sourceTree = "<group>";
@@ -334,6 +327,7 @@
 		5031F3A91B15ABFF00FAB551 /* Ai */ = {
 			isa = PBXGroup;
 			children = (
+				5063BCEF1B2C5F7D00FB5558 /* RMXSpriteTimer.swift */,
 				6C8CCAF31B0B5E3000D8DC99 /* RMXAi.swift */,
 				6C9299C51AE544C000E71811 /* RMXQuestions.swift */,
 				5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */,
@@ -359,18 +353,38 @@
 			path = ../Audio;
 			sourceTree = "<group>";
 		};
+		5063BCF31B2C651D00FB5558 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				5063BCF41B2C651D00FB5558 /* iOS.swift */,
+			);
+			name = iOS;
+			path = Source/iOS;
+			sourceTree = "<group>";
+		};
+		5063BCF51B2C651D00FB5558 /* OSX */ = {
+			isa = PBXGroup;
+			children = (
+				5063BCF61B2C651D00FB5558 /* OSX.swift */,
+			);
+			name = OSX;
+			path = Source/OSX;
+			sourceTree = "<group>";
+		};
 		6C10B7091B26C78400C48DD9 /* RMXKit */ = {
 			isa = PBXGroup;
 			children = (
-				6C10B70A1B26C78400C48DD9 /* RMSMaths.swift */,
-				6C10B70B1B26C78400C48DD9 /* RMX.swift */,
-				6C10B70C1B26C78400C48DD9 /* RMXAiDelegate.swift */,
-				6C10B70D1B26C78400C48DD9 /* RMXDebugger.swift */,
-				6C10B70E1B26C78400C48DD9 /* RMXFunctions.swift */,
-				6C10B70F1B26C78400C48DD9 /* RMXSprite.swift */,
-				6C10B7101B26C78400C48DD9 /* RMXSpriteTimer.swift */,
-				6C10B7111B26C78400C48DD9 /* RMXValue.swift */,
-				6C10B7121B26C78400C48DD9 /* UserActions.swift */,
+				5063BCF31B2C651D00FB5558 /* iOS */,
+				5063BCF51B2C651D00FB5558 /* OSX */,
+				5063BCF71B2C651D00FB5558 /* RMSMaths.swift */,
+				5063BCF81B2C651D00FB5558 /* RMX.swift */,
+				5063BCF91B2C651D00FB5558 /* RMXAiDelegate.swift */,
+				5063BCFA1B2C651D00FB5558 /* RMXDebugger.swift */,
+				5063BCFB1B2C651D00FB5558 /* RMXFunctions.swift */,
+				5063BCFC1B2C651D00FB5558 /* RMXPawn.swift */,
+				5063BCFD1B2C651D00FB5558 /* RMXWorld.swift */,
+				5063BCFE1B2C651D00FB5558 /* RMXValue.swift */,
+				5063BCFF1B2C651D00FB5558 /* UserActions.swift */,
 			);
 			name = RMXKit;
 			path = ../../RMXKit;
@@ -428,7 +442,6 @@
 		6C73A8D91B0A6D7900187A61 /* Art */ = {
 			isa = PBXGroup;
 			children = (
-				6C73A8DE1B0A6E8000187A61 /* RMXModels.swift */,
 				6C9299B81AE544C000E71811 /* 3dModels.swift */,
 				6C73A8DA1B0A6E5F00187A61 /* 2dModels.swift */,
 				6C9299B91AE544C000E71811 /* RMSArt.swift */,
@@ -535,12 +548,11 @@
 			isa = PBXGroup;
 			children = (
 				6C9299F21AE5457700E71811 /* ChildSpriteArray.swift */,
-				6C9299BB1AE544C000E71811 /* RMSWorld.swift */,
+				6C9299BB1AE544C000E71811 /* RMXScene.swift */,
 				6C9299BC1AE544C000E71811 /* RMXCamera.swift */,
 				6C9299BD1AE544C000E71811 /* RMXClock.swift */,
 				6C9299BE1AE544C000E71811 /* RMXNode.swift */,
 				50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */,
-				6C73A8E41B0A75DC00187A61 /* RMXScene.swift */,
 				6C4A28831B049FF9001C3F5B /* Observers.swift */,
 			);
 			path = Environment;
@@ -598,6 +610,7 @@
 				6C9299FE1AE5497800E71811 /* AppDelegate.swift */,
 				6C929A081AE5497900E71811 /* MainMenu.xib */,
 				6C9299FC1AE5497800E71811 /* Supporting Files */,
+				50B4B0E01B2C57A6009AF091 /* Model.xcdatamodeld */,
 			);
 			path = "AiScene-OSX";
 			sourceTree = "<group>";
@@ -904,8 +917,7 @@
 				50B563EF1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */,
 				6C73A8A71B0A66E300187A61 /* GameScene.swift in Sources */,
 				6C73A8CF1B0A6C8C00187A61 /* RMXNode.swift in Sources */,
-				6C73A8E71B0A75DF00187A61 /* RMXScene.swift in Sources */,
-				6C73A8CA1B0A6BE400187A61 /* RMSWorld.swift in Sources */,
+				6C73A8CA1B0A6BE400187A61 /* RMXScene.swift in Sources */,
 				6C73A8C61B0A6BBB00187A61 /* RMSActionProcessor.swift in Sources */,
 				50AC218D1B17AABA00A9BD28 /* TeamGame.swift in Sources */,
 				6C73A8DC1B0A6E6D00187A61 /* 2dModels.swift in Sources */,
@@ -914,12 +926,9 @@
 				50BF10801B16030D00680768 /* RMXTracker.swift in Sources */,
 				6C73A8C81B0A6BC300187A61 /* RMXInterface.swift in Sources */,
 				6C73A8A91B0A66E300187A61 /* GameViewController.swift in Sources */,
-				6C73A8CB1B0A6BE700187A61 /* ChildSpriteArray.swift in Sources */,
 				6C73A8A31B0A66E300187A61 /* AppDelegate.swift in Sources */,
-				6C73A8E21B0A6FA600187A61 /* RMXController.swift in Sources */,
 				6C8CCAF61B0B5EF800D8DC99 /* RMXAi.swift in Sources */,
 				6C73A8D81B0A6CB300187A61 /* RMXViewController.swift in Sources */,
-				6C73A8E11B0A6EAC00187A61 /* RMXModels.swift in Sources */,
 				6C73A8E81B0A7C5200187A61 /* RMXInitialize.swift in Sources */,
 				6C73A8E31B0A70D700187A61 /* RMXCamera.swift in Sources */,
 				5031F3AD1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
@@ -938,18 +947,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5063BD041B2C651D00FB5558 /* RMSMaths.swift in Sources */,
 				6C9299EB1AE544C000E71811 /* iOSControllers.swift in Sources */,
-				6C9299DA1AE544C000E71811 /* RMSWorld.swift in Sources */,
+				6C9299DA1AE544C000E71811 /* RMXScene.swift in Sources */,
+				5063BCF01B2C5F7D00FB5558 /* RMXSpriteTimer.swift in Sources */,
 				6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */,
 				6C9299DE1AE544C000E71811 /* RM3DEntity.swift in Sources */,
 				5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
-				6C10B7131B26C78400C48DD9 /* RMSMaths.swift in Sources */,
-				6C10B71F1B26C78400C48DD9 /* RMXSpriteTimer.swift in Sources */,
-				501B09F71B2B25690025AFD5 /* KeyValues.swift in Sources */,
 				6C9299E51AE544C000E71811 /* GameView.swift in Sources */,
 				6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */,
 				6C9299E91AE544C000E71811 /* RMXViewController.swift in Sources */,
-				6C10B7231B26C78400C48DD9 /* UserActions.swift in Sources */,
+				5063BD121B2C651D00FB5558 /* RMXValue.swift in Sources */,
 				6C10B7251B26D21300C48DD9 /* Accelorometer.swift in Sources */,
 				6C9299DF1AE544C000E71811 /* RMSEquations.swift in Sources */,
 				6C9299DD1AE544C000E71811 /* RMXNode.swift in Sources */,
@@ -959,26 +967,25 @@
 				6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */,
 				50BF107E1B16030D00680768 /* RMXTracker.swift in Sources */,
 				6CAFB6721B170FB2006A1BA0 /* RMXAudioVideo.swift in Sources */,
+				5063BD101B2C651D00FB5558 /* RMXWorld.swift in Sources */,
+				5063BD001B2C651D00FB5558 /* iOS.swift in Sources */,
+				5063BD0A1B2C651D00FB5558 /* RMXDebugger.swift in Sources */,
+				5063BD171B2C654D00FB5558 /* RMXPawn.swift in Sources */,
 				6C9299E71AE544C000E71811 /* RMXInitialize.swift in Sources */,
 				6C6DD1A61B10C7F300107FAD /* AiCubo Basic.swift in Sources */,
 				50AC218B1B17AABA00A9BD28 /* TeamGame.swift in Sources */,
-				6C10B7261B26D55800C48DD9 /* RMXDebugger.swift in Sources */,
-				6C73A8DF1B0A6E8000187A61 /* RMXModels.swift in Sources */,
-				6C10B7211B26C78400C48DD9 /* RMXValue.swift in Sources */,
+				5063BD0C1B2C651D00FB5558 /* RMXFunctions.swift in Sources */,
 				6C9299EC1AE544C000E71811 /* RMSActionProcessor.swift in Sources */,
-				6C10B7171B26C78400C48DD9 /* RMXAiDelegate.swift in Sources */,
 				6C9299EF1AE544C000E71811 /* RMXInterface.swift in Sources */,
-				6C10B71B1B26C78400C48DD9 /* RMXFunctions.swift in Sources */,
+				5063BD081B2C651D00FB5558 /* RMXAiDelegate.swift in Sources */,
 				6C9299D81AE544C000E71811 /* RMSArt.swift in Sources */,
 				6CB6A1A31B0D267100136DCF /* Buttons.swift in Sources */,
-				6C73A8E51B0A75DC00187A61 /* RMXScene.swift in Sources */,
 				6C9299EE1AE544C000E71811 /* RMXDPad.swift in Sources */,
-				6C9299E81AE544C000E71811 /* RMXController.swift in Sources */,
+				5063BD141B2C651D00FB5558 /* UserActions.swift in Sources */,
 				6C8CCAF41B0B5E3000D8DC99 /* RMXAi.swift in Sources */,
-				6C9299F31AE5457700E71811 /* ChildSpriteArray.swift in Sources */,
 				6C206C3C1B2586AF00D83CC0 /* RMXSceneKit.swift in Sources */,
-				6C10B7151B26C78400C48DD9 /* RMX.swift in Sources */,
 				501B09F41B2B217A0025AFD5 /* SpriteAttributes.swift in Sources */,
+				5063BD061B2C651D00FB5558 /* RMX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -997,42 +1004,41 @@
 				6C929A1D1AE5499900E71811 /* GameView.swift in Sources */,
 				6C8CCAF51B0B5EF800D8DC99 /* RMXAi.swift in Sources */,
 				50BF107F1B16030D00680768 /* RMXTracker.swift in Sources */,
-				6C10B7181B26C78400C48DD9 /* RMXAiDelegate.swift in Sources */,
 				5031F3AC1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
-				6C73A8E61B0A75DE00187A61 /* RMXScene.swift in Sources */,
-				6C929A201AE5499D00E71811 /* ChildSpriteArray.swift in Sources */,
 				6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */,
 				6C929A301AE549A600E71811 /* RMXInterface.swift in Sources */,
 				6CAFB6731B170FB2006A1BA0 /* RMXAudioVideo.swift in Sources */,
 				6C929A211AE5499D00E71811 /* 3dModels.swift in Sources */,
-				6C10B7141B26C78400C48DD9 /* RMSMaths.swift in Sources */,
+				5063BD131B2C651D00FB5558 /* RMXValue.swift in Sources */,
 				6C929A271AE5499D00E71811 /* RMXNode.swift in Sources */,
 				6C929A1E1AE5499900E71811 /* GameViewController.swift in Sources */,
 				50B563EE1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */,
-				6C929A241AE5499D00E71811 /* RMSWorld.swift in Sources */,
+				6C929A241AE5499D00E71811 /* RMXScene.swift in Sources */,
 				6C929A2A1AE549A300E71811 /* RMXViewController.swift in Sources */,
+				5063BD0F1B2C651D00FB5558 /* RMXPawn.swift in Sources */,
 				50AC218C1B17AABA00A9BD28 /* TeamGame.swift in Sources */,
-				6C73A8E01B0A6EAB00187A61 /* RMXModels.swift in Sources */,
+				5063BD111B2C651D00FB5558 /* RMXWorld.swift in Sources */,
+				5063BD071B2C651D00FB5558 /* RMX.swift in Sources */,
 				6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */,
-				6C10B7241B26C78400C48DD9 /* UserActions.swift in Sources */,
 				6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */,
+				5063BD151B2C651D00FB5558 /* UserActions.swift in Sources */,
 				6C929A281AE5499D00E71811 /* RM3DEntity.swift in Sources */,
 				6C6DD1A71B10CA8800107FAD /* AiCubo Basic.swift in Sources */,
-				6C929A291AE549A300E71811 /* RMXController.swift in Sources */,
 				6C206C491B258BDD00D83CC0 /* RMXSceneKit.swift in Sources */,
 				6C0DC6A01B26EE1400220E95 /* RMKey.swift in Sources */,
-				6C10B71C1B26C78400C48DD9 /* RMXFunctions.swift in Sources */,
+				50B4B0E21B2C57A6009AF091 /* Model.xcdatamodeld in Sources */,
 				6C929A1F1AE5499900E71811 /* RMXInitialize.swift in Sources */,
 				6C929A2D1AE549A600E71811 /* RMSActionProcessor.swift in Sources */,
+				5063BD031B2C651D00FB5558 /* OSX.swift in Sources */,
 				6C929A311AE54DCA00E71811 /* RMSEquations.swift in Sources */,
 				6C929A2E1AE549A600E71811 /* RMSKeys.swift in Sources */,
-				6C10B7201B26C78400C48DD9 /* RMXSpriteTimer.swift in Sources */,
 				6C929A221AE5499D00E71811 /* RMSArt.swift in Sources */,
-				6C10B7221B26C78400C48DD9 /* RMXValue.swift in Sources */,
+				5063BD1B1B2C6E8800FB5558 /* RMXSpriteTimer.swift in Sources */,
+				5063BD091B2C651D00FB5558 /* RMXAiDelegate.swift in Sources */,
 				501B09F51B2B217A0025AFD5 /* SpriteAttributes.swift in Sources */,
-				6C10B71A1B26C78400C48DD9 /* RMXDebugger.swift in Sources */,
-				6C10B7161B26C78400C48DD9 /* RMX.swift in Sources */,
-				501B09F81B2B25690025AFD5 /* KeyValues.swift in Sources */,
+				5063BD051B2C651D00FB5558 /* RMSMaths.swift in Sources */,
+				5063BD0B1B2C651D00FB5558 /* RMXDebugger.swift in Sources */,
+				5063BD0D1B2C651D00FB5558 /* RMXFunctions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1485,6 +1491,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		50B4B0E01B2C57A6009AF091 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				50B4B0E11B2C57A6009AF091 /* Model.xcdatamodel */,
+			);
+			currentVersion = 50B4B0E11B2C57A6009AF091 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6C9299831AE5432000E71811 /* Project object */;
 }

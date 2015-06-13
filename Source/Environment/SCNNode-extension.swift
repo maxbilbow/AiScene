@@ -12,12 +12,12 @@ import SceneKit
 
 extension SCNNode : RMXObject {
     
-    var uniqueID: String? {
+    public var uniqueID: String? {
         let parentID = self.parentNode?.uniqueID ?? ""
         return "\(parentID)/\(self.name ?? self.description)"
     }
     
-    var print: String {
+    public var print: String {
         return self.uniqueID!
     }
     
@@ -31,7 +31,7 @@ extension SCNNode : RMXObject {
 //        }
     }
     
-    var rmxID: Int? {
+    public var rmxID: Int? {
         return self.rmxNode?.sprite?.rmxID
     }
 

@@ -15,7 +15,7 @@ import SceneKit
 class AiCubo {
    
    
-    class func createEarth(inWorld world: RMSWorld, radius: RMFloat? = nil, addCameras: Bool = true) {
+    class func createEarth(inWorld world: RMXScene, radius: RMFloat? = nil, addCameras: Bool = true) {
         let worldRadius = radius ?? world.radius
         
         let earth: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: RMColor.lightGrayColor()), type: .BACKGROUND, unique: true)
@@ -36,7 +36,7 @@ class AiCubo {
         
     }
  
-    class func createLight(inWorld world: RMSWorld, fixed: Bool = false, radius: RMFloat? = nil, addCameras: Bool = false){
+    class func createLight(inWorld world: RMXScene, fixed: Bool = false, radius: RMFloat? = nil, addCameras: Bool = false){
         let worldRadius = radius ?? world.radius
         
 //        world.physicsWorld
@@ -121,11 +121,11 @@ class AiCubo {
   
     
     
-    class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMSWorld {
+    class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
         if let interface = interface {
 
-            let world = RMSWorld(interface: interface) //interface.world//
-            world.addObserver(interface, forKeyPath: RMSWorld.kvScores, options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
+            let world = RMXScene(interface: interface) //interface.world//
+            world.addObserver(interface, forKeyPath: RMXScene.kvScores, options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
             //SetUpEnvironment
             switch type {
             case .EMPTY:
@@ -189,7 +189,7 @@ class AiCubo {
                 world.gameOverMessage = ({(world: AnyObject?) -> [String]? in
                     if let game = world as? RMXTeamGame {
                         for team in game.teams {
-//                            if (game as! RMSWorld).activeCamera.pivot.m43 == 0 {
+//                            if (game as! RMXScene).activeCamera.pivot.m43 == 0 {
 //                                return RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
 //                            }
                             let score = team.1.score
@@ -225,7 +225,7 @@ class AiCubo {
         
     }
     
-    class func particles(inWorld world: RMSWorld){
+    class func particles(inWorld world: RMXScene){
         let player = world.activeSprite
         let head = player.node.childNodeWithName("head", recursively: true)
         
@@ -235,7 +235,7 @@ class AiCubo {
         head?.addParticleSystem(ps)
     }
     
-    class func simplePlayer(world: RMSWorld, asAi: Bool = false, unique: Bool? = nil) -> RMXSprite {
+    class func simplePlayer(world: RMXScene, asAi: Bool = false, unique: Bool? = nil) -> RMXSprite {
         //Set up player
         let unique = unique != nil ? unique! : !asAi //if unique not stated, players are unique, ais are not
         let player = self.simpleSprite(world, type: asAi ? .AI : .PLAYER, isUnique: unique)
@@ -245,7 +245,7 @@ class AiCubo {
         return player
     }
     
-    class func simpleSprite(world: RMSWorld, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
+    class func simpleSprite(world: RMXScene, type: RMXSpriteType = .PASSIVE, isUnique: Bool) -> RMXSprite {
         
         let player = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique)
         
@@ -262,20 +262,20 @@ class AiCubo {
     }
     
     
-    class func soccerGame(world: RMSWorld) {
+    class func soccerGame(world: RMXScene) {
   
     }
     
-    class func insideGlobe(world: RMSWorld) {
+    class func insideGlobe(world: RMXScene) {
     
     }
     
-    class func domedEnvironment(world: RMSWorld) {
+    class func domedEnvironment(world: RMXScene) {
 //        AiCubo.initialWorldSetup(world)
         
     }
     
-    class func initialWorldSetup(world: RMSWorld, radius: RMFloat? = nil, poppy: Bool = true, player2: Bool = true, additionalCameras: Bool = true){
+    class func initialWorldSetup(world: RMXScene, radius: RMFloat? = nil, poppy: Bool = true, player2: Bool = true, additionalCameras: Bool = true){
         
         world.setRadius(radius)
         //Set up Main Player
@@ -304,7 +304,7 @@ class AiCubo {
    
     }
     
-    class func addPlayers(world: RMSWorld, noOfPlayers n: Int, teams: Int = 0){
+    class func addPlayers(world: RMXScene, noOfPlayers n: Int, teams: Int = 0){
         
         if world.gameOverMessage == nil {
             world.gameOverMessage = RMXTeam.isGameWon

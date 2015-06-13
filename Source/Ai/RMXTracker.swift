@@ -36,7 +36,7 @@ class RMXTracker : NSObject {
     init(sprite: RMXSprite) {
         self.sprite = sprite
         super.init()
-        self.sprite.world.interface.collider.trackers.append(self)
+        self.sprite.scene.interface.collider.trackers.append(self)
     }
     
     static let IDLE = "Idle"
@@ -51,7 +51,7 @@ class RMXTracker : NSObject {
 
     var isStuck: Bool {
         if self.hasTarget {
-            return self.sprite.distanceTo(self.lastPosition) < 0.5// && self.sprite.distanceTo(target!.position) >= self.sprite.radius * target!.radius + 5
+            return self.sprite.distanceToPoint(self.lastPosition) < 0.5// && self.sprite.distanceTo(target!.position) >= self.sprite.radius * target!.radius + 5
         } else {
             return false
         }
@@ -74,7 +74,7 @@ class RMXTracker : NSObject {
 //        let oldTarget = self.target// ; let newTarget = target
 
         if let target = target {
-            if target == self.sprite {
+            if target.rmxID == self.sprite.rmxID {
                 self._target = nil
                 return false
             }
@@ -139,8 +139,8 @@ class RMXTracker : NSObject {
     var impulse = false
     var doesJump = true
     
-    var world: RMSWorld {
-        return self.sprite.world
+    var world: RMXScene {
+        return self.sprite.scene
     }
     
     func abort() {
@@ -148,7 +148,7 @@ class RMXTracker : NSObject {
         self.didReachTarget(self.target)
     }
     
-    func headToTarget(node: SCNNode!) -> Void {
+    func headToTarget(node: AnyObject!) -> Void {
        
         if !self.world.aiOn {
             if self.isAi {

@@ -29,7 +29,7 @@ class RMXArt {
     static let redVector: GLKVector4 = GLKVector4Make(1.0, 0.0, 0.0, 1.0)
 
     
-    class func initializeTestingEnvironment(world: RMSWorld, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloat = 1000, radius: RMFloat? = nil, shapes: ShapeType ...) -> RMSWorld {
+    class func initializeTestingEnvironment(world: RMXScene, withAxis drawAxis: Bool = true, withCubes noOfShapes: RMFloat = 1000, radius: RMFloat? = nil, shapes: ShapeType ...) -> RMXScene {
         
         //RMXArt.drawPlane(world)
         if drawAxis {
@@ -44,7 +44,7 @@ class RMXArt {
     
 
     
-    class func drawAxis(world: RMSWorld, radius: RMFloat) {//xCol y:(float*)yCol z:(float*)zCol{
+    class func drawAxis(world: RMXScene, radius: RMFloat) {//xCol y:(float*)yCol z:(float*)zCol{
         
         
         func drawAxis(axis: String) {
@@ -96,7 +96,7 @@ class RMXArt {
         drawAxis("z2")
     }
     
-    class func randomObjects(world: RMSWorld, noOfShapes: RMFloat = 100, radius r: RMFloat? = nil, ofType types: [ShapeType])    {
+    class func randomObjects(world: RMXScene, noOfShapes: RMFloat = 100, radius r: RMFloat? = nil, ofType types: [ShapeType])    {
     //int max =100, min = -100;
     //BOOL gravity = true;
         let radius = r ?? world.radius

@@ -10,25 +10,16 @@ import Foundation
 import SceneKit
 
 @available(OSX 10.10, *)
-class SpriteAttributes : NSObject {
+class SpriteAttributes : RMXAttributes {
     var invincible = false
     var sprite: RMXSprite!
         
     var health: Float {
-        return Float(self.values[KeyValue.Health]!)!
+        return Float(self.values[RMKeyValue.Health]!)!
     }
     
-    var values: Dictionary<String,String> = [
-        KeyValue.name   : "",
-        KeyValue.Health : "100",
-        KeyValue.Points : "0",
-        KeyValue.Kills  : "0",
-        KeyValue.Deaths : "0"
-    ]
     
-    var keys: [String] {
-        return self.values.keys.array
-    }
+    
     
     private var _teamID: String = ""
     
@@ -41,7 +32,7 @@ class SpriteAttributes : NSObject {
     }
     
     var game: RMXTeamGame? {
-        return self.sprite.world
+        return self.sprite.scene
     }
     
     var rmxID: Int? {
@@ -52,7 +43,7 @@ class SpriteAttributes : NSObject {
     
     func setHealth(health: Float? = nil) {
         self.willChangeValueForKey("health")
-        self.values[KeyValue.Health] = String(health ?? self.team?.startingHealth ?? 100)
+        self.values[RMKeyValue.Health] = String(health ?? self.team?.startingHealth ?? 100)
         self.didChangeValueForKey("health")
     }
     
@@ -60,7 +51,7 @@ class SpriteAttributes : NSObject {
     func reduceHealth(byDividingBy factor: Float) -> Bool {
         if factor > 1 {
             self.willChangeValueForKey("health")
-            self.values[KeyValue.Health] = String(self.health / factor)
+            self.values[RMKeyValue.Health] = String(self.health / factor)
             self.didChangeValueForKey("health")
             return true
         }
@@ -70,7 +61,7 @@ class SpriteAttributes : NSObject {
     func reduceHealth(byMultiplyingBy factor: Float) -> Bool {
         if factor < 1 {
             self.willChangeValueForKey("health")
-            self.values[KeyValue.Health] = String(self.health * factor)
+            self.values[RMKeyValue.Health] = String(self.health * factor)
             self.didChangeValueForKey("health")
             return true
         }
@@ -80,7 +71,7 @@ class SpriteAttributes : NSObject {
     func reduceHealth(bySubtracting amount: Float) -> Bool{
         if amount > 0 {
             self.willChangeValueForKey("health")
-            self.values[KeyValue.Health] = String(self.health - amount)
+            self.values[RMKeyValue.Health] = String(self.health - amount)
             self.didChangeValueForKey("health")
             return true
         }
@@ -89,14 +80,14 @@ class SpriteAttributes : NSObject {
     
 
     var points: Int {
-        return Int(self.values[KeyValue.Points]!)!
+        return Int(self.values[RMKeyValue.Points]!)!
     }
     
     func givePoints(points: Int) -> Bool {
         if points > 0 {
             self.willChangeValueForKey("points")
             self.team?.willChangeValueForKey("points")
-            self.values[KeyValue.Points] = String(self.points + points)
+            self.values[RMKeyValue.Points] = String(self.points + points)
             self.team?.score.points += points
             self.didChangeValueForKey("points")
             self.team?.didChangeValueForKey("points")
@@ -108,7 +99,7 @@ class SpriteAttributes : NSObject {
     func setPoints(points: Int) {
         if points != self.points {
             self.willChangeValueForKey("points")
-            self.values[KeyValue.Points] = String(points)
+            self.values[RMKeyValue.Points] = String(points)
             self.didChangeValueForKey("points")
         }
     }
@@ -126,16 +117,15 @@ class SpriteAttributes : NSObject {
         self.sprite = sprite
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init()
-        for value in aDecoder.dictionaryWithValuesForKeys(self.keys) {
-            self.values[value.0] = String(value.1)
-        }
-    }
     
     init(sprite: RMXSprite){
         self.sprite = sprite //as! RMXSprite // = [ KeyValue.Sprite.rawValue : sprite ]
         super.init()
+    }
+    
+
+    internal required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 
     
@@ -160,8 +150,8 @@ class SpriteAttributes : NSObject {
         
     }
     
-    var world: RMSWorld {
-        return self.sprite.world
+    var world: RMXScene {
+        return self.sprite.scene
     }
     
     var isTeamPlayer: Bool {
@@ -221,23 +211,23 @@ class SpriteAttributes : NSObject {
 //    private var _killCount: Int = 0
     
     var deathCount: Int {
-        return Int(self.values[KeyValue.Deaths]!)!
+        return Int(self.values[RMKeyValue.Deaths]!)!
     }
     
     var killCount: Int {
-        return Int(self.values[KeyValue.Kills]!)!
+        return Int(self.values[RMKeyValue.Kills]!)!
     }
     
     func registerKill() {
         self.team?.willChangeValueForKey("kills")
-        self.values[KeyValue.Kills] = String(self.killCount + 1)
+        self.values[RMKeyValue.Kills] = String(self.killCount + 1)
         self.team?.score.kills++
         self.team?.didChangeValueForKey("kills")
     }
     
     func registerDeath() {
         self.team?.willChangeValueForKey("deaths")
-        self.values[KeyValue.Deaths] = String(self.deathCount + 1)
+        self.values[RMKeyValue.Deaths] = String(self.deathCount + 1)
         self.team?.score.deaths++
         self.team?.didChangeValueForKey("deaths")
     }
@@ -254,9 +244,5 @@ class SpriteAttributes : NSObject {
     
 }
 
-extension SpriteAttributes : NSCoding {
-    func encodeWithCoder(aCoder: NSCoder) {
-        
-    }
-}
+
 

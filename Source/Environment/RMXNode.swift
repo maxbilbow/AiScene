@@ -15,20 +15,8 @@ import SceneKit
 @available(OSX 10.10, *)
 class RMXNode : SCNNode {
     
-//    internal var _geometryNode: SCNNode!
-    
     private var _rmxID: Int?
     
-//    override var rmxID: Int {
-//        return self.rmxSprite.rmxID
-//        if let id = _rmxID {
-//            return id
-//        } else {
-//            _rmxID = self.rootNode?.rmxID
-//            if _rmxID == nil { NSLog("error -1 RMXID") }
-//            return _rmxID ?? -1
-//        }
-//    }
 
     var rmxSprite: RMXSprite {
         return self._sprite

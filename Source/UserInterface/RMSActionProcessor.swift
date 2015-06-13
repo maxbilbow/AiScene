@@ -39,7 +39,7 @@ class RMSActionProcessor {
     var activeSprite: RMXSprite {
         return self.world.activeSprite
     }
-    var world: RMSWorld {
+    var world: RMXScene {
         return self.interface.world
     }
     
@@ -478,16 +478,16 @@ class RMSActionProcessor {
        
     func explode(sprite s: RMXSprite? = nil, force: RMFloat = 1, range: RMFloat = 500) -> Bool{
         let sprite = s ?? self.activeSprite
-        sprite.world.interface.av.playSound(UserAction.BOOM.description, info: sprite.node, range: Float(range))
+        sprite.scene.interface.av.playSound(UserAction.BOOM.description, info: sprite.node, range: Float(range))
         return RMSActionProcessor.explode(sprite, force: force * 10000, range: range)
         
     }
     
     class func explode(sprite: RMXSprite?, force: RMFloat = 1, range: RMFloat = 500) -> Bool {
         if let sprite = sprite {
-            let world = sprite.world
+            let world = sprite.scene
             for child in world.sprites {
-                let dist = sprite.distanceTo(child)
+                let dist = sprite.distanceToSprite(child)
                 if  dist < range && child.physicsBody?.type != .Static && child != sprite {
                     let direction = (child.position - sprite.position).normalised
                     child.applyForce(direction * (force  / (dist + 0.1)) , impulse: true)

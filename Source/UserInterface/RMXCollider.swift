@@ -23,7 +23,7 @@ extension SCNPhysicsContact : RMXLocatable {
 class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     enum type { case Began, Updated, Ended }
-    var world: RMSWorld? {
+    var world: RMXScene? {
         return self.interface.world
     }
     

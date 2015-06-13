@@ -9,15 +9,7 @@
 import Foundation
 import QuartzCore
     import GLKit
-#if iOS
-    import UIKit
-    typealias RMDataView = UITextView
-    typealias RMLabel = UIButton
-    #elseif OSX
-    import AppKit
-    typealias RMDataView = NSTextView
-    typealias RMLabel = NSButton
-#endif
+
 
 import AVFoundation
     import SceneKit
@@ -26,49 +18,56 @@ import SpriteKit
     
 
 @available(OSX 10.10, *)
-class RMXInterface : NSObject, RendererDelegate {
+class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
 
     var lockCursor = false
     
     lazy var collider: RMXCollider = RMXCollider(interface: self)
     lazy var av: RMXAudioVideo = RMXAudioVideo(interface: self)
-
-    var activeCamera: SCNNode {
-        return self.world.activeCamera
-    }
+    
+    
     
     lazy var actionProcessor: RMSActionProcessor = RMSActionProcessor(interface: self)
     private let _isDebugging = false
     var debugData: String = "No Data"
     
-    var gvc: GameViewController
+    var gvc: GameViewController!
+    
+    
+    var timer: NSTimer? //CADisplayLink?
+    //    var world: RMXScene?
+    
+    //    internal static let lookSpeed: RMFloat = 1
+    internal static let moveSpeed: RMFloat = 2
+    
+    
+    
+    var keyboard: KeyboardType = .UK
+    //    private var _scoreboard: SKView! = nil
+    var lines: [SKLabelNode] = [ SKLabelNode(text: "") , SKLabelNode(text: ""), SKLabelNode(text: ""), SKLabelNode(text: "") ]
+    //    let line1 = SKLabelNode(text: "line1")
+    //    let line2 = SKLabelNode(text: "line2")
+    //    let line3 = SKLabelNode(text: "line3")
+    
+    
+    
+    var scoreboard: SKView!
+    
+    var availableGames: [ GameType ] = [ .TEAM_GAME, .TEAM_GAME_2, .WEAPONS, .TEST, .EMPTY ]
+    
+    var activeGames: [GameType: RMXScene] = Dictionary<GameType,RMXScene>()
+    
     var gameView: GameView? {
         return self.gvc.gameView
     }
-
-   
-    var timer: NSTimer? //CADisplayLink?
-//    var world: RMSWorld?
-
-//    internal static let lookSpeed: RMFloat = 1
-    internal static let moveSpeed: RMFloat = 2
+    
+    var activeCamera: SCNNode {
+        return self.world.activeCamera
+    }
     
     var activeSprite: RMXSprite {
         return self.world.activeSprite
     }
-    internal var keyboard: KeyboardType = .UK
-    
-   
-    
-//    private var _scoreboard: SKView! = nil
-    var lines: [SKLabelNode] = [ SKLabelNode(text: "") , SKLabelNode(text: ""), SKLabelNode(text: ""), SKLabelNode(text: "") ]
-//    let line1 = SKLabelNode(text: "line1")
-//    let line2 = SKLabelNode(text: "line2")
-//    let line3 = SKLabelNode(text: "line3")
-
-    
-    
-    var scoreboard: SKView!
 
     
 //    var activeCamera: RMXCamera? {
@@ -86,31 +85,12 @@ class RMXInterface : NSObject, RendererDelegate {
     }
 
 //    var world2D: SKView?
-    var world2DNode: SK3DNode?
     func startVideo(sender: AnyObject?){}
     
     ///Run this last when overriding
     func viewDidLoad(){
         self.gameView!.delegate = self
-
-        /*
-        self.world2DNode = SK3DNode(viewportSize: self.scoreboard.scene!.size)
-        self.world2DNode?.position = self.scoreboard.scene!.position
-        self.world2DNode?.pointOfView = self.world.activeCamera
-        self.world2DNode?.projectPoint(vector_float3(10,10,0))
-       self.world2DNode?.scnScene = self._world!
-
-        self.scoreboard?.scene?.addChild(self.world2DNode!)
-        */
         
-        
-        
-        
-    }
-    
-    func setUpTimers(){
-//        self.timer = NSTimer(target: self, selector: Selector("update"))
-//        self.timer!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
     }
     
     private var _scoreboardRect: CGRect {
@@ -139,16 +119,14 @@ class RMXInterface : NSObject, RendererDelegate {
     
     private static let DEFAULT_GAME: GameType = .TEAM_GAME_2
     
-    var availableGames: [ GameType ] = [ .TEAM_GAME, .TEAM_GAME_2, .WEAPONS, .TEST, .EMPTY ]
     
-    var activeGames: [GameType: RMSWorld] = Dictionary<GameType,RMSWorld>()
     
-    private var _world: RMSWorld?
+    private var _world: RMXScene?
     
-    func destroyWorld() -> RMSWorld? {
+    func destroyWorld() -> RMXScene? {
         return nil //_world?.destroy()
     }
-    var world: RMSWorld {
+    var world: RMXScene {
         return _world ?? _newGame()
     }
     private var isNewGame = true
@@ -164,7 +142,7 @@ class RMXInterface : NSObject, RendererDelegate {
         self.pauseGame()
     }
     
-    private func _newGame(type: GameType? = nil) -> RMSWorld! {
+    private func _newGame(type: GameType? = nil) -> RMXScene! {
 
         RMLog("World: \(_world?.rmxID)")
         if let type = type {
@@ -339,7 +317,7 @@ class RMXInterface : NSObject, RendererDelegate {
     ///@virtual
     func update(){}
     
-    enum KeyboardType { case French, UK, DEFAULT }
+    
     func setKeyboard(type: KeyboardType = .UK)  {
         self.keyboard = type
     }
@@ -401,7 +379,7 @@ class RMXInterface : NSObject, RendererDelegate {
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         switch keyPath! {
-        case RMSWorld.kvScores:
+        case RMXScene.kvScores:
             if let msg = self.world.gameOverMessage?(world) {
                 self.pauseGame()
                 self.updateScoreboard(msg)

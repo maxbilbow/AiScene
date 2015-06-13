@@ -13,7 +13,7 @@ import SceneKit
 @available(OSX 10.10, *)
 extension RMX {
 #if iOS
-    /* static func Controller(view: GameView, world: RMSWorld) -> RMXDPad {
+    /* static func Controller(view: GameView, world: RMXScene) -> RMXDPad {
         return RMXDPad(view: view, world: world)
     } */
     static func Controller(gvc: GameViewController) -> RMXDPad {
@@ -28,7 +28,7 @@ extension RMX {
 
 @available(OSX 10.10, *)
 protocol RMXView {
-    var world: RMSWorld? { get }
+    var world: RMXScene? { get }
     var interface: RMXInterface? { get set }
     var gvc: GameViewController? { get set }
     
@@ -39,7 +39,7 @@ protocol RMXView {
 protocol RMXViewController {
     
     var gameView: GameView? { get }
-    var world: RMSWorld? { get }
+    var world: RMXScene? { get }
     var interface: RMXInterface? { get set }
     
     #if iOS

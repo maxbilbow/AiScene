@@ -7,22 +7,18 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>60E495DD-0DA6-49A6-95F1-3CCB53563263</string>
 	<key>IDESourceControlProjectName</key>
-	<string>AiScene</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2</key>
 		<string>https://github.com/maxbilbow/AiScene.git</string>
-		<key>9B5C915E67A2341F288F69ADE09AA64D219E260C</key>
-		<string>https://github.com/maxbilbow/RMXKit.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>AiScene-Xcode/AiScene.xcodeproj</string>
+	<string>AiScene-Xcode/AiScene.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2</key>
 		<string>../../..</string>
-		<key>9B5C915E67A2341F288F69ADE09AA64D219E260C</key>
-		<string>../../..art.scnassets/RMXKit</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/maxbilbow/AiScene.git</string>
@@ -39,14 +35,6 @@
 			<string>973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2</string>
 			<key>IDESourceControlWCCName</key>
 			<string>AiScene</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>9B5C915E67A2341F288F69ADE09AA64D219E260C</string>
-			<key>IDESourceControlWCCName</key>
-			<string>RMXKit</string>
 		</dict>
 	</array>
 </dict>

@@ -38,7 +38,7 @@ protocol RMXTeamMember {
 }
 
 @available(OSX 10.10, *)
-extension RMSWorld : RMXTeamGame {
+extension RMXScene : RMXTeamGame {
     
     var teamScores: [String] {
         var scores = Array<String>()
@@ -367,7 +367,7 @@ class RMXTeam : NSObject, RMXObject {
                     RMXTeam.challenge(challenger.attributes, defender: projectile.attributes, doOnWin: self.indirectChallenge)
                     challenger.attributes.team?.didChangeValueForKey("score")
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
-                    challenger.world.interface.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
+                    challenger.scene.interface.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
                     projectile.tracker.abort()
                 }
             }

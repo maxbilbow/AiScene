@@ -26,7 +26,7 @@ extension RMX {
 //            return thing(radius: radius, count: i, noOfShapes: limit )
         default:
             let radius = ceil(radius)
-            return SCNVector4Make(randomFloat(radius*2)-radius,y: randomFloat(2*radius),z: randomFloat(radius*2)-radius, w: randomFloat(radius))
+            return SCNVector4Make(randomFloat(radius*2)-radius,randomFloat(2*radius),randomFloat(radius*2)-radius, randomFloat(radius))
         }
         
     }
@@ -43,20 +43,22 @@ extension RMX {
         last2 = last1
         let r = limit * limit / thisOne
         let theta = Float(i)
-        return SCNVector4Make(r * i * RMFloat(sinf(theta)),y: i,z: r * i * RMFloat(cosf(theta)),w: 1)
+        return SCNVector4Make(r * i * RMFloat(sinf(theta)),i,r * i * RMFloat(cosf(theta)),1)
     }
 
     static func circle ( count i: RMFloat, radius r: RMFloat, limit: RMFloat) -> SCNVector4 {
         let x = RMFloat(sin(i)*sin(i)*r)
         let y = RMFloat(sin(i)*cos(i)*r)
         let z = RMFloat(cos(i)*cos(i)*r)
-        return  SCNVector4Make(x,y: y, z: z,w: limit)
+        return  SCNVector4Make(x,y, z,limit)
         
     }
     static func randomSpurt (count i: Int) -> SCNVector4 {
         let result = SCNVector4Make(
-            RMFloat(random() % 360 + i),y: RMFloat(random() % 360 + i),
-            z: RMFloat(random() % 360 + i),w: RMFloat(random() % 360 + 10)
+            RMFloat(random() % 360 + i),
+            RMFloat(random() % 360 + i),
+            RMFloat(random() % 360 + i),
+            RMFloat(random() % 360 + 10)
         )
         return result;
     }
@@ -72,7 +74,7 @@ extension RMX {
         let x:RMFloat = centre + radius * RMFloat(exp( PI * I * ( angle_in_degrees  / 180.0 ) ))
         let y:RMFloat = 0
         let z:RMFloat = centre + radius * RMFloat(exp ( PI * I * ( angle_in_degrees  / 180.0 ) ))
-        return SCNVector4Make(x, y: y, z: z,w: 0)
+        return SCNVector4Make(x,y, z, 0)
     }
 }
 

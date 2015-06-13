@@ -11,9 +11,7 @@ import SceneKit
 
 typealias RendererDelegate = SCNSceneRendererDelegate
 
-typealias AiBehaviour = (SCNNode!) -> Void
+//typealias AiBehaviour = (SCNNode!) -> Void
 @available(OSX 10.10, *)
 typealias AiCollisionBehaviour = (SCNPhysicsContact) -> Void
 typealias RMSceneRenderer = SCNSceneRenderer
-@available(OSX 10.10, *)
-typealias RMXWorld = RMSWorld

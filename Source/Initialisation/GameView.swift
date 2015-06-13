@@ -13,7 +13,7 @@ import SpriteKit
 class GameView: SCNView  {
     
     @available(OSX 10.10, *)
-    var world: RMSWorld? {
+    var world: RMXScene? {
         return self.interface?.world
     }
     

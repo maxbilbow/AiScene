@@ -52,7 +52,7 @@ class RM3DModels  {
     
     
    
-    class func getNode(shapeType type: ShapeType, radius r: RMFloat? = nil, height h: RMFloat? = nil, scale s: RMXSize? = nil, color: RMColor! = nil) -> SCNNode {
+    class func getNode(shapeType type: ShapeType, radius r: RMFloat? = nil, height h: RMFloat? = nil, scale s: SCNVector3? = nil, color: RMColor! = nil) -> SCNNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
