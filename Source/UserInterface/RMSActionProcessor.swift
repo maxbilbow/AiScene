@@ -244,7 +244,7 @@ class RMSActionProcessor {
                 }
 
             case .BOOM:
-                if sprite.hasItem && speed > 0 && self.boomTimer > 1 {
+                if sprite.isHoldingItem && speed > 0 && self.boomTimer > 1 {
                     let result = sprite.throwItem(force: speed * self.boomTimer)
                     self.boomTimer = 1
                     return result
@@ -260,7 +260,7 @@ class RMSActionProcessor {
                 return false
             case .THROW_OR_GRAB_ITEM:
                 if speed == 0 && self.boomTimer == 1 {
-                    if sprite.hasItem {
+                    if sprite.isHoldingItem {
                         self.boomTimer = 2
                         return true
                     } else {
@@ -268,7 +268,7 @@ class RMSActionProcessor {
                     }
                 } else if speed > 0 {
                     //                    var result = false
-                    if sprite.hasItem {
+                    if sprite.isHoldingItem {
                         return true//self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
                     }
                     self.boomTimer = 1
@@ -350,20 +350,11 @@ class RMSActionProcessor {
         let sprite = self.activeSprite
             switch action {
             case "pitch", "Pitch", "PITCH":
-                sprite.lookAround(phi: speed)
+                sprite.rotate(phi: speed)
                 return true
             case "yaw", "Yaw", "YAW":
-                sprite.lookAround(theta: speed)
+                sprite.rotate(theta: speed)
                 return true
-            case "setRoll":
-                sprite.setAngle(roll: speed)
-                break
-            case "setPitch":
-                sprite.setAngle(pitch: speed)
-                break
-            case "setYaw":
-                sprite.setAngle(speed)
-                break
             case "1", "2", "3", "4", "5", "6", "7", "8", "9", "10":
                 let n = Int(action)! - 1
                 if n < self.interface.availableGames.count  {
@@ -376,21 +367,20 @@ class RMSActionProcessor {
                 NSLog("'\(action)' not recognised")
                 return false
             }
-       
-        return false
+
     }
     
     
     enum TESTING { case PLAYER_INFO, ACTIVE_CAMERA, ANGLES, SCORES }
     func getData(type: TESTING = .ACTIVE_CAMERA) -> String {
-        let node = self.activeSprite.node//.presentationNode()
+        let node = self.activeSprite//.presentationNode()
         let sprite = self.activeSprite
         let physics = self.world.physicsWorld
         var info: String = "\n"
         switch type {
         case .PLAYER_INFO:
-            info += "\n        vel:\(sprite.velocity.print)\n     Pos:\(sprite.position.print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
-            info += "\n       MASS: \(sprite.mass),  GRAVITY: \(physics.gravity.print)"
+            info += "\n        vel:\(sprite.velocity.print)\n     Pos:\(sprite.getPosition().print)\n transform:\n\(sprite.transform.print)\n   orientation:\n\(sprite.orientation.print)\n"
+            info += "\n       MASS: \(sprite.physicsBody?.mass),  GRAVITY: \(physics.gravity.print)"
             info += "\n   FRICTION: \(node.physicsBody?.friction), Rolling Friction: \(node.physicsBody?.rollingFriction), restitution: \(node.physicsBody?.restitution) \n"
             
             //Accelerometer vs sprite angles
@@ -401,20 +391,20 @@ class RMSActionProcessor {
             if let dPad: RMXDPad = self.interface as? RMXDPad {
                 if let att = dPad.motionManager.deviceMotion?.attitude {
                     let attitude = SCNVector3Make(RMFloat(att.pitch), RMFloat(att.yaw), RMFloat(att.roll))
-                    angles      += "\n    - SPRITE: \(sprite.node.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
+                    angles      += "\n    - SPRITE: \(sprite.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"
                     angles      += "\n    -  PHONE: \(attitude.asDegrees) \n"//Roll: \(), Pitch: \()\n"
                 }
             }
             #endif
             return angles
         case .ACTIVE_CAMERA:
-            let camera = self.world.activeCamera
+            let camera = self.world.activeCamera as! RMXCameraNode
             
 
             info += "     left: \(self.world.leftVector.print)         camera: \(camera.presentationNode().worldTransform.left.print)\n"
             info += "       up: \(self.world.upVector.print)               : \(camera.presentationNode().worldTransform.up.print)\n"
             info += "      fwd: \(self.world.forwardVector.print)               : \(camera.presentationNode().worldTransform.forward.print)\n\n"
-            info += "   sprite: \(self.activeSprite.position.print)\n"
+            info += "   sprite: \(self.activeSprite.getPosition().print)\n"
             info += "   camera: \(camera.presentationNode().worldTransform.position.print)\n"
             info += "\n --- Camera: \(camera.name) ID: \(self.activeSprite.rmxID) : \(camera.rmxID)---\n"
             return info
@@ -446,30 +436,29 @@ class RMSActionProcessor {
         
     
     var extendArm: RMFloat = 0
-//    var mousePos: NSPoint = NSPoint(x: 0,y: 0)
-//    var isMouseLocked = false
+
     
-    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloat? = nil, yaw y: RMFloat? = nil, roll z: RMFloat? = nil) {
-        let sprite = s ?? self.activeSprite
-        if  orientation != nil {
-            RMLog("not implemented")
-        } else {
-            sprite.setAngle(y, pitch: x, roll: z)
-        }
-    }
+//    func setOrientation(sprite s: RMXSprite? = nil, orientation: SCNQuaternion? = nil, zRotation: CGFloat? = nil, pitch x: RMFloat? = nil, yaw y: RMFloat? = nil, roll z: RMFloat? = nil) {
+//        let sprite = s ?? self.activeSprite
+//        if  orientation != nil {
+//            RMLog("not implemented")
+//        } else {
+//            sprite.setAngle(y, pitch: x, roll: z)
+//        }
+//    }
     
     func throwOrGrab(target: Any?, withForce force: RMFloat = 1, tracking: Bool) -> Bool {
-        if self.activeSprite.hasItem  {
+        if self.activeSprite.isHoldingItem  {
             let boom = self.boomTimer
             self.boomTimer = 1
             if let target: AnyObject = target as? AnyObject {
-                return self.activeSprite.throwItem(atObject: target, withForce: force * boom, tracking: tracking)
+                return self.activeSprite.throwItem(at: target, withForce: force * boom, tracking: tracking)
             } else if let target: SCNVector3 = target as? SCNVector3 {
                 return self.activeSprite.throwItem(atPosition: target, withForce: force * boom)
             }
         } else {
             self.boomTimer = 1
-            return self.activeSprite.grab(target as? AnyObject)
+            return self.activeSprite.grabItem(target as? AnyObject)
         }
         self.boomTimer = 1
         return false
@@ -478,7 +467,7 @@ class RMSActionProcessor {
        
     func explode(sprite s: RMXSprite? = nil, force: RMFloat = 1, range: RMFloat = 500) -> Bool{
         let sprite = s ?? self.activeSprite
-        sprite.scene.interface.av.playSound(UserAction.BOOM.description, info: sprite.node, range: Float(range))
+        sprite.scene.interface.av.playSound(UserAction.BOOM.description, info: sprite, range: Float(range))
         return RMSActionProcessor.explode(sprite, force: force * 10000, range: range)
         
     }
@@ -489,7 +478,7 @@ class RMSActionProcessor {
             for child in world.sprites {
                 let dist = sprite.distanceToSprite(child)
                 if  dist < range && child.physicsBody?.type != .Static && child != sprite {
-                    let direction = (child.position - sprite.position).normalised
+                    let direction = (child.getPosition() - sprite.getPosition()).normalised
                     child.applyForce(direction * (force  / (dist + 0.1)) , impulse: true)
                 }
             }

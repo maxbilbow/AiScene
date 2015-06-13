@@ -179,15 +179,15 @@ class SpriteAttributes : RMXAttributes {
             
             self._isAlive = false
             //            self.sprite.node.paused = true
-            self.sprite.node.opacity = 0.1
+            self.sprite.opacity = 0.1
             //
             self.sprite.releaseItem()
-            self.sprite.node.removeCollisionActions()
+            self.sprite.removeCollisionActions()
             
             self.sprite.tracker.abort()
 //            self.registerDeath()
             //            self.sprite.timer.addTimer(interval: 5, target: self, selector: "deRetire", repeats: false)
-            self.sprite.node.runAction(SCNAction.fadeOpacityTo(1, duration: 5), completionHandler: { () -> Void in
+            self.sprite.runAction(SCNAction.fadeOpacityTo(1, duration: 5), completionHandler: { () -> Void in
                 self.deRetire()
             })
             self.didChangeValueForKey("isAlive")
@@ -201,7 +201,7 @@ class SpriteAttributes : RMXAttributes {
         self.willChangeValueForKey("isAlive")
         self._isAlive = true
         //            self.sprite.node.paused = false
-        self.sprite.node.opacity = 1
+        self.sprite.opacity = 1
         self.didChangeValueForKey("isAlive")
         //        }
         

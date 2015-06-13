@@ -55,11 +55,11 @@ class RMXCollider: NSObject, SCNPhysicsContactDelegate {
 //            self.av.playSound("Pop", info: contact)
 //        }
         
-        contact.nodeA.sprite?.tracker.checkForCollision(contact)
-        contact.nodeB.sprite?.tracker.checkForCollision(contact)
+        contact.nodeA.rmxNode?.tracker.checkForCollision(contact)
+        contact.nodeB.rmxNode?.tracker.checkForCollision(contact)
      
-        contact.nodeA.collisionNode?.collisionAction(contact)
-        contact.nodeB.collisionNode?.collisionAction(contact)
+        contact.nodeA.rmxNode?.collisionAction(contact)
+        contact.nodeB.rmxNode?.collisionAction(contact)
 
 //        if contact.nodeA.doesCollide && contact.nodeB.doesCollide {
 //            (contact.nodeA as? RMXNode)?.collisionAction(contact.nodeB)

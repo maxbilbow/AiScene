@@ -227,7 +227,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
                 
 //                    var animate: Bool = false
                     if type == .THROW_ITEM {
-                        if self.actionProcessor.throwOrGrab(node.sprite, tracking: true) {
+                        if self.actionProcessor.throwOrGrab(node, tracking: true) {
                             self.animateHit(node)
                         } else {
                             self.actionProcessor.throwOrGrab(hitResults[0].worldCoordinates, tracking: false) //activeSprite.throwItem(atPosition: hitResults[0].worldCoordinates, withForce: 1)

@@ -16,10 +16,10 @@ class RMXTracker : NSObject {
         return self.sprite.rmxID
     }
     
-    var sprite: RMXSprite
+    var sprite: RMXNode
 //    var hitTarget = false
-    private var _target: RMXSprite?
-    var target: RMXSprite? {
+    private var _target: RMXNode?
+    var target: RMXNode? {
         return self.isActive ? _target : nil
     }
     
@@ -39,12 +39,9 @@ class RMXTracker : NSObject {
         self.sprite.scene.interface.collider.trackers.append(self)
     }
     
-    static let IDLE = "Idle"
-    
     var isActive = true
 //    var itemToWatch: RMXSprite! = nil
     var timePassed = 0
-    var state: String = IDLE
     
     let updateInterval = 1
     var lastPosition: SCNVector3 = SCNVector3Zero
@@ -92,12 +89,12 @@ class RMXTracker : NSObject {
             
             
             if self.impulse {
-                self.speed *= 100 / (self.sprite.mass + 1)
-                if self.sprite.isActiveSprite {
-                    RMLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+                self.speed *= 100 / (1 + RMFloat(self.sprite.physicsBody?.mass ?? 0))
+                if self.sprite.isLocalPlayer {
+                    RMLog("Implse: \(speed), actual \(self.speed), mass: \(self.sprite.physicsBody?.mass)")
                 }
-            } else if self.sprite.isActiveSprite {
-                    RMLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.mass)")
+            } else if self.sprite.isLocalPlayer {
+                    RMLog("Speed: \(speed), actual \(self.speed), mass: \(self.sprite.physicsBody?.mass)")
             }
             
             
@@ -131,7 +128,7 @@ class RMXTracker : NSObject {
     
     func checkForCollision(contact: SCNPhysicsContact) -> Bool {
         if let target = self.target {
-            return contact.getDefender(forChallenger: self.sprite).rmxID == target.rmxID && self.didReachTarget(target)
+            return (contact.getDefender(forChallenger: self.sprite) as? RMXNode)?.rmxID == target.rmxID && self.didReachTarget(target)
         }
         return false
     }
@@ -159,7 +156,7 @@ class RMXTracker : NSObject {
             }
         }
         let isStuck = self.isStuck
-        self.lastPosition = self.sprite.position
+        self.lastPosition = self.sprite.getPosition()
         if let target = self.target {
             if !target.attributes.isAlive && !self.isProjectile {
                 self.abort()
@@ -169,7 +166,7 @@ class RMXTracker : NSObject {
                 _count = 0
             } else {
                 ++_count
-                let direction = (target.position - self.sprite.position).normalized
+                let direction = (target.getPosition() - self.sprite.getPosition()).normalized
                
                 self.sprite.applyForce(direction * self.speed, atPosition: self.isProjectile ? SCNVector3Zero : self.sprite.front,  impulse: self.impulse)
                 if self.doesJump && isStuck {

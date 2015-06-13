@@ -17,14 +17,14 @@ import GLKit
 @available(OSX 10.10, *)
 extension SCNPhysicsContact {
     func getDefender(forChallenger challenger: RMXSprite) -> SCNNode {
-        return self.nodeA == challenger.node ? nodeB : nodeA
+        return self.nodeA == challenger ? nodeB : nodeA
     }
 }
+//@available(OSX 10.10, *)
+typealias RMXSprite = RMXNode
+/*
 @available(OSX 10.10, *)
-typealias RMXSprite = RM3DEntity
-
-@available(OSX 10.10, *)
-class RM3DEntity : NSObject, RMXTeamMember, RMXPawn, RMXUniqueEntity, RMXObject {
+class RM333d : RMXNode, RMXTeamMember, RMXPawn {
     
     lazy var tracker: RMXTracker = RMXTracker(sprite: self)
 
@@ -37,11 +37,11 @@ class RM3DEntity : NSObject, RMXTeamMember, RMXPawn, RMXUniqueEntity, RMXObject 
         return self._rmxNode
     }
     
-    var uniqueID: String? {
+    override var uniqueID: String? {
         return "\(self._name)/\(self.rmxID!)"
     }
     
-    var print: String {
+    override var print: String {
         return self.uniqueID!
     }
     
@@ -141,10 +141,7 @@ class RM3DEntity : NSObject, RMXTeamMember, RMXPawn, RMXUniqueEntity, RMXObject 
         
     }
 
-    var altitude: RMFloat {
-        return self.position.y
-    }
-    
+
     func setAltitude(y: RMFloat, resetTransform: Bool = true) {
         self.node.position.y = y
         if resetTransform {
@@ -399,7 +396,7 @@ class RM3DEntity : NSObject, RMXTeamMember, RMXPawn, RMXUniqueEntity, RMXObject 
     }
     
     func validate() {
-        if self.scene.hasGravity && self.scene.earth?.altitude > self.altitude {
+        if self.scene.hasGravity && self.scene.earth?.position.y > self.position.y {
             //                NSLog("reset \(sprite.name)")
             let lim = self.scene.radius
             self.setPosition(SCNVector3Random(lim, min: -lim, setY: self.scene.ground + 100), resetTransform: true)
@@ -1025,3 +1022,10 @@ extension RMXSprite : RMXLocatable {
         return self.position
     }
 }
+
+*/
+
+*/*/*/*/
+
+
+

@@ -12,7 +12,8 @@ import SceneKit
 
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 @available(OSX 10.10, *)
-class RMXScene : SCNScene, RMXWorld, RMXUniqueEntity, RMXObject {
+class RMXScene : SCNScene, RMXWorld, RMXObject {
+
     
     static let kvScores = "teamScores"
     
@@ -54,12 +55,12 @@ class RMXScene : SCNScene, RMXWorld, RMXUniqueEntity, RMXObject {
         return self.sprites
     }
     
-    private var _earth: RMXSprite?
-    var earth: RMXSprite? {
+    private var _earth: SCNNode?
+    var earth: SCNNode? {
         if self._earth != nil {
             return self._earth
         } else {
-            self._earth = self.rootNode.childNodeWithName("Earth", recursively: true)?.sprite
+            self._earth = self.rootNode.childNodeWithName("Earth", recursively: true)
             return self._earth
         }
     }
@@ -150,7 +151,7 @@ class RMXScene : SCNScene, RMXWorld, RMXUniqueEntity, RMXObject {
                 }
             }
         }
-        AiCubo.addPlayers(self, noOfPlayers: self.players.count, teams: self.teams.count)
+//        AiCubo.addPlayers(self, noOfPlayers: self.players.count, teams: self.teams.count)
     }
     
     func calibrate() -> SCNScene {
@@ -175,7 +176,8 @@ class RMXScene : SCNScene, RMXWorld, RMXUniqueEntity, RMXObject {
         self.paused = false
         if self.shouldTurnOnAi {
             if !(self.aiTimer?.valid ?? true) {
-                    self.aiTimer?.fire()
+//                    self.aiTimer?.fire()
+                self.switchOnAi()
             } else {
                 self.aiTimer = NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector: "switchOnAi", userInfo: nil, repeats: false)
             }
@@ -218,8 +220,9 @@ class RMXScene : SCNScene, RMXWorld, RMXUniqueEntity, RMXObject {
     }
     
     private var _defaultPlayer: RMXSprite  {
-        _activeSprite = AiCubo.simplePlayer(self, asAi: false, unique: true)
-        _activeSprite.setName("Player")
+        _activeSprite = AiCubo.simplePlayer(self, asAi: false, unique: true, safeInit: true)
+        _activeSprite.addCameras()
+        _activeSprite.updateName("Player")
         return _activeSprite
     }
     
@@ -227,13 +230,11 @@ class RMXScene : SCNScene, RMXWorld, RMXUniqueEntity, RMXObject {
         //Set the render delegate
     }
   
-        
+    
     func insertChild(child: RMXSprite, andNode:Bool = true){
         self.sprites.append(child)
-        child.attributes.addObserver(self, forKeyPath: "points", options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
-        
         if andNode {
-            self.rootNode.addChildNode(child.node)
+            self.rootNode.addChildNode(child)
         }
     }
     

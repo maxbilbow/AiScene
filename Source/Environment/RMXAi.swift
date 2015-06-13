@@ -19,7 +19,7 @@ class AiPoppy : RMXAi {
     }
     
     var itemToWatch: SCNNode?
-    var speed:RMFloat {
+    var speed: RMFloat {
         return self.sprite.speed
     }
     
@@ -44,15 +44,15 @@ class AiPoppy : RMXAi {
     
     override func run(sender: AnyObject?, updateAtTime time: NSTimeInterval) -> Void {
         super.run(sender, updateAtTime: time)
-        if self.master.hasItem && self.master.item?.rmxID != self.sprite.rmxID {
+        if self.master.isHoldingItem && self.master.item?.rmxID != self.sprite.rmxID {
             self.sprite.releaseItem()
-            self.itemToWatch = self.master.item?.node
-            self.sprite.tracker.setTarget(itemToWatch?.sprite, doOnArrival: { (target) -> () in
+            self.itemToWatch = self.master.item
+            self.sprite.tracker.setTarget(self.itemToWatch?.rmxNode, doOnArrival: { (target) -> () in
                 if self.master.item?.rmxID != target?.rmxID {
                     self.sprite.scene.interface.av.playSound("pop1", info: self.sprite)
                     ++self._count
                     if self._count > self._limit {
-                        if self.master.isActiveSprite {
+                        if self.master.isLocalPlayer {
                             repeat {
                                 self.master = self.getTarget() as? RMXSprite
                             } while self.master.rmxID == self.sprite.rmxID
@@ -64,9 +64,9 @@ class AiPoppy : RMXAi {
                     }
                 } else {
                     self._count = 0
-                    self.sprite.grab(target)
+                    self.sprite.grabItem(target)
                     self.sprite.tracker.setTarget(self.master, doOnArrival: { (target) -> () in
-                        self.sprite.scene.interface.av.playSound("pop2", info: self.sprite.node)
+                        self.sprite.scene.interface.av.playSound("pop2", info: self.sprite)
                         self.sprite.releaseItem()
                         
                     })
@@ -97,20 +97,20 @@ class AiRandom: RMXAi {
     override func run(sender: AnyObject?, updateAtTime time: NSTimeInterval) -> Void {
         super.run(sender, updateAtTime: time)
         if !self.world.aiOn { return }
-        if self.sprite.hasItem && !self.sprite.tracker.hasTarget {
+        if self.sprite.isHoldingItem && !self.sprite.tracker.hasTarget {
             self.sprite.tracker.setTarget(self.getTarget() as? RMXSprite, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                if !self.sprite.throwItem(atObject: target, withForce: 1, tracking: true) {
-                    self.sprite.throwItem(atObject: target, withForce: 1, tracking: false)
+                if !self.sprite.throwItem(at: target, withForce: 1, tracking: true) {
+                    self.sprite.throwItem(at: target, withForce: 1, tracking: false)
                 }
             })
         }
-        if !self.sprite.hasItem && !self.sprite.tracker.hasTarget { //after time to prevent grabbing (ish)
+        if !self.sprite.isHoldingItem && !self.sprite.tracker.hasTarget { //after time to prevent grabbing (ish)
             let target = self.getTarget(RMXSpriteType.PASSIVE) as? RMXSprite
             self.sprite.tracker.setTarget(target, willJump: true, afterTime: 100, doOnArrival: { (target: RMXSprite?) -> () in
-                if self.sprite.grab(target) {
+                if self.sprite.grabItem(target) {
                     self.sprite.tracker.setTarget(self.getTarget() as? RMXSprite, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                        if !self.sprite.throwItem(atObject: target, withForce: 1, tracking: true) {
-                            self.sprite.throwItem(atObject: target, withForce: 1, tracking: false)
+                        if !self.sprite.throwItem(at: target, withForce: 1, tracking: true) {
+                            self.sprite.throwItem(at: target, withForce: 1, tracking: false)
                         }
                     })
                 }
@@ -224,14 +224,15 @@ class AiTeamPlayer : AiRandom {
 extension RMXAi {
 //    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
+        if sprite.isActor {
         let ai = { (node: AnyObject!) -> Void in
 //            if sprite.world.aiOn { NSLog(sprite.name) }
             if sprite.scene.hasGravity {
-                sprite.physicsBody?.applyForce(sprite.scene.gravity * sprite.mass, atPosition: sprite.bottom, impulse: false)
+                sprite.physicsBody?.applyForce(sprite.scene.gravity * RMFloat(sprite.physicsBody!.mass), atPosition: sprite.bottom, impulse: false)
             }
         }
         sprite.addBehaviour(ai)
-        
+        }
         
     }
 

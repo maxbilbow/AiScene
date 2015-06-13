@@ -17,14 +17,14 @@ extension RMX {
     
     
     static func makePoppy(world world: RMXScene, master: RMXSprite) -> RMXSprite{
-        let poppy: RMXSprite = RMXSprite(inWorld: world, geometry: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 10, color: RMColor.darkGrayColor()), type: .AI, shape: .BOBBLE_MAN, unique: true)//.asPlayer()
+        let poppy: RMXSprite = RMXSprite(inWorld: world, geometryNode: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 10, color: RMColor.darkGrayColor()), type: .AI, shape: .BOBBLE_MAN, unique: true)//.asPlayer()
         
         poppy.setPosition(SCNVector3Make(100,y: 10,z: -50))
         poppy.attributes.setTeamID("\(-1)")
 //        RMXAi.playFetch(poppy, master: master)
         poppy.aiDelegate = AiPoppy(poppy: poppy, master: master)
         RMXAi.autoStablise(poppy)
-        poppy.setName("Poppy")
+        poppy.updateName("Poppy")
         poppy.addCameras()
         world.cameras += poppy.cameras
        

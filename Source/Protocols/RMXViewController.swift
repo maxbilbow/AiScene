@@ -26,32 +26,3 @@ extension RMX {
 #endif
 }
 
-@available(OSX 10.10, *)
-protocol RMXView {
-    var world: RMXScene? { get }
-    var interface: RMXInterface? { get set }
-    var gvc: GameViewController? { get set }
-    
-    func initialize(gvc: GameViewController, interface: RMXInterface)
-}
-
-@available(OSX 10.10, *)
-protocol RMXViewController {
-    
-    var gameView: GameView? { get }
-    var world: RMXScene? { get }
-    var interface: RMXInterface? { get set }
-    
-    #if iOS
-        var view: UIView! { get set }
-//        #elseif OPENGL_OSX
-//        var view: NSOpenGLView! { get set }
-    #endif
-
-//    var interface: RMXInterface { get }
-
-
-}
-
-
-

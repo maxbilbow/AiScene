@@ -99,7 +99,7 @@ extension RMXDPad {
     func explode(recogniser: UILongPressGestureRecognizer) {
         //        self.activeSprite?.setAngle(roll: 0)
         if recogniser.state == .Ended {
-            if self.activeSprite.hasItem {
+            if self.activeSprite.isHoldingItem {
                 self.actionProcessor.throwOrGrab(nil, withForce: 1, tracking: false)
                 self.activeSprite.throwItem(force: 1)
             } else {

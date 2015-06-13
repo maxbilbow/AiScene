@@ -17,7 +17,7 @@ import QuartzCore
     #endif
 
 //@available(OSX 10.10, *)
-class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
+class GameViewController: ViewController , SCNSceneRendererDelegate {
     
     var rmxID: Int?; var uniqueID, name: String? ; var print: String = classForCoder().description()
     
@@ -90,7 +90,8 @@ class GameViewController: ViewController , SCNSceneRendererDelegate, RMXObject {
       
     #if iOS
     override func didReceiveMemoryWarning() {
-        self.gameView.world?.rootNode.childNodeWithName("sun", recursively: true)?.light?.shadowMapSize = CGSizeZero
+        //self.gameView.world?.rootNode.childNodeWithName("sun", recursively: true)?.light?.shadowMapSize = CGSizeZero
+        
         super.didReceiveMemoryWarning()
     }
     #endif

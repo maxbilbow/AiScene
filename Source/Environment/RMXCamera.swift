@@ -47,22 +47,22 @@ class RMXCamera : SCNCamera {
         let followCam = RMXCameraNode(sprite: sprite)
         var type = "FREE"
         followCam.cameraType = .FREE
-        if sprite.type == .PLAYER {
+        if sprite.isLocalPlayer {
             switch option {
             case .FIXED:
                 type = "FIXED"
                 followCam.cameraType = .FIXED
-                if let head = sprite.node.childNodeWithName("head", recursively: true) {
+                if let head = sprite.childNodeWithName("head", recursively: true) {
                     head.addChildNode(followCam)
                 } else {
-                    sprite.node.addChildNode(followCam)
+                    sprite.addChildNode(followCam)
                 }
                 break
             case .FREE:
 //                followCam.node
                 sprite.addBehaviour({ AiBehaviour in
-                    if sprite.scene.activeCamera.rmxID == followCam.rmxID {
-                        followCam.position = sprite.position
+                    if sprite.scene.activeCamera == followCam {
+                        followCam.position = sprite.getPosition()
                     }
                 } )
                 type = "FREE"
@@ -73,7 +73,7 @@ class RMXCamera : SCNCamera {
                 followCam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
                 //let slowFollow = SCNAction.moveTo(followCam.position, duration: 1)
                 sprite.addBehaviour({ AiBehaviour in
-                    if sprite.scene.activeCamera.rmxID == followCam.rmxID {
+                    if sprite.scene.activeCamera == followCam {
                             //followCam.runAction(slowFollow)
                     }
                 } )
@@ -93,7 +93,7 @@ class RMXCamera : SCNCamera {
 
         
 
-        followCam.restingPivotPoint.z = -(100 + sprite.radius)
+        followCam.restingPivotPoint.z = -RMFloat(100 + sprite.radius)
         followCam.restingEulerAngles.x = -25 * PI_OVER_180
         
         followCam.pivot.m43 = followCam.restingPivotPoint.z
@@ -109,11 +109,11 @@ class RMXCamera : SCNCamera {
         headcam.name! += "\(type)/HEADCAM/\(sprite.name)"
         
         sprite.cameras.append(headcam)
-        if let head = sprite.node.childNodeWithName("head", recursively: true) {
+        if let head = sprite.childNodeWithName("head", recursively: true) {
             head.addChildNode(headcam)
             
         } else {
-            sprite.node.addChildNode(headcam)
+            sprite.addChildNode(headcam)
         }
        
         return headcam
@@ -133,11 +133,14 @@ class RMXCameraNode : SCNNode {
     static var COUNT: Int = 0
     lazy var cameraID: Int = RMX.COUNT++
 //    var rmxID: Int?
+    var rmxID: Int? {
+        return self._rmxID
+    }
     var cameraType: CameraOptions = .FIXED
     
     var aiDelegate: RMXAiDelegate!
     
-    init(sprite: RMXSprite? = nil, world: RMXScene! = nil) {
+    init(sprite: RMXNode? = nil, world: RMXScene! = nil) {
         self.rmxSprite = sprite ?? world.activeSprite
         self._rmxID = sprite?.rmxID ?? world.activeSprite.rmxID ?? world.rmxID
         self.world = sprite?.scene ?? world
@@ -277,13 +280,14 @@ class RMXCameraNode : SCNNode {
             return RMFloat(self.fov / self.restingFOV) * (1 - self.pivot.m43 * 0.75 / self.zMin)
         }
     }
-    func print() {
+    
+    var print: String{
         var s = ""
         s += "\n   pivot: \(self.pivot.position.print), FOV: \(fov.toData()), phi: \(self.eulerAngles.x.toData()), zoomFactor: \(self.zoomFactor.toData())"
        
         s += "\n   focalSize: \(self.camera!.focalSize.print), fDist: \(self.camera!.focalDistance.print), fBlurRad: \(self.camera!.focalBlurRadius.print)"
         s += "\n   appeture: \(self.camera!.aperture.print), orthScale: \(self.camera!.orthographicScale.print)\n zFar: \(self.camera!.zFar)"
-        Swift.print(s)
+        return s
     }
     
     func moveOut(speed: RMFloat = 1) {

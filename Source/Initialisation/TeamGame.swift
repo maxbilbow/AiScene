@@ -136,6 +136,7 @@ typealias ScoreCard = (kills: Int, deaths: Int, points: Int)
 typealias TeamStats = (score: ScoreCard, players: Int, livePlayers: Int)
 @available(OSX 10.10, *)
 class RMXTeam : NSObject, RMXObject {
+    
     var name: String? {
         return self.id
     }
@@ -360,7 +361,7 @@ class RMXTeam : NSObject, RMXObject {
     
     class func throwChallenge(challenger: RMXSprite, projectile: RMXSprite)  {
         func _challenge(contact: SCNPhysicsContact) -> Void {
-            if let defender = contact.getDefender(forChallenger: challenger).sprite {
+            if let defender = contact.getDefender(forChallenger: challenger).rmxNode {
                 if defender.willCollide ?? false && defender.attributes.teamID != challenger.attributes.teamID {
                     challenger.attributes.team?.willChangeValueForKey("score")
                     RMXTeam.challenge(challenger.attributes, defender: defender.attributes, doOnWin: self.indirectChallenge)
@@ -372,7 +373,7 @@ class RMXTeam : NSObject, RMXObject {
                 }
             }
         }
-        projectile.node.addCollisionAction(named: "Attack", removeAfterTime: 2, action: _challenge)
+        projectile.addCollisionAction(named: "Attack", removeAfterTime: 2, action: _challenge)
         
     }
     
