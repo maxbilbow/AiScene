@@ -126,12 +126,12 @@ class RMXCamera : SCNCamera {
 class RMXCameraNode : SCNNode {
     var rmxSprite: RMXSprite?
     var world: RMXScene
-    var restingPivotPoint: SCNVector3 = SCNVector3Zero
-    var restingEulerAngles: SCNVector3 = SCNVector3Zero
+    var restingPivotPoint: SCNVector3
+    var restingEulerAngles: SCNVector3
     var restingFOV: Double = 65
     internal var _rmxID: Int?
     static var COUNT: Int = 0
-    lazy var cameraID: Int = RMX.COUNT++
+    let cameraID: Int = RMX.COUNT++
 //    var rmxID: Int?
     var rmxID: Int? {
         return self._rmxID
@@ -141,6 +141,8 @@ class RMXCameraNode : SCNNode {
     var aiDelegate: RMXAiDelegate!
     
     init(sprite: RMXNode? = nil, world: RMXScene! = nil) {
+        self.restingEulerAngles = SCNVector3Zero
+        self.restingPivotPoint = SCNVector3Zero
         self.rmxSprite = sprite ?? world.activeSprite
         self._rmxID = sprite?.rmxID ?? world.activeSprite.rmxID ?? world.rmxID
         self.world = sprite?.scene ?? world

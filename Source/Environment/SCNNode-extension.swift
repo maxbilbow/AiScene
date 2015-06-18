@@ -34,12 +34,6 @@ extension SCNNode {
     }
     
     
-    
-    @available(OSX 10.10, *)
-    func setRmxID(rmxID: Int?) {
-        (self as? RMXCameraNode)?._rmxID = rmxID
-    }
-    
     @available(OSX 10.10, *)
     var boundingSphere: (center: SCNVector3, radius: CGFloat) {
         var center: SCNVector3 = SCNVector3Zero; var radius: CGFloat = 0

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -110,7 +110,6 @@
 		6C9299DA1AE544C000E71811 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMXScene.swift */; };
 		6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
 		6C9299DD1AE544C000E71811 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
-		6C9299DE1AE544C000E71811 /* RM3DEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RM3DEntity.swift */; };
 		6C9299DF1AE544C000E71811 /* RMSEquations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C11AE544C000E71811 /* RMSEquations.swift */; };
 		6C9299E51AE544C000E71811 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299C91AE544C000E71811 /* GameView.swift */; };
 		6C9299E61AE544C000E71811 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CA1AE544C000E71811 /* GameViewController.swift */; };
@@ -133,7 +132,6 @@
 		6C929A241AE5499D00E71811 /* RMXScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BB1AE544C000E71811 /* RMXScene.swift */; };
 		6C929A251AE5499D00E71811 /* RMXCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BC1AE544C000E71811 /* RMXCamera.swift */; };
 		6C929A271AE5499D00E71811 /* RMXNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BE1AE544C000E71811 /* RMXNode.swift */; };
-		6C929A281AE5499D00E71811 /* RM3DEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299BF1AE544C000E71811 /* RM3DEntity.swift */; };
 		6C929A2A1AE549A300E71811 /* RMXViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299CE1AE544C000E71811 /* RMXViewController.swift */; };
 		6C929A2D1AE549A600E71811 /* RMSActionProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D21AE544C000E71811 /* RMSActionProcessor.swift */; };
 		6C929A2E1AE549A600E71811 /* RMSKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D31AE544C000E71811 /* RMSKeys.swift */; };
@@ -239,7 +237,6 @@
 		6C9299BC1AE544C000E71811 /* RMXCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXCamera.swift; sourceTree = "<group>"; };
 		6C9299BD1AE544C000E71811 /* RMXClock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXClock.swift; sourceTree = "<group>"; };
 		6C9299BE1AE544C000E71811 /* RMXNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXNode.swift; sourceTree = "<group>"; };
-		6C9299BF1AE544C000E71811 /* RM3DEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RM3DEntity.swift; path = Environment/RM3DEntity.swift; sourceTree = "<group>"; };
 		6C9299C11AE544C000E71811 /* RMSEquations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMSEquations.swift; sourceTree = "<group>"; };
 		6C9299C51AE544C000E71811 /* RMXQuestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXQuestions.swift; path = Generics/RMXQuestions.swift; sourceTree = "<group>"; };
 		6C9299C91AE544C000E71811 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
@@ -320,7 +317,6 @@
 		501B09F21B2B214F0025AFD5 /* GameState */ = {
 			isa = PBXGroup;
 			children = (
-				6C9299BF1AE544C000E71811 /* RM3DEntity.swift */,
 				50AC218A1B17AABA00A9BD28 /* TeamGame.swift */,
 				501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */,
 			);
@@ -816,7 +812,7 @@
 				};
 			};
 			buildConfigurationList = 6C9299861AE5432000E71811 /* Build configuration list for PBXProject "AiScene" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -964,7 +960,6 @@
 				6C9299DA1AE544C000E71811 /* RMXScene.swift in Sources */,
 				5063BCF01B2C5F7D00FB5558 /* RMXSpriteTimer.swift in Sources */,
 				6C9299F51AE5467000E71811 /* AppDelegate.swift in Sources */,
-				6C9299DE1AE544C000E71811 /* RM3DEntity.swift in Sources */,
 				5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */,
 				6C9299E51AE544C000E71811 /* GameView.swift in Sources */,
 				6C9299DB1AE544C000E71811 /* RMXCamera.swift in Sources */,
@@ -1035,7 +1030,6 @@
 				6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */,
 				6C9299FF1AE5497800E71811 /* AppDelegate.swift in Sources */,
 				5063BD151B2C651D00FB5558 /* UserActions.swift in Sources */,
-				6C929A281AE5499D00E71811 /* RM3DEntity.swift in Sources */,
 				6C6DD1A71B10CA8800107FAD /* AiCubo Basic.swift in Sources */,
 				6C206C491B258BDD00D83CC0 /* RMXSceneKit.swift in Sources */,
 				6C0DC6A01B26EE1400220E95 /* RMKey.swift in Sources */,
@@ -1291,7 +1285,7 @@
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rattle.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AiScene;
-				PROVISIONING_PROFILE = "170d4054-31df-4f10-b7bf-795876b40cfb";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1306,7 +1300,7 @@
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rattle.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AiScene;
-				PROVISIONING_PROFILE = "170d4054-31df-4f10-b7bf-795876b40cfb";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

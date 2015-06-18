@@ -17,7 +17,8 @@ import SceneKit
                         return self.isActor
                     }
                 }
-
+typealias RMXSprite = RMXNode
+                
 @available(OSX 10.10, *)
 class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     
@@ -102,15 +103,18 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
 
     
     var length: RMFloat {
-        return self.boundingBox.max.z * 2 // * self.scale.z
+        let bounds = self.boundingBox;
+        return bounds.max.z - bounds.min.z
     }
     
     var width: RMFloat {
-        return self.boundingBox.max.x * 2//* self.scale.x
+        let bounds = self.boundingBox;
+        return bounds.max.x - bounds.min.x
     }
     
     var height: RMFloat {
-        return self.boundingBox.max.y * 2//* self.scale.y
+        let bounds = self.boundingBox;
+        return bounds.max.y - bounds.min.y
     }
     
     var bottom: SCNVector3 {
@@ -171,7 +175,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     convenience init(inWorld world: RMXScene, type: RMXSpriteType = .PASSIVE, shape: ShapeType = .CUBE, color: RMColor? = RMX.randomColor(), unique: Bool = false) {
-        self.init(inWorld: world, geometryNode: RMXModels.getNode(shapeType: shape, color: color), type: type, shape: shape, unique: unique)
+        self.init(inWorld: world, geometryNode: RMXModels.getNode(shapeType: shape, color: color, inWorld: world), type: type, shape: shape, unique: unique)
     }
     
     deinit {
@@ -196,6 +200,8 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         super.init()
         if let node = geometryNode {
             self.setGeometryNode(node)
+        } else {
+            self.setGeometryNode(RMXModels.getNode(shapeType: shape))
         }
         self.attributes = SpriteAttributes(sprite: self)
         self.safeInit = safeInit
@@ -817,12 +823,17 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
 
     func setGeometryNode(node: SCNNode) {
         node.name = "geometry"
+    
+        
         self.addChildNode(node)
-        self.setMass()
+        if node.geometry is SCNFloor {
+            node.physicsBody = SCNPhysicsBody.staticBody()
+        }
         switch self.type {
         case _ where self.isActor || self.type == .PASSIVE:
             self.physicsBody = SCNPhysicsBody.dynamicBody()
             self.physicsBody?.friction = 0.1
+//            self.physicsBody?.rollingFriction = 0.1
             break
         case .AI, .PASSIVE:
             self.physicsBody?.damping = 0.3
@@ -836,8 +847,10 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
             self.physicsBody?.angularDamping = 0.99
             break
         case .BACKGROUND:
-            self.physicsBody = SCNPhysicsBody.staticBody()
-            self.physicsBody!.friction = 0.1
+//            if !(node.geometry is SCNFloor) {
+                self.physicsBody = SCNPhysicsBody.staticBody()
+//            }
+            self.physicsBody!.friction = 0.01
             break
         case .KINEMATIC:
             self.physicsBody = SCNPhysicsBody.kinematicBody()
@@ -847,15 +860,12 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
             break
         default:
             fatalError()
-//        case .:
-//            if self.physicsBody == nil {
-//                self.physicsBody = SCNPhysicsBody()//.staticBody()
-//                self.physicsBody!.restitution = 0.0
-//            }
-//            break
         }
         
+
         
+        
+        self.setMass()
         
         switch self.shapeType {
         case .BOBBLE_MAN:

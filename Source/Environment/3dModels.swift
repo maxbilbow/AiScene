@@ -52,7 +52,7 @@ class RM3DModels  {
     
     
    
-    class func getNode(shapeType type: ShapeType, radius r: RMFloat? = nil, height h: RMFloat? = nil, scale s: SCNVector3? = nil, color: RMColor! = nil) -> SCNNode {
+    class func getNode(shapeType type: ShapeType, radius r: RMFloat? = nil, height h: RMFloat? = nil, scale s: SCNVector3? = nil, color: RMColor! = nil, inWorld world: RMXScene? = nil) -> SCNNode {
         var hasColor = false
         var radius = r ?? 1
         var height = h ?? radius
@@ -91,13 +91,23 @@ class RM3DModels  {
              hasColor = true
             node = SCNNode(geometry: SCNPlane(width: CGFloat(scale.x), height: CGFloat(scale.y)))
             break
-        case ShapeType.FLOOR:
-            hasColor = true
-//            node = SCNFloor
+        case .CYLINDER_FLOOR:
+            if let world = world {
+                radius = world.radius
+            }
             let geometry = SCNCylinder(radius: CGFloat(radius), height: 100)
             node = SCNNode(geometry:geometry)
             geometry.firstMaterial?.shininess = 0
             geometry.firstMaterial?.reflective.intensity = 0.1
+            break
+        case ShapeType.FLOOR:
+            hasColor = true
+//            node = SCNFloor
+            let geometry: SCNFloor = SCNFloor.new()//(radius: CGFloat(radius), height: 100)
+            node = SCNNode(geometry:geometry)
+            geometry.firstMaterial?.shininess = 0
+            geometry.firstMaterial?.reflective.intensity = 0.1
+//            node.physicsBody = SCNPhysicsBody.staticBody()
             
 //            geometry.firstMaterial
             //node.transform = SCNMatrix4Rotate(node.transform, 90 * PI_OVER_180, 1, 0, 0)

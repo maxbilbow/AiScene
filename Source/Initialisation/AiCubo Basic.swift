@@ -15,10 +15,9 @@ import SceneKit
 class AiCubo {
    
    
-    class func createEarth(inWorld world: RMXScene, radius: RMFloat? = nil, addCameras: Bool = true) {
-        let worldRadius = radius ?? world.radius
+    class func createEarth(inWorld world: RMXScene, addCameras: Bool = true, type shape: ShapeType = .FLOOR) {
         
-        let earth: RMXSprite = RMXSprite(inWorld: world, geometryNode: RMXModels.getNode(shapeType: ShapeType.FLOOR, radius: worldRadius, color: RMColor.lightGrayColor()), type: .BACKGROUND, unique: true)
+        let earth: RMXSprite = RMXSprite(inWorld: world, shape: shape, type: .BACKGROUND, unique: true, color:  RMColor.lightGrayColor())
         
         world.physicsWorld.gravity = SCNVector3Make(0,y: -9.8 * 10,z: 0)
         
@@ -27,7 +26,13 @@ class AiCubo {
         
         let earthPosition = SCNVector3Make(0,y: -earth.height / 2, z: 0)
         earth.setPosition(earthPosition)
-        //earth.node.runAction(SCNAction.repeatActionForever(SCNAction.moveTo(earthPosition, duration: 1)))
+        if #available(OSX 10.11, iOS 9.0, *) {
+            earth.physicsBody?.affectedByGravity = false
+        } else {
+            earth.addBehaviour { (object) -> Void in
+                earth.resetTransform()
+            }
+        }
         if addCameras {
             earth.addCameras()
             world.cameras += earth.cameras
@@ -50,7 +55,7 @@ class AiCubo {
         lightNode.light?.spotOuterAngle = 100
         lightNode.light?.shadowBias = 1
         #if OSX
-        lightNode.light?.shadowMapSize = CGSizeMake(10000, 10000)
+//        lightNode.light?.shadowMapSize = CGSizeMake(10000, 10000)
         #elseif iOS
 //            lightNode.light?.shadowMapSize = CGSizeMake(1000, 1000)
         #endif
@@ -119,7 +124,26 @@ class AiCubo {
     }
     
   
+    class func gameOverMessage(game: RMXTeamGame) -> (AnyObject?) -> [String]?  {
+        let teamPlayers: Int = game.teamPlayers.count
+        return ({(world: AnyObject?) -> [String]? in
+            if let game = world as? RMXTeamGame {
+                for team in game.teams {
+                    //                            if (game as! RMXScene).activeCamera.pivot.m43 == 0 {
+                    //                                return RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
+                    //                            }
+                    let score = team.1.score
+                    if score.kills == teamPlayers {
+                        return [ "Team \(team.0) killed \(score.kills) players!"] + RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
+                    } else if team.0 == game.activeSprite.attributes.teamID && score.deaths == teamPlayers {
+                        return [ "Your teammates died \(score.deaths) times!"] + RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
+                    }
+                }
+            }
+            return nil
+        })
     
+    }
     
     class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
         if let interface = interface {
@@ -150,9 +174,11 @@ class AiCubo {
             case .WEAPONS:
                 world.name = "Weapons World"
                 AiCubo.initialWorldSetup(world)
-                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createEarth(inWorld: world, addCameras: true, type: .CYLINDER_FLOOR)
                 AiCubo.createLight(inWorld: world, fixed: true, addCameras: true)
+                AiCubo.addPlayers(world, noOfPlayers: 6, teams: 2)
                 AiCubo.particles(inWorld: world)
+                world.gameOverMessage = self.gameOverMessage(world)
                 break
             case .DOMED:
                 world.name = "Domed World"
@@ -170,11 +196,12 @@ class AiCubo {
             case .TEAM_GAME:
                 world.name = "Team Game: Play to win!"
                 AiCubo.initialWorldSetup(world)
-                AiCubo.createEarth(inWorld: world, addCameras: true)
+                AiCubo.createEarth(inWorld: world, addCameras: true, type: .CYLINDER_FLOOR)
                 AiCubo.createLight(inWorld: world, fixed: false, addCameras: true)
                 RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 20, shapes: .CYLINDER, .CUBE)
                 AiCubo.addPlayers(world, noOfPlayers: 10, teams: 2)
                 RMXAi.offenciveBehaviour(to: world.sprites)
+                world.gameOverMessage = self.gameOverMessage(world)
                 break
             case .TEAM_GAME_2:
                 world.name = "Team Game: 3 teams"
@@ -185,23 +212,7 @@ class AiCubo {
                 RMXArt.initializeTestingEnvironment(world,withAxis: false, withCubes: 12, shapes: .CYLINDER, .CUBE)
                 AiCubo.addPlayers(world, noOfPlayers: 9, teams: 3)
                 RMXAi.offenciveBehaviour(to: world.sprites)
-                let teamPlayers: Int = world.teamPlayers.count
-                world.gameOverMessage = ({(world: AnyObject?) -> [String]? in
-                    if let game = world as? RMXTeamGame {
-                        for team in game.teams {
-//                            if (game as! RMXScene).activeCamera.pivot.m43 == 0 {
-//                                return RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
-//                            }
-                            let score = team.1.score
-                            if score.kills == teamPlayers {
-                                return [ "Team \(team.0) killed \(score.kills) players!"] + RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
-                            } else if team.0 == game.activeSprite.attributes.teamID && score.deaths == teamPlayers {
-                                return [ "Your teammates died \(score.deaths) times!"] + RMXTeam.gameOverMessage(winner: team.0, player: game.activeSprite)
-                            }
-                        }
-                    }
-                    return nil
-                })
+                world.gameOverMessage = self.gameOverMessage(world)
                 break
             default:
                 AiCubo.initialWorldSetup(world)

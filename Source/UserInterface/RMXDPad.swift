@@ -40,8 +40,6 @@ class RMXDPad : RMXInterface {
             self.motionManager.startMagnetometerUpdates()
         }
         
-        
-        
 
         
     }

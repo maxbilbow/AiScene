@@ -239,7 +239,7 @@ class SpriteAttributes : RMXAttributes {
     
     var printScore: String {
         let score = self.score
-        return "\(self.sprite.name)'s Score: \(score.points), Kills: \(score.kills), Deaths: \(score.deaths), Health: \(self.health)"
+        return "\(self.sprite.name!)'s Score: \(score.points), Kills: \(score.kills), Deaths: \(score.deaths), Health: \(self.health)"
     }
     
 }

@@ -20,6 +20,13 @@ extension SCNPhysicsContact : RMXLocatable {
 }
 
 @available(OSX 10.10, *)
+extension SCNPhysicsContact {
+    func getDefender(forChallenger challenger: RMXSprite) -> SCNNode {
+        return self.nodeA == challenger ? nodeB : nodeA
+    }
+}
+
+@available(OSX 10.10, *)
 class RMXCollider: NSObject, SCNPhysicsContactDelegate {
     
     enum type { case Began, Updated, Ended }

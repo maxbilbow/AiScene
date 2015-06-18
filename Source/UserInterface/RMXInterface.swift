@@ -136,7 +136,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
         _world = _newGame(type)
         self.isNewGame = true
         _world?.calibrate()
-        self.updateScoreboard(nil)
+        
 //        self.organiseLines()
 //        self.unPauseGame(nil)
         self.pauseGame()
@@ -314,8 +314,18 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
         
     }
     
-    ///@virtual
-    func update(){}
+    
+    func update(){
+        if _willUpdateScoreboard {
+            if let msg = self.world.gameOverMessage?(world) {
+                self.pauseGame()
+                self.updateScoreboard(msg)
+            } else if !self.scoreboard.hidden {
+                self.updateScoreboard(nil)
+            }
+            _willUpdateScoreboard = false
+        }
+    }
     
     
     func setKeyboard(type: KeyboardType = .UK)  {
@@ -345,6 +355,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
         // self.action(action: RMXInterface.SHOW_SCORES, speed: 1)
         self.hideButtons(true)
         self.scoreboard.hidden = false
+        self.updateScoreboard(nil)
         _world?.pause()
         return true
     }
@@ -377,15 +388,11 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
         return CGRectMake(bounds.width * (col.0 - 1) / col.1, bounds.height * (row.0 - 1) / row.1, bounds.width / col.1, bounds.height / row.1)
     }
     
+    private var _willUpdateScoreboard = false
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         switch keyPath! {
         case RMXScene.kvScores:
-            if let msg = self.world.gameOverMessage?(world) {
-                self.pauseGame()
-                self.updateScoreboard(msg)
-            } else if !self.scoreboard.hidden {
-                self.updateScoreboard(nil)
-            }
+            _willUpdateScoreboard = true
             break
         default:
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)

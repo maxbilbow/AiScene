@@ -96,5 +96,5 @@ class GameViewController: ViewController , SCNSceneRendererDelegate {
     }
     #endif
     
-    static var context = UnsafeMutablePointer<Void>()
+
 }

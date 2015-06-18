@@ -225,10 +225,21 @@ extension RMXAi {
 //    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXSprite) {
         if sprite.isActor {
+            if #available(OSX 10.11, iOS 9.0, *) {
+                sprite.physicsBody?.affectedByGravity = false
+                for node in sprite.childNodes {
+                    node.physicsBody?.affectedByGravity = false
+                }
+            } else {
+                // Fallback on earlier versions
+            }
         let ai = { (node: AnyObject!) -> Void in
 //            if sprite.world.aiOn { NSLog(sprite.name) }
             if sprite.scene.hasGravity {
                 sprite.physicsBody?.applyForce(sprite.scene.gravity * RMFloat(sprite.physicsBody!.mass), atPosition: sprite.bottom, impulse: false)
+//                if sprite.isLocalPlayer {
+//                    print("height: \(sprite.height.print), g: \(sprite.scene.gravity.print), Bottom: \(sprite.bottom.print), Top: \(sprite.top.print)")
+//                }
             }
         }
         sprite.addBehaviour(ai)

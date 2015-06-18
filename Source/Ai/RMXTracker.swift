@@ -44,7 +44,7 @@ class RMXTracker : NSObject {
     var timePassed = 0
     
     let updateInterval = 1
-    var lastPosition: SCNVector3 = SCNVector3Zero
+    var lastPosition: SCNVector3 = SCNVector3Make(0)
 
     var isStuck: Bool {
         if self.hasTarget {
