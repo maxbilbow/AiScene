@@ -7,7 +7,7 @@
 //
 import GLKit
 import Foundation
-
+import RMXKit
 import SceneKit
 
     //typealias RMXNode = SCNNode

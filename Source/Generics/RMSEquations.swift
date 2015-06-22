@@ -9,6 +9,7 @@
 import Foundation
 import SceneKit
 import GLKit
+import RMXKit
 
 @available(OSX 10.10, *)
 extension RMX {

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import RMXKit
 @available(OSX 10.10, *)
 class RMXSpriteTimer : NSObject, RMXTimer {
     var sprite: RMXSprite

@@ -9,7 +9,7 @@
 import Foundation
 import QuartzCore
     import GLKit
-
+import RMXKit
 
 import AVFoundation
     import SceneKit
@@ -81,7 +81,6 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
         self.setUpViews()
         self.newGame(RMXInterface.DEFAULT_GAME)
         self.viewDidLoad()
-        RMXLog()
     }
 
 //    var world2D: SKView?

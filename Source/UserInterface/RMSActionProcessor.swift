@@ -14,7 +14,7 @@ import AppKit
     
     #endif
     import SceneKit
-
+import RMXKit
 
 @available(OSX 10.10, *)
 extension RMX {

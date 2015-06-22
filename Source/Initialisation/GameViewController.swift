@@ -8,7 +8,7 @@
 
 import SceneKit
 import QuartzCore
-//import GameKit
+import RMXKit
 
 #if iOS
     typealias ViewController = UIViewController

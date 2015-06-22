@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 import ApplicationServices
 import SceneKit
-   
+   import RMXKit
     
 /// Contains Keys control mapping for a desktop interface.
 ///

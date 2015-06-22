@@ -8,7 +8,7 @@
 
 import Foundation
 import GLKit
-
+import RMXKit
 
 @available(OSX 10.10, *)
 extension RMX {

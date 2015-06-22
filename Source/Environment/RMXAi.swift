@@ -7,7 +7,7 @@
 //
 import SceneKit
 import Foundation
-
+import RMXKit
 
 
 
@@ -35,7 +35,7 @@ class AiPoppy : RMXAi {
         self.init(pawn: poppy)
         self.master = master
     }
-    required init(pawn: RMXPawn) {
+    required override init(pawn: RMXPawn) {
         self.master = (pawn as! RMXSprite).scene.activeSprite
         super.init(pawn: pawn)
     }
@@ -145,7 +145,7 @@ class AiTeamPlayer : AiRandom {
 
     
     var inWhichTeams: InWhichTeams!
-    required init(pawn: RMXPawn) {
+    required override init(pawn: RMXPawn) {
         super.init(pawn: pawn)
         let pawn = pawn as! RMXSprite
         self.inWhichTeams = InWhichTeams(exc: self.sprite.attributes.teamID)

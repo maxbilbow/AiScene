@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 import SceneKit
-
+import RMXKit
 @available(OSX 10.10,*)
 protocol RMXLocatable {
     func getPosition() -> SCNVector3

@@ -9,7 +9,7 @@
 import Foundation
 import GLKit
 import SceneKit
-
+import RMXKit
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 @available(OSX 10.10, *)
 class RMXScene : SCNScene, RMXWorld, RMXObject {
