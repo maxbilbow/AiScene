@@ -78,35 +78,8 @@ typedef int swift_int2  __attribute__((__ext_vector_type__(2)));
 typedef int swift_int3  __attribute__((__ext_vector_type__(3)));
 typedef int swift_int4  __attribute__((__ext_vector_type__(4)));
 #if defined(__has_feature) && __has_feature(modules)
-@import ObjectiveC;
-@import Foundation;
-@import SceneKit;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
-
-SWIFT_CLASS("_TtC6RMXKit5RMXAi")
-@interface RMXAi : NSObject
-- (void)setState:(NSString * __nullable)state;
-@property (nonatomic, readonly, copy) NSString * __nullable state;
-- (void)run:(id __nullable)sender updateAtTime:(NSTimeInterval)time;
-@end
-
-@class NSCoder;
-
-SWIFT_CLASS("_TtC6RMXKit13RMXAttributes")
-@interface RMXAttributes : NSObject <NSCoding>
-@property (nonatomic, copy) NSDictionary<NSString *, NSString *> * __nonnull values;
-@property (nonatomic, readonly, copy) NSArray<NSString *> * __nonnull keys;
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-- (void)encodeWithCoder:(NSCoder * __nonnull)aCoder;
-@end
-
-
-@interface SCNNode (SWIFT_EXTENSION(RMXKit))
-- (SCNVector3)getPosition;
-@end
-
 #pragma clang diagnostic pop

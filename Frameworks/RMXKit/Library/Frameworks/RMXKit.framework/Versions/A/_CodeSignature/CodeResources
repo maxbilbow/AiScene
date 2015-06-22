@@ -6,26 +6,114 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		9ofbOpMTbtVG110zVWStFTMNBko=
+		zpGXCVr5s/etpd7y9lmScGJ529s=
+		</data>
+		<key>Resources/RMX.d</key>
+		<data>
+		8djjfAYT2zMb1XJjt1rvxT/RI8s=
+		</data>
+		<key>Resources/RMX.dia</key>
+		<data>
+		6r6m4nfDu60+pJ0cB5VhAPd0qt8=
+		</data>
+		<key>Resources/RMX.o</key>
+		<data>
+		GX4XaMhGV1YfRWq0GCQsfPS4ezY=
+		</data>
+		<key>Resources/RMX.swiftdeps</key>
+		<data>
+		XM9+zqhzfz+UwOvwslBMeI3S6ro=
+		</data>
+		<key>Resources/RMXKit-OutputFileMap.json</key>
+		<data>
+		gufU9oktQGw+3/w8h9VF7mg0t0o=
+		</data>
+		<key>Resources/RMXKit-Swift.h</key>
+		<data>
+		D8mvr7zEOjPwPEzMl1/PnlGkfFA=
+		</data>
+		<key>Resources/RMXKit-master.swiftdeps</key>
+		<data>
+		NSpzDtVQ8gBTPSJ+3EBc1WoLuQE=
+		</data>
+		<key>Resources/RMXKit.swiftdoc</key>
+		<data>
+		rRPQUmQ84AAr3Akh3TVnpXrkTYY=
+		</data>
+		<key>Resources/RMXKit.swiftmodule</key>
+		<data>
+		nCkbb6EjwyTgjmNIxhypBQH4QoA=
+		</data>
+		<key>Resources/RMX~partial.swiftdoc</key>
+		<data>
+		rRPQUmQ84AAr3Akh3TVnpXrkTYY=
+		</data>
+		<key>Resources/RMX~partial.swiftmodule</key>
+		<data>
+		srAOz+VSmyzlG3h5hwAatExczG8=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Headers/OSX.swift</key>
+		<data>
+		zX0cfmUUMYtcUarXwY1HgAozD7A=
+		</data>
+		<key>Headers/RMSMaths.swift</key>
+		<data>
+		vum1OGC0RXSi3BSAzfc9pC0YTps=
+		</data>
+		<key>Headers/RMX.swift</key>
+		<data>
+		vRrglUEfluRiSvFqo+7KDOAZps0=
+		</data>
+		<key>Headers/RMXAiDelegate.swift</key>
+		<data>
+		dlAmdvAm6PFhWkMr+wNFk4pbqFQ=
+		</data>
+		<key>Headers/RMXDebugger.swift</key>
+		<data>
+		9cq1zyUj0gVqBCsl+HGWybaVIGw=
+		</data>
+		<key>Headers/RMXFunctions.swift</key>
+		<data>
+		cnpAIok7qMvo0LsypNTC3ZQhTVs=
+		</data>
 		<key>Headers/RMXKit-Swift.h</key>
 		<data>
-		2kqDBZO2nuyVUqyCl7Nmq48Cmm0=
+		D8mvr7zEOjPwPEzMl1/PnlGkfFA=
 		</data>
 		<key>Headers/RMXKit.h</key>
 		<data>
-		AA4ghbN16wOfey70N1nFoXuDLI8=
+		IGnJZ/wK0IPEX/5HKIvl6icITLY=
+		</data>
+		<key>Headers/RMXPawn.swift</key>
+		<data>
+		3d4i94IxhINt3pUcmoOswnCskIU=
+		</data>
+		<key>Headers/RMXValue.swift</key>
+		<data>
+		Hkg4cR9pwjpfgLMLedP6yL/FBjw=
+		</data>
+		<key>Headers/RMXWorld.swift</key>
+		<data>
+		dILMHZbgvGadck9rRktqA+8MQ3E=
+		</data>
+		<key>Headers/SCNNode.swift</key>
+		<data>
+		bCos7GXb4hfBNQdMOpTjoV0Oudw=
+		</data>
+		<key>Headers/UserActions.swift</key>
+		<data>
+		2mk/P2+MU6IEkGjdokfx9C05B5U=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/x86_64.swiftdoc</key>
 		<data>
-		VXjbnnAZMuAX7VkO0mwrZjm6BtQ=
+		rRPQUmQ84AAr3Akh3TVnpXrkTYY=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		jnPirLghaD70MfcvDF7R4oTLLYU=
+		nCkbb6EjwyTgjmNIxhypBQH4QoA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -33,7 +121,51 @@
 		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		9ofbOpMTbtVG110zVWStFTMNBko=
+		zpGXCVr5s/etpd7y9lmScGJ529s=
+		</data>
+		<key>Resources/RMX.d</key>
+		<data>
+		8djjfAYT2zMb1XJjt1rvxT/RI8s=
+		</data>
+		<key>Resources/RMX.dia</key>
+		<data>
+		6r6m4nfDu60+pJ0cB5VhAPd0qt8=
+		</data>
+		<key>Resources/RMX.o</key>
+		<data>
+		GX4XaMhGV1YfRWq0GCQsfPS4ezY=
+		</data>
+		<key>Resources/RMX.swiftdeps</key>
+		<data>
+		XM9+zqhzfz+UwOvwslBMeI3S6ro=
+		</data>
+		<key>Resources/RMXKit-OutputFileMap.json</key>
+		<data>
+		gufU9oktQGw+3/w8h9VF7mg0t0o=
+		</data>
+		<key>Resources/RMXKit-Swift.h</key>
+		<data>
+		D8mvr7zEOjPwPEzMl1/PnlGkfFA=
+		</data>
+		<key>Resources/RMXKit-master.swiftdeps</key>
+		<data>
+		NSpzDtVQ8gBTPSJ+3EBc1WoLuQE=
+		</data>
+		<key>Resources/RMXKit.swiftdoc</key>
+		<data>
+		rRPQUmQ84AAr3Akh3TVnpXrkTYY=
+		</data>
+		<key>Resources/RMXKit.swiftmodule</key>
+		<data>
+		nCkbb6EjwyTgjmNIxhypBQH4QoA=
+		</data>
+		<key>Resources/RMX~partial.swiftdoc</key>
+		<data>
+		rRPQUmQ84AAr3Akh3TVnpXrkTYY=
+		</data>
+		<key>Resources/RMX~partial.swiftmodule</key>
+		<data>
+		srAOz+VSmyzlG3h5hwAatExczG8=
 		</data>
 	</dict>
 	<key>rules</key>

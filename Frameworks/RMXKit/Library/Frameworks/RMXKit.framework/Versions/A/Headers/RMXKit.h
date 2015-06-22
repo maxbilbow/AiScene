@@ -4,6 +4,7 @@
 //
 //  Created by Max Bilbow on 13/06/2015.
 //  Copyright © 2015 Rattle Media Ltd. All rights reserved.
+//  Version 1.1
 //
 
 #import <Cocoa/Cocoa.h>
