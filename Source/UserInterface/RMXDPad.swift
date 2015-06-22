@@ -8,11 +8,12 @@
 
 import Foundation
 import GLKit
-
+import RMXKit
 
 import CoreMotion
 import UIKit
 import AVFoundation
+
 class RMXDPad : RMXInterface {
     
      let _testing = false

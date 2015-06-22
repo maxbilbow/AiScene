@@ -8,6 +8,7 @@
 
 import Foundation
 import GLKit
+import RMXKit
 
 extension RMXDPad {
     func accelerometer() {

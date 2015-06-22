@@ -52,6 +52,7 @@
 		6C10B7251B26D21300C48DD9 /* Accelorometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9299D01AE544C000E71811 /* Accelorometer.swift */; };
 		6C206C3C1B2586AF00D83CC0 /* RMXSceneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */; };
 		6C206C491B258BDD00D83CC0 /* RMXSceneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */; };
+		6C22DE4A1B386BB900185DA6 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C22DE491B386BB900185DA6 /* RMXKit.framework */; };
 		6C4A28721B03ACCC001C3F5B /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286A1B03ACCC001C3F5B /* icons.xcassets */; };
 		6C4A28841B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
 		6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
@@ -168,7 +169,7 @@
 		6C0DC69F1B26EE1400220E95 /* RMKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMKey.swift; sourceTree = "<group>"; };
 		6C0DC6A51B26FDC200220E95 /* GameplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameplayKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/GameplayKit.framework; sourceTree = DEVELOPER_DIR; };
 		6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSceneKit.swift; sourceTree = "<group>"; };
-		6C41E0231B385E420082FCC1 /* RMXKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RMXKit.xcodeproj; path = ../RMXKit/RMXKit/RMXKit.xcodeproj; sourceTree = "<group>"; };
+		6C22DE491B386BB900185DA6 /* RMXKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RMXKit.framework; path = ../Frameworks/RMXKit/Library/Frameworks/RMXKit.framework; sourceTree = "<group>"; };
 		6C4A286A1B03ACCC001C3F5B /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
 		6C4A28831B049FF9001C3F5B /* Observers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observers.swift; sourceTree = "<group>"; };
 		6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AiCubo Basic.swift"; sourceTree = "<group>"; };
@@ -266,6 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C22DE4A1B386BB900185DA6 /* RMXKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,7 +390,7 @@
 		6C9299821AE5432000E71811 = {
 			isa = PBXGroup;
 			children = (
-				6C41E0231B385E420082FCC1 /* RMXKit.xcodeproj */,
+				6C22DE491B386BB900185DA6 /* RMXKit.framework */,
 				6C0DC6A51B26FDC200220E95 /* GameplayKit.framework */,
 				6C8F11CC1B1C19A1009F49DB /* StoreKit.framework */,
 				6C8F11CA1B1C199E009F49DB /* GameKit.framework */,

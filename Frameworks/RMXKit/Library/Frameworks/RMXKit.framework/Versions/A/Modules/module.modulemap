@@ -1,0 +1,10 @@
+framework module RMXKit {
+  umbrella header "RMXKit.h"
+
+  export *
+  module * { export * }
+}
+
+module RMXKit.Swift {
+    header "RMXKit-Swift.h"
+}
