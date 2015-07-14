@@ -13,7 +13,12 @@ import RMXKit
 
 @available(OSX 10.10, *)
 class AiPoppy : RMXAi {
-   
+    enum PoppyState { //: AiState {
+        case Idle, ChasingBall, ExpectingBallToBeThrown, BringingBallBack
+    }
+    
+//    var state: AiState = PoppyState.Idle
+    
     var sprite: RMXSprite {
         return self.pawn as! RMXSprite
     }
@@ -49,7 +54,7 @@ class AiPoppy : RMXAi {
             self.itemToWatch = self.master.item
             self.sprite.tracker.setTarget(self.itemToWatch?.rmxNode, doOnArrival: { (target) -> () in
                 if self.master.item?.rmxID != target?.rmxID {
-                    self.sprite.scene.interface.av.playSound("pop1", info: self.sprite)
+                    RMXInterface.current?.av.playSound("pop1", info: self.sprite)
                     ++self._count
                     if self._count > self._limit {
                         if self.master.isLocalPlayer {
@@ -66,7 +71,7 @@ class AiPoppy : RMXAi {
                     self._count = 0
                     self.sprite.grabItem(target)
                     self.sprite.tracker.setTarget(self.master, doOnArrival: { (target) -> () in
-                        self.sprite.scene.interface.av.playSound("pop2", info: self.sprite)
+                        RMXInterface.current?.av.playSound("pop2", info: self.sprite)
                         self.sprite.releaseItem()
                         
                     })

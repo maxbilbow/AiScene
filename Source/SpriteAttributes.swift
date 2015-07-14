@@ -19,9 +19,6 @@ class SpriteAttributes : RMXAttributes {
         return Float(self.values[RMKeyValue.Health]!)!
     }
     
-    
-    
-    
     private var _teamID: String = ""
     
     var teamID: String {

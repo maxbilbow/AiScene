@@ -21,3 +21,20 @@ public func * (lhs: SCNVector3, rhs: CGFloat) -> SCNVector3 {
     return lhs * Float(rhs)
 }
 
+
+public extension RMX {
+    
+    public static func makeButton(target: NSObject, title: String? = nil, selector: String? = nil, view: UIView, row: (CGFloat, CGFloat), col: (CGFloat, CGFloat)) -> RMButton {
+        let btn = RMButton(frame: getRect(withinRect: view, row: row, col: col))//(view!.bounds.width * col.0 / col.1, view!.bounds.height * row.0 / row.1, view!.bounds.width / col.1, view!.bounds.height / row.1))
+        if let title = title {
+            btn.setTitle(title, forState:UIControlState.Normal)
+        }
+        if let selector = selector {
+            btn.addTarget(target, action: Selector(selector), forControlEvents:UIControlEvents.TouchDown)
+        }
+        
+        btn.enabled = true
+        view.addSubview(btn)
+        return btn
+    }
+}

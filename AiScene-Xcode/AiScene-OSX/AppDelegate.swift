@@ -13,38 +13,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var window: NSWindow!
     
-    var interface: RMXInterface! {
-        return (self.window.contentView.subviews.first as? GameView)?.interface
-    }
-    
     #if DEBUG
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
-        var s = "\napplicationDidFinishLaunching"
-        s += "\n           World: \(self.interface.world.name)"
-        print(s, appendNewline: true)
+        if let interface = RMXInterface.current {
+            var s = "\napplicationDidFinishLaunching"
+            s += "\n           World: \(interface.world.name)"
+            print(s, appendNewline: true)
+        }
     }
     
     func applicationWillHide(notification: NSNotification) {
-        var s = "\napplicationWillHide"
-        self.interface.pauseGame()
-        s += "\n   Game was paused"
-        print(s, appendNewline: true)
+        if let interface = RMXInterface.current {
+            var s = "\napplicationWillHide"
+            interface.pauseGame()
+            s += "\n   Game was paused"
+            print(s, appendNewline: true)
+        }
     }
     
     func applicationDidUnhide(notification: NSNotification) {
-        var s = "\napplicationDidUnhide"
-//        self.interface.pauseGame()
-        s += "\n   Game if not unpause automatically."
-        print(s, appendNewline: true)
+//        if let interface = RMXInterface.current() {
+            var s = "\napplicationDidUnhide"
+    //      interface.pauseGame()
+            s += "\n   Game if not unpause automatically."
+            print(s, appendNewline: true)
+//        }
     }
 
     func applicationDidChangeOcclusionState(notification: NSNotification) {
 //        NSLog(notification.description)
-        
-        print("\napplicationDidChangeOcclusionState")
-        if self.window.occlusionState != NSWindowOcclusionState.Visible {
-            self.interface.pauseGame()
+        if let interface = RMXInterface.current {
+            print("\napplicationDidChangeOcclusionState")
+            if self.window.occlusionState != NSWindowOcclusionState.Visible {
+                interface.pauseGame()
+            }
         }
         
     }

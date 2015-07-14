@@ -21,6 +21,10 @@ typealias RMXSprite = RMXNode
                 
 @available(OSX 10.10, *)
 class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
+
+    static var current: RMXNode? {
+        return RMXScene.current?.activeSprite
+    }
     
     private let _rmxid: Int = RMX.COUNT++
     var rmxID: Int? {

@@ -17,7 +17,6 @@ typealias WinLogic = (Any? ...) -> Bool
 
 @available(OSX 10.10, *)
 protocol RMXTeamGame  {
-    var interface: RMXInterface { get }
     var players: Array<RMXSprite> { get }
     var teamPlayers: Array<RMXSprite> { get }
     var nonPlayers: Array<RMXSprite> { get }
@@ -368,7 +367,7 @@ class RMXTeam : NSObject, RMXObject {
                     RMXTeam.challenge(challenger.attributes, defender: projectile.attributes, doOnWin: self.indirectChallenge)
                     challenger.attributes.team?.didChangeValueForKey("score")
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
-                    challenger.scene.interface.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
+                    RMXInterface.current?.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
                     projectile.tracker.abort()
                 }
             }

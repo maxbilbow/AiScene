@@ -32,73 +32,39 @@ public func SCNVector3Length(v: SCNVector3) -> RMFloat {
     return RMFloat(GLKVector3Length(SCNVector3ToGLKVector3(v)))
 }
 
-public func SCNVector3PlusX(inout v: SCNVector3, x: RMFloat){
-    #if true
-        v.x += x
-        #else
-    v = GLKVector3Make(v.x + x, v.y, v.z)
-    #endif
-}
-
-public func SCNVector3PlusY(inout v: SCNVector3, y: RMFloat){
-    #if true
-        v.y += y
-        #else
-    v = GLKVector3Make(v.x, v.y + y, v.z)
-    #endif
-}
-
-public func SCNVector3PlusZ(inout v: SCNVector3, z: RMFloat){
-    #if true
-        v.z += z
-        #else
-    v = GLKVector3Make(v.x, v.y, v.z + z)
-    #endif
-}
 
 @available(OSX 10.10, *)
 public func SCNMatrix4Transpose(mat: SCNMatrix4)->SCNMatrix4 {
-    #if true
-        return SCNMatrix4FromGLKMatrix4(GLKMatrix4Transpose(SCNMatrix4ToGLKMatrix4(mat)))
-        #else
-        return GLKMatrix4Transpose(mat)
-    #endif
+    return SCNMatrix4FromGLKMatrix4(GLKMatrix4Transpose(SCNMatrix4ToGLKMatrix4(mat)))
 }
 
 @available(OSX 10.10, *)
 public func SCNMatrix4Make(row1: SCNVector3, row2: SCNVector3, row3: SCNVector3, row4: SCNVector3 = SCNVector3Zero) -> SCNMatrix4 {
-    #if true
         return SCNMatrix4(
             m11: row1.x, m12: row1.y, m13: row1.z, m14: 0,
             m21: row2.x, m22: row2.y, m23: row2.z, m24: 0,
             m31: row3.x, m32: row3.y, m33: row3.z, m34: 0,
             m41: row4.x, m42: row4.y, m43: row4.z, m44: 1
             )
-    #else
-        return GLKMatrix4MakeWithColumns(
-            GLKVector4MakeWithVector3(row1, 0),
-            GLKVector4MakeWithVector3(row2, 0),
-            GLKVector4MakeWithVector3(row3, 0),
-            GLKVector4MakeWithVector3(row4, 1)
-        )
-    #endif
+}
+
+public func GLKMatrix4Make(row1: GLKVector3, row2: GLKVector3, row3: GLKVector3, row4: GLKVector3 = GLKVector3Zero) -> GLKMatrix4 {
+    return GLKMatrix4MakeWithColumns(
+        GLKVector4MakeWithVector3(row1, 0),
+        GLKVector4MakeWithVector3(row2, 0),
+        GLKVector4MakeWithVector3(row3, 0),
+        GLKVector4MakeWithVector3(row4, 1)
+    )
+
 }
 
 @available(OSX 10.10,*)
 public func SCNMatrix4MultiplyVector3(mat: SCNMatrix4, v: SCNVector3) -> SCNVector3{
-    #if true
         return SCNVector3FromGLKVector3(GLKMatrix4MultiplyVector3(GLKMatrix4Transpose(SCNMatrix4ToGLKMatrix4(mat)),SCNVector3ToGLKVector3(v)))
-        #else
-        return GLKMatrix4MultiplyVector3(GLKMatrix4Transpose(mat), v)
-    #endif
 }
 
 public func SCNVector3Divide(n:SCNVector3, d: SCNVector3) -> SCNVector3 {
-    #if true
     return SCNVector3FromGLKVector3(GLKVector3Divide(SCNVector3ToGLKVector3(n),SCNVector3ToGLKVector3(d)))
-        #else
-    return GLKVector3Divide(n, d)
-    #endif
 }
 
 public func + (lhs: SCNVector3, rhs: SCNVector3)->SCNVector3{
@@ -289,37 +255,21 @@ public func SCNMatrix4RotateY(matrix: SCNMatrix4, theta: RMFloat) -> SCNMatrix4 
 
 @available(OSX 10.10,*)
 public func SCNMatrix4Rotate(mat: SCNMatrix4, angle: RMFloat, x: RMFloat, y: RMFloat, z: RMFloat)-> SCNMatrix4{
-    #if true
-        return SCNMatrix4Rotate(mat, angle, x, y, z)
-        #else
-        return GLKMatrix4Rotate(mat, angle, x, y, z)
-    #endif
+    return SCNMatrix4Rotate(mat, angle, x, y, z)
 }
 
 @available(OSX 10.10,*)
 public func SCNMatrix4MakeRotation(radians: RMFloat,v: SCNVector3) -> SCNMatrix4 {
-    #if true
-        return SCNMatrix4MakeRotation(radians, v.x,v.y,v.z)
-        #else
-        return GLKMatrix4MakeRotation(radians, v.x,v.y,v.z)
-    #endif
+    return SCNMatrix4MakeRotation(radians, v.x,v.y,v.z)
 }
 
 @available(OSX 10.10,*)
 public func SCNMatrix4RotateWithVector3(mat: SCNMatrix4, angle: RMFloat, vector: SCNVector3) -> SCNMatrix4{
-    #if true
-        return SCNMatrix4Rotate(mat, angle, vector.x, vector.y, vector.z)
-        #else
-        return GLKMatrix4RotateWithVector3(mat, angle, vector)
-    #endif
+    return SCNMatrix4Rotate(mat, angle, vector.x, vector.y, vector.z)
 }
 
 public func SCNMatrix4Translate(mat: SCNMatrix4, v: SCNVector3)-> SCNMatrix4 {
-    #if true
-        return SCNMatrix4Translate(mat, v.x, v.y, v.z)
-        #else
-        return GLKMatrix4Translate(mat, v.x, v.y, v.z)
-    #endif
+    return SCNMatrix4Translate(mat, v.x, v.y, v.z)
 }
 
 @available(OSX 10.10,*)
@@ -334,12 +284,8 @@ public func SCNMatrix4Normalize(mat: SCNMatrix4) -> SCNMatrix4{
 }
 
 public func SCNVector3MakeNormal(x:RMFloat,y:RMFloat,z:RMFloat) -> SCNVector3 {
-     var v = SCNVector3Make(x,y: y,z: z)
-    #if true
+    var v = SCNVector3Make(x,y: y,z: z)
         v = SCNVector3FromGLKVector3(GLKVector3Normalize(SCNVector3ToGLKVector3(v)))
-        #else
-        v = GLKVector3Normalize(v)
-    #endif
     return v
 }
 public func SCNMatrix4SetPosition(m4:SCNMatrix4, v3 row: SCNVector3) -> SCNMatrix4{
@@ -380,16 +326,7 @@ public func SCNMatrix4SetPosition(m4:SCNMatrix4, v4 row: SCNVector4) -> SCNMatri
         )
     #endif
 }
-/*
-public func RMXGetThetaAndPhi(vectorA A: SCNVector3, vectorB B: SCNVector3) -> (theta:Float, phi:Float){
-    let thetaA = GLKVector2Make(A.x, A.z); let thetaB = GLKVector2Make(B.x, B.z)
-    let phiA = GLKVector2Make(A.z, A.y); let phiB = GLKVector2Make(B.z, B.y)
-    let theta = RMXGetTheta(vectorA: thetaA, vectorB: thetaB)
-    let phi = RMXGetTheta(vectorA: phiA, vectorB: phiB)
-   // NSLog("theta: \(GLKMathRadiansToDegrees(theta)), phi: \(GLKMathRadiansToDegrees(phi)) ")
-    return (theta:-theta, phi:-phi)
-}
-*/
+
 
 public func RMXGetTheta(vectorA A: GLKVector2, vectorB B: GLKVector2) -> RMFloat{
     let delta = GLKVector2Subtract(B, A)
@@ -439,15 +376,11 @@ public func != (lhs: SCNVector3, rhs: SCNVector3) -> Bool {
 
 
 public func SCNVector3MultiplyScalar(v: SCNVector3, s: RMFloat) -> SCNVector3{
-    #if true
-        return SCNVector3Make(
-            v.x * s,
-            v.y * s,
-            v.z * s
-        )
-        #else
-        return GLKVector3MultiplyScalar(v, s)
-    #endif
+    return SCNVector3Make(
+        v.x * s,
+        v.y * s,
+        v.z * s
+    )
 }
 
 

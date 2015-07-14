@@ -29,50 +29,25 @@ class GameViewController: ViewController , SCNSceneRendererDelegate {
     @IBOutlet weak var gameView: GameView?
     #endif
     
-//    var gameKit: RMXGameManager = RMXGameManager()
-    
-    
-    var interface: RMXInterface?
-    
-    @available(OSX 10.10, *)
-    var world: RMXScene? {
-        return self.interface?.world
-    }
    
+    static var current: GameViewController!
     override func awakeFromNib(){
         // create a new scene
         #if iOS
-            
-            
-            
         self.view = GameView(frame: self.view.bounds)
         #endif
 
         
-        self.gameView?.gvc = self
+        if GameViewController.current == nil {
+            GameViewController.current = self
+        } else {
+            fatalError("Should not be possible to have > 1 GVC yet.")
+        }
 
-        self.interface  = RMX.Controller(self)
+        if let _ = RMXInterface.current {
+            NSLog("Interface initiated")
+        }
         
-
-//        self.gameView?.delegate = self.interface
-//        self.world?.setWorldType()
-//        let scene = self.world.scene
-        
-        // create and add a camera to the scene
-//        let cameraNode = self.world.activeCamera
-//
-//        self.gameView?.pointOfView = cameraNode
-//        
-        // create and add a light to the scene
-        
-        
-        
-        
-        
-        
-
-        // set the scene to the view
-
         
         // allows the user to manipulate the camera
         self.gameView?.allowsCameraControl = false

@@ -467,7 +467,7 @@ class RMSActionProcessor {
        
     func explode(sprite s: RMXSprite? = nil, force: RMFloat = 1, range: RMFloat = 500) -> Bool{
         let sprite = s ?? self.activeSprite
-        sprite.scene.interface.av.playSound(UserAction.BOOM.description, info: sprite, range: Float(range))
+        RMXInterface.current?.av.playSound(UserAction.BOOM.description, info: sprite, range: Float(range))
         return RMSActionProcessor.explode(sprite, force: force * 10000, range: range)
         
     }

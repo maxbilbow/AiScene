@@ -14,8 +14,6 @@ import RMXKit
 import UIKit
 
 extension RMXDPad {
-    
-    
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
         self.actionProcessor.action(UserAction.RESET)
@@ -48,20 +46,16 @@ extension RMXDPad {
     }
     
     
-   
-    
-    
-    
-        ///The event handling method
-        func handleOrientation(recognizer: UIPanGestureRecognizer) {
-            if recognizer.numberOfTouches() == 1 {
-                let point = recognizer.velocityInView(self.gameView)
-                
-                self.actionProcessor.action(.LOOK_AROUND, speed: self.lookSpeed, args: point)
-            }
-//            _handleRelease(recognizer.state)
+    ///The event handling method
+    func handleOrientation(recognizer: UIPanGestureRecognizer) {
+        if recognizer.numberOfTouches() == 1 {
+            let point = recognizer.velocityInView(self.gameView)
+            
+            self.actionProcessor.action(.LOOK_AROUND, speed: self.lookSpeed, args: point)
         }
-    
+//            _handleRelease(recognizer.state)
+    }
+
     
     func nextCamera(recogniser: UITapGestureRecognizer) {
             self.actionProcessor.action(UserAction.NEXT_CAMERA, speed: 1)

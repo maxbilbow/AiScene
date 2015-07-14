@@ -12,8 +12,8 @@ import SceneKit
 //public typealias RMXNode = SCNNode
 public typealias AiBehaviour = (AnyObject!) -> Void
 
-public enum AiState { case MOVING, TURNING, IDLE }
-public enum PoppyState: Int32 { case IDLE = 1, READY_TO_CHASE , CHASING, FETCHING }
+//public enum AiState { case MOVING, TURNING, IDLE }
+//public enum PoppyState: Int32 { case IDLE = 1, READY_TO_CHASE , CHASING, FETCHING }
 public enum RMXSpriteType: Int { case  AI = 0, PLAYER, BACKGROUND, PASSIVE, ABSTRACT, KINEMATIC, CAMERA }
 public enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, CYLINDER_FLOOR,  OILDRUM, BOBBLE_MAN, LAST,ROCK,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL, SUN, CAMERA }
 public enum KeyboardType { case French, UK, DEFAULT }

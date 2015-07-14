@@ -9,10 +9,18 @@
 import Foundation
 
 
+public protocol AiState {
+    
+}
 
-@available(OSX 10.10, *)
+public enum BasicAi : AiState {
+    case Idle
+}
+
+
+@available(OSX 10.9, *)
 public protocol RMXAiDelegate : NSObjectProtocol {
-    var state: String? { get }
+    var state: AiState? { get }
     var args: [RMXSpriteType] { get }
     var pawnLogic: [AiBehaviour] { get }
     var pawn: RMXPawn { get }
@@ -24,13 +32,13 @@ public protocol RMXAiDelegate : NSObjectProtocol {
 @available(OSX 10.10, *)
 public class RMXAi : NSObject, RMXAiDelegate {
     
-    private var _state: String?
+    internal var _state: AiState? = BasicAi.Idle
     
-    public func setState(state: String?) {
+    public func setState(state: AiState?) {
         self._state = state
     }
     
-    public var state: String? {
+    public var state: AiState? {
         return self.state
     }
     

@@ -148,7 +148,7 @@ class AiCubo {
     class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
         if let interface = interface {
 
-            let world = RMXScene(interface: interface) //interface.world//
+            let world = RMXScene() //interface.world//
             world.addObserver(interface, forKeyPath: RMXScene.kvScores, options: NSKeyValueObservingOptions.New, context: UnsafeMutablePointer<Void>())
             //SetUpEnvironment
             switch type {

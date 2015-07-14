@@ -88,8 +88,6 @@ typedef int swift_int4  __attribute__((__ext_vector_type__(4)));
 
 SWIFT_CLASS("_TtC6RMXKit5RMXAi")
 @interface RMXAi : NSObject
-- (void)setState:(NSString * __nullable)state;
-@property (nonatomic, readonly, copy) NSString * __nullable state;
 - (void)run:(id __nullable)sender updateAtTime:(NSTimeInterval)time;
 @end
 

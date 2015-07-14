@@ -14,6 +14,9 @@ import RMXKit
 @available(OSX 10.10, *)
 class RMXScene : SCNScene, RMXWorld, RMXObject {
 
+    static var current: RMXScene? {
+        return RMXInterface.current?.world
+    }
     
     static let kvScores = "teamScores"
     
@@ -95,10 +98,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
         self._radius = radius
     }
     
-    var interface: RMXInterface
-    
-    init(interface: RMXInterface){
-        self.interface = interface
+    override init(){
         super.init()
         self.setScene()
         self.worldDidInitialize()
@@ -120,7 +120,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     private func setScene(scene: SCNScene? = nil) -> SCNScene {
 //        self._scene = scene ?? RMXScene.DefaultScene()
         self.cameras += self.activeSprite.cameras// + self.cameras
-        self.physicsWorld.contactDelegate = self.interface.collider
+        self.physicsWorld.contactDelegate = RMXInterface.current?.collider
         self.calibrate()
         return self
     }
@@ -156,9 +156,9 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     
     func calibrate() -> SCNScene {
         _aiOn = false
-        self.interface.gameView!.scene = self//._scene
+        RMXInterface.current?.gameView!.scene = self//._scene
         self.cameraNumber = 0
-        self.interface.gameView!.pointOfView = self.activeCamera
+        RMXInterface.current?.gameView!.pointOfView = self.activeCamera
 //        self.shouldTurnOnAi = true
         return self
     }
@@ -187,7 +187,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     }
     
     var isLive: Bool {
-        return self.interface.world.rmxID == self.rmxID && self.paused == false
+        return RMXInterface.current?.world.rmxID == self.rmxID && self.paused == false
     }
     
     

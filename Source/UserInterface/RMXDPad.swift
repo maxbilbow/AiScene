@@ -13,6 +13,7 @@ import RMXKit
 import CoreMotion
 import UIKit
 import AVFoundation
+typealias RMXDPadOrKeys = RMXDPad
 
 class RMXDPad : RMXInterface {
     

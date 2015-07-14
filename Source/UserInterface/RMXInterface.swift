@@ -31,7 +31,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
     private let _isDebugging = false
     var debugData: String = "No Data"
     
-    var gvc: GameViewController!
+//    var gvc: GameViewController!
     
     
     var timer: NSTimer? //CADisplayLink?
@@ -58,7 +58,7 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
     var activeGames: [GameType: RMXScene] = Dictionary<GameType,RMXScene>()
     
     var gameView: GameView? {
-        return self.gvc.gameView
+        return GameViewController.current.gameView
     }
     
     var activeCamera: SCNNode {
@@ -74,16 +74,41 @@ class RMXInterface : NSObject, RendererDelegate, RMXInterfaceProtocol {
 //        return self.world?.activeCamera.camera
 //    }
 //    
-        
-    init(gvc: GameViewController){
-        self.gvc = gvc
+    override class func new() -> Self {
+        fatalError("call New() instead")
+    }
+    
+    
+    
+    override init() {
         super.init()
-        self.setUpViews()
-        self.newGame(RMXInterface.DEFAULT_GAME)
-        self.viewDidLoad()
+        if (RMXInterface._current != nil) {
+            fatalError(RMXException.Singleton.rawValue)
+        } else {
+            RMXInterface._current = self
+            self.setUpViews()
+            self.newGame(RMXInterface.DEFAULT_GAME)
+            self.viewDidLoad()
+        }
+    }
+    
+    class func destroy() {
+        if self === RMXInterface._current {
+            RMXInterface._current = nil
+        }
+    }
+    
+    deinit {
+        RMXInterface.destroy()
+    }
+    
+    private static var _current: RMXInterface?
+    
+    static var current: RMXDPadOrKeys? {
+        return RMXInterface._current as? RMXDPadOrKeys ?? RMXDPadOrKeys()
     }
 
-//    var world2D: SKView?
+    //    var world2D: SKView?
     func startVideo(sender: AnyObject?){}
     
     ///Run this last when overriding

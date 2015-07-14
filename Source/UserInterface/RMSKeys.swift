@@ -11,6 +11,8 @@ import AppKit
 import ApplicationServices
 import SceneKit
    import RMXKit
+
+typealias RMXDPadOrKeys = RMSKeys
     
 /// Contains Keys control mapping for a desktop interface.
 ///

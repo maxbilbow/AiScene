@@ -36,7 +36,7 @@ class RMXTracker : NSObject {
     init(sprite: RMXSprite) {
         self.sprite = sprite
         super.init()
-        self.sprite.scene.interface.collider.trackers.append(self)
+        RMXInterface.current?.collider.trackers.append(self)
     }
     
     var isActive = true

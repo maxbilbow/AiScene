@@ -4,81 +4,17 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Frameworks/libswiftAVFoundation.dylib</key>
-		<data>
-		skNOp9rRFk1chMHsJCjw1lFtTtU=
-		</data>
-		<key>Frameworks/libswiftCore.dylib</key>
-		<data>
-		/1EHhEEof+yLbR+4jnjjfk0ZWQo=
-		</data>
-		<key>Frameworks/libswiftCoreAudio.dylib</key>
-		<data>
-		v6umoqIaP/SiZcR6NcABagDC6uU=
-		</data>
-		<key>Frameworks/libswiftCoreGraphics.dylib</key>
-		<data>
-		CaP7exizA5897hcjKqYo1Pdie+c=
-		</data>
-		<key>Frameworks/libswiftCoreImage.dylib</key>
-		<data>
-		RFkcL3GQ4p4Y7kjI0UpnG+96cD4=
-		</data>
-		<key>Frameworks/libswiftCoreMedia.dylib</key>
-		<data>
-		j3CoKZHKu7PtcgrsO74zPFykqLk=
-		</data>
-		<key>Frameworks/libswiftDarwin.dylib</key>
-		<data>
-		O2LrXih3oUavlyoVAkGhxNUt4vg=
-		</data>
-		<key>Frameworks/libswiftDispatch.dylib</key>
-		<data>
-		l9pXLJELuGyOzrpql9n4VLOvsQc=
-		</data>
-		<key>Frameworks/libswiftFoundation.dylib</key>
-		<data>
-		Y5cWJr0wD7ImFd/y+JUYiUmW07M=
-		</data>
-		<key>Frameworks/libswiftGLKit.dylib</key>
-		<data>
-		zyB28PrGmmsgsdIkTYkRGIv3N3A=
-		</data>
-		<key>Frameworks/libswiftObjectiveC.dylib</key>
-		<data>
-		/5te6aDoA0lU/y/WrONKmAXSz+4=
-		</data>
-		<key>Frameworks/libswiftSceneKit.dylib</key>
-		<data>
-		RmYiGRmZK84qu+nLmwislU6ZHgc=
-		</data>
-		<key>Frameworks/libswiftSecurity.dylib</key>
-		<data>
-		BbNj/sh1iCcu8DlZSeCeAc+4C3Y=
-		</data>
-		<key>Frameworks/libswiftSpriteKit.dylib</key>
-		<data>
-		8inFXJrVx5fGuC9K4NQRDaDcuHs=
-		</data>
-		<key>Frameworks/libswiftUIKit.dylib</key>
-		<data>
-		ZL6+yUwmv+0+qMgjif/hcYt4eE0=
-		</data>
-		<key>Frameworks/libswiftsimd.dylib</key>
-		<data>
-		OoSklcmjYpD8M4FuRqIESurA+v8=
-		</data>
 		<key>Headers/RMSMaths.swift</key>
 		<data>
-		vum1OGC0RXSi3BSAzfc9pC0YTps=
+		YJYFu5OFVCNqlJ9XocOs3lgIIY4=
 		</data>
 		<key>Headers/RMX.swift</key>
 		<data>
-		vRrglUEfluRiSvFqo+7KDOAZps0=
+		R9wZTiorRR1Nob6DOcfaq0w+s6k=
 		</data>
 		<key>Headers/RMXAiDelegate.swift</key>
 		<data>
-		dlAmdvAm6PFhWkMr+wNFk4pbqFQ=
+		IleoVznZD2kihZBVaXcDOibB91Q=
 		</data>
 		<key>Headers/RMXDebugger.swift</key>
 		<data>
@@ -86,11 +22,11 @@
 		</data>
 		<key>Headers/RMXFunctions.swift</key>
 		<data>
-		cnpAIok7qMvo0LsypNTC3ZQhTVs=
+		ItVD3DmNBAVDCuPto0MPs0PfXGA=
 		</data>
 		<key>Headers/RMXKit-Swift.h</key>
 		<data>
-		2kqDBZO2nuyVUqyCl7Nmq48Cmm0=
+		hbfvOUKI2R45BFK+310Kb1COQFk=
 		</data>
 		<key>Headers/RMXKit.h</key>
 		<data>
@@ -118,11 +54,11 @@
 		</data>
 		<key>Headers/iOS.swift</key>
 		<data>
-		IuBGSJ5bQZpmzhyqlYEpDzKLI7w=
+		JQoZLsD2GtQDAMz61U/niZq9IwE=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		UT2N1Hk9M0KesjBv96/4WpIGYt8=
+		xoNhNwl5wJElvKexBJKFcwTsv8s=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm.swiftdoc</key>
 		<data>
@@ -130,7 +66,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm.swiftmodule</key>
 		<data>
-		ZSDRkdAOLWD0QPzVocCbmHIfON8=
+		4xV5W9U+ECQcYKbdDYyrS6AH3TM=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -138,7 +74,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		d04IRMqRFg5/Z1LmdGKjNUYC19Q=
+		LzyGEVTcKEFAlJ5jG4AchOfCzys=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -147,81 +83,17 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Frameworks/libswiftAVFoundation.dylib</key>
-		<data>
-		skNOp9rRFk1chMHsJCjw1lFtTtU=
-		</data>
-		<key>Frameworks/libswiftCore.dylib</key>
-		<data>
-		/1EHhEEof+yLbR+4jnjjfk0ZWQo=
-		</data>
-		<key>Frameworks/libswiftCoreAudio.dylib</key>
-		<data>
-		v6umoqIaP/SiZcR6NcABagDC6uU=
-		</data>
-		<key>Frameworks/libswiftCoreGraphics.dylib</key>
-		<data>
-		CaP7exizA5897hcjKqYo1Pdie+c=
-		</data>
-		<key>Frameworks/libswiftCoreImage.dylib</key>
-		<data>
-		RFkcL3GQ4p4Y7kjI0UpnG+96cD4=
-		</data>
-		<key>Frameworks/libswiftCoreMedia.dylib</key>
-		<data>
-		j3CoKZHKu7PtcgrsO74zPFykqLk=
-		</data>
-		<key>Frameworks/libswiftDarwin.dylib</key>
-		<data>
-		O2LrXih3oUavlyoVAkGhxNUt4vg=
-		</data>
-		<key>Frameworks/libswiftDispatch.dylib</key>
-		<data>
-		l9pXLJELuGyOzrpql9n4VLOvsQc=
-		</data>
-		<key>Frameworks/libswiftFoundation.dylib</key>
-		<data>
-		Y5cWJr0wD7ImFd/y+JUYiUmW07M=
-		</data>
-		<key>Frameworks/libswiftGLKit.dylib</key>
-		<data>
-		zyB28PrGmmsgsdIkTYkRGIv3N3A=
-		</data>
-		<key>Frameworks/libswiftObjectiveC.dylib</key>
-		<data>
-		/5te6aDoA0lU/y/WrONKmAXSz+4=
-		</data>
-		<key>Frameworks/libswiftSceneKit.dylib</key>
-		<data>
-		RmYiGRmZK84qu+nLmwislU6ZHgc=
-		</data>
-		<key>Frameworks/libswiftSecurity.dylib</key>
-		<data>
-		BbNj/sh1iCcu8DlZSeCeAc+4C3Y=
-		</data>
-		<key>Frameworks/libswiftSpriteKit.dylib</key>
-		<data>
-		8inFXJrVx5fGuC9K4NQRDaDcuHs=
-		</data>
-		<key>Frameworks/libswiftUIKit.dylib</key>
-		<data>
-		ZL6+yUwmv+0+qMgjif/hcYt4eE0=
-		</data>
-		<key>Frameworks/libswiftsimd.dylib</key>
-		<data>
-		OoSklcmjYpD8M4FuRqIESurA+v8=
-		</data>
 		<key>Headers/RMSMaths.swift</key>
 		<data>
-		vum1OGC0RXSi3BSAzfc9pC0YTps=
+		YJYFu5OFVCNqlJ9XocOs3lgIIY4=
 		</data>
 		<key>Headers/RMX.swift</key>
 		<data>
-		vRrglUEfluRiSvFqo+7KDOAZps0=
+		R9wZTiorRR1Nob6DOcfaq0w+s6k=
 		</data>
 		<key>Headers/RMXAiDelegate.swift</key>
 		<data>
-		dlAmdvAm6PFhWkMr+wNFk4pbqFQ=
+		IleoVznZD2kihZBVaXcDOibB91Q=
 		</data>
 		<key>Headers/RMXDebugger.swift</key>
 		<data>
@@ -229,11 +101,11 @@
 		</data>
 		<key>Headers/RMXFunctions.swift</key>
 		<data>
-		cnpAIok7qMvo0LsypNTC3ZQhTVs=
+		ItVD3DmNBAVDCuPto0MPs0PfXGA=
 		</data>
 		<key>Headers/RMXKit-Swift.h</key>
 		<data>
-		2kqDBZO2nuyVUqyCl7Nmq48Cmm0=
+		hbfvOUKI2R45BFK+310Kb1COQFk=
 		</data>
 		<key>Headers/RMXKit.h</key>
 		<data>
@@ -261,7 +133,7 @@
 		</data>
 		<key>Headers/iOS.swift</key>
 		<data>
-		IuBGSJ5bQZpmzhyqlYEpDzKLI7w=
+		JQoZLsD2GtQDAMz61U/niZq9IwE=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm.swiftdoc</key>
 		<data>
@@ -269,7 +141,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm.swiftmodule</key>
 		<data>
-		ZSDRkdAOLWD0QPzVocCbmHIfON8=
+		4xV5W9U+ECQcYKbdDYyrS6AH3TM=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -277,7 +149,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		d04IRMqRFg5/Z1LmdGKjNUYC19Q=
+		LzyGEVTcKEFAlJ5jG4AchOfCzys=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
