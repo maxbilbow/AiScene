@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9B5C915E67A2341F288F69ADE09AA64D219E260C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9B5C915E67A2341F288F69ADE09AA64D219E260C" : 0,
+    "973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "8B56A843-1D82-4416-94C4-84FDC58A4CCE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9B5C915E67A2341F288F69ADE09AA64D219E260C" : "RMXKit\/",
+    "973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "RMXKit",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "RMXKit\/RMXKit.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/maxbilbow\/AiScene.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "973CCBDB0B6DF708810C6B5B6136C82D6C2A9DF2"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/maxbilbow\/RMXKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9B5C915E67A2341F288F69ADE09AA64D219E260C"
+    }
+  ]
+}
