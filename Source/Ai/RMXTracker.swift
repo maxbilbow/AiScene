@@ -9,7 +9,7 @@
 import Foundation
 import SceneKit
 import RMXKit
-@available(OSX 10.10, *)
+
 class RMXTracker : NSObject {
     
     var rmxID: Int? {
@@ -27,16 +27,16 @@ class RMXTracker : NSObject {
         return _target != nil
     }
     
-    private var doOnArrival:((target: RMXSprite?)->())?
+    private var doOnArrival:((target: RMXNode?)->())?
     
     var isAi: Bool {
         return self.sprite.type == .AI
     }
     
-    init(sprite: RMXSprite) {
+    init(sprite: RMXNode) {
         self.sprite = sprite
         super.init()
-        RMXInterface.current?.collider.trackers.append(self)
+        sprite.scene.collisionTrackers.append(self)
     }
     
     var isActive = true
@@ -44,7 +44,8 @@ class RMXTracker : NSObject {
     var timePassed = 0
     
     let updateInterval = 1
-    var lastPosition: SCNVector3 = SCNVector3Make(0)
+    
+    var lastPosition: SCNVector3 = SCNVector3Zero
 
     var isStuck: Bool {
         if self.hasTarget {
@@ -67,7 +68,7 @@ class RMXTracker : NSObject {
     var speed: RMFloat = 0
 
     
-    func setTarget(target: RMXSprite?, speed: RMFloat? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, doOnArrival: ((target: RMXSprite?) -> ())? = nil) -> Bool {
+    func setTarget(target: RMXNode?, speed: RMFloat? = nil, afterTime limit: Int = 0, willJump: Bool = false, impulse: Bool = false, asProjectile: Bool = false, doOnArrival: ((target: RMXNode?) -> ())? = nil) -> Bool {
 //        let oldTarget = self.target// ; let newTarget = target
 
         if let target = target {
@@ -111,7 +112,7 @@ class RMXTracker : NSObject {
         return self.hasTarget
     }
     
-    internal func didReachTarget(target: RMXSprite?) -> Bool {
+    internal func didReachTarget(target: RMXNode?) -> Bool {
         if self.hasTarget {
             if self.isProjectile { //if holming missile with timer, do not let interferrence
                 self.sprite.isLocked = false
@@ -126,6 +127,7 @@ class RMXTracker : NSObject {
     private var _count: Int = 0 ; private var _limit: Int = 0
    
     
+    @available(OSX 10.10, *)
     func checkForCollision(contact: SCNPhysicsContact) -> Bool {
         if let target = self.target {
             return (contact.getDefender(forChallenger: self.sprite) as? RMXNode)?.rmxID == target.rmxID && self.didReachTarget(target)

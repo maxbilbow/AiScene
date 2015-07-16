@@ -22,13 +22,13 @@ extension SCNNode {
         return self.rmxNode?.isActor ?? false
     }
     
-    @available(OSX 10.10, *)
+//    @available(OSX 10.10, *)
     var collisionNode: RMXNode? {
         return self.rmxNode //self.parentNode as? RMXNode
     }
     
     
-    @available(OSX 10.10, *)
+//    @available(OSX 10.10, *)
     var rmxNode: RMXNode? {
         return self.pawn as? RMXNode
     }

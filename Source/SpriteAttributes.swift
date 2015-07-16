@@ -10,10 +10,10 @@ import Foundation
 import SceneKit
 import RMXKit
 
-@available(OSX 10.10, *)
+@available(OSX 10.9, *)
 class SpriteAttributes : RMXAttributes {
     var invincible = false
-    var sprite: RMXSprite!
+    var sprite: RMXNode!
         
     var health: Float {
         return Float(self.values[RMKeyValue.Health]!)!
@@ -110,13 +110,13 @@ class SpriteAttributes : RMXAttributes {
         return self.sprite.rmxID == self.team?.captain?.rmxID
     }
     
-    convenience init?(sprite: RMXSprite, coder aDecoder: NSCoder) {
+    convenience init?(sprite: RMXNode, coder aDecoder: NSCoder) {
         self.init(coder: aDecoder)
         self.sprite = sprite
     }
     
     
-    init(sprite: RMXSprite){
+    init(sprite: RMXNode){
         self.sprite = sprite //as! RMXSprite // = [ KeyValue.Sprite.rawValue : sprite ]
         super.init()
     }

@@ -10,14 +10,15 @@ import Foundation
 import SceneKit
 import RMXKit
 
- enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, TEAM_GAME_2, WEAPONS }
+
+enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, TEAM_GAME_2, WEAPONS }
 @available(OSX 10.10, *)
 class AiCubo {
    
    
     class func createEarth(inWorld world: RMXScene, addCameras: Bool = true, type shape: ShapeType = .FLOOR) {
         
-        let earth: RMXSprite = RMXSprite(inWorld: world, shape: shape, type: .BACKGROUND, unique: true, color:  RMColor.lightGrayColor())
+        let earth: RMXNode = RMXNode(inWorld: world, shape: shape, type: .BACKGROUND, unique: true, color:  RMColor.lightGrayColor())
         
         world.physicsWorld.gravity = SCNVector3Make(0,y: -9.8 * 10,z: 0)
         
@@ -67,7 +68,7 @@ class AiCubo {
         let sunNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
         sunNode.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
         sunNode.geometry?.firstMaterial!.emission.intensity = 1
-        let sun: RMXSprite = RMXSprite(inWorld: world, geometryNode: sunNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
+        let sun: RMXNode = RMXNode(inWorld: world, geometryNode: sunNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
         sunNode.addChildNode(lightNode)
         sun.updateName("sun")
         sun.pivot.m43 = -worldRadius
@@ -102,7 +103,7 @@ class AiCubo {
 //        moonNode.light?.zFar = worldRadius * 2
 //        
 //        
-//        let moon: RMXSprite = RMXSprite(inWorld: world, geometry: moonNode, type: .ABSTRACT, shape: .SUN, unique: true)
+//        let moon: RMXNode = RMXNode(inWorld: world, geometry: moonNode, type: .ABSTRACT, shape: .SUN, unique: true)
 //        moon.setName("moon")
 //        moon.node.pivot.m43 = -worldRadius
 //        moon.node.eulerAngles.x = 135 * PI_OVER_180
@@ -145,7 +146,7 @@ class AiCubo {
     
     }
     
-    class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
+    class func setUpWorld(interface: RMX.Interface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
         if let interface = interface {
 
             let world = RMXScene() //interface.world//
@@ -246,7 +247,7 @@ class AiCubo {
         head?.addParticleSystem(ps)
     }
     
-    class func simplePlayer(world: RMXScene, asAi: Bool = false, unique: Bool? = nil, safeInit: Bool = false) -> RMXSprite {
+    class func simplePlayer(world: RMXScene, asAi: Bool = false, unique: Bool? = nil, safeInit: Bool = false) -> RMXNode {
         //Set up player
         let unique = unique != nil ? unique! : !asAi //if unique not stated, players are unique, ais are not
         let player = self.simpleSprite(world, type: asAi ? .AI : .PLAYER, isUnique: unique, safeInit: safeInit)
@@ -256,9 +257,9 @@ class AiCubo {
         return player
     }
     
-    class func simpleSprite(world: RMXScene, type: RMXSpriteType = .PASSIVE, isUnique: Bool, safeInit: Bool = false) -> RMXSprite {
+    class func simpleSprite(world: RMXScene, type: RMXSpriteType = .PASSIVE, isUnique: Bool, safeInit: Bool = false) -> RMXNode {
         
-        let player = RMXSprite(inWorld: world, geometryNode: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique, safeInit: safeInit)
+        let player = RMXNode(inWorld: world, geometryNode: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique, safeInit: safeInit)
         
         let lim = world.radius
         player.setPosition(SCNVector3Random(lim, min: -lim, setY: world.ground + 20))//(0, 50, 50))//, resetTransform: <#Bool#>
@@ -339,7 +340,7 @@ class AiCubo {
             for team in world.teams {
                 for player in world.players.filter({ (player) -> Bool in
                     RMLog("\(player.attributes.teamID)")
-                    return player.attributes.teamID == RMXSprite.TEAM_ASSIGNABLE
+                    return player.attributes.teamID == RMXNode.TEAM_ASSIGNABLE
                 }) {
                     RMLog("\(player.name!) added to team: \(team.0)")
                     if team.1.addPlayer(player) && ++count > max {

@@ -49,7 +49,7 @@ class RMXClock {
     var callBacks: [ RMXTimedCallback? ] = [ nil ]
     
     init(world: RMSWorld, interface: RMXInterface){
-        self.interface = interface
+        RMXInterface.current = interface
         self.world = world
     }
     

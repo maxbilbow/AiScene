@@ -10,14 +10,14 @@ import Foundation
 
 @available(OSX 10.10, *)
 extension RMX {
-    static func spriteWith(ID ID: Int, inArray array: Array<RMXSprite>) -> RMXSprite? {
+    static func spriteWith(ID ID: Int, inArray array: Array<RMXNode>) -> RMXNode? {
         for sprite in array {
             if sprite.rmxID == ID {
                 return sprite
             }
         }
         return nil
-//        return array.filter({ (sprite: RMXSprite) -> Bool in
+//        return array.filter({ (sprite: RMXNode) -> Bool in
 //            return sprite.rmxID == ID
 //        }).first
     }
@@ -33,15 +33,15 @@ class SpriteArray {
 
     private var _key: Int = 0
     
-    //        var current: UnsafeMutablePointer<[Int:RMXSprite]> {
+    //        var current: UnsafeMutablePointer<[Int:RMXNode]> {
     //            return nodeArray[type.rawValue]
     //        }
-    private var spriteArray: [ [RMXSprite] ] = [ Array<RMXSprite>() ]
-    var current:[RMXSprite] {
+    private var spriteArray: [ [RMXNode] ] = [ Array<RMXNode>() ]
+    var current:[RMXNode] {
         return spriteArray[_key]
     }
     
-    class func get(key: Int, inArray array: Array<RMXSprite>) -> RMXSprite? {
+    class func get(key: Int, inArray array: Array<RMXNode>) -> RMXNode? {
         for node in array {
             if node.rmxID == key{
                 return node
@@ -50,7 +50,7 @@ class SpriteArray {
         return nil
     }
     
-    func get(key: Int) -> RMXSprite? {
+    func get(key: Int) -> RMXNode? {
         for (index, node) in enumerate(self.spriteArray[_key]) {
             if node.rmxID == key{
                 return node
@@ -59,11 +59,11 @@ class SpriteArray {
         return nil
     }
     
-    func set(node: RMXSprite) {
+    func set(node: RMXNode) {
         self.spriteArray[_key].append(node)
     }
     
-    func remove(key: Int) -> RMXSprite? {
+    func remove(key: Int) -> RMXNode? {
         for (index, node) in enumerate(self.spriteArray[_key]) {
             if node.rmxID == key{
                 self.spriteArray[_key].removeAtIndex(index)
@@ -85,11 +85,11 @@ class SpriteArray {
         self._key = type.rawValue
     }
     
-    func getCurrent() ->[RMXSprite]? {
+    func getCurrent() ->[RMXNode]? {
         return self.current
     }
     
-    func makeFirst(node: RMXSprite){
+    func makeFirst(node: RMXNode){
         self.remove(node.rmxID)
         self.spriteArray[_key].insert(node, atIndex: 0)
     }
@@ -98,7 +98,7 @@ class SpriteArray {
         if let parent = p as? RMSWorld {
             self.spriteArray.reserveCapacity(GameType.DEFAULT.rawValue)
             for (var i = 1; i <= GameType.DEFAULT.rawValue ; ++i){
-                let dict = Array<RMXSprite>()
+                let dict = Array<RMXNode>()
                 self.spriteArray.append(dict)
             }
         }

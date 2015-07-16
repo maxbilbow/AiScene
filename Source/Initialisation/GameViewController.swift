@@ -44,10 +44,8 @@ class GameViewController: ViewController , SCNSceneRendererDelegate {
             fatalError("Should not be possible to have > 1 GVC yet.")
         }
 
-        if let _ = RMXInterface.current {
-            NSLog("Interface initiated")
-        }
         
+        RMX.DPadOrKeys.current //initialise the game
         
         // allows the user to manipulate the camera
         self.gameView?.allowsCameraControl = false

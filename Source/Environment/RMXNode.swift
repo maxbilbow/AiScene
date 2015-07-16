@@ -10,20 +10,19 @@ import Foundation
 import RMXKit
 import SceneKit
 
-    //typealias RMXNode = SCNNode
                 
-                extension RMXNode {
-                    var isPlayerOrAi: Bool {
-                        return self.isActor
-                    }
-                }
-typealias RMXSprite = RMXNode
+extension RMXNode {
+    var isPlayerOrAi: Bool {
+        return self.isActor
+    }
+}
+
                 
-@available(OSX 10.10, *)
+//@available(OSX 10.9, *)
 class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
 
     static var current: RMXNode? {
-        return RMXScene.current?.activeSprite
+        return RMXScene.current.activeSprite
     }
     
     private let _rmxid: Int = RMX.COUNT++
@@ -168,13 +167,13 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
 //    private var _ignoreNextJump:Bool = false
     
     
-    private var _itemInHand: RMXSprite?
-    var item: RMXSprite? {
+    private var _itemInHand: RMXNode?
+    var item: RMXNode? {
         return _itemInHand
     }
 
     
-    convenience init(world: RMXScene, type: RMXSpriteType = .ABSTRACT, shape: ShapeType = .NULL){
+    convenience init(world: RMXScene = RMXScene.current, type: RMXSpriteType = .ABSTRACT, shape: ShapeType = .NULL){
         self.init(inWorld: world, type: type, shape: shape)
     }
     
@@ -259,9 +258,9 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         self.scene.insertChild(self, andNode: true)
         
         if type != .PLAYER && type != .AI {
-            self.attributes.setTeamID(RMXSprite.NO_COLLISIONS)
+            self.attributes.setTeamID(RMXNode.NO_COLLISIONS)
         } else {
-            self.attributes.setTeamID(RMXSprite.TEAM_ASSIGNABLE)
+            self.attributes.setTeamID(RMXNode.TEAM_ASSIGNABLE)
         }
         
         
@@ -299,7 +298,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
             }
         }
         let damping: CGFloat = self.physicsBody?.damping ?? 0.1
-        _speed = speed ?? 150 * RMFloat((self.physicsBody?.mass ?? 1) * damping) * 2
+        _speed = speed ?? 100 * RMFloat((self.physicsBody?.mass ?? 1) * damping) * 2
         _rotationSpeed = rotationSpeed ?? 15 * RMFloat(self.physicsBody?.mass ?? 1) // (1 - rDamping)
         
     }
@@ -588,11 +587,11 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         }
     }
     
-    func isWithinReachOf(item: RMXSprite) -> Bool{
+    func isWithinReachOf(item: RMXNode) -> Bool{
         return self.distanceToSprite(item) <= RMFloat(self.radius) * 3
     }
     
-    func isWithinSightOf(item: RMXSprite) -> Bool{
+    func isWithinSightOf(item: RMXNode) -> Bool{
         return self.distanceToSprite(item) <= RMFloat(self.scene.radius) / 4
     }
     
@@ -600,7 +599,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         if self.item != nil { return false }
         if object?.isKindOfClass(SCNNode) ?? false {
             return self.setItemInHand((object as! SCNNode).rmxNode)
-        } else if let sprite = object as? RMXSprite {
+        } else if let sprite = object as? RMXNode {
             return self.setItemInHand(sprite)
         }
         return self.item != nil
@@ -726,7 +725,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         return RMFloat((self.getPosition() - point).length)
     }
     
-    func distanceToSprite(sprite:RMXSprite) -> RMFloat{
+    func distanceToSprite(sprite:RMXNode) -> RMFloat{
         return self.distanceToPoint(sprite.getPosition())
     }
     
@@ -785,7 +784,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         
     }
     
-    func makeAsSun(rDist: RMFloat = 1000, rAxis: SCNVector3 = SCNVector3Make(1,y: 0,z: 0)) -> RMXSprite {
+    func makeAsSun(rDist: RMFloat = 1000, rAxis: SCNVector3 = SCNVector3Make(1,y: 0,z: 0)) -> RMXNode {
         //        self.type = .BACKGROUND
         
         

@@ -9,7 +9,7 @@
 import Foundation
 
 struct RMXAsk {
-    static func doesObjectHaveItem(object: RMXSprite) -> Bool{
+    static func doesObjectHaveItem(object: RMXNode) -> Bool{
         return object.hasItem
     }
     

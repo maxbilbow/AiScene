@@ -10,28 +10,28 @@ import Foundation
 import RMXKit
 import SceneKit
 
-@available(OSX 10.10, *)
+@available(OSX 10.9, *)
 typealias Challenge = (SpriteAttributes, SpriteAttributes) -> RMXTeam.ChallengeOutcome
 
 typealias WinLogic = (Any? ...) -> Bool
 
-@available(OSX 10.10, *)
+@available(OSX 10.9, *)
 protocol RMXTeamGame  {
-    var players: Array<RMXSprite> { get }
-    var teamPlayers: Array<RMXSprite> { get }
-    var nonPlayers: Array<RMXSprite> { get }
-    var nonTeamPlayers: Array<RMXSprite> { get }
+    var players: Array<RMXNode> { get }
+    var teamPlayers: Array<RMXNode> { get }
+    var nonPlayers: Array<RMXNode> { get }
+    var nonTeamPlayers: Array<RMXNode> { get }
     func getTeam(id id: String) -> RMXTeam?
-    func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXSprite>
+    func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXNode>
     var winningTeam: RMXTeam? { get }
     func addTeam(team: RMXTeam)
     var teams: Dictionary<String, RMXTeam> { get }
     func updateTeam(team: RMXTeam) -> RMXTeam?
-    var activeSprite: RMXSprite { get }
+    var activeSprite: RMXNode { get }
     var gameOverMessage: ((AnyObject?) -> [String]?)? { get set }
 }
 
-@available(OSX 10.10, *)
+@available(OSX 10.9, *)
 protocol RMXTeamMember {
     var attributes: SpriteAttributes! { get }
 }
@@ -75,42 +75,42 @@ extension RMXScene : RMXTeamGame {
     }
     
     
-    func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXSprite> {
-        return self.sprites.filter({ (child: RMXSprite) -> Bool in
+    func getTeamRoster(forTeam team: RMXTeam?) -> Array<RMXNode> {
+        return self.sprites.filter({ (child: RMXNode) -> Bool in
             return child.attributes.teamID == team?.id
         })
     }
     
     /// Team IDs must be > 0. I.e. payer is assigned to a team
-    var teamPlayers: Array<RMXSprite> {
-        return self.sprites.filter( { (child: RMXSprite) -> Bool in
+    var teamPlayers: Array<RMXNode> {
+        return self.sprites.filter( { (child: RMXNode) -> Bool in
             return Int(child.attributes.teamID) ?? 1 > 0 && child.isPlayerOrAi
         })
     }
     
-    var liveTeamPlayers: Array<RMXSprite> {
-        return self.sprites.filter( { (child: RMXSprite) -> Bool in
+    var liveTeamPlayers: Array<RMXNode> {
+        return self.sprites.filter( { (child: RMXNode) -> Bool in
             return Int(child.attributes.teamID) ?? 1 > 0 && child.isPlayerOrAi && child.attributes.isAlive
         })
     }
     
     ///Players not assigend to a team (i.e. teamID == 0 )
-    var nonTeamPlayers: Array<RMXSprite> {
-        return self.sprites.filter( { (child: RMXSprite) -> Bool in
+    var nonTeamPlayers: Array<RMXNode> {
+        return self.sprites.filter( { (child: RMXNode) -> Bool in
             return child.isPlayerOrAi //&& child.attributes.teamID == 0
         })
     }
     
     
     
-    var players: Array<RMXSprite> {
-        return self.sprites.filter( { (child: RMXSprite) -> Bool in
+    var players: Array<RMXNode> {
+        return self.sprites.filter( { (child: RMXNode) -> Bool in
             return child.isPlayerOrAi
         })
     }
     
-    var nonPlayers: Array<RMXSprite> {
-        return self.sprites.filter({ (child: RMXSprite) -> Bool in
+    var nonPlayers: Array<RMXNode> {
+        return self.sprites.filter({ (child: RMXNode) -> Bool in
             return !child.isPlayerOrAi
         })
     }
@@ -133,7 +133,7 @@ extension RMXScene : RMXTeamGame {
 
 typealias ScoreCard = (kills: Int, deaths: Int, points: Int)
 typealias TeamStats = (score: ScoreCard, players: Int, livePlayers: Int)
-@available(OSX 10.10, *)
+@available(OSX 10.9, *)
 class RMXTeam : NSObject, RMXObject {
     
     var name: String? {
@@ -177,13 +177,13 @@ class RMXTeam : NSObject, RMXObject {
     
     var isRetired: Bool = false
     
-    var players: Array<RMXSprite> {
+    var players: Array<RMXNode> {
         return self.game.getTeamRoster(forTeam: self)
     }
     
     var captain: SpriteAttributes?
     
-    init(gameWorld game: RMXTeamGame, captain: RMXSprite? = nil, withID: AnyObject? = nil){
+    init(gameWorld game: RMXTeamGame, captain: RMXNode? = nil, withID: AnyObject? = nil){
         self.game = game
         
         super.init()
@@ -208,7 +208,7 @@ class RMXTeam : NSObject, RMXObject {
         RMXTeam.updateTeam(self)
     }
     
-    func addPlayer(player: RMXSprite) -> Bool{
+    func addPlayer(player: RMXNode) -> Bool{
 //    NSLog("name: \(player.name), team: \(player.attributes.teamID)")
         
         if Int(player.attributes.teamID) ?? 1 < 0 { ///Actually this might be OK (capture the flag for example)
@@ -358,7 +358,7 @@ class RMXTeam : NSObject, RMXObject {
     }
     
     
-    class func throwChallenge(challenger: RMXSprite, projectile: RMXSprite)  {
+    class func throwChallenge(challenger: RMXNode, projectile: RMXNode)  {
         func _challenge(contact: SCNPhysicsContact) -> Void {
             if let defender = contact.getDefender(forChallenger: challenger).rmxNode {
                 if defender.willCollide ?? false && defender.attributes.teamID != challenger.attributes.teamID {
@@ -367,7 +367,7 @@ class RMXTeam : NSObject, RMXObject {
                     RMXTeam.challenge(challenger.attributes, defender: projectile.attributes, doOnWin: self.indirectChallenge)
                     challenger.attributes.team?.didChangeValueForKey("score")
 //                    NSLog("I (\(challenger.name)) Smashed up, \(defender.name)")
-                    RMXInterface.current?.av.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
+                    RMSoundBox.current.playSound(UserAction.THROW_ITEM.rawValue, info: defender)
                     projectile.tracker.abort()
                 }
             }
@@ -376,7 +376,7 @@ class RMXTeam : NSObject, RMXObject {
         
     }
     
-    class func gameOverMessage(winner teamID: String, player: RMXSprite) -> [String] {
+    class func gameOverMessage(winner teamID: String, player: RMXNode) -> [String] {
         let msg = teamID == player.attributes.teamID ? "Well done, \(player.name!)" : "You lose! :("
         return [ "The winning team is team \(teamID)! \(msg)" , "Your score: \(player.attributes.printScore)" ]
     }

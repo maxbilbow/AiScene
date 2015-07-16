@@ -21,63 +21,30 @@ extension SCNPhysicsContact : RMXLocatable {
 
 @available(OSX 10.10, *)
 extension SCNPhysicsContact {
-    func getDefender(forChallenger challenger: RMXSprite) -> SCNNode {
+    func getDefender(forChallenger challenger: RMXNode) -> SCNNode {
         return self.nodeA == challenger ? nodeB : nodeA
     }
 }
 
 @available(OSX 10.10, *)
-class RMXCollider: NSObject, SCNPhysicsContactDelegate {
+extension RMXScene: SCNPhysicsContactDelegate {
+
     
     enum type { case Began, Updated, Ended }
-    var world: RMXScene? {
-        return self.interface.world
-    }
-    
-    var activeSprite: RMXSprite? {
-        return self.world?.activeSprite
-    }
-    
-    var interface: RMXInterface
-    
-    var av: RMXAudioVideo {
-        return self.interface.av
-    }
-    
-    
-    var trackers: Array<RMXTracker> = Array<RMXTracker>()
-    
-    init(interface: RMXInterface) {
-        self.interface = interface
-        
-        
-    }
+
     
     
     
-    
+//    collisionTrackers
     func physicsWorld(world: SCNPhysicsWorld, didBeginContact contact: SCNPhysicsContact) {
         
-//        if contact.nodeA.rmxID == self.activeSprite?.rmxID {
-//            self.av.playSound("Pop", info: contact)
-//        }
-        
+
         contact.nodeA.rmxNode?.tracker.checkForCollision(contact)
         contact.nodeB.rmxNode?.tracker.checkForCollision(contact)
      
         contact.nodeA.rmxNode?.collisionAction(contact)
         contact.nodeB.rmxNode?.collisionAction(contact)
 
-//        if contact.nodeA.doesCollide && contact.nodeB.doesCollide {
-//            (contact.nodeA as? RMXNode)?.collisionAction(contact.nodeB)
-//            (contact.nodeB as? RMXNode)?.collisionAction(contact.nodeA)
-//        }
-        
-//        if contact.nodeA.sprite?.willCollide ?? false && contact.nodeB.sprite?.willCollide ?? false {
-//            for tracker in self.trackers {
-//                tracker.checkForCollision(contact)
-//            }
-//        }
     
         
     }

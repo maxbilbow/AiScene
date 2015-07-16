@@ -17,6 +17,7 @@ enum CameraOptions: Int16 { case FIXED, FREE, SLOW_FOLLOW }
 @available(OSX 10.10, *)
 class RMXCamera : SCNCamera {
     
+    
     class func standardCamera() -> RMXCamera {
         let camera = RMXCamera()
         camera.zNear = 0.1
@@ -35,7 +36,7 @@ class RMXCamera : SCNCamera {
     
     
     class func free(inWorld world: RMXScene) -> RMXCameraNode {
-//        let sprite = RMXSprite(inWorld: world, type: .ABSTRACT, isUnique: false)
+//        let sprite = RMXNode(inWorld: world, type: .ABSTRACT, isUnique: false)
         let cameraNode = RMXCameraNode(world: world)
         cameraNode.name = "\(cameraNode.name!)/FREE/\(world.rmxID)"
         cameraNode.cameraType = .FREE
@@ -43,7 +44,7 @@ class RMXCamera : SCNCamera {
         return cameraNode
     }
     
-    class func followCam(sprite: RMXSprite, option: CameraOptions) -> RMXCameraNode {
+    class func followCam(sprite: RMXNode, option: CameraOptions) -> RMXCameraNode {
         let followCam = RMXCameraNode(sprite: sprite)
         var type = "FREE"
         followCam.cameraType = .FREE
@@ -102,7 +103,7 @@ class RMXCamera : SCNCamera {
         return followCam
     }
     
-    class func headcam(sprite: RMXSprite) -> RMXCameraNode {
+    class func headcam(sprite: RMXNode) -> RMXCameraNode {
         let headcam: RMXCameraNode = RMXCameraNode(sprite: sprite)
         headcam.cameraType = sprite.type == .PLAYER ? .FIXED : .FREE
         let type: String = headcam.cameraType == .FIXED ? "FIXED" : "FREE"
@@ -124,7 +125,12 @@ class RMXCamera : SCNCamera {
 
 @available(OSX 10.10, *)
 class RMXCameraNode : SCNNode {
-    var rmxSprite: RMXSprite?
+    
+    static var current: RMXCameraNode? {
+        return RMXScene.current.activeCamera as? RMXCameraNode
+    }
+    
+    var rmxSprite: RMXNode?
     var world: RMXScene
     var restingPivotPoint: SCNVector3
     var restingEulerAngles: SCNVector3

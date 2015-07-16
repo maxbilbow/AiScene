@@ -10,17 +10,25 @@ import Foundation
 import GLKit
 import SceneKit
 import RMXKit
+
+//typealias AiCubo
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
-@available(OSX 10.10, *)
+@available(OSX 10.9, *)
 class RMXScene : SCNScene, RMXWorld, RMXObject {
 
-    static var current: RMXScene? {
-        return RMXInterface.current?.world
+    var collisionTrackers: Array<RMXTracker> = Array<RMXTracker>()
+    
+    static var current: RMXScene {
+        return RMX.Interface.current.world
     }
     
     static let kvScores = "teamScores"
     
-    lazy var uniqueID: String? = "\(self.name!)/\(self.rmxID)"; var name: String? = classForCoder().description() ; lazy var rmxID: Int? = RMX.COUNT++ ; lazy var print: String = self.uniqueID!
+    let rmxID: Int? = RMX.COUNT++
+    lazy var uniqueID: String? = "\(self.name)/\(self.rmxID)";
+    var name: String? = classForCoder().description() ;
+    
+    lazy var print: String = self.uniqueID!
     
     internal var _teams: Dictionary<String ,RMXTeam> = Dictionary<String ,RMXTeam>()
     
@@ -69,12 +77,12 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     }
     
     @available(*,deprecated=1,message="Use sprites")
-    var children: Array<RMXSprite> {
+    var children: Array<RMXNode> {
         return self.sprites
     }
     
-    var sprites: Array<RMXSprite> = Array<RMXSprite>()
-//    var children: [RMXSprite] {
+    var sprites: Array<RMXNode> = Array<RMXNode>()
+//    var children: [RMXNode] {
 //        return environments.current
 //    }
     
@@ -120,7 +128,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     private func setScene(scene: SCNScene? = nil) -> SCNScene {
 //        self._scene = scene ?? RMXScene.DefaultScene()
         self.cameras += self.activeSprite.cameras// + self.cameras
-        self.physicsWorld.contactDelegate = RMXInterface.current?.collider
+        self.physicsWorld.contactDelegate = self
         self.calibrate()
         return self
     }
@@ -156,9 +164,9 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     
     func calibrate() -> SCNScene {
         _aiOn = false
-        RMXInterface.current?.gameView!.scene = self//._scene
+        GameViewController.current.gameView!.scene = self//._scene
         self.cameraNumber = 0
-        RMXInterface.current?.gameView!.pointOfView = self.activeCamera
+        GameViewController.current.gameView!.pointOfView = self.activeCamera
 //        self.shouldTurnOnAi = true
         return self
     }
@@ -187,7 +195,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     }
     
     var isLive: Bool {
-        return RMXInterface.current?.world.rmxID == self.rmxID && self.paused == false
+        return RMX.Interface.current.world.rmxID == self.rmxID && self.paused == false
     }
     
     
@@ -213,13 +221,13 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     private let GRAVITY: RMFloat = 0
     
     
-    private var _activeSprite: RMXSprite!
+    private var _activeSprite: RMXNode!
 
-    var activeSprite: RMXSprite {
+    var activeSprite: RMXNode {
         return _activeSprite ?? _defaultPlayer
     }
     
-    private var _defaultPlayer: RMXSprite  {
+    private var _defaultPlayer: RMXNode  {
         _activeSprite = AiCubo.simplePlayer(self, asAi: false, unique: true, safeInit: true)
         _activeSprite.addCameras()
         _activeSprite.updateName("Player")
@@ -231,20 +239,20 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     }
   
     
-    func insertChild(child: RMXSprite, andNode:Bool = true){
+    func insertChild(child: RMXNode, andNode:Bool = true){
         self.sprites.append(child)
         if andNode {
             self.rootNode.addChildNode(child)
         }
     }
     
-    func insertChildren(children: [RMXSprite], insertNodes:Bool = true){
+    func insertChildren(children: [RMXNode], insertNodes:Bool = true){
         for child in children {
             self.insertChild(child, andNode: insertNodes)
         }
     }
 
-    func insertChildren(children children: [String:RMXSprite], insertNodes:Bool = true){
+    func insertChildren(children children: [String:RMXNode], insertNodes:Bool = true){
         for child in children {
             self.insertChild(child.1, andNode: insertNodes)
         }

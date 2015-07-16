@@ -10,10 +10,10 @@ import Foundation
 import RMXKit
 @available(OSX 10.10, *)
 class RMXSpriteTimer : NSObject, RMXTimer {
-    var sprite: RMXSprite
+    var sprite: RMXNode
     
     var validationTimer: NSTimer!
-    init(sprite: RMXSprite){
+    init(sprite: RMXNode){
         self.sprite = sprite
         super.init()
         self.validationTimer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: "validate", userInfo: nil, repeats: true)

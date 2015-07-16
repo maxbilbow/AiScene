@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import RMXKit
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -16,38 +17,39 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     #if DEBUG
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
-        if let interface = RMXInterface.current {
+        let interface = RMX.Interface.current
             var s = "\napplicationDidFinishLaunching"
             s += "\n           World: \(interface.world.name)"
             print(s, appendNewline: true)
-        }
     }
     
     func applicationWillHide(notification: NSNotification) {
-        if let interface = RMXInterface.current {
-            var s = "\napplicationWillHide"
-            interface.pauseGame()
-            s += "\n   Game was paused"
-            print(s, appendNewline: true)
-        }
+        _wasPausedAutomatically = RMX.Interface.current.pauseGame()
+        
     }
     
+    private var _wasPausedAutomatically: Bool = false;
+   
     func applicationDidUnhide(notification: NSNotification) {
 //        if let interface = RMXInterface.current() {
             var s = "\napplicationDidUnhide"
     //      interface.pauseGame()
             s += "\n   Game if not unpause automatically."
+        if _wasPausedAutomatically {
+            RMX.Interface.current.unPauseGame()
+            _wasPausedAutomatically = false
+        }
             print(s, appendNewline: true)
 //        }
     }
 
     func applicationDidChangeOcclusionState(notification: NSNotification) {
 //        NSLog(notification.description)
-        if let interface = RMXInterface.current {
+        let interface = RMX.Interface.current
             print("\napplicationDidChangeOcclusionState")
             if self.window.occlusionState != NSWindowOcclusionState.Visible {
                 interface.pauseGame()
-            }
+            
         }
         
     }
