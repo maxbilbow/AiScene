@@ -25,6 +25,12 @@ class RMXKitTests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
+    func testGameObject() {
+
+//        print(gameObject)
+        
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measureBlock() {
@@ -32,4 +38,7 @@ class RMXKitTests: XCTestCase {
         }
     }
     
+    
 }
+
+

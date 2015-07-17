@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		501B09F41B2B217A0025AFD5 /* SpriteAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */; };
 		501B09F51B2B217A0025AFD5 /* SpriteAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501B09F31B2B217A0025AFD5 /* SpriteAttributes.swift */; };
-		502AED611B581F0700A07A40 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; };
-		502AED621B581F0700A07A40 /* RMXKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5031F3AB1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
 		5031F3AC1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
 		5031F3AD1B15AC4800FAB551 /* RMXCollider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5031F3AA1B15AC4800FAB551 /* RMXCollider.swift */; };
@@ -43,6 +41,8 @@
 		50AC218B1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218C1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218D1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
+		50AFBE461B5943C900462AC1 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; };
+		50AFBE471B5943C900462AC1 /* RMXKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		50B4B0E21B2C57A6009AF091 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50B4B0E01B2C57A6009AF091 /* Model.xcdatamodeld */; };
 		50B563ED1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
 		50B563EE1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
@@ -153,7 +153,14 @@
 			remoteGlobalIDString = 5063BCD11B2C5C5E00FB5558;
 			remoteInfo = "RMXKit-iosTests";
 		};
-		502AED631B581F0700A07A40 /* PBXContainerItemProxy */ = {
+		50AFBE3C1B59418A00462AC1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 502AED521B581D2800A07A40 /* RMXKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 50AFBE2E1B593D6500462AC1;
+			remoteInfo = RMXUnity;
+		};
+		50AFBE481B5943C900462AC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 502AED521B581D2800A07A40 /* RMXKit.xcodeproj */;
 			proxyType = 1;
@@ -184,13 +191,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6C1F2EC71B558E1A005B0B37 /* Embed Frameworks */ = {
+		50AFBE4A1B5943CA00462AC1 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				502AED621B581F0700A07A40 /* RMXKit.framework in Embed Frameworks */,
+				50AFBE471B5943C900462AC1 /* RMXKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,7 +315,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				502AED611B581F0700A07A40 /* RMXKit.framework in Frameworks */,
+				50AFBE461B5943C900462AC1 /* RMXKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +345,7 @@
 				502AED5C1B581D2800A07A40 /* RMXKitTests.xctest */,
 				502AED5E1B581D2800A07A40 /* RMXKit.framework */,
 				502AED601B581D2800A07A40 /* RMXKit-iosTests.xctest */,
+				50AFBE3D1B59418A00462AC1 /* RMXUnity */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -689,12 +697,12 @@
 				6C9299F61AE5497800E71811 /* Sources */,
 				6C9299F71AE5497800E71811 /* Frameworks */,
 				6C9299F81AE5497800E71811 /* Resources */,
-				6C1F2EC71B558E1A005B0B37 /* Embed Frameworks */,
+				50AFBE4A1B5943CA00462AC1 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				502AED641B581F0700A07A40 /* PBXTargetDependency */,
+				50AFBE491B5943C900462AC1 /* PBXTargetDependency */,
 			);
 			name = "AiScene-OSX";
 			productName = "AiScene-OSX";
@@ -830,6 +838,13 @@
 			fileType = wrapper.cfbundle;
 			path = "RMXKit-iosTests.xctest";
 			remoteRef = 502AED5F1B581D2800A07A40 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		50AFBE3D1B59418A00462AC1 /* RMXUnity */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = RMXUnity;
+			remoteRef = 50AFBE3C1B59418A00462AC1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1038,10 +1053,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		502AED641B581F0700A07A40 /* PBXTargetDependency */ = {
+		50AFBE491B5943C900462AC1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RMXKit;
-			targetProxy = 502AED631B581F0700A07A40 /* PBXContainerItemProxy */;
+			targetProxy = 50AFBE481B5943C900462AC1 /* PBXContainerItemProxy */;
 		};
 		6C73A8B81B0A66E300187A61 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1333,6 +1348,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = "AiScene-OSX/AiScene-OSX.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1357,6 +1373,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_ENTITLEMENTS = "AiScene-OSX/AiScene-OSX.entitlements";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;

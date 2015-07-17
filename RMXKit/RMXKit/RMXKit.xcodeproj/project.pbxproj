@@ -7,16 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		502AED661B5843EC00A07A40 /* IBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED651B5843EC00A07A40 /* IBehaviour.swift */; };
-		502AED671B5843EC00A07A40 /* IBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED651B5843EC00A07A40 /* IBehaviour.swift */; };
-		502AED691B5845F600A07A40 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED681B5845F600A07A40 /* GameObject.swift */; };
-		502AED6A1B5845F600A07A40 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED681B5845F600A07A40 /* GameObject.swift */; };
-		502AED6C1B58509000A07A40 /* MonoBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED6B1B58509000A07A40 /* MonoBehaviour.swift */; };
-		502AED6D1B58509000A07A40 /* MonoBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED6B1B58509000A07A40 /* MonoBehaviour.swift */; };
-		502AED721B58517900A07A40 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED711B58517900A07A40 /* Transform.swift */; };
-		502AED731B58517900A07A40 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED711B58517900A07A40 /* Transform.swift */; };
-		502AED751B58532400A07A40 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED741B58532400A07A40 /* Component.swift */; };
-		502AED761B58532400A07A40 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED741B58532400A07A40 /* Component.swift */; };
 		5063BC9B1B2C5BEB00FB5558 /* RMXKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 5063BC9A1B2C5BEB00FB5558 /* RMXKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5063BCA21B2C5BEB00FB5558 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5063BC971B2C5BEB00FB5558 /* RMXKit.framework */; };
 		5063BCA71B2C5BEB00FB5558 /* RMXKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BCA61B2C5BEB00FB5558 /* RMXKitTests.swift */; };
@@ -43,10 +33,21 @@
 		5063BD3D1B2C7CF300FB5558 /* RMXWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BD281B2C7CF300FB5558 /* RMXWorld.swift */; };
 		5063BD3E1B2C7CF300FB5558 /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BD291B2C7CF300FB5558 /* UserActions.swift */; };
 		5063BD3F1B2C7CF300FB5558 /* UserActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BD291B2C7CF300FB5558 /* UserActions.swift */; };
+		50AFBE311B593D6500462AC1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AFBE301B593D6500462AC1 /* main.swift */; };
+		50AFBE3E1B59420F00462AC1 /* Transform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED711B58517900A07A40 /* Transform.swift */; };
+		50AFBE3F1B59420F00462AC1 /* IBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED651B5843EC00A07A40 /* IBehaviour.swift */; };
+		50AFBE401B59420F00462AC1 /* MonoBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED6B1B58509000A07A40 /* MonoBehaviour.swift */; };
+		50AFBE411B59420F00462AC1 /* Component.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED741B58532400A07A40 /* Component.swift */; };
+		50AFBE421B59420F00462AC1 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502AED681B5845F600A07A40 /* GameObject.swift */; };
+		50AFBE441B59434C00462AC1 /* OSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BD201B2C7CF300FB5558 /* OSX.swift */; };
+		50AFBE4B1B5943DB00462AC1 /* RMSMaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BD211B2C7CF300FB5558 /* RMSMaths.swift */; };
+		50AFBE4C1B5943DB00462AC1 /* RMXValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5063BD271B2C7CF300FB5558 /* RMXValue.swift */; };
+		50AFBE4E1B594B4300462AC1 /* DieWhenTouched.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AFBE4D1B594B4300462AC1 /* DieWhenTouched.swift */; };
+		50AFBE501B594CFF00462AC1 /* MonoObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AFBE4F1B594CFF00462AC1 /* MonoObject.swift */; };
+		50AFBE521B59547B00462AC1 /* Mono.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AFBE511B59547B00462AC1 /* Mono.swift */; };
 		6C22DE4B1B386DCC00185DA6 /* RMX.swift in Headers */ = {isa = PBXBuildFile; fileRef = 5063BD221B2C7CF300FB5558 /* RMX.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C22DE4C1B386DE000185DA6 /* RMX.swift in Resources */ = {isa = PBXBuildFile; fileRef = 5063BD221B2C7CF300FB5558 /* RMX.swift */; };
 		6C22DE531B386F6D00185DA6 /* SCNNode.swift in Headers */ = {isa = PBXBuildFile; fileRef = 6C41E03B1B38637D0082FCC1 /* SCNNode.swift */; settings = {ATTRIBUTES = (Public, ); }; };
-		6C22DE541B386F6D00185DA6 /* OSX.swift in Headers */ = {isa = PBXBuildFile; fileRef = 5063BD201B2C7CF300FB5558 /* OSX.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C22DE551B386F6D00185DA6 /* RMSMaths.swift in Headers */ = {isa = PBXBuildFile; fileRef = 5063BD211B2C7CF300FB5558 /* RMSMaths.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C22DE561B386F6D00185DA6 /* RMXAiDelegate.swift in Headers */ = {isa = PBXBuildFile; fileRef = 5063BD231B2C7CF300FB5558 /* RMXAiDelegate.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 		6C22DE571B386F6D00185DA6 /* RMXDebugger.swift in Headers */ = {isa = PBXBuildFile; fileRef = 5063BD241B2C7CF300FB5558 /* RMXDebugger.swift */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -87,12 +88,24 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		50AFBE2C1B593D6500462AC1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		502AED651B5843EC00A07A40 /* IBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IBehaviour.swift; sourceTree = "<group>"; };
-		502AED681B5845F600A07A40 /* GameObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
-		502AED6B1B58509000A07A40 /* MonoBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonoBehaviour.swift; sourceTree = "<group>"; };
-		502AED711B58517900A07A40 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transform.swift; sourceTree = "<group>"; };
-		502AED741B58532400A07A40 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
+		502AED651B5843EC00A07A40 /* IBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IBehaviour.swift; path = ../../Source/IBehaviour.swift; sourceTree = "<group>"; };
+		502AED681B5845F600A07A40 /* GameObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameObject.swift; path = ../../Source/GameObject.swift; sourceTree = "<group>"; };
+		502AED6B1B58509000A07A40 /* MonoBehaviour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MonoBehaviour.swift; path = ../../Source/MonoBehaviour.swift; sourceTree = "<group>"; };
+		502AED711B58517900A07A40 /* Transform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Transform.swift; path = ../../Source/Transform.swift; sourceTree = "<group>"; };
+		502AED741B58532400A07A40 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Component.swift; path = ../../Source/Component.swift; sourceTree = "<group>"; };
 		5063BC971B2C5BEB00FB5558 /* RMXKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RMXKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5063BC9A1B2C5BEB00FB5558 /* RMXKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RMXKit.h; sourceTree = "<group>"; };
 		5063BC9C1B2C5BEB00FB5558 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -116,6 +129,11 @@
 		5063BD271B2C7CF300FB5558 /* RMXValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXValue.swift; sourceTree = "<group>"; };
 		5063BD281B2C7CF300FB5558 /* RMXWorld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXWorld.swift; sourceTree = "<group>"; };
 		5063BD291B2C7CF300FB5558 /* UserActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserActions.swift; sourceTree = "<group>"; };
+		50AFBE2E1B593D6500462AC1 /* RMXUnity */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RMXUnity; sourceTree = BUILT_PRODUCTS_DIR; };
+		50AFBE301B593D6500462AC1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		50AFBE4D1B594B4300462AC1 /* DieWhenTouched.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DieWhenTouched.swift; path = Scripts/DieWhenTouched.swift; sourceTree = "<group>"; };
+		50AFBE4F1B594CFF00462AC1 /* MonoObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonoObject.swift; sourceTree = "<group>"; };
+		50AFBE511B59547B00462AC1 /* Mono.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mono.swift; sourceTree = "<group>"; };
 		6C41E03B1B38637D0082FCC1 /* SCNNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,17 +168,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		50AFBE2B1B593D6500462AC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		502AED6E1B58516100A07A40 /* Unity */ = {
 			isa = PBXGroup;
 			children = (
-				502AED711B58517900A07A40 /* Transform.swift */,
-				502AED651B5843EC00A07A40 /* IBehaviour.swift */,
-				502AED6B1B58509000A07A40 /* MonoBehaviour.swift */,
-				502AED741B58532400A07A40 /* Component.swift */,
-				502AED681B5845F600A07A40 /* GameObject.swift */,
 			);
 			name = Unity;
 			sourceTree = "<group>";
@@ -173,6 +193,7 @@
 				5063BCA51B2C5BEB00FB5558 /* RMXKitTests */,
 				5063BCC91B2C5C5E00FB5558 /* RMXKit-ios */,
 				5063BCD51B2C5C5E00FB5558 /* RMXKit-iosTests */,
+				50AFBE2F1B593D6500462AC1 /* RMXUnity */,
 				5063BC981B2C5BEB00FB5558 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -184,6 +205,7 @@
 				5063BCA11B2C5BEB00FB5558 /* RMXKitTests.xctest */,
 				5063BCC81B2C5C5E00FB5558 /* RMXKit.framework */,
 				5063BCD11B2C5C5E00FB5558 /* RMXKit-iosTests.xctest */,
+				50AFBE2E1B593D6500462AC1 /* RMXUnity */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -261,6 +283,22 @@
 			path = OSX;
 			sourceTree = "<group>";
 		};
+		50AFBE2F1B593D6500462AC1 /* RMXUnity */ = {
+			isa = PBXGroup;
+			children = (
+				502AED711B58517900A07A40 /* Transform.swift */,
+				502AED651B5843EC00A07A40 /* IBehaviour.swift */,
+				502AED6B1B58509000A07A40 /* MonoBehaviour.swift */,
+				502AED741B58532400A07A40 /* Component.swift */,
+				502AED681B5845F600A07A40 /* GameObject.swift */,
+				50AFBE301B593D6500462AC1 /* main.swift */,
+				50AFBE511B59547B00462AC1 /* Mono.swift */,
+				50AFBE4D1B594B4300462AC1 /* DieWhenTouched.swift */,
+				50AFBE4F1B594CFF00462AC1 /* MonoObject.swift */,
+			);
+			path = RMXUnity;
+			sourceTree = "<group>";
+		};
 		6C41E03A1B38637D0082FCC1 /* SceneKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -279,7 +317,6 @@
 				5063BC9B1B2C5BEB00FB5558 /* RMXKit.h in Headers */,
 				6C22DE4B1B386DCC00185DA6 /* RMX.swift in Headers */,
 				6C22DE531B386F6D00185DA6 /* SCNNode.swift in Headers */,
-				6C22DE541B386F6D00185DA6 /* OSX.swift in Headers */,
 				6C22DE551B386F6D00185DA6 /* RMSMaths.swift in Headers */,
 				6C22DE561B386F6D00185DA6 /* RMXAiDelegate.swift in Headers */,
 				6C22DE571B386F6D00185DA6 /* RMXDebugger.swift in Headers */,
@@ -385,6 +422,23 @@
 			productReference = 5063BCD11B2C5C5E00FB5558 /* RMXKit-iosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		50AFBE2D1B593D6500462AC1 /* RMXUnity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50AFBE321B593D6500462AC1 /* Build configuration list for PBXNativeTarget "RMXUnity" */;
+			buildPhases = (
+				50AFBE2A1B593D6500462AC1 /* Sources */,
+				50AFBE2B1B593D6500462AC1 /* Frameworks */,
+				50AFBE2C1B593D6500462AC1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RMXUnity;
+			productName = RMXUnity;
+			productReference = 50AFBE2E1B593D6500462AC1 /* RMXUnity */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -409,6 +463,9 @@
 					5063BCD01B2C5C5E00FB5558 = {
 						CreatedOnToolsVersion = 7.0;
 					};
+					50AFBE2D1B593D6500462AC1 = {
+						CreatedOnToolsVersion = 7.0;
+					};
 				};
 			};
 			buildConfigurationList = 5063BC911B2C5BEB00FB5558 /* Build configuration list for PBXProject "RMXKit" */;
@@ -427,6 +484,7 @@
 				5063BCA01B2C5BEB00FB5558 /* RMXKitTests */,
 				5063BCC71B2C5C5E00FB5558 /* RMXKit-ios */,
 				5063BCD01B2C5C5E00FB5558 /* RMXKit-iosTests */,
+				50AFBE2D1B593D6500462AC1 /* RMXUnity */,
 			);
 		};
 /* End PBXProject section */
@@ -468,20 +526,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				502AED6C1B58509000A07A40 /* MonoBehaviour.swift in Sources */,
-				502AED661B5843EC00A07A40 /* IBehaviour.swift in Sources */,
 				5063BD3A1B2C7CF300FB5558 /* RMXValue.swift in Sources */,
 				5063BD341B2C7CF300FB5558 /* RMXDebugger.swift in Sources */,
 				5063BD361B2C7CF300FB5558 /* RMXFunctions.swift in Sources */,
-				502AED691B5845F600A07A40 /* GameObject.swift in Sources */,
 				5063BD2C1B2C7CF300FB5558 /* OSX.swift in Sources */,
-				502AED721B58517900A07A40 /* Transform.swift in Sources */,
 				5063BD3C1B2C7CF300FB5558 /* RMXWorld.swift in Sources */,
 				5063BD321B2C7CF300FB5558 /* RMXAiDelegate.swift in Sources */,
 				5063BD3E1B2C7CF300FB5558 /* UserActions.swift in Sources */,
 				5063BD381B2C7CF300FB5558 /* RMXPawn.swift in Sources */,
 				5063BD2E1B2C7CF300FB5558 /* RMSMaths.swift in Sources */,
-				502AED751B58532400A07A40 /* Component.swift in Sources */,
 				6C41E03C1B38637D0082FCC1 /* SCNNode.swift in Sources */,
 				5063BD301B2C7CF300FB5558 /* RMX.swift in Sources */,
 			);
@@ -499,20 +552,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				502AED6D1B58509000A07A40 /* MonoBehaviour.swift in Sources */,
-				502AED671B5843EC00A07A40 /* IBehaviour.swift in Sources */,
 				5063BD3B1B2C7CF300FB5558 /* RMXValue.swift in Sources */,
 				5063BD351B2C7CF300FB5558 /* RMXDebugger.swift in Sources */,
 				5063BD371B2C7CF300FB5558 /* RMXFunctions.swift in Sources */,
-				502AED6A1B5845F600A07A40 /* GameObject.swift in Sources */,
 				5063BD3D1B2C7CF300FB5558 /* RMXWorld.swift in Sources */,
-				502AED731B58517900A07A40 /* Transform.swift in Sources */,
 				5063BD331B2C7CF300FB5558 /* RMXAiDelegate.swift in Sources */,
 				5063BD2B1B2C7CF300FB5558 /* iOS.swift in Sources */,
 				5063BD3F1B2C7CF300FB5558 /* UserActions.swift in Sources */,
 				5063BD391B2C7CF300FB5558 /* RMXPawn.swift in Sources */,
 				6C41E03D1B38637D0082FCC1 /* SCNNode.swift in Sources */,
-				502AED761B58532400A07A40 /* Component.swift in Sources */,
 				5063BD2F1B2C7CF300FB5558 /* RMSMaths.swift in Sources */,
 				5063BD311B2C7CF300FB5558 /* RMX.swift in Sources */,
 			);
@@ -523,6 +571,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				5063BCD71B2C5C5E00FB5558 /* RMXKit_iosTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50AFBE2A1B593D6500462AC1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50AFBE4C1B5943DB00462AC1 /* RMXValue.swift in Sources */,
+				50AFBE4B1B5943DB00462AC1 /* RMSMaths.swift in Sources */,
+				50AFBE401B59420F00462AC1 /* MonoBehaviour.swift in Sources */,
+				50AFBE501B594CFF00462AC1 /* MonoObject.swift in Sources */,
+				50AFBE3E1B59420F00462AC1 /* Transform.swift in Sources */,
+				50AFBE421B59420F00462AC1 /* GameObject.swift in Sources */,
+				50AFBE3F1B59420F00462AC1 /* IBehaviour.swift in Sources */,
+				50AFBE311B593D6500462AC1 /* main.swift in Sources */,
+				50AFBE4E1B594B4300462AC1 /* DieWhenTouched.swift in Sources */,
+				50AFBE441B59434C00462AC1 /* OSX.swift in Sources */,
+				50AFBE521B59547B00462AC1 /* Mono.swift in Sources */,
+				50AFBE411B59420F00462AC1 /* Component.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +843,22 @@
 			};
 			name = Release;
 		};
+		50AFBE331B593D6500462AC1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		50AFBE341B593D6500462AC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -823,6 +906,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		50AFBE321B593D6500462AC1 /* Build configuration list for PBXNativeTarget "RMXUnity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50AFBE331B593D6500462AC1 /* Debug */,
+				50AFBE341B593D6500462AC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
