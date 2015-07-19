@@ -8,7 +8,7 @@
 
 import Foundation
 import SceneKit
-import RMXKit
+//import RMXKit
 
 @available(OSX 10.9, *)
 class SpriteAttributes : RMXAttributes {

@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 import SceneKit
-import RMXKit
+//import RMXKit
 
 
 @available(OSX 10.10,*)

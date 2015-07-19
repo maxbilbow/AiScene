@@ -8,7 +8,7 @@
 
 import Foundation
 import SceneKit
-import RMXKit
+//import RMXKit
 
 class RMXTracker : NSObject {
     

@@ -8,7 +8,7 @@
 
 import Foundation
 import SceneKit
-import RMXKit
+//import RMXKit
 
 
 enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, TEAM_GAME_2, WEAPONS }

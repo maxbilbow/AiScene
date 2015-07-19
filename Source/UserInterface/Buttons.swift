@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import RMXKit
+//import RMXKit
 
 #if iOS
     typealias RMImage = UIImage
