@@ -390,7 +390,7 @@ extension RMX {
             case .ANGLES:
                 var angles   = "\n ANGLES: \n"
                 #if iOS
-                if let dPad: RMXDPad = Interface.current as? RMXDPad {
+                if let dPad: RMXMobileInput = Interface.current as? RMXMobileInput {
                     if let att = dPad.motionManager.deviceMotion?.attitude {
                         let attitude = SCNVector3Make(RMFloat(att.pitch), RMFloat(att.yaw), RMFloat(att.roll))
                         angles      += "\n    - SPRITE: \(sprite.presentationNode().eulerAngles.asDegrees)"//, Pitch: \()\n"

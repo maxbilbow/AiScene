@@ -19,7 +19,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     var collisionTrackers: Array<RMXTracker> = Array<RMXTracker>()
     
     static var current: RMXScene {
-        return RMX.Interface.current.world
+        return Interface.current.world
     }
     
     static let kvScores = "teamScores"
@@ -195,7 +195,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     }
     
     var isLive: Bool {
-        return RMX.Interface.current.world.rmxID == self.rmxID && self.paused == false
+        return Interface.current.world.rmxID == self.rmxID && self.paused == false
     }
     
     

@@ -15,10 +15,10 @@ import AVFoundation
 import SceneKit
 import SpriteKit
 
-    
-extension RMX {
+    typealias Interface = RMXInterface
+
     //@available(OSX 10.9, *)
-    class Interface : NSObject, RendererDelegate, RMSingleton {
+    class RMXInterface : NSObject, RendererDelegate, RMSingleton {
 
         var lockCursor = false
         
@@ -188,7 +188,7 @@ extension RMX {
         
         func renderer(aRenderer: SCNSceneRenderer, updateAtTime time: NSTimeInterval) {
             if !(_world?.paused ?? true) {//.scene.paused {
-                ActionProcessor.current.animate()
+                RMX.ActionProcessor.current.animate()
                 self.world.renderer(aRenderer, updateAtTime: time)
             }
             self.update()
@@ -233,12 +233,12 @@ extension RMX {
                     
     //                    var animate: Bool = false
                         if type == .THROW_ITEM {
-                            if ActionProcessor.current.throwOrGrab(node, tracking: true) {
+                            if RMX.ActionProcessor.current.throwOrGrab(node, tracking: true) {
                                 self.animateHit(node)
                             } else {
-                                ActionProcessor.current.throwOrGrab(hitResults[0].worldCoordinates, tracking: false) //activeSprite.throwItem(atPosition: hitResults[0].worldCoordinates, withForce: 1)
+                                RMX.ActionProcessor.current.throwOrGrab(hitResults[0].worldCoordinates, tracking: false) //activeSprite.throwItem(atPosition: hitResults[0].worldCoordinates, withForce: 1)
                             }
-                        } else if ActionProcessor.current.throwOrGrab(node, tracking: false) {
+                        } else if RMX.ActionProcessor.current.throwOrGrab(node, tracking: false) {
                             self.animateHit(node)
                         }
                     }
@@ -406,4 +406,3 @@ extension RMX {
             }
         }
     }
-}

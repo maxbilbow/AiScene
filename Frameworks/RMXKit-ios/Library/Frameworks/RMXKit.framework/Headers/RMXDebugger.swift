@@ -10,20 +10,15 @@ import Foundation
 import SceneKit
 
 
-@available(OSX 10.10, *)
-extension RMXLog {
-//    static let isDebugging: Bool = false
 
-}
-
-@available(OSX 10.10, *)
+//@available(OSX 10.10, *)
 extension RMX {
     
     
     public static var log: [RMXLogEntry] = [ RMXLogEntry(sender: nil, function: "", filename: "\(__FILE__)", line: "\(__LINE__)", id: RMXLog.DEBUG) ]
 }
 
-@available(OSX 10.10,*)
+//@available(OSX 10.10,*)
 public class RMXLogEntry {
     var senderID, message: String?
     var function, filename: String
@@ -82,10 +77,10 @@ public class RMXLogEntry {
     
 }
 
-@available(OSX 10.10,*)
+//@available(OSX 10.10,*)
 public typealias RMXDebugCallback = (AnyObject?, sender: RMXObject?, String, String, Int) -> Bool?
 
-@available(OSX 10.10,*)
+//@available(OSX 10.10,*)
 public class RMXLog {// : NSObject {
     static let DEBUG = "DEBUG"//classForCoder().description()
     
@@ -157,7 +152,7 @@ public class RMXLog {// : NSObject {
 }
 
 
-@available(OSX 10.10, *)
+//@available(OSX 10.10, *)
 public func RMLog(message: AnyObject? = "", sender: RMXObject? = nil, id: String = RMXLog.DEBUG, function: String = "", file: String = __FILE__, line: Int = __LINE__, isDebugging: Bool = true) -> Bool? {//, function: String = __FUNCTION__, file: String = __FILE__, line: Int = __LINE__) -> Bool? {
     #if DEBUG
     if isDebugging {

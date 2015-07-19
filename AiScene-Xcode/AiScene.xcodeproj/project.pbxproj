@@ -41,8 +41,6 @@
 		50AC218B1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218C1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
 		50AC218D1B17AABA00A9BD28 /* TeamGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC218A1B17AABA00A9BD28 /* TeamGame.swift */; };
-		50AFBE461B5943C900462AC1 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; };
-		50AFBE471B5943C900462AC1 /* RMXKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		50B4B0E21B2C57A6009AF091 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 50B4B0E01B2C57A6009AF091 /* Model.xcdatamodeld */; };
 		50B563ED1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
 		50B563EE1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */; };
@@ -59,6 +57,12 @@
 		6C4A28721B03ACCC001C3F5B /* icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C4A286A1B03ACCC001C3F5B /* icons.xcassets */; };
 		6C4A28841B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
 		6C4A28851B049FF9001C3F5B /* Observers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4A28831B049FF9001C3F5B /* Observers.swift */; };
+		6C6B53871B5BDB1800051652 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; };
+		6C6B53881B5BDB1800051652 /* RMXKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5A1B581D2800A07A40 /* RMXKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C6B538C1B5BDB7B00051652 /* RMXKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5E1B581D2800A07A40 /* RMXKit.framework */; };
+		6C6B538D1B5BDB7B00051652 /* RMXKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 502AED5E1B581D2800A07A40 /* RMXKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		6C6B53921B5BE4B500051652 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C6B53911B5BE4B500051652 /* GameKit.framework */; };
+		6C6B53941B5BE4B700051652 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C6B53931B5BE4B700051652 /* StoreKit.framework */; };
 		6C6DD1A61B10C7F300107FAD /* AiCubo Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */; };
 		6C6DD1A71B10CA8800107FAD /* AiCubo Basic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */; };
 		6C73A8A31B0A66E300187A61 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73A8A21B0A66E300187A61 /* AppDelegate.swift */; };
@@ -160,12 +164,19 @@
 			remoteGlobalIDString = 50AFBE2E1B593D6500462AC1;
 			remoteInfo = RMXUnity;
 		};
-		50AFBE481B5943C900462AC1 /* PBXContainerItemProxy */ = {
+		6C6B53891B5BDB1800051652 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 502AED521B581D2800A07A40 /* RMXKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 5063BC961B2C5BEB00FB5558;
 			remoteInfo = RMXKit;
+		};
+		6C6B538E1B5BDB7B00051652 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 502AED521B581D2800A07A40 /* RMXKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5063BCC71B2C5C5E00FB5558;
+			remoteInfo = "RMXKit-ios";
 		};
 		6C73A8B71B0A66E300187A61 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -191,13 +202,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		50AFBE4A1B5943CA00462AC1 /* Embed Frameworks */ = {
+		6C6B538B1B5BDB1800051652 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				50AFBE471B5943C900462AC1 /* RMXKit.framework in Embed Frameworks */,
+				6C6B53881B5BDB1800051652 /* RMXKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6C6B53901B5BDB7C00051652 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6C6B538D1B5BDB7B00051652 /* RMXKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,6 +248,8 @@
 		6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSceneKit.swift; sourceTree = "<group>"; };
 		6C4A286A1B03ACCC001C3F5B /* icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = icons.xcassets; sourceTree = "<group>"; };
 		6C4A28831B049FF9001C3F5B /* Observers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observers.swift; sourceTree = "<group>"; };
+		6C6B53911B5BE4B500051652 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		6C6B53931B5BE4B700051652 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		6C6DD1A51B10C7F300107FAD /* AiCubo Basic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AiCubo Basic.swift"; sourceTree = "<group>"; };
 		6C73A89E1B0A66E300187A61 /* AiSprite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiSprite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C73A8A11B0A66E300187A61 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -301,6 +325,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C6B53941B5BE4B700051652 /* StoreKit.framework in Frameworks */,
+				6C6B538C1B5BDB7B00051652 /* RMXKit.framework in Frameworks */,
+				6C6B53921B5BE4B500051652 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,7 +342,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50AFBE461B5943C900462AC1 /* RMXKit.framework in Frameworks */,
+				6C6B53871B5BDB1800051652 /* RMXKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +477,8 @@
 		6C9299821AE5432000E71811 = {
 			isa = PBXGroup;
 			children = (
+				6C6B53931B5BE4B700051652 /* StoreKit.framework */,
+				6C6B53911B5BE4B500051652 /* GameKit.framework */,
 				502AED521B581D2800A07A40 /* RMXKit.xcodeproj */,
 				6C4A28821B03ACDB001C3F5B /* Media */,
 				6C9299F01AE544D500E71811 /* art.scnassets */,
@@ -662,10 +691,12 @@
 				6C9299871AE5432000E71811 /* Sources */,
 				6C9299881AE5432000E71811 /* Frameworks */,
 				6C9299891AE5432000E71811 /* Resources */,
+				6C6B53901B5BDB7C00051652 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6C6B538F1B5BDB7B00051652 /* PBXTargetDependency */,
 			);
 			name = AiScene;
 			productName = AiScene;
@@ -697,12 +728,12 @@
 				6C9299F61AE5497800E71811 /* Sources */,
 				6C9299F71AE5497800E71811 /* Frameworks */,
 				6C9299F81AE5497800E71811 /* Resources */,
-				50AFBE4A1B5943CA00462AC1 /* Embed Frameworks */,
+				6C6B538B1B5BDB1800051652 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				50AFBE491B5943C900462AC1 /* PBXTargetDependency */,
+				6C6B538A1B5BDB1800051652 /* PBXTargetDependency */,
 			);
 			name = "AiScene-OSX";
 			productName = "AiScene-OSX";
@@ -1053,10 +1084,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		50AFBE491B5943C900462AC1 /* PBXTargetDependency */ = {
+		6C6B538A1B5BDB1800051652 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RMXKit;
-			targetProxy = 50AFBE481B5943C900462AC1 /* PBXContainerItemProxy */;
+			targetProxy = 6C6B53891B5BDB1800051652 /* PBXContainerItemProxy */;
+		};
+		6C6B538F1B5BDB7B00051652 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "RMXKit-ios";
+			targetProxy = 6C6B538E1B5BDB7B00051652 /* PBXContainerItemProxy */;
 		};
 		6C73A8B81B0A66E300187A61 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1220,7 +1256,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1261,7 +1297,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PROVISIONING_PROFILE = "a5bcd5c6-0f38-4ea9-893e-69873086d449";
@@ -1277,7 +1313,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = AiScene/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rattle.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1290,9 +1328,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-1";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = AiScene/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DSceneKit -DiOS";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rattle.$(PRODUCT_NAME:rfc1034identifier)";

@@ -22,7 +22,7 @@ extension RMX {
     ///   let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (2, 0)
     ///   var key = RMKey(action: "forward", characters: "w", speed: MOVE_SPEED)
     ///
-    /// The RMSActionProcessor class handles the application of the human term "forward", regardless of interface used. See also `RMXDPad` for iOS.
+    /// The RMSActionProcessor class handles the application of the human term "forward", regardless of interface used. See also `RMXMobileInput` for iOS.
     ///
     /// See also: `RMKeys` and  `RMSActionProcessor`.
     class DesktopInput : Interface {

@@ -13,62 +13,62 @@ import RMXKit
 
 import UIKit
 
-extension RMXDPad {
+extension RMXMobileInput {
     func resetTransform(recogniser: UITapGestureRecognizer) {
 //        self.activeSprite?.setAngle(roll: 0)
-        self.actionProcessor.action(UserAction.RESET)
+        RMX.ActionProcessor.current.action(UserAction.RESET)
     }
     func printData(recogniser: UITapGestureRecognizer){
-        self.actionProcessor.action(UserAction.GET_INFO)
+        RMX.ActionProcessor.current.action(UserAction.GET_INFO)
     }
     
     func showScores(recogniser: UITapGestureRecognizer){
-        self.actionProcessor.action(UserAction.TOGGLE_SCORES, speed: 1)
+        RMX.ActionProcessor.current.action(UserAction.TOGGLE_SCORES, speed: 1)
     }
     
     func toggleAi(recogniser: UITapGestureRecognizer){
-        self.world.toggleAi()
+        RMXScene.current.toggleAi()
     }
     
     
     func zoom(recogniser: UIPinchGestureRecognizer) {        
-        self.actionProcessor.action(UserAction.ZoomInAnOut, speed: RMFloat(recogniser.velocity))
+        RMX.ActionProcessor.current.action(UserAction.ZoomInAnOut, speed: RMFloat(recogniser.velocity))
     }
     
     
     func toggleGravity(recognizer: UITapGestureRecognizer) {
-            self.actionProcessor.action(UserAction.TOGGLE_GRAVITY, speed: 1)
+            RMX.ActionProcessor.current.action(UserAction.TOGGLE_GRAVITY, speed: 1)
         }
         
         
     func toggleAllGravity(recognizer: UITapGestureRecognizer) {
-        self.actionProcessor.action(UserAction.TOGGLE_GRAVITY, speed: 1)
+        RMX.ActionProcessor.current.action(UserAction.TOGGLE_GRAVITY, speed: 1)
     }
     
     
     ///The event handling method
     func handleOrientation(recognizer: UIPanGestureRecognizer) {
         if recognizer.numberOfTouches() == 1 {
-            let point = recognizer.velocityInView(self.gameView)
+            let point = recognizer.velocityInView(GameView.current)
             
-            self.actionProcessor.action(.LOOK_AROUND, speed: self.lookSpeed, args: point)
+            RMX.ActionProcessor.current.action(.LOOK_AROUND, speed: self.lookSpeed, args: point)
         }
 //            _handleRelease(recognizer.state)
     }
 
     
     func nextCamera(recogniser: UITapGestureRecognizer) {
-            self.actionProcessor.action(UserAction.NEXT_CAMERA, speed: 1)
+            RMX.ActionProcessor.current.action(UserAction.NEXT_CAMERA, speed: 1)
     }
     
     func previousCamera(recogniser: UITapGestureRecognizer) {
-        self.actionProcessor.action(UserAction.PREV_CAMERA, speed: 1)
+        RMX.ActionProcessor.current.action(UserAction.PREV_CAMERA, speed: 1)
     }
 
 
     func grabOrThrow(recognizer: UITapGestureRecognizer) {
         // retrieve the SCNView
-        let scnView = self.gameView//.view as! GameView
+        let scnView = GameView.current//.view as! GameView
         // check what nodes are tapped
         let p = recognizer.locationInView(scnView)
         

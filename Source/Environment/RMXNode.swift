@@ -362,8 +362,8 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     internal func addCameras() {
         if self.cameras.count == 0 {
             if self.type == .PLAYER {
-                RMXCamera.followCam(self, option: CameraOptions.FIXED)
                 RMXCamera.headcam(self)
+                RMXCamera.followCam(self, option: CameraOptions.FIXED)
                 RMXCamera.followCam(self, option: CameraOptions.FREE)
             } else {
                 RMXCamera.headcam(self)

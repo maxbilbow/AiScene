@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+public protocol SoundMaker : Hashable { }
 public enum UserAction : String, CustomStringConvertible {
     //Movement
     case MOVE = "Move Around"

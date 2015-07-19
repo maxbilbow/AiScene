@@ -38,7 +38,7 @@ class GameView: SCNView  {
         }
         
         override func keyUp(theEvent: NSEvent) {
-            if let key = (RMX.Interface.current as? RMX.DesktopInput)?.forEvent(theEvent) {
+            if let key = (RMXInterface.current as? RMX.DesktopInput)?.forEvent(theEvent) {
                 RMLog("Key recognised: \(key.print) \n\(theEvent.characters!.hash) == \(theEvent.keyCode) == \(theEvent.characters!)",id: "keys")
                 if !key.release() {
                     RMLog("ERROR on Key Up for \(key.print)")
@@ -69,7 +69,7 @@ class GameView: SCNView  {
         }
         
         override func rightMouseDown(theEvent: NSEvent) {
-            let interface = RMX.Interface.current as! RMX.DesktopInput
+            let interface = RMXInterface.current as! RMX.DesktopInput
             if interface.get(forChar: RMX.DesktopInput.RIGHT_CLICK)?.press() ?? false {
                 let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
                 if !interface.processHit(point: p, type: .THROW_ITEM) {
@@ -84,7 +84,7 @@ class GameView: SCNView  {
         }
         
         override func mouseUp(theEvent: NSEvent) {
-            let interface = RMX.Interface.current as! RMX.DesktopInput
+            let interface = RMXInterface.current as! RMX.DesktopInput
             if interface.get(forChar: RMX.DesktopInput.LEFT_CLICK)?.release() ?? false {
                 let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
                 if !interface.processHit(point: p, type: .GRAB_ITEM) {
@@ -102,7 +102,7 @@ class GameView: SCNView  {
             /* Called when a mouse click occurs */
             
             // check what nodes are clicked
-            let interface = RMX.Interface.current as! RMX.DesktopInput
+            let interface = RMXInterface.current as! RMX.DesktopInput
             if interface.get(forChar: RMX.DesktopInput.LEFT_CLICK)?.press() ?? false {
                 let p = self.convertPoint(theEvent.locationInWindow, fromView: nil)
                 if !interface.processHit(point: p, type: .GRAB_ITEM) {

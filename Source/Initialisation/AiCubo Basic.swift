@@ -146,7 +146,7 @@ class AiCubo {
     
     }
     
-    class func setUpWorld(interface: RMX.Interface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
+    class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
         if let interface = interface {
 
             let world = RMXScene() //interface.world//
