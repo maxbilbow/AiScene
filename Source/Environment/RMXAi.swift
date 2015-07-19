@@ -236,8 +236,9 @@ extension RMXAi {
                 for node in sprite.childNodes {
                     node.physicsBody?.affectedByGravity = false
                 }
-            } else {
                 scalar = 2
+            } else {
+                scalar = 1
             }
         let ai = { (node: AnyObject!) -> Void in
 //            if sprite.world.aiOn { NSLog(sprite.name) }

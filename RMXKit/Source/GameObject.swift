@@ -170,6 +170,7 @@ extension Mono {
            return result
         }
         
+        @available(*,deprecated=0.1,message="This doesnt actually produce a copy. Will have to be cleverer")
         public override func clone() -> Object {
             let clone = super.clone() as! GameObject
             clone._id = GameObject.Count++

@@ -148,7 +148,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     var startingPoint: SCNVector3?//?// = SCNVector3Zero
     
     var isLocalPlayer: Bool {
-        return self.rmxID == self.scene.activeSprite.rmxID
+        return self.rmxID == RMXNode.current?.rmxID
     }
     
     ///Set automated rotation (used mainly for the sun)
@@ -269,7 +269,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     var isHoldingItem: Bool {
-        return self.item != nil
+        return self.arm?.childNodes.count == 2
     }
     
    
@@ -527,11 +527,31 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         self.physicsBody?.mass = mass ?? 4 * PI_CG * self.radius * self.radius
     }
     
+    enum GrabbingRule {
+        case Yes, No, Tractor, HeadTowards
+    }
+    
+    func isAbleToGrab(node: RMXNode) -> GrabbingRule {
+        if node.isLocked || node.type != .PASSIVE || self.isHoldingItem || node == self {
+            return .No
+        }
+        if isWithinReachOf(node) {
+            return .Yes
+        } else if isWithinSightOf(node) {
+            return .Tractor
+        } else {
+            return .HeadTowards
+        }
+    
+    }
+    
     var isLocked: Bool = false
     private func setItemInHand(node: SCNNode?) -> Bool {
-        if let itemIncoming = node?.rmxNode {
-            if itemIncoming.rmxID == self.rmxID || self.isHoldingItem  || itemIncoming.isLocked { return false } else { itemIncoming.isLocked = true }
-            if  itemIncoming.isLocalPlayer && !self.canGrabPlayers {  RMLog("\(__FUNCTION__)- cant grab \(itemIncoming.name)", id: "THROW") ;return false  } //Prevent accidentily holding oneself
+        if let itemIncoming = node as? RMXNode ?? node?.rmxNode {
+            switch self.isAbleToGrab(itemIncoming) {
+            case .Yes:
+                
+            }
             if self.isWithinReachOf(itemIncoming) {
                 itemIncoming.removeCollisionActions()
                 //                itemIncoming.followers.removeAll(keepCapacity: false) ///TODO: this may not be necessary
@@ -588,7 +608,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     func isWithinReachOf(item: RMXNode) -> Bool{
-        return self.distanceToSprite(item) <= RMFloat(self.radius) * 3
+        return self.distanceToSprite(item) <= RMFloat(self.radius + item.radius) * 2
     }
     
     func isWithinSightOf(item: RMXNode) -> Bool{
@@ -597,10 +617,10 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     
     func grabItem(object: AnyObject?) -> Bool {
         if self.item != nil { return false }
-        if object?.isKindOfClass(SCNNode) ?? false {
-            return self.setItemInHand((object as! SCNNode).rmxNode)
-        } else if let sprite = object as? RMXNode {
+        if let sprite = object as? RMXNode {
             return self.setItemInHand(sprite)
+        } else if object?.isKindOfClass(SCNNode) ?? false {
+            return self.setItemInHand((object as! SCNNode).rmxNode)
         }
         return self.item != nil
     }
