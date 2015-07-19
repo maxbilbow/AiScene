@@ -246,7 +246,7 @@ extension RMX {
                     }
 
                 case .BOOM:
-                    if sprite.isHoldingItem && speed > 0 && self.boomTimer > 1 {
+                    if speed > 0 && self.boomTimer > 1 {
                         let result = sprite.throwItem(force: speed * self.boomTimer)
                         self.boomTimer = 1
                         return result
@@ -260,7 +260,7 @@ extension RMX {
                         }
                     }
                     return false
-                case .THROW_OR_GRAB_ITEM:
+                case .THROW_OR_GRAB_TRACKED, .THROW_OR_GRAB_UNTRACKED:
                     if speed == 0 && self.boomTimer == 1 {
                         if sprite.isHoldingItem {
                             self.boomTimer = 2
@@ -271,7 +271,7 @@ extension RMX {
                     } else if speed > 0 {
                         //                    var result = false
                         if sprite.isHoldingItem {
-                            return true//self.activeSprite.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
+                            return true// RMXNode.current.throwItem(atObject: args as? AnyObject, withForce: self.boomTimer * item.mass * speed)
                         }
                         self.boomTimer = 1
                         return false
@@ -427,13 +427,9 @@ extension RMX {
         func animate(){
             if self.boomTimer > 1 {
                 self.boomTimer++
-                RMLog(self.boomTimer.print, id: "ActionProcessor")
+//                RMLog(self.boomTimer.print, id: "ActionProcessor")
             }
-            
-            
-            
-
-            self.debug(false)
+//            self.debug(false)
         }
             
         
@@ -448,7 +444,7 @@ extension RMX {
     //            sprite.setAngle(y, pitch: x, roll: z)
     //        }
     //    }
-        
+        /*
         func throwOrGrab(target: Any?, withForce force: RMFloat = 1, tracking: Bool) -> Bool {
             if self.activeSprite.isHoldingItem  {
                 let boom = self.boomTimer
@@ -464,9 +460,9 @@ extension RMX {
             }
             self.boomTimer = 1
             return false
-        }
+        } */
         
-           
+        
         func explode(sprite s: RMXNode? = nil, force: RMFloat = 1, range: RMFloat = 500) -> Bool{
             let sprite = s ?? self.activeSprite
             RMSoundBox.current.playSound(UserAction.BOOM.description, info: sprite, range: Float(range))

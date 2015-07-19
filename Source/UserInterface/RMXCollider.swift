@@ -14,7 +14,7 @@ typealias CollisionRequest = (contact: SCNPhysicsContact) -> Bool
 
 @available(OSX 10.10, *)
 extension SCNPhysicsContact : RMXLocatable {
-    func getPosition() -> SCNVector3 {
+    public func getPosition() -> SCNVector3 {
         return self.contactPoint
     }
 }

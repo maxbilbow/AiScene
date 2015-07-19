@@ -309,19 +309,19 @@ class RMXMobileInput : RMXInterface {
 
     func accelerometer() {
         func tilt(direction: UserAction, tilt: RMFloat){
-            if RMXScene.current.hasGravity {
-                return
-            } else {
-                let rollSpeed = RMFloat(self.moveSpeed)
-                let rollThreshold: RMFloat = 0.1
-                if tilt > rollThreshold {
-                    let speed = (1.0 + tilt) * rollSpeed
-                    RMX.ActionProcessor.current.action(direction, speed: speed)
-                } else if tilt < -rollThreshold {
-                    let speed = (-1.0 + tilt) * rollSpeed
-                    RMX.ActionProcessor.current.action(direction, speed: speed)
-                }
+//            if RMXScene.current.hasGravity {
+//                return
+//            } else {
+            let rollSpeed = RMFloat(self.moveSpeed)
+            let rollThreshold: RMFloat = 0.1
+            if tilt > rollThreshold {
+                let speed = (1.0 + tilt) * rollSpeed
+                RMX.ActionProcessor.current.action(direction, speed: speed)
+            } else if tilt < -rollThreshold {
+                let speed = (-1.0 + tilt) * rollSpeed
+                RMX.ActionProcessor.current.action(direction, speed: speed)
             }
+//            }
         }
         
         if let deviceMotion = self.motionManager.deviceMotion {

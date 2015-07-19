@@ -98,8 +98,8 @@ import UIKit
             //        RMXNode.current?.setAngle(roll: 0)
             if recogniser.state == .Ended {
                 if RMXNode.current?.isHoldingItem ?? false {
-                    RMX.ActionProcessor.current.throwOrGrab(nil, withForce: 1, tracking: false)
-                    RMXNode.current?.throwItem(force: 1)
+                    RMX.ActionProcessor.current.action(UserAction.THROW_OR_GRAB_UNTRACKED)
+//                    RMXNode.current?.throwItem(force: 1)
                 } else {
                     RMX.ActionProcessor.current.action(UserAction.BOOM, speed: 1)
                 }

@@ -10,6 +10,7 @@ import Foundation
 //import RMXKit
 import SceneKit
 
+      
                 
 extension RMXNode {
     var isPlayerOrAi: Bool {
@@ -57,8 +58,6 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     var print: String {
         return self.uniqueID!
     }
-    
-    var holder: RMXNode?
     
     var attributes: SpriteAttributes!
     
@@ -167,23 +166,36 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
 //    private var _ignoreNextJump:Bool = false
     
     
-    private var _itemInHand: RMXNode?
+//    private var _itemInHand: RMXNode?
+    @available(*,deprecated=0.13,message="use 'itemInHand' instead'")
     var item: RMXNode? {
-        return _itemInHand
-    }
-
-    
-    convenience init(world: RMXScene = RMXScene.current, type: RMXSpriteType = .ABSTRACT, shape: ShapeType = .NULL){
-        self.init(inWorld: world, type: type, shape: shape)
+        return itemInHand
     }
     
-    convenience init(inWorld world: RMXScene, type: RMXSpriteType = .PASSIVE, shape: ShapeType = .CUBE, color: RMColor? = RMX.randomColor(), unique: Bool = false) {
-        self.init(inWorld: world, geometryNode: RMXModels.getNode(shapeType: shape, color: color, inWorld: world), type: type, shape: shape, unique: unique)
+    var itemInHand: RMXNode? {
+        if let nodes = coupling?.getNodes(inScene: self.scene) {
+            return nodes.A == self ? nodes.B : nil
+        } else {
+            return nil
+        }
+    }
+    /// The node that holds this one.
+    var holderNode: RMXNode? {
+        if let nodes = coupling?.getNodes(inScene: self.scene) {
+            return nodes.B == self ? nodes.A : nil
+        } else {
+            return nil
+        }
+    }
+        
+    
+    
+    convenience init(withScene scene: RMXScene, type: RMXSpriteType = .PASSIVE, shape: ShapeType = .CUBE, color: RMColor? = RMX.randomColor(), unique: Bool = false) {
+        self.init(withScene: scene, geometryNode: RMXModels.getNode(shapeType: shape, color: color, inWorld: scene), type: type, shape: shape, unique: unique)
     }
     
     deinit {
-        self.holder?.releaseItem()
-        self.releaseItem()
+        self.unCouple()
         self.tracker.abort()
         self.aiDelegate = nil
         self.removeCollisionActions()
@@ -193,13 +205,14 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     private var safeInit = false
-    var arm: SCNNode?
-    init(inWorld scene: RMXScene, geometryNode: SCNNode?, type: RMXSpriteType, shape: ShapeType = .CUBE, unique: Bool, safeInit: Bool = false){
+    var socket: SCNNode
+    init(withScene scene: RMXScene, geometryNode: SCNNode?, type: RMXSpriteType, shape: ShapeType = .CUBE, unique: Bool, safeInit: Bool = false){
         self._scene = scene
         self.type = type
         self.shapeType = shape
         self.isUnique = unique
         //        self.geometryNode = node
+        self.socket = RMXModels.getNode(shapeType: .SPHERE, radius: 2)//, type: RMXSpriteType.ABSTRACT)
         super.init()
         if let node = geometryNode {
             self.setGeometryNode(node)
@@ -231,10 +244,10 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         case .PLAYER, .AI, .PASSIVE:
             self._spriteLogic.append(self.tracker.headToTarget)
             self._spriteLogic.append((self.timer as! RMXSpriteTimer).activate)
-            self.arm = RMXModels.getNode(shapeType: .SPHERE, radius: 2)
-            self.arm?.physicsBody = SCNPhysicsBody.staticBody()
-            self.arm?.position = self.front
-            self.addChildNode(self.arm!)
+//            self.socket = RMXModels.getNode(shapeType: .SPHERE, radius: 2)
+            self.socket.physicsBody = SCNPhysicsBody()//.staticBody()
+            self.socket.position = self.front
+            self.addChildNode(self.socket)
             self.setMass()
             
             break
@@ -269,8 +282,13 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     var isHoldingItem: Bool {
-        return self.arm?.childNodes.count == 2
+        return self.coupling?.bodyA == self.socket.physicsBody && self.coupling?.bodyB != nil
     }
+    
+    var isCoupled: Bool {
+        return self.coupling?.bodyA != nil && self.coupling?.bodyB != nil
+    }
+    
     
    
     
@@ -359,7 +377,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     
-    internal func addCameras() {
+    internal func addCameras() -> Array<SCNNode> {
         if self.cameras.count == 0 {
             if self.type == .PLAYER {
                 RMXCamera.headcam(self)
@@ -374,6 +392,7 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         } else {
             RMLog("cameras already set up for \(self.name)")
         }
+        return self.cameras
         
     }
     
@@ -396,63 +415,38 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         return _isTargetable ?? ( self.type != .BACKGROUND && self.type != .ABSTRACT )
     }
     
+    
+    
     ///object as Node: thrown in direction of node
     ///object as Sprite: thrown and tracked to sprite
     ///object as position: thown in direction
-    func throwItem(at object: AnyObject?, withForce strength: RMFloat, tracking: Bool) -> Bool {
-        if let node = object as? RMXNode {
-            if !node.isTargetable {
-                RMLog(" Sprite: \(node.name) is not targetable", sender: self, id: "THROW")
-                return false
-            }
-            if tracking {
-                RMLog("SPRITE -> SPRITE: \(node.name)", sender: self, id: "THROW")//, sender: self)
-                return self.throwItem(atPawn: node, withForce: strength)
-            } else {
-                RMLog("NODE -> Position: \(node.getPosition().print)", sender: self, id: "THROW")//, sender: self)
-                return self.throwItem(atPosition: node.getPosition(), withForce: strength)
-            }
-        } else if let node = object as? SCNNode {
-            if !(node.rmxNode?.isTargetable ?? true){
-                RMLog(" Sprite: \(node.name) is not trackable", sender: self, id: "THROW")
-                return false
-            }
-            if tracking {
-                RMLog("NODE -> Sprite: \(node.pawn?.name)", sender: self, id: "THROW")//, sender: self)
-                return self.throwItem(at: node.pawn, withForce: strength, tracking: tracking)
-            } else {
-                RMLog("NODE -> Position: \(node.getPosition())", sender: self, id: "THROW")//, sender: self)
-                return self.throwItem(atPosition: node.getPosition(), withForce: strength)
-            }
-        } else if let position = object as? SCNVector3 {
-            RMLog("VECTOR -> Position: \(position.print)", sender: self, id: "THROW")
-            return self.throwItem(atPosition: position, withForce: strength)
+    func throwItem(at hit: SCNHitTestResult?, withForce strength: RMFloat = 1, tracking: Bool = false) -> Bool {
+        if let node = hit?.node as? RMXNode ?? hit?.node.rmxNode where node.isTargetable {
+            return self.throwItem(atPawn: node, withForce: strength, tracking: tracking)
+        } else if let point = hit?.worldCoordinates {
+            self.throwItem(atPosition: point, withForce: strength)
         } else {
-            RMLog("UNKNOWN Object: \(object?.description)", sender: self, id: "THROW")//, sender: self)
-            return self.throwItem(force: strength)
+            self.throwItem(force: strength)
         }
+        return false //should not highlight
     }
     
-    private func throwItem(atPawn pawn: RMXNode?, withForce strength: RMFloat = 1) -> Bool{
-        if let itemInHand = self.item {
-            if let sprite = pawn {
-                if sprite.rmxID == self.rmxID || sprite.rmxID == itemInHand.rmxID {
-                    return false
-                }
-                RMLog("Item thrown at sprite (force: \(strength.print))", sender: self, id: "THROW")
-                self.releaseItem()
-                itemInHand.tracker.setTarget(sprite, speed: strength, asProjectile: true, impulse: true, willJump: false, doOnArrival: { (target) -> () in
-                    RMXTeam.challenge(self.attributes, defender: target!.attributes, doOnWin: nil)
+    func throwItem(atPawn pawn: RMXNode?, withForce force: RMFloat = 1, tracking: Bool) -> Bool{
+        if let itemInHand = self.itemInHand, let theTarget = pawn where theTarget != self && theTarget != itemInHand {
+            self.unCouple()
+            if tracking {
+                itemInHand.tracker.setTarget(theTarget, speed: force, asProjectile: true, impulse: true, willJump: false, doOnArrival: { (target) -> () in
+                    RMXTeam.challenge(self.attributes, defender: theTarget.attributes, doOnWin: nil)
                 })
                 RMXTeam.throwChallenge(self, projectile: itemInHand)
-                
+                return true
             } else {
-                RMLog(" *Item thrown at sprite (force: \(strength.print)) but nothing to throw", sender: self, id: "THROW")
+                return self.throwItem(atPosition: theTarget.getPosition(), withForce: force)
             }
         } else {
-            RMLog("Nothing to throw",sender: self, id: SPRITE_TYPE)
+            ///Not a valid target
+            return false
         }
-        return self.item == nil
     }
     
     private lazy var SPRITE_ACTIONS: String = self.uniqueID!
@@ -461,9 +455,9 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     
-    
+    /// Returns true if hit should be highlighted
     func throwItem(force strength: RMFloat) -> Bool {
-        if let itemInHand = self.item {
+        if let itemInHand = self.itemInHand {
             RMLog("Item thrown with force: \(strength.print)", sender: self, id: "THROW")
             let direction = self.forwardVector
 //            if self.isLocalPlayer {
@@ -471,14 +465,14 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
 //                let mat = GLKMatrix4MakeRotation(Float(gradient), Float(1.0), 0.0, 0.0)
 //                direction = SCNVector3FromGLKVector3( GLKMatrix4MultiplyVector3WithTranslation(mat, SCNVector3ToGLKVector3( direction)))
 //            }
-            self.releaseItem()
+            self.unCouple()
             RMXTeam.throwChallenge(self, projectile: itemInHand)
             let force = itemInHand.suggestedThrowingForce(strength < 150 ? 150 : strength)
             itemInHand.applyForce(direction * force, impulse: true)
         } else {
             RMLog(" *Item thrown with force but nothing to throw: \(strength.print)", sender: self, id: "THROW")
         }
-        return self.item == nil
+        return false
         
     }
     func suggestedThrowingForce(force: RMFloat = 1) -> RMFloat {
@@ -487,41 +481,39 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
         return RMFloat(damping * mass) * force
     }
     
-    func throwItem(atPosition target: SCNVector3?, withForce strength: RMFloat) -> Bool {
-        if let target = target {
-            if let itemInHand = self.item {
-                let direction = (target - itemInHand.getPosition())//.normalised
-                self.releaseItem()
-                RMXTeam.throwChallenge(self, projectile: itemInHand)
-                let force: RMFloat = itemInHand.suggestedThrowingForce()
-                itemInHand.applyForce( direction * force, impulse: true)
-                RMLog("Throw Item thrown from: \(itemInHand.getPosition().print) to \(target.print)", sender: self, id: "THROW")
-                RMLog("          in Direction: \(direction.print))", sender: self, id: "THROW")
-                RMLog("            with force: \((direction * force).print))", sender: self, id: "THROW")
-            } else {
-                RMLog(" *Item thrown in direction: \(target.print) but Nothing to throw", sender: self, id: "THROW")
-            }
+    /// Returns true if hit should be highlighted
+    func throwItem(atPosition target: SCNVector3?, withForce force: RMFloat) -> Bool {
+        if let target = target, let itemInHand = self.itemInHand {
+            let direction = (target - itemInHand.getPosition())//.normalised
+            self.unCouple()
+            RMXTeam.throwChallenge(self, projectile: itemInHand)
+            let force: RMFloat = itemInHand.suggestedThrowingForce(force)
+            itemInHand.applyForce( direction * force, impulse: true)
+            RMLog("Throw Item thrown from: \(itemInHand.getPosition().print) to \(target.print)", sender: self, id: "THROW")
+            RMLog("          in Direction: \(direction.print))", sender: self, id: "THROW")
+            RMLog("            with force: \((direction * force).print))", sender: self, id: "THROW")
+            return true
         }
-        return self.item == nil
+        return false
     }
     
     
     
     func manipulate(node: AnyObject! = nil) -> Void {
-        if self.isHoldingItem && self.item?.physicsBody?.type != .Dynamic {
-            var newPos = self.getPosition() + self.forwardVector * (self.length / 2 + RMFloat(self.item!.radius * 0.5))
+        if let itemInHand = self.itemInHand where itemInHand.physicsBody?.type != .Dynamic {
+            var newPos = self.getPosition() + self.forwardVector * (self.length / 2 + RMFloat(itemInHand.radius * 0.5))
             if let earth = self.scene.earth as? RMXNode {
-                let minHeight:RMFloat = earth.top.y + earth.getPosition().y + RMFloat(self.item!.radius)
+                let minHeight:RMFloat = earth.top.y + earth.getPosition().y + RMFloat(itemInHand.radius)
                 if self.scene.hasGravity && newPos.y < minHeight {
                     newPos.y = minHeight
                 }
             }
-            self.item!.setPosition(newPos)//, resetTransform: false)
+            itemInHand.setPosition(newPos)//, resetTransform: false)
             RMLog("\(self.name!) is holding a non-dynamic body", sender: self, id: "MISC")
         }
     }
     
-    private var _arm: SCNPhysicsBehavior?
+    var coupling: SCNPhysicsBallSocketJoint?
     
     func setMass(mass: CGFloat? = nil) {
         self.physicsBody?.mass = mass ?? 4 * PI_CG * self.radius * self.radius
@@ -545,64 +537,26 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     
     }
     
-    var isLocked: Bool = false
-    private func setItemInHand(node: SCNNode?) -> Bool {
-        if let itemIncoming = node as? RMXNode ?? node?.rmxNode {
+    var isLocked: Bool {
+        return self.isCoupled
+    }
+    
+    private func setItemInHand(node: SCNNode) -> Bool {
+        if let itemIncoming = node as? RMXNode ?? node.rmxNode {
             switch self.isAbleToGrab(itemIncoming) {
             case .Yes:
-                
-            }
-            if self.isWithinReachOf(itemIncoming) {
-                itemIncoming.removeCollisionActions()
-                //                itemIncoming.followers.removeAll(keepCapacity: false) ///TODO: this may not be necessary
-                
-                //Used to make body static here
-                if itemIncoming.arm != nil {
-                    if !itemIncoming.isActor { ///reduce mass to 1% of sprite unless its another player
-                        itemIncoming.setMass(self.physicsBody!.mass * 0.01)
-                        itemIncoming.physicsBody?.restitution = 0.01
-                        itemIncoming.physicsBody?.friction = 0.01
-                    }
-                    _itemInHand = itemIncoming
-                    itemIncoming.holder = self
-                    _arm = SCNPhysicsBallSocketJoint(bodyA: self.physicsBody!, anchorA: self.arm!.getPosition(), bodyB: itemIncoming.physicsBody!, anchorB: itemIncoming.arm!.getPosition()) //+ SCNVector3Make(item.arm.radius))
-                    
-                    self.scene.physicsWorld.addBehavior(_arm!)
-                }
-                //joint
+                RMXCoupling.Make(self, receiver: itemIncoming)
                 return true
-            } else {
+            case .Tractor:
                 ///Player can use tractor beam function on passive objects
-                itemIncoming.isLocked = false
-                if (self.isLocalPlayer || self.isWithinSightOf(itemIncoming)) && itemIncoming.type == .PASSIVE { // || (self.isLocalPlayer && itemIncoming.isActor ) { ///active player can grab anything for now
-                    itemIncoming.tracker.setTarget(self, willJump: false, asProjectile: true, impulse: true, doOnArrival: { (target) -> () in// speed: 10 * item.mass
-                        self.setItemInHand(itemIncoming)
-                        //                        item.tracker.removeTarget()
-                    })
-                    return true
-                }
-                
+                itemIncoming.tracker.setTarget(self, willJump: false, asProjectile: true, impulse: true, doOnArrival: { (target) -> () in// speed: 10 * item.mass
+                    self.setItemInHand(itemIncoming)
+                })
+                return true //Check...
+            default:
                 return false
             }
-        } else if let itemInHand = self._itemInHand {
-            
-            //this used to make dynamic again here
-            //                itemInHand.physicsBody?.type = .Dynamic
-            self._itemInHand = nil
-            self.scene.physicsWorld.removeBehavior(_arm!)
-            if !itemInHand.isActor {
-                itemInHand.setMass()
-                itemInHand.physicsBody?.restitution = 0.5
-                itemInHand.physicsBody?.friction = 0.5
-            }
-            _arm = nil
-            itemInHand.holder = nil
-            //            itemInHand.followers.removeAll(keepCapacity: false)
-            itemInHand.isLocked = false
-            
-            return true
-        }
-        else {
+        } else {
             return false
         }
     }
@@ -612,28 +566,25 @@ class RMXNode : SCNNode, RMXTeamMember, RMXPawn, RMXObject {
     }
     
     func isWithinSightOf(item: RMXNode) -> Bool{
-        return self.distanceToSprite(item) <= RMFloat(self.scene.radius) / 4
+        let maxDist = RMFloat(self.scene.radius) / (self.isLocalPlayer ? 1 : 4)
+        return self.distanceToSprite(item) <= maxDist
     }
     
     func grabItem(object: AnyObject?) -> Bool {
-        if self.item != nil { return false }
-        if let sprite = object as? RMXNode {
-            return self.setItemInHand(sprite)
-        } else if object?.isKindOfClass(SCNNode) ?? false {
-            return self.setItemInHand((object as! SCNNode).rmxNode)
+        if self.isCoupled { return false }
+        else if let node = object as? SCNNode {
+            return self.setItemInHand(node)
+        } else {
+            return false;//self.isCoupled
         }
-        return self.item != nil
     }
     
     
-    func releaseItem() {
-        self.setItemInHand(nil)
+    func unCouple() {
+        self.coupling?.unCouple(self.scene)
     }
     
-    
- 
 
-    
     func jump() {
         if self.getPosition().y < self.height * 10 {
             let jumpStrength = fabs(RMFloat(self.weight) * self.jumpStrength)

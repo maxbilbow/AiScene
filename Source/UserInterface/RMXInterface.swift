@@ -224,24 +224,12 @@ import SpriteKit
         }
         
         func processHit(point p: CGPoint, type: UserAction) -> Bool {
-            if let hitResults = GameViewController.current.gameView?.hitTest(p, options: nil) {
-                // check that we clicked on at least one object
-                if hitResults.count > 0 {
-                    // retrieved the first clicked object
-                    if let node: SCNNode = hitResults[0].node {
-    //                NSLog(result.)
-                    
-    //                    var animate: Bool = false
-                        if type == .THROW_ITEM {
-                            if RMX.ActionProcessor.current.throwOrGrab(node, tracking: true) {
-                                self.animateHit(node)
-                            } else {
-                                RMX.ActionProcessor.current.throwOrGrab(hitResults[0].worldCoordinates, tracking: false) //activeSprite.throwItem(atPosition: hitResults[0].worldCoordinates, withForce: 1)
-                            }
-                        } else if RMX.ActionProcessor.current.throwOrGrab(node, tracking: false) {
-                            self.animateHit(node)
-                        }
-                    }
+            if let hitResults = GameViewController.current.gameView?.hitTest(p, options: nil) where hitResults.count > 0,
+                let hit: SCNHitTestResult = hitResults[0] {
+                let tracked = type == .THROW_OR_GRAB_TRACKED
+                if RMXNode.current?.throwItem(at: hit, tracking: tracked) ?? false || RMXNode.current?.grabItem(hit.node) ?? false {
+                    self.animateHit(hit.node)
+                    return true
                 }
             }
             return false

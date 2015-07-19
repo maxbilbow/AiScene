@@ -65,8 +65,8 @@ extension RMX {
         RMKey(action: .LOOK_AROUND, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
         
         //Interactions
-        RMKey(action: .THROW_OR_GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
-        RMKey(action: .THROW_OR_GRAB_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
+        RMKey(action: .THROW_OR_GRAB_UNTRACKED, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
+        RMKey(action: .THROW_OR_GRAB_TRACKED, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
         RMKey(action: .BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
         
         //Environmentals

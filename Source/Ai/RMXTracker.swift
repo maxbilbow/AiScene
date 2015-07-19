@@ -103,7 +103,7 @@ class RMXTracker : NSObject {
             self.doOnArrival = doOnArrival
 
             if asProjectile { //if holming missile with timer, do not let interferrence
-                self.sprite.isLocked = true
+//                self.sprite.isLocked = true
                 if limit <= 0 {
                     self._limit = 100
                 }
@@ -115,7 +115,7 @@ class RMXTracker : NSObject {
     internal func didReachTarget(target: RMXNode?) -> Bool {
         if self.hasTarget {
             if self.isProjectile { //if holming missile with timer, do not let interferrence
-                self.sprite.isLocked = false
+//                self.sprite.isLocked = false
             }
             self._target = nil
             self.doOnArrival?(target: target)
@@ -152,9 +152,9 @@ class RMXTracker : NSObject {
         if !self.world.aiOn {
             if self.isAi {
                 return
-            } else if self.sprite.holder?.type != .PLAYER {
+            } else if self.sprite.holderNode?.type != .PLAYER {
 //                self.sprite.isLocked = false
-                self.sprite.holder?.releaseItem()
+                self.sprite.holderNode?.unCouple()
             }
         }
         let isStuck = self.isStuck
