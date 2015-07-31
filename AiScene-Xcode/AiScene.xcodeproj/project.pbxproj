@@ -50,6 +50,10 @@
 		50BF107E1B16030D00680768 /* RMXTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BF107D1B16030D00680768 /* RMXTracker.swift */; };
 		50BF107F1B16030D00680768 /* RMXTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BF107D1B16030D00680768 /* RMXTracker.swift */; };
 		50BF10801B16030D00680768 /* RMXTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BF107D1B16030D00680768 /* RMXTracker.swift */; };
+		50C43C381B679C5500AD2FAC /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C43C371B679C5500AD2FAC /* NotificationCenter.swift */; };
+		50C43C391B679C5500AD2FAC /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C43C371B679C5500AD2FAC /* NotificationCenter.swift */; };
+		50C43C3B1B679D2200AD2FAC /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C43C3A1B679D2200AD2FAC /* Protocols.swift */; };
+		50C43C3C1B679D2200AD2FAC /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C43C3A1B679D2200AD2FAC /* Protocols.swift */; };
 		6C05FC341B55750600965780 /* RMXException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C05FC331B55750600965780 /* RMXException.swift */; };
 		6C05FC351B55758E00965780 /* RMXException.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C05FC331B55750600965780 /* RMXException.swift */; };
 		6C0DC6A01B26EE1400220E95 /* RMKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0DC69F1B26EE1400220E95 /* RMKey.swift */; };
@@ -221,6 +225,8 @@
 		50B4B0E11B2C57A6009AF091 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		50B563EC1B13A7F2008AB47D /* SCNNode-extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode-extension.swift"; sourceTree = "<group>"; };
 		50BF107D1B16030D00680768 /* RMXTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RMXTracker.swift; path = Ai/RMXTracker.swift; sourceTree = "<group>"; };
+		50C43C371B679C5500AD2FAC /* NotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationCenter.swift; path = ../RMXGCD/NotificationCenter.swift; sourceTree = "<group>"; };
+		50C43C3A1B679D2200AD2FAC /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Protocols.swift; path = ../RMXGCD/Protocols.swift; sourceTree = "<group>"; };
 		6C05FC331B55750600965780 /* RMXException.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXException.swift; sourceTree = "<group>"; };
 		6C0DC69F1B26EE1400220E95 /* RMKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMKey.swift; sourceTree = "<group>"; };
 		6C206C3B1B2586AF00D83CC0 /* RMXSceneKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RMXSceneKit.swift; sourceTree = "<group>"; };
@@ -379,6 +385,15 @@
 			path = ../Audio;
 			sourceTree = "<group>";
 		};
+		50C43C321B679BE600AD2FAC /* RMXGCD */ = {
+			isa = PBXGroup;
+			children = (
+				50C43C371B679C5500AD2FAC /* NotificationCenter.swift */,
+				50C43C3A1B679D2200AD2FAC /* Protocols.swift */,
+			);
+			name = RMXGCD;
+			sourceTree = "<group>";
+		};
 		6C4A28821B03ACDB001C3F5B /* Media */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,6 +465,7 @@
 		6C9299821AE5432000E71811 = {
 			isa = PBXGroup;
 			children = (
+				50C43C321B679BE600AD2FAC /* RMXGCD */,
 				502AED521B581D2800A07A40 /* RMXKit.xcodeproj */,
 				6C4A28821B03ACDB001C3F5B /* Media */,
 				6C9299F01AE544D500E71811 /* art.scnassets */,
@@ -984,7 +1000,9 @@
 				50B563ED1B13A7F2008AB47D /* SCNNode-extension.swift in Sources */,
 				6C9299D71AE544C000E71811 /* 3dModels.swift in Sources */,
 				50BF107E1B16030D00680768 /* RMXTracker.swift in Sources */,
+				50C43C3B1B679D2200AD2FAC /* Protocols.swift in Sources */,
 				6CAFB6721B170FB2006A1BA0 /* RMXAudioVideo.swift in Sources */,
+				50C43C381B679C5500AD2FAC /* NotificationCenter.swift in Sources */,
 				6C9299E71AE544C000E71811 /* RMXInitialize.swift in Sources */,
 				6C05FC341B55750600965780 /* RMXException.swift in Sources */,
 				6C6DD1A61B10C7F300107FAD /* AiCubo Basic.swift in Sources */,
@@ -1035,6 +1053,8 @@
 				6C929A1F1AE5499900E71811 /* RMXInitialize.swift in Sources */,
 				6C929A2D1AE549A600E71811 /* ActionProcessor.swift in Sources */,
 				6C929A311AE54DCA00E71811 /* RMSEquations.swift in Sources */,
+				50C43C391B679C5500AD2FAC /* NotificationCenter.swift in Sources */,
+				50C43C3C1B679D2200AD2FAC /* Protocols.swift in Sources */,
 				6C929A2E1AE549A600E71811 /* DesktopInput.swift in Sources */,
 				6C929A221AE5499D00E71811 /* RMSArt.swift in Sources */,
 				5063BD1B1B2C6E8800FB5558 /* RMXSpriteTimer.swift in Sources */,
