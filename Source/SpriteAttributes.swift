@@ -8,7 +8,7 @@
 
 import Foundation
 import SceneKit
-import RMXKit
+//import RMXKit
 
 @available(OSX 10.9, *)
 class SpriteAttributes : RMXAttributes {
@@ -179,7 +179,7 @@ class SpriteAttributes : RMXAttributes {
             //            self.sprite.node.paused = true
             self.sprite.opacity = 0.1
             //
-            self.sprite.releaseItem()
+            self.sprite.unCouple()
             self.sprite.removeCollisionActions()
             
             self.sprite.tracker.abort()

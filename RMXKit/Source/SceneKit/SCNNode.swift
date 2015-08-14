@@ -9,7 +9,7 @@
 import Foundation
 import SceneKit
 
-public extension SCNNode  {
+extension SCNNode : RMXLocatable  {
     
 //    public var uniqueID: String? {
 //        let parentID = self.parentNode?.uniqueID ?? ""
@@ -20,7 +20,7 @@ public extension SCNNode  {
 //        return self.uniqueID!
 //    }
     
-    func getPosition() -> SCNVector3 {
+    public func getPosition() -> SCNVector3 {
         return self.presentationNode().position
     }
 

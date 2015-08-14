@@ -8,7 +8,7 @@
 
 import Foundation
 import GLKit
-import RMXKit
+//import RMXKit
 import SceneKit
 
 //typealias RMXCamera = SCNCamera
@@ -48,7 +48,7 @@ class RMXCamera : SCNCamera {
         let followCam = RMXCameraNode(sprite: sprite)
         var type = "FREE"
         followCam.cameraType = .FREE
-        if sprite.isLocalPlayer {
+        if sprite.type == .PLAYER {
             switch option {
             case .FIXED:
                 type = "FIXED"

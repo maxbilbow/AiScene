@@ -8,7 +8,7 @@
 
 import Foundation
 import SceneKit
-import RMXKit
+//import RMXKit
 
 
 enum GameType { case TEST, EMPTY, SOCCER, POOL, DOMED, IN_GLOBE, TEAM_GAME, TEAM_GAME_2, WEAPONS }
@@ -18,7 +18,7 @@ class AiCubo {
    
     class func createEarth(inWorld world: RMXScene, addCameras: Bool = true, type shape: ShapeType = .FLOOR) {
         
-        let earth: RMXNode = RMXNode(inWorld: world, shape: shape, type: .BACKGROUND, unique: true, color:  RMColor.lightGrayColor())
+        let earth: RMXNode = RMXNode(withScene: world, shape: shape, type: .BACKGROUND, unique: true, color:  RMColor.lightGrayColor())
         
         world.physicsWorld.gravity = SCNVector3Make(0,y: -9.8 * 10,z: 0)
         
@@ -68,7 +68,7 @@ class AiCubo {
         let sunNode = RMXModels.getNode(shapeType: ShapeType.SPHERE, radius: 100)
         sunNode.geometry?.firstMaterial!.emission.contents = RMColor.whiteColor()
         sunNode.geometry?.firstMaterial!.emission.intensity = 1
-        let sun: RMXNode = RMXNode(inWorld: world, geometryNode: sunNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
+        let sun: RMXNode = RMXNode(withScene: world, geometryNode: sunNode, type: .ABSTRACT, shape: ShapeType.SUN, unique: true)
         sunNode.addChildNode(lightNode)
         sun.updateName("sun")
         sun.pivot.m43 = -worldRadius
@@ -146,7 +146,7 @@ class AiCubo {
     
     }
     
-    class func setUpWorld(interface: RMX.Interface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
+    class func setUpWorld(interface: RMXInterface?, type: GameType = .TEAM_GAME, backupWorld: Bool = false) -> RMXScene {
         if let interface = interface {
 
             let world = RMXScene() //interface.world//
@@ -259,7 +259,7 @@ class AiCubo {
     
     class func simpleSprite(world: RMXScene, type: RMXSpriteType = .PASSIVE, isUnique: Bool, safeInit: Bool = false) -> RMXNode {
         
-        let player = RMXNode(inWorld: world, geometryNode: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique, safeInit: safeInit)
+        let player = RMXNode(withScene: world, geometryNode: RMXModels.getNode(shapeType: ShapeType.BOBBLE_MAN, radius: 6, color: RMX.randomColor()), type: type, shape: .BOBBLE_MAN, unique: isUnique, safeInit: safeInit)
         
         let lim = world.radius
         player.setPosition(SCNVector3Random(lim, min: -lim, setY: world.ground + 20))//(0, 50, 50))//, resetTransform: <#Bool#>

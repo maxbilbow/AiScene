@@ -7,7 +7,7 @@
 //
 import SceneKit
 import Foundation
-import RMXKit
+//import RMXKit
 
 
 
@@ -49,11 +49,11 @@ class AiPoppy : RMXAi {
     
     override func run(sender: AnyObject?, updateAtTime time: NSTimeInterval) -> Void {
         super.run(sender, updateAtTime: time)
-        if self.master.isHoldingItem && self.master.item?.rmxID != self.sprite.rmxID {
-            self.sprite.releaseItem()
-            self.itemToWatch = self.master.item
+        if self.master.isHoldingItem && self.master.itemInHand?.rmxID != self.sprite.rmxID {
+            self.sprite.unCouple()
+            self.itemToWatch = self.master.itemInHand
             self.sprite.tracker.setTarget(self.itemToWatch?.rmxNode, doOnArrival: { (target) -> () in
-                if self.master.item?.rmxID != target?.rmxID {
+                if self.master.itemInHand?.rmxID != target?.rmxID {
                     RMSoundBox.current.playSound("pop1", info: self.sprite)
                     ++self._count
                     if self._count > self._limit {
@@ -72,8 +72,7 @@ class AiPoppy : RMXAi {
                     self.sprite.grabItem(target)
                     self.sprite.tracker.setTarget(self.master, doOnArrival: { (target) -> () in
                         RMSoundBox.current.playSound("pop2", info: self.sprite)
-                        self.sprite.releaseItem()
-                        
+                        self.sprite.unCouple()
                     })
                 }
                 
@@ -104,8 +103,8 @@ class AiRandom: RMXAi {
         if !self.world.aiOn { return }
         if self.sprite.isHoldingItem && !self.sprite.tracker.hasTarget {
             self.sprite.tracker.setTarget(self.getTarget() as? RMXNode, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                if !self.sprite.throwItem(at: target, withForce: 1, tracking: true) {
-                    self.sprite.throwItem(at: target, withForce: 1, tracking: false)
+                if !self.sprite.throwItem(atPawn: target, withForce: 1, tracking: true) {
+                    self.sprite.throwItem(atPawn: target, withForce: 1, tracking: false)
                 }
             })
         }
@@ -114,8 +113,8 @@ class AiRandom: RMXAi {
             self.sprite.tracker.setTarget(target, willJump: true, afterTime: 100, doOnArrival: { (target: RMXNode?) -> () in
                 if self.sprite.grabItem(target) {
                     self.sprite.tracker.setTarget(self.getTarget() as? RMXNode, willJump: true, afterTime: 100, doOnArrival: { (target) -> () in
-                        if !self.sprite.throwItem(at: target, withForce: 1, tracking: true) {
-                            self.sprite.throwItem(at: target, withForce: 1, tracking: false)
+                        if !self.sprite.throwItem(atPawn: target, withForce: 1, tracking: true) {
+                            self.sprite.throwItem(atPawn: target, withForce: 1, tracking: false)
                         }
                     })
                 }
@@ -229,19 +228,21 @@ class AiTeamPlayer : AiRandom {
 extension RMXAi {
 //    static var autoStabilise: Bool = true
     class func autoStablise(sprite: RMXNode) {
-        if sprite.isActor {
+        if sprite.shapeType == .BOBBLE_MAN {
+            var scalar: RMFloat = 1
             if #available(OSX 10.11, iOS 9.0, *) {
                 sprite.physicsBody?.affectedByGravity = false
                 for node in sprite.childNodes {
                     node.physicsBody?.affectedByGravity = false
                 }
+                scalar = 2
             } else {
-                // Fallback on earlier versions
+                scalar = 1
             }
         let ai = { (node: AnyObject!) -> Void in
 //            if sprite.world.aiOn { NSLog(sprite.name) }
             if sprite.scene.hasGravity {
-                sprite.physicsBody?.applyForce(sprite.scene.gravity * RMFloat(sprite.physicsBody!.mass), atPosition: sprite.bottom, impulse: false)
+                sprite.physicsBody?.applyForce(sprite.scene.gravity * RMFloat(sprite.physicsBody!.mass) * scalar, atPosition: sprite.bottom, impulse: false)
 //                if sprite.isLocalPlayer {
 //                    print("height: \(sprite.height.print), g: \(sprite.scene.gravity.print), Bottom: \(sprite.bottom.print), Top: \(sprite.top.print)")
 //                }

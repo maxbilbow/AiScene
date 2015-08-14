@@ -28,7 +28,8 @@ public enum UserAction : String, CustomStringConvertible {
     //Interactions
     case GRAB_ITEM = "Grab Item"
     case THROW_ITEM = "Throw Item"
-    case THROW_OR_GRAB_ITEM = "Throw Item / Grab Item"
+    case THROW_OR_GRAB_TRACKED = "Throw Item tracked/ Grab Item"
+    case THROW_OR_GRAB_UNTRACKED = "Throw Item untracked / Grab Item"
     case BOOM = "explode"
     
     //Environmentals

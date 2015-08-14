@@ -18,7 +18,7 @@ public enum RMXSpriteType: Int { case  AI = 0, PLAYER, BACKGROUND, PASSIVE, ABST
 public enum ShapeType: Int { case CUBE , SPHERE, CYLINDER, CYLINDER_FLOOR,  OILDRUM, BOBBLE_MAN, LAST,ROCK,SPACE_SHIP, PILOT,  PLANE, FLOOR, DOG, AUSFB,PONGO, NULL, SUN, CAMERA }
 public enum KeyboardType { case French, UK, DEFAULT }
 
-@available(OSX 10.10, *)
+
 public struct RMX {
 
     public static var COUNT: Int = 0
@@ -43,4 +43,8 @@ public struct RMKeyValue {
 }
 
 
-
+public protocol RMSingleton {
+//    static func current() -> Self!
+//    static var current: Self! { get }
+    init()
+}

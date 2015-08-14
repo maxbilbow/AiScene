@@ -10,7 +10,7 @@ import Foundation
 import AppKit
 import ApplicationServices
 import SceneKit
-import RMXKit
+//import RMXKit
 
 extension RMX {
     typealias DPadOrKeys = DesktopInput
@@ -22,7 +22,7 @@ extension RMX {
     ///   let MOVE_SPEED: (on:RMFloat,off:RMFloat) = (2, 0)
     ///   var key = RMKey(action: "forward", characters: "w", speed: MOVE_SPEED)
     ///
-    /// The RMSActionProcessor class handles the application of the human term "forward", regardless of interface used. See also `RMXDPad` for iOS.
+    /// The RMSActionProcessor class handles the application of the human term "forward", regardless of interface used. See also `RMXMobileInput` for iOS.
     ///
     /// See also: `RMKeys` and  `RMSActionProcessor`.
     class DesktopInput : Interface {
@@ -65,8 +65,8 @@ extension RMX {
         RMKey(action: .LOOK_AROUND, characters: MOVE_CURSOR_PASSIVE, isRepeating: false,speed: LOOK_SPEED),
         
         //Interactions
-        RMKey(action: .THROW_OR_GRAB_ITEM, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
-        RMKey(action: .THROW_OR_GRAB_ITEM, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
+        RMKey(action: .THROW_OR_GRAB_UNTRACKED, characters: LEFT_CLICK, isRepeating: false, speed: ON_KEY_UP),
+        RMKey(action: .THROW_OR_GRAB_TRACKED, characters: RIGHT_CLICK, isRepeating: false,  speed: ON_KEY_UP),
         RMKey(action: .BOOM, characters: "b", isRepeating: false,  speed: ON_KEY_UP),
         
         //Environmentals

@@ -10,15 +10,15 @@
 		</data>
 		<key>Headers/RMX.swift</key>
 		<data>
-		R9wZTiorRR1Nob6DOcfaq0w+s6k=
+		F+gGOePTu9xIwhDp8gnfLi61O/I=
 		</data>
 		<key>Headers/RMXAiDelegate.swift</key>
 		<data>
-		IleoVznZD2kihZBVaXcDOibB91Q=
+		6EjqdNdguBpg2BfPICL3AUS2mOE=
 		</data>
 		<key>Headers/RMXDebugger.swift</key>
 		<data>
-		9cq1zyUj0gVqBCsl+HGWybaVIGw=
+		I3tWjaGN+XjF66luyQlIgIifY8I=
 		</data>
 		<key>Headers/RMXFunctions.swift</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Headers/UserActions.swift</key>
 		<data>
-		2mk/P2+MU6IEkGjdokfx9C05B5U=
+		qwuG16vWFSS7Q++7x8dg/qh5kCU=
 		</data>
 		<key>Headers/iOS.swift</key>
 		<data>
@@ -66,7 +66,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm.swiftmodule</key>
 		<data>
-		4xV5W9U+ECQcYKbdDYyrS6AH3TM=
+		q47B/xtPRkiQ2OLdxlQ8ZE+5TbE=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -74,7 +74,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		LzyGEVTcKEFAlJ5jG4AchOfCzys=
+		tkfQUkMR0yBlbc8EH5UrNV97MYI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -89,15 +89,15 @@
 		</data>
 		<key>Headers/RMX.swift</key>
 		<data>
-		R9wZTiorRR1Nob6DOcfaq0w+s6k=
+		F+gGOePTu9xIwhDp8gnfLi61O/I=
 		</data>
 		<key>Headers/RMXAiDelegate.swift</key>
 		<data>
-		IleoVznZD2kihZBVaXcDOibB91Q=
+		6EjqdNdguBpg2BfPICL3AUS2mOE=
 		</data>
 		<key>Headers/RMXDebugger.swift</key>
 		<data>
-		9cq1zyUj0gVqBCsl+HGWybaVIGw=
+		I3tWjaGN+XjF66luyQlIgIifY8I=
 		</data>
 		<key>Headers/RMXFunctions.swift</key>
 		<data>
@@ -129,7 +129,7 @@
 		</data>
 		<key>Headers/UserActions.swift</key>
 		<data>
-		2mk/P2+MU6IEkGjdokfx9C05B5U=
+		qwuG16vWFSS7Q++7x8dg/qh5kCU=
 		</data>
 		<key>Headers/iOS.swift</key>
 		<data>
@@ -141,7 +141,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm.swiftmodule</key>
 		<data>
-		4xV5W9U+ECQcYKbdDYyrS6AH3TM=
+		q47B/xtPRkiQ2OLdxlQ8ZE+5TbE=
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -149,7 +149,7 @@
 		</data>
 		<key>Modules/RMXKit.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		LzyGEVTcKEFAlJ5jG4AchOfCzys=
+		tkfQUkMR0yBlbc8EH5UrNV97MYI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>

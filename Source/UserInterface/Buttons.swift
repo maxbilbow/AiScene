@@ -8,23 +8,20 @@
 
 import Foundation
 import UIKit
-import RMXKit
+//import RMXKit
 
 #if iOS
     typealias RMImage = UIImage
     #elseif OSX
     typealias RMImage = NSImage
     #endif
-extension RMX {
-    extension RMXDPad {
+
+
+    extension RMXMobileInput {
         
-        class func getImage() -> RMImage {
+        static func getImage() -> RMImage {
             return RMImage(named: "art.scnassets/2D/circle_shape.png")!
         }
-        
-    }
-
-    extension RMXDPad {
         internal func getButton(frame: CGRect) -> UIView {
             let buttonBase = UIView(frame: frame)
             buttonBase.alpha = 0.5
@@ -55,12 +52,12 @@ extension RMX {
             }
         }
         func handleMovement(recogniser: UILongPressGestureRecognizer){
-            let point = recogniser.locationInView(self.gameView)
+            let point = recogniser.locationInView(GameView.current)
             if recogniser.state == .Began {
                 self.moveOrigin = point
             } else if recogniser.state == .Ended {
                 self.moveButtonPad!.frame = self.moveButtonCenter
-                self.actionProcessor.action(.STOP_MOVEMENT)
+                RMX.ActionProcessor.current.action(.STOP_MOVEMENT)
             } else {
                 var move = CGPoint(x: point.x - self.moveOrigin.x, y: point.y - self.moveOrigin.y)
 
@@ -75,56 +72,55 @@ extension RMX {
                 let percentage = CGPoint(x: move.x / limX, y: move.y / limY)
                 self.moveButtonPad!.center = rect.origin + rect.size * 0.5 + move * 1
     //            self.moveButtonPad?.setNeedsDisplay()
-                self.actionProcessor.action(.MOVE, speed: 1, args: percentage * self.moveSpeed)
+                RMX.ActionProcessor.current.action(.MOVE, speed: 1, args: percentage * self.moveSpeed)
     //            NSLog("FWD: \((x / limX).toData()), SIDE: \((y / limY).toData())),  TOTAL: \(1)")
             }
             
         }
         
         var moveButtonCenter: CGRect {
-            let avg = (self.gameView!.bounds.size * 0.13).average
+            let avg = (GameView.current!.bounds.size * 0.13).average
             let size = CGSize(width: avg, height: avg)
-            let origin = CGPoint(x: self.gameView!.bounds.size.width * 0.07, y: self.gameView!.bounds.size.height * 0.88 - size.height)
+            let origin = CGPoint(x: GameView.current!.bounds.size.width * 0.07, y: GameView.current!.bounds.size.height * 0.88 - size.height)
             let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
             return frame
         }
         
         var boomButtonCenter: CGRect {
-            let avg = (self.gameView!.bounds.size * 0.10).average
+            let avg = (GameView.current!.bounds.size * 0.10).average
             let size = CGSize(width: avg, height: avg)
-            let origin = CGPoint(x: self.gameView!.bounds.size.width * 0.82 - size.width / 2, y: self.gameView!.bounds.size.height * 0.88 - size.height)
+            let origin = CGPoint(x: GameView.current!.bounds.size.width * 0.82 - size.width / 2, y: GameView.current!.bounds.size.height * 0.88 - size.height)
             let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
             return frame
         }
         
         func explode(recogniser: UILongPressGestureRecognizer) {
-            //        self.activeSprite?.setAngle(roll: 0)
+            //        RMXNode.current?.setAngle(roll: 0)
             if recogniser.state == .Ended {
-                if self.activeSprite.isHoldingItem {
-                    self.actionProcessor.throwOrGrab(nil, withForce: 1, tracking: false)
-                    self.activeSprite.throwItem(force: 1)
+                if RMXNode.current?.isHoldingItem ?? false {
+                    RMX.ActionProcessor.current.action(UserAction.THROW_OR_GRAB_UNTRACKED)
+//                    RMXNode.current?.throwItem(force: 1)
                 } else {
-                    self.actionProcessor.action(UserAction.BOOM, speed: 1)
+                    RMX.ActionProcessor.current.action(UserAction.BOOM, speed: 1)
                 }
-                //self.actionProcessor.explode(force: self.boomTimer)
+                //RMX.ActionProcessor.current.explode(force: self.boomTimer)
                 
             } else {
-                self.actionProcessor.action(UserAction.BOOM, speed: 0)
+                RMX.ActionProcessor.current.action(UserAction.BOOM, speed: 0)
                 self.boomTimer++ //TODO: put this in the ActionProcessor class
             }
         }
         
         var jumpButtonCenter: CGRect {
-            let avg = (self.gameView!.bounds.size * 0.10).average
+            let avg = (GameView.current!.bounds.size * 0.10).average
             let size = CGSize(width: avg, height: avg)
-            let origin = CGPoint(x: self.gameView!.bounds.size.width * 0.82 + size.width / 2, y: self.gameView!.bounds.size.height * 0.85 - size.height)
+            let origin = CGPoint(x: GameView.current!.bounds.size.width * 0.82 + size.width / 2, y: GameView.current!.bounds.size.height * 0.85 - size.height)
             let frame = CGRectMake(origin.x, origin.y, size.width, size.height)
             return frame
         }
         
         func jump(recogniser: UILongPressGestureRecognizer){
             let speed: RMFloat = recogniser.state == .Ended ? 1 : 0
-            self.actionProcessor.action(UserAction.JUMP, speed: speed)
+            RMX.ActionProcessor.current.action(UserAction.JUMP, speed: speed)
         }
     }
-}

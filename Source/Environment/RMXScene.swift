@@ -9,17 +9,20 @@
 import Foundation
 import GLKit
 import SceneKit
-import RMXKit
+//import RMXKit
 
 //typealias AiCubo
 //enum GameType: Int { case NULL = -1, TESTING_ENVIRONMENT, SMALL_TEST, FETCH, DEFAULT }
 @available(OSX 10.9, *)
 class RMXScene : SCNScene, RMXWorld, RMXObject {
-
+    
+    var couplings: Dictionary<SCNPhysicsBehavior, (A: RMXNode, B: RMXNode)> = Dictionary<SCNPhysicsBehavior, (A: RMXNode, B: RMXNode)>()
+    
+    
     var collisionTrackers: Array<RMXTracker> = Array<RMXTracker>()
     
     static var current: RMXScene {
-        return RMX.Interface.current.world
+        return Interface.current.world
     }
     
     static let kvScores = "teamScores"
@@ -195,7 +198,7 @@ class RMXScene : SCNScene, RMXWorld, RMXObject {
     }
     
     var isLive: Bool {
-        return RMX.Interface.current.world.rmxID == self.rmxID && self.paused == false
+        return Interface.current.world.rmxID == self.rmxID && self.paused == false
     }
     
     
@@ -337,4 +340,22 @@ extension RMXScene {
         return self.activeCamera.presentationNode().worldTransform.left// ?? SCNVector3Make(-1,0,0)
     }
     
+}
+
+
+extension RMXScene {
+    func addCoupling(coupling: SCNPhysicsBallSocketJoint, nodeA: RMXNode, nodeB: RMXNode) {
+        self.physicsWorld.addBehavior(coupling)
+        self.couplings[coupling] = (nodeA, nodeB)
+        nodeA.coupling = coupling
+        nodeB.coupling = coupling
+    }
+    
+    func removeCoupling(coupling: SCNPhysicsBallSocketJoint) {
+        if let nodes = self.couplings.removeValueForKey(coupling) {
+            nodes.A.coupling = nil
+            nodes.B.coupling = nil
+        }
+        self.physicsWorld.removeBehavior(coupling)
+    }
 }

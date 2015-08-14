@@ -22,10 +22,11 @@ public let PI_OVER_180f = Float(PI_OVER_180)
 public let PI_OVER_180_CG = CGFloat(PI_OVER_180)
 
 
-protocol SCNLocatable3 {
+public protocol SCNLocatable3 {
     func getPosition() -> SCNVector3
 }
 
+public typealias RMXLocatable = SCNLocatable3
 
 
 @available(OSX 10.10,*)
@@ -181,7 +182,12 @@ public extension GLKVector3 {
 
 
 
-public extension SCNVector3 {
+extension SCNVector3 : SCNLocatable3 {
+    
+    public func getPosition() -> SCNVector3 {
+        return self
+    }
+    
     var print: String {
         return "\(x.toData()) \(y.toData()) \(z.toData())"
     }
